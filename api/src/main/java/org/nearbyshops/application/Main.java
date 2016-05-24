@@ -1,15 +1,17 @@
 	package org.nearbyshops.application;
 
 
-import org.nearbyshops.contractClasses.DistributorContract;
-import org.nearbyshops.contractClasses.ItemCategoryContract;
-import org.nearbyshops.contractClasses.ItemContract;
-import org.nearbyshops.contractClasses.JDBCContract;
-import org.nearbyshops.contractClasses.ShopContract;
-import org.nearbyshops.contractClasses.ShopItemContract;
+import org.nearbyshops.ContractClasses.DistributorContract;
+import org.nearbyshops.ContractClasses.ItemCategoryContract;
+import org.nearbyshops.ContractClasses.ItemContract;
+import org.nearbyshops.ContractClasses.JDBCContract;
+import org.nearbyshops.ContractClasses.ShopContract;
+import org.nearbyshops.ContractClasses.ShopItemContract;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.nearbyshops.Globals.Globals;
+import org.nearbyshops.Model.ItemCategory;
 
 
 import java.awt.BorderLayout;
@@ -48,7 +50,7 @@ public class Main implements ActionListener {
     public static HttpServer startServer() {
         // create a resource config that scans for JAX-RS resources and providers
         // in org.sumeet.restsamples.Sample package
-        final ResourceConfig rc = new ResourceConfig().packages("org.nearbyshops.Resource","org.nearbyshops");
+        final ResourceConfig rc = new ResourceConfig().packages("org.nearbyshops.RESTInterfaces","org.nearbyshops");
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
@@ -111,7 +113,7 @@ public class Main implements ActionListener {
 		
 		server = startServer();
         System.out.println(String.format("Jersey app started with WADL available at "
-                + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
+                + "\nHit enter to stop it...", BASE_URI));
         //System.in.read();
         isServerStart = true;
         
@@ -183,7 +185,14 @@ public class Main implements ActionListener {
 		        		+ ItemCategoryContract.TABLE_NAME + "(" + ItemCategoryContract.ITEM_CATEGORY_ID + ")" 
 		        		+ ")"; 
 		    	
-		        stmt.executeUpdate(createTableItemCategoryPostgres); 
+		        stmt.executeUpdate(createTableItemCategoryPostgres);
+
+
+
+
+
+
+
 		        
 		    //} 
 		    
@@ -279,9 +288,6 @@ public class Main implements ActionListener {
 		        		+ "GENERATED ALWAYS AS IDENTITY"
 		        		+ "(START WITH 1, INCREMENT BY 1),"
 		        		+ " " + ShopContract.SHOP_NAME + " VARCHAR(40),"
-		        		+ " " + ShopContract.RADIUS_OF_SERVICE + " FLOAT,"
-		        		+ " " + ShopContract.LONGITUDE + " FLOAT,"
-		        		+ " " + ShopContract.LATITUDE + " FLOAT,"
 		        		+ " " + ShopContract.AVERAGE_RATING + " FLOAT,"
 		        		+ " " + ShopContract.DELIVERY_CHARGES + " FLOAT,"
 		        		+ " " + ShopContract.DISTRIBUTOR_ID + " INT,"
@@ -292,34 +298,26 @@ public class Main implements ActionListener {
 		    	String createTableShopPostgres = "CREATE TABLE IF NOT EXISTS " + ShopContract.TABLE_NAME + "("
 		        		+ " " + ShopContract.SHOP_ID + " SERIAL PRIMARY KEY,"
 		        		+ " " + ShopContract.SHOP_NAME + " VARCHAR(40),"
-		        		+ " " + ShopContract.RADIUS_OF_SERVICE + " FLOAT,"
-		        		+ " " + ShopContract.LONGITUDE + " FLOAT,"
-		        		+ " " + ShopContract.LATITUDE + " FLOAT,"
-		        		+ " " + ShopContract.AVERAGE_RATING + " FLOAT,"
+		        		+ " " + ShopContract.DELIVERY_RANGE + " FLOAT,"
+		        		+ " " + ShopContract.LON_CENTER + " FLOAT,"
+		        		+ " " + ShopContract.LAT_CENTER + " FLOAT,"
+						+ " " + ShopContract.LON_MAX + " FLOAT,"
+						+ " " + ShopContract.LAT_MAX + " FLOAT,"
+						+ " " + ShopContract.LON_MIN + " FLOAT,"
+						+ " " + ShopContract.LAT_MIN + " FLOAT,"
 		        		+ " " + ShopContract.DELIVERY_CHARGES + " FLOAT,"
 		        		+ " " + ShopContract.DISTRIBUTOR_ID + " INT,"
 		        		+ " " + ShopContract.IMAGE_PATH + " VARCHAR(60),"
 		        		+ " FOREIGN KEY(" + ShopContract.DISTRIBUTOR_ID +") REFERENCES DISTRIBUTOR(ID))";
-		    	 
-		    	
-		    	
-		        stmt.executeUpdate(createTableShopPostgres); 
-		        
-		    //}
-		    
 
-		    
-			 // create table SHOP_ITEM
-		    //rs = dmd.getTables(null,null, ShopItemContract.TABLE_NAME,null); 
-		    //System.out.println("Outside the create table");
-		    
-		    //if (!rs.next()) { 
-		    	
-		    	
+		        stmt.executeUpdate(createTableShopPostgres);
+
+
+
 		    System.out.println("Into the create table");
-		    	
-		    
-		    	
+
+
+
 		    	String createTableShopItemDerby = "CREATE TABLE " + ShopItemContract.TABLE_NAME + "("
 		        		+ " " + ShopItemContract.ITEM_ID + " INT,"
 		        		+ " " + ShopItemContract.SHOP_ID + " INT,"
@@ -346,15 +344,48 @@ public class Main implements ActionListener {
 		        		+ ")";
 		    	
 		    	
-		        stmt.executeUpdate(createTableShopItemPostgres); 
-		        
-		    //}
-		    
-		    
-		    
-		    
-		    
-		    
+		        stmt.executeUpdate(createTableShopItemPostgres);
+
+
+
+			// Insert the root category whose ID is 1
+
+			String insertItemCategory = "";
+
+			// The root ItemCategory has id 1. If the root category does not exist then insert it.
+			if(Globals.itemCategoryService.getItemCategory(1) == null)
+			{
+
+				insertItemCategory = "INSERT INTO "
+						+ ItemCategoryContract.TABLE_NAME
+						+ "("
+						+ ItemCategoryContract.ITEM_CATEGORY_ID + ","
+						+ ItemCategoryContract.ITEM_CATEGORY_NAME + ","
+						+ ItemCategoryContract.PARENT_CATEGORY_ID + ","
+						+ ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION + ","
+						+ ItemCategoryContract.IMAGE_PATH + ","
+						+ ItemCategoryContract.IS_LEAF_NODE + ") VALUES("
+						+ "" + "1"	+ ","
+						+ "'" + "ROOT"	+ "',"
+						+ "" + "NULL" + ","
+						+ "'" + "This is the root Category. Do not modify it." + "',"
+						+ "'" + " " + "',"
+						+ "'" + "FALSE" + "'"
+						+ ")";
+
+				stmt.executeUpdate(insertItemCategory);
+
+			}
+
+			//ItemCategory itemCategory = new ItemCategory();
+			//itemCategory.setCategoryName("Root");
+
+			//Globals.itemCategoryService.saveItemCategory(itemCategory);
+
+
+			//+ ItemCategoryContract.PARENT_CATEGORY_ID + ","
+
+			// + "" + "NULL" + ","
 	    	/*
 
 	    	String queryPostgresAbstractCategory = "CREATE TABLE IF NOT EXISTS " + AbstractCategoryContract.TABLE_NAME + "("
@@ -389,9 +420,7 @@ public class Main implements ActionListener {
 			
 			
 			// close the connection and statement object
-			
-			
-			
+
 			if(stmt !=null)
 			{
 				
