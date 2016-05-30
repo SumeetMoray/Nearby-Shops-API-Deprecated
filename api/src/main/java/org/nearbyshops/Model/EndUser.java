@@ -1,10 +1,27 @@
 package org.nearbyshops.Model;
 
+/**
+ * Created by sumeet on 29/5/16.
+ */
 public class EndUser {
-	
-	
-	
-	// list of order that this end user has made	
-	
 
+    int endUserID;
+    String endUserName;
+
+
+    public int getEndUserID() {
+        return endUserID;
+    }
+
+    public void setEndUserID(int endUserID) {
+        this.endUserID = endUserID;
+    }
+
+    public String getEndUserName() {
+        return endUserName;
+    }
+
+    public void setEndUserName(String endUserName) {
+        this.endUserName = endUserName;
+    }
 }

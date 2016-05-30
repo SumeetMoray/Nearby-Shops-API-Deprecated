@@ -1,6 +1,8 @@
 package org.nearbyshops.Model;
 
 
+import org.nearbyshops.ModelStats.ItemStats;
+
 public class Item {
 
 	int itemID;
@@ -15,9 +17,18 @@ public class Item {
 	
 	// Only required for JDBC
 	int itemCategoryID;
-	
 
 
+	ItemStats itemStats;
+
+
+	public ItemStats getItemStats() {
+		return itemStats;
+	}
+
+	public void setItemStats(ItemStats itemStats) {
+		this.itemStats = itemStats;
+	}
 
 	public int getItemCategoryID() {
 		return itemCategoryID;

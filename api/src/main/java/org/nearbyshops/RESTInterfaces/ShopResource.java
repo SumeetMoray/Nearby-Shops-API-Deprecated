@@ -25,15 +25,10 @@ import org.nearbyshops.Utility.GeoLocation;
 @Produces(MediaType.APPLICATION_JSON)
 public class ShopResource {
 
-
-
 	GeoLocation center;
-
 	GeoLocation[] minMaxArray;
 	GeoLocation pointOne;
 	GeoLocation pointTwo;
-
-
 	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -163,14 +158,15 @@ public class ShopResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getShops(@QueryParam("DistributorID")int distributorID,
-							 @QueryParam("latCenter")double latCenter,@QueryParam("lonCenter")double lonCenter,
+							 @QueryParam("LeafNodeItemCategoryID")int itemCategoryID,
+							 @QueryParam("latCenter")double latCenter, @QueryParam("lonCenter")double lonCenter,
 							 @QueryParam("deliveryRangeMax")double deliveryRangeMax,
 							 @QueryParam("deliveryRangeMin")double deliveryRangeMin,
 							 @QueryParam("proximity")double proximity)
 	{
 		
 		List<Shop> list = Globals.shopService.getShops(
-				distributorID,
+				distributorID,itemCategoryID,
 				latCenter, lonCenter,
 				deliveryRangeMin,deliveryRangeMax,
 				proximity
@@ -205,9 +201,10 @@ public class ShopResource {
 	@GET
 	@Path("/{ShopID}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getShop(@PathParam("ShopID")int shopID)
+	public Response getShop(@PathParam("ShopID")int shopID,
+							@QueryParam("latCenter")double latCenter, @QueryParam("lonCenter")double lonCenter)
 	{
-		Shop shop = Globals.shopService.getShop(shopID);
+		Shop shop = Globals.shopService.getShop(shopID,latCenter,lonCenter);
 		
 		if(shop!= null)
 		{

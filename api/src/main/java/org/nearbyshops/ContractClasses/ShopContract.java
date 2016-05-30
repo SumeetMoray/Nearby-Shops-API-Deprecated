@@ -15,7 +15,8 @@ public class ShopContract {
 	public static final String LON_MAX = "LON_MAX";
 	public static final String LAT_MIN = "LAT_MIN";
 	public static final String LON_MIN = "LON_MIN";
-	public static final String AVERAGE_RATING = "AVERAGE_RATING";
+
+	//public static final String AVERAGE_RATING = "AVERAGE_RATING";
 	public static final String DELIVERY_CHARGES = "DELIVERY_CHARGES";
 	public static final String DISTRIBUTOR_ID = "DISTRIBUTOR_ID";
 	public static final String IMAGE_PATH = "IMAGE_PATH";

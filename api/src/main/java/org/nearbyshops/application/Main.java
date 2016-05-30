@@ -1,12 +1,7 @@
 	package org.nearbyshops.application;
 
 
-import org.nearbyshops.ContractClasses.DistributorContract;
-import org.nearbyshops.ContractClasses.ItemCategoryContract;
-import org.nearbyshops.ContractClasses.ItemContract;
-import org.nearbyshops.ContractClasses.JDBCContract;
-import org.nearbyshops.ContractClasses.ShopContract;
-import org.nearbyshops.ContractClasses.ShopItemContract;
+import org.nearbyshops.ContractClasses.*;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -188,12 +183,6 @@ public class Main implements ActionListener {
 		        stmt.executeUpdate(createTableItemCategoryPostgres);
 
 
-
-
-
-
-
-		        
 		    //} 
 		    
 			// create table ITEM
@@ -235,6 +224,7 @@ public class Main implements ActionListener {
 		        		+ " " + ItemContract.ITEM_DESC + " VARCHAR(500),"
 		        		+ " " + ItemContract.ITEM_IMAGE_URL + " VARCHAR(100),"
 		        		+ " " + ItemContract.ITEM_BRAND_NAME + " VARCHAR(100),"
+						+ " " + ItemContract.QUANTITY_UNIT + " VARCHAR(40),"
 		        		+ " " + ItemContract.ITEM_CATEGORY_ID + " INT,"
 		        		+ " FOREIGN KEY(" + ItemContract.ITEM_CATEGORY_ID +") REFERENCES ITEM_CATEGORY(ID))";
 		    	
@@ -288,7 +278,6 @@ public class Main implements ActionListener {
 		        		+ "GENERATED ALWAYS AS IDENTITY"
 		        		+ "(START WITH 1, INCREMENT BY 1),"
 		        		+ " " + ShopContract.SHOP_NAME + " VARCHAR(40),"
-		        		+ " " + ShopContract.AVERAGE_RATING + " FLOAT,"
 		        		+ " " + ShopContract.DELIVERY_CHARGES + " FLOAT,"
 		        		+ " " + ShopContract.DISTRIBUTOR_ID + " INT,"
 		        		+ " " + ShopContract.IMAGE_PATH + " VARCHAR(60),"
@@ -323,21 +312,21 @@ public class Main implements ActionListener {
 		        		+ " " + ShopItemContract.SHOP_ID + " INT,"
 		        		+ " " + ShopItemContract.AVAILABLE_ITEM_QUANTITY + " INT,"
 		        		+ " " + ShopItemContract.ITEM_PRICE + " FLOAT,"
-		        		+ " " + ShopItemContract.QUANTITY_UNIT + " VARCHAR(40),"
-		        		+ " " + ShopItemContract.QUANTITY_MULTIPLE + " INT,"
 		        		+ " FOREIGN KEY(" + ShopItemContract.SHOP_ID +") REFERENCES SHOP(SHOP_ID),"
 		        		+ " FOREIGN KEY(" + ShopItemContract.ITEM_ID +") REFERENCES ITEM(ITEM_ID)," 
 		        		+ " PRIMARY KEY (" + ShopItemContract.SHOP_ID + ", " + ShopItemContract.ITEM_ID + ")"
 		        		+ ")";
-		    	
+
+
+					//+ " " + ShopItemContract.QUANTITY_UNIT + " VARCHAR(40),"
+					//+ " " + ShopItemContract.QUANTITY_MULTIPLE + " INT,"
+
 
 		    	String createTableShopItemPostgres = "CREATE TABLE IF NOT EXISTS " + ShopItemContract.TABLE_NAME + "("
 		        		+ " " + ShopItemContract.ITEM_ID + " INT,"
 		        		+ " " + ShopItemContract.SHOP_ID + " INT,"
 		        		+ " " + ShopItemContract.AVAILABLE_ITEM_QUANTITY + " INT,"
 		        		+ " " + ShopItemContract.ITEM_PRICE + " FLOAT,"
-		        		+ " " + ShopItemContract.QUANTITY_UNIT + " VARCHAR(40),"
-		        		+ " " + ShopItemContract.QUANTITY_MULTIPLE + " INT,"
 		        		+ " FOREIGN KEY(" + ShopItemContract.SHOP_ID +") REFERENCES SHOP(SHOP_ID),"
 		        		+ " FOREIGN KEY(" + ShopItemContract.ITEM_ID +") REFERENCES ITEM(ITEM_ID)," 
 		        		+ " PRIMARY KEY (" + ShopItemContract.SHOP_ID + ", " + ShopItemContract.ITEM_ID + ")"
@@ -345,6 +334,53 @@ public class Main implements ActionListener {
 		    	
 		    	
 		        stmt.executeUpdate(createTableShopItemPostgres);
+
+
+
+			// Create Table EndUser
+
+			String createTableEndUserPostgres = "CREATE TABLE IF NOT EXISTS " + EndUserContract.TABLE_NAME + "("
+					+ " " + EndUserContract.END_USER_ID + " SERIAL PRIMARY KEY,"
+					+ " " + EndUserContract.END_USER_NAME + " VARCHAR(40)" + ")";
+
+			stmt.executeUpdate(createTableEndUserPostgres);
+
+
+
+			// Create Table Order In postgres
+
+			String createTableOrderPostgres = "CREATE TABLE IF NOT EXISTS " + OrderContract.TABLE_NAME + "("
+					+ " " + OrderContract.ORDER_ID + " SERIAL PRIMARY KEY,"
+					+ " " + OrderContract.DELIVERY_CHARGES + " INT,"
+					+ " " + OrderContract.ORDER_STATUS + " INT,"
+					+ " " + OrderContract.END_USER_ID + " INT,"
+					+ " " + OrderContract.SHOP_ID + " INT,"
+					+ " FOREIGN KEY(" + OrderContract.END_USER_ID +") REFERENCES " + EndUserContract.TABLE_NAME + "(" + EndUserContract.END_USER_ID + "),"
+					+ " FOREIGN KEY(" + OrderContract.SHOP_ID +") REFERENCES " + ShopContract.TABLE_NAME + "(" + ShopContract.SHOP_ID + ")"
+					+ ")";
+
+			//System.out.println("Into the create table");
+
+			//System.out.println(createTableOrderPostgres);
+
+			stmt.executeUpdate(createTableOrderPostgres);
+
+
+			// Create table OrderItem in Postgres
+			String createtableOrderItemPostgres = "CREATE TABLE IF NOT EXISTS " + OrderItemContract.TABLE_NAME + "("
+					+ " " + OrderItemContract.ITEM_ID + " INT,"
+					+ " " + OrderItemContract.ORDER_ID + " INT,"
+					+ " " + OrderItemContract.ITEM_PRICE_AT_ORDER + " FLOAT,"
+					+ " " + OrderItemContract.ITEM_QUANTITY + " INT,"
+					+ " FOREIGN KEY(" + OrderItemContract.ITEM_ID +") REFERENCES " + EndUserContract.TABLE_NAME + "(" + EndUserContract.END_USER_ID + "),"
+					+ " FOREIGN KEY(" + OrderItemContract.ORDER_ID +") REFERENCES " + ShopContract.TABLE_NAME + "(" + ShopContract.SHOP_ID + "),"
+					+ " PRIMARY KEY (" + OrderItemContract.ITEM_ID + ", " + OrderItemContract.ORDER_ID + ")"
+					+ ")";
+
+
+			stmt.executeUpdate(createtableOrderItemPostgres);
+
+
 
 
 

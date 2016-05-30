@@ -1,14 +1,7 @@
 package org.nearbyshops.Model;
 
+/**
+ * Created by sumeet on 29/5/16.
+ */
 public class OrderItem {
-		
-	int orderID;
-	Order order;
-	
-	int itemID;
-	Item item;
-	
-	int itemPriceAtOrder;
-	int Quantity;
-
 }

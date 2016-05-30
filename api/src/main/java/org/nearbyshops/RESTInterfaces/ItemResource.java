@@ -142,8 +142,7 @@ public class ItemResource {
 				Globals.itemService.getItems(
 						itemCategoryID,
 						shopID,
-						latCenter,
-						lonCenter,
+						latCenter, lonCenter,
 						deliveryRangeMin,
 						deliveryRangeMax,
 						proximity

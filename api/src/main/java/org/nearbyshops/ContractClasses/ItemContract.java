@@ -12,6 +12,6 @@ public class ItemContract {
 	public static final String ITEM_IMAGE_URL = "ITEM_IMAGE_URL";
 	public static final String ITEM_BRAND_NAME = "ITEM_BRAND_NAME";
 	public static final String ITEM_CATEGORY_ID = "ITEM_CATEGORY_ID";
-	
+	public static final String QUANTITY_UNIT = "QUANTITY_UNIT";
 
 }

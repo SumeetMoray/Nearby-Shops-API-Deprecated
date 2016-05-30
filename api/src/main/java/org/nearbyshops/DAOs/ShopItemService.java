@@ -24,19 +24,18 @@ public class ShopItemService {
 		Statement stmt = null;
 		int rowCount = -1;
 
+		//+ "" + shopItem.getQuantityUnit() + ","
+		//+ "" + shopItem.getQuantityMultiple() + ","
+
 		String insertShop = "INSERT INTO "
 				+ ShopItemContract.TABLE_NAME				
 				+ "("  
 				+ ShopItemContract.SHOP_ID + ","
-				+ ShopItemContract.QUANTITY_UNIT + ","
-				+ ShopItemContract.QUANTITY_MULTIPLE + ","
 				+ ShopItemContract.ITEM_PRICE + ","
 				+ ShopItemContract.ITEM_ID + ","
 				+ ShopItemContract.AVAILABLE_ITEM_QUANTITY
 				+ " ) VALUES ("
-				+ "" + shopItem.getShopID() + "," 
-				+ "" + shopItem.getQuantityUnit() + "," 
-				+ "" + shopItem.getQuantityMultiple() + ","
+				+ "" + shopItem.getShopID() + ","
 				+ "" + shopItem.getItemPrice() + ","
 				+ "" + shopItem.getItemID() + ","
 				+ "" + shopItem.getAvailableItemQuantity()
@@ -87,6 +86,14 @@ public class ShopItemService {
 	
 	public int updateShopItem(ShopItem shopItem)
 	{
+		/*
+
+				+ ShopItemContract.QUANTITY_MULTIPLE + " ="
+				+ "" + shopItem.getQuantityMultiple() + ","
+				+ ShopItemContract.QUANTITY_UNIT + " ="
+				+ "'" + shopItem.getQuantityUnit() + "',"
+		 */
+
 		String updateStatement = "UPDATE " + ShopItemContract.TABLE_NAME 
 				+ " SET " + ShopItemContract.AVAILABLE_ITEM_QUANTITY + " = "
 				+ "" + shopItem.getAvailableItemQuantity() + ","
@@ -94,10 +101,6 @@ public class ShopItemService {
 				+ "" + shopItem.getItemID() + ","
 				+ ShopItemContract.ITEM_PRICE + " ="
 				+ "" + shopItem.getItemPrice() + ","
-				+ ShopItemContract.QUANTITY_MULTIPLE + " ="
-				+ "" + shopItem.getQuantityMultiple() + ","
-				+ ShopItemContract.QUANTITY_UNIT + " ="
-				+ "'" + shopItem.getQuantityUnit() + "',"
 				+ ShopItemContract.SHOP_ID + " ="
 				+ "" + shopItem.getShopID() + ""
 				+ " WHERE " + ShopItemContract.SHOP_ID + " = "
@@ -247,8 +250,6 @@ public ArrayList<ShopItem> getShopItems(
 			+ "SI." + ShopItemContract.ITEM_ID + ","
 			+ "SI." + ShopItemContract.SHOP_ID + ","
 			+ "SI." + ShopItemContract.ITEM_PRICE + ","
-			+ "SI." + ShopItemContract.QUANTITY_MULTIPLE + ","
-			+ "SI." + ShopItemContract.QUANTITY_UNIT + ","
 			+ "SI." + ShopItemContract.AVAILABLE_ITEM_QUANTITY + ""
 			+ " FROM " 
 			+ ShopContract.TABLE_NAME + " S" 
@@ -280,8 +281,6 @@ public ArrayList<ShopItem> getShopItems(
 			+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID + ","
 			+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID + ","
 			+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_PRICE + ","
-			+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.QUANTITY_MULTIPLE + ","
-			+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.QUANTITY_UNIT + ","
 			+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.AVAILABLE_ITEM_QUANTITY + ""
 			+ " FROM " 
 			+ ShopContract.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + "," 
@@ -567,8 +566,6 @@ public ArrayList<ShopItem> getShopItems(
 				shopItem.setItemID(rs.getInt(ShopItemContract.ITEM_ID));
 				shopItem.setAvailableItemQuantity(rs.getInt(ShopItemContract.AVAILABLE_ITEM_QUANTITY));
 				shopItem.setItemPrice(rs.getDouble(ShopItemContract.ITEM_PRICE));
-				shopItem.setQuantityUnit(rs.getString(ShopItemContract.QUANTITY_UNIT));
-				shopItem.setQuantityMultiple(rs.getInt(ShopItemContract.QUANTITY_MULTIPLE));
 				
 				shopItemList.add(shopItem);
 				

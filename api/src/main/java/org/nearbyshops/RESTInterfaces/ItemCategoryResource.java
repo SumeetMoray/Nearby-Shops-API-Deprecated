@@ -140,7 +140,8 @@ public class ItemCategoryResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllItemCategory(
-			@QueryParam("ShopID")int shopID, @QueryParam("ParentID")int parentID,
+			@QueryParam("ShopID")int shopID,
+			@QueryParam("ParentID")int parentID,
 			@QueryParam("latCenter")double latCenter,@QueryParam("lonCenter")double lonCenter,
 			@QueryParam("deliveryRangeMax")double deliveryRangeMax,
 			@QueryParam("deliveryRangeMin")double deliveryRangeMin,

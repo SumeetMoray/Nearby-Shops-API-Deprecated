@@ -137,7 +137,7 @@ public class ShopItemResource {
 		{
 			if(ShopID == 0)
 			{
-				shopItem.setShop(Globals.shopService.getShop(shopItem.getShopID()));
+				shopItem.setShop(Globals.shopService.getShop(shopItem.getShopID(),latCenter,lonCenter));
 			}
 
 			if(itemID == 0)

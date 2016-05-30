@@ -7,8 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import org.nearbyshops.ContractClasses.JDBCContract;
-import org.nearbyshops.ContractClasses.ShopContract;
+import org.nearbyshops.ContractClasses.*;
 import org.nearbyshops.Model.Shop;
 import org.nearbyshops.Utility.GeoLocation;
 
@@ -249,26 +248,80 @@ public class ShopService {
 	GeoLocation pointTwo;
 
 
+
+
 	public ArrayList<Shop> getShops(
 			int distributorID,
+			int itemCategoryID,
 			double latCenter, double lonCenter,
 			double deliveryRangeMin,double deliveryRangeMax,
 			double proximity
 	)
 	{
 
+		String query = "";
+		String queryJoin = "";
+
 		// flag for tracking whether to put "AND" or "WHERE"
 		boolean isFirst = true;
 
-		String query = "SELECT * FROM " + ShopContract.TABLE_NAME;
-		
+
+		String queryNormal = "SELECT DISTINCT "
+				+ "6371 * acos( cos( radians("
+				+ latCenter + ")) * cos( radians( lat_center) ) * cos(radians( lon_center ) - radians("
+				+ lonCenter + "))"
+				+ " + sin( radians(" + latCenter + ")) * sin(radians(lat_center))) as distance" + ","
+				+ " * FROM " + ShopContract.TABLE_NAME;
+
+
+		queryJoin = "SELECT DISTINCT "
+				+ "6371 * acos(cos( radians("
+				+ latCenter + ")) * cos( radians( lat_center) ) * cos(radians( lon_center ) - radians("
+				+ lonCenter + "))"
+				+ " + sin( radians(" + latCenter + ")) * sin(radians(lat_center))) as distance" + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.SHOP_ID + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.SHOP_NAME + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.LON_CENTER + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.LAT_CENTER + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.DELIVERY_RANGE + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.DELIVERY_CHARGES + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.DISTRIBUTOR_ID + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.IMAGE_PATH + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.LAT_MAX + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.LAT_MIN + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.LON_MAX + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.LON_MIN
+
+				+ " FROM "
+				+ ShopContract.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
+				+ ItemContract.TABLE_NAME + "," + ItemCategoryContract.TABLE_NAME
+
+				+ " WHERE "
+				+ ShopContract.TABLE_NAME + "." + ShopContract.SHOP_ID
+				+ "="
+				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID
+				+ " AND "
+				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID
+				+ "="
+				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_ID
+				+ " AND "
+				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_CATEGORY_ID
+				+ "="
+				+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.ITEM_CATEGORY_ID;
+
+
+
 		if(distributorID > 0)
 		{
-			query = query + " WHERE " 
+			queryNormal = queryNormal + " WHERE "
 					+ ShopContract.DISTRIBUTOR_ID + " = " + distributorID;
 
 			// reset the flag
 			isFirst = false;
+
+			queryJoin = queryJoin + " AND "
+					+ ShopContract.TABLE_NAME + "." + ShopContract.DISTRIBUTOR_ID
+					+ " = " + distributorID;
 		}
 
 
@@ -277,20 +330,24 @@ public class ShopService {
 			// Applying shop visibility filter. Gives all the shops which are visible at the given location defined by
 			// latCenter and lonCenter. For more information see the API documentation.
 
+
+			String queryPartlatLonCenter = "";
+			String queryPartlatLonCenterTwo = "";
+
 			if(isFirst)
 			{
-				query = query + " WHERE ";
+				queryNormal = queryNormal + " WHERE ";
 
 				// reset the flag
 				isFirst = false;
 
 			}else
 			{
-				query = query + " AND ";
+				queryNormal = queryNormal + " AND ";
 			}
 
 
-			query = query + ShopContract.TABLE_NAME
+			queryPartlatLonCenterTwo = queryPartlatLonCenterTwo + ShopContract.TABLE_NAME
 					+ "."
 					+ ShopContract.LAT_MAX
 					+ " >= " + latCenter
@@ -310,7 +367,17 @@ public class ShopService {
 					+ ShopContract.LON_MIN
 					+ " <= " + lonCenter;
 
+
+			queryPartlatLonCenter = queryPartlatLonCenter + " 6371.01 * acos( cos( radians("
+					+ latCenter + ")) * cos( radians( lat_center) ) * cos(radians( lon_center ) - radians("
+					+ lonCenter + "))"
+					+ " + sin( radians(" + latCenter + ")) * sin(radians(lat_center))) <= delivery_range ";
 			//+ " BETWEEN " + latmax + " AND " + latmin;
+
+			queryNormal = queryNormal + queryPartlatLonCenter;
+
+			queryJoin = queryJoin + " AND " + queryPartlatLonCenter;
+
 		}
 
 
@@ -318,25 +385,33 @@ public class ShopService {
 		if(deliveryRangeMin > 0|| deliveryRangeMax>0){
 
 			// apply delivery range filter
+			String queryPartDeliveryRange = "";
 
 			if(isFirst)
 			{
-				query = query + " WHERE ";
+				queryNormal = queryNormal + " WHERE ";
 
 				// reset the flag
 				isFirst = false;
 
 			}else
 			{
-				query = query + " AND ";
+				queryNormal = queryNormal + " AND ";
 			}
 
 
-			query = query + ShopContract.TABLE_NAME
+
+
+			queryPartDeliveryRange = queryPartDeliveryRange + ShopContract.TABLE_NAME
 					+ "."
 					+ ShopContract.DELIVERY_RANGE
 					+ " BETWEEN " + deliveryRangeMin + " AND " + deliveryRangeMax;
 					//+ " <= " + deliveryRange;
+
+			queryNormal = queryNormal + queryPartDeliveryRange;
+
+			queryJoin = queryJoin + " AND " + queryPartDeliveryRange;
+
 		}
 
 
@@ -344,8 +419,11 @@ public class ShopService {
 		// not required.
 		if(proximity > 0 && (deliveryRangeMax==0 || (deliveryRangeMax > 0 && proximity <= deliveryRangeMax)))
 		{
-			// generate bounding coordinates for the shop based on the required location and its
 
+			String queryPartProximity = "";
+			String queryPartProximityTwo = "";
+
+			// generate bounding coordinates for the shop based on the required location and its
 			center = GeoLocation.fromDegrees(latCenter,lonCenter);
 			minMaxArray = center.boundingCoordinates(proximity,6371.01);
 
@@ -362,17 +440,18 @@ public class ShopService {
 
 			if(isFirst)
 			{
-				query = query + " WHERE ";
+				queryNormal = queryNormal + " WHERE ";
 
 				// reset the flag
 				isFirst = false;
 
 			}else
 			{
-				query = query + " AND ";
+				queryNormal = queryNormal + " AND ";
 			}
 
-			query = query + ShopContract.TABLE_NAME
+				// Filtering by proximity using bounding coordinates
+			queryPartProximityTwo = queryPartProximityTwo+ ShopContract.TABLE_NAME
 					+ "."
 					+ ShopContract.LAT_CENTER
 					+ " < " + latMax
@@ -394,6 +473,53 @@ public class ShopService {
 					+ "."
 					+ ShopContract.LON_CENTER
 					+ " > " + lonMin;
+
+
+				// filter using Haversine formula using SQL math functions
+			queryPartProximity = queryPartProximity
+					+ " (6371.01 * acos(cos( radians("
+					+ latCenter
+					+ ")) * cos( radians("
+					+ ShopContract.LAT_CENTER
+					+ " )) * cos(radians( "
+					+ ShopContract.LON_CENTER
+					+ ") - radians("
+					+ lonCenter
+					+ "))"
+					+ " + sin( radians("
+					+ latCenter
+					+ ")) * sin(radians("
+					+ ShopContract.LAT_CENTER
+					+ ")))) <= "
+					+ proximity ;
+
+
+			queryNormal = queryNormal + queryPartProximity;
+
+			queryJoin = queryJoin + " AND " + queryPartProximity;
+
+
+		}
+
+		if(itemCategoryID>0)
+		{
+			// filter shops by Item Category ID
+			queryJoin = queryJoin + " AND "
+					+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.ITEM_CATEGORY_ID
+					+ " = "
+					+ itemCategoryID;
+		}
+
+
+
+		// use Join query only if filtering requires a join
+		if(itemCategoryID>0)
+		{
+			query = queryJoin;
+
+		}else
+		{
+			query = queryNormal;
 		}
 
 
@@ -421,6 +547,7 @@ public class ShopService {
 			{
 				
 				Shop shop = new Shop();
+				shop.setDistance(rs.getDouble("distance"));
 				shop.setShopID(rs.getInt(ShopContract.SHOP_ID));
 				shop.setShopName(rs.getString(ShopContract.SHOP_NAME));
 				shop.setLatCenter(rs.getFloat(ShopContract.LAT_CENTER));
@@ -484,10 +611,28 @@ public class ShopService {
 	
 	
 	
-	public Shop getShop(int ShopID)
+	public Shop getShop(int ShopID,
+						double latCenter, double lonCenter)
 	{		
-		String query = "SELECT * FROM " + ShopContract.TABLE_NAME 
+		String query = "SELECT "
+						+ " (6371.01 * acos(cos( radians("
+						+ latCenter
+						+ ")) * cos( radians("
+						+ ShopContract.LAT_CENTER
+						+ " )) * cos(radians( "
+						+ ShopContract.LON_CENTER
+						+ ") - radians("
+						+ lonCenter
+						+ "))"
+						+ " + sin( radians("
+						+ latCenter
+						+ ")) * sin(radians("
+						+ ShopContract.LAT_CENTER
+						+ "))))"
+						+ " as distance , * FROM " + ShopContract.TABLE_NAME
 						+ " WHERE "	+  ShopContract.SHOP_ID + "= " + ShopID;
+
+
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -509,6 +654,7 @@ public class ShopService {
 			{
 				
 				shop = new Shop();
+				shop.setDistance(rs.getDouble("distance"));
 				shop.setShopID(rs.getInt(ShopContract.SHOP_ID));
 				shop.setShopName(rs.getString(ShopContract.SHOP_NAME));
 				shop.setLatCenter(rs.getFloat(ShopContract.LAT_CENTER));

@@ -21,15 +21,23 @@ public class Shop {
 	double latCenter;
 	double lonCenter;
 
+	// bounding coordinates for the shop generated using shop center coordinates and delivery range.
 	double latMax;
 	double lonMax;
 	double latMin;
 	double lonMin;
 
+	double distance;
 
+	public double getDistance() {
+		return distance;
+	}
 
-	
-	// delivery charger per order 
+	public void setDistance(double distance) {
+		this.distance = distance;
+	}
+
+	// delivery charger per order
 	double deliveryCharges;
 	
 	// column created for JDBC

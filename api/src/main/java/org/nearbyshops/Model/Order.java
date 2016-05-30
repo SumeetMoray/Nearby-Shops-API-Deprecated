@@ -1,22 +1,7 @@
 package org.nearbyshops.Model;
 
-import java.util.List;
-
+/**
+ * Created by sumeet on 29/5/16.
+ */
 public class Order {
-	
-	Shop shop;
-	int shopID;
-	
-	EndUser endUser;
-	int endUserID;
-	
-	int orderID;
-	
-	
-	
-	List<OrderItem> orderItems;
-	
-	
-	
-
 }

@@ -1,11 +1,6 @@
 package org.nearbyshops.Globals;
 
-import org.nearbyshops.DAOs.DistributorService;
-import org.nearbyshops.DAOs.ItemCategoryService;
-import org.nearbyshops.DAOs.ItemService;
-import org.nearbyshops.DAOs.ShopItemService;
-import org.nearbyshops.DAOs.ShopService;
-import org.nearbyshops.Model.Later.AbstractCategoryService;
+import org.nearbyshops.DAOs.*;
 
 
 public class Globals {
@@ -21,7 +16,7 @@ public class Globals {
 	public static ShopService shopService = new ShopService();
 	
 	public static ShopItemService shopItemService = new ShopItemService();
-	
-	public static AbstractCategoryService abstractCategoryService = new AbstractCategoryService();
+
+	public static EndUserService endUserService = new EndUserService();
 	
 }
