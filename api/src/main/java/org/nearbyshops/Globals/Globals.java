@@ -1,6 +1,7 @@
 package org.nearbyshops.Globals;
 
 import org.nearbyshops.DAOs.*;
+import org.nearbyshops.ModelStats.CartStats;
 
 
 public class Globals {
@@ -18,5 +19,11 @@ public class Globals {
 	public static ShopItemService shopItemService = new ShopItemService();
 
 	public static EndUserService endUserService = new EndUserService();
-	
+
+	public static CartService cartService = new CartService();
+
+	public static CartItemService cartItemService = new CartItemService();
+
+	public static CartStatsDAO cartStatsDAO = new CartStatsDAO();
+
 }

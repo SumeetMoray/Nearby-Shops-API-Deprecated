@@ -1,7 +1,7 @@
 package org.nearbyshops.RESTInterfaces;
 
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.Model.Distributor;
+import org.nearbyshops.Model.Cart;
 import org.nearbyshops.Model.EndUser;
 
 import javax.ws.rs.*;
@@ -13,11 +13,11 @@ import java.net.URI;
 import java.util.List;
 
 
-@Path("/EndUser")
-public class EndUserResource {
+@Path("/Cart")
+public class CartResource {
 
 
-	public EndUserResource() {
+	public CartResource() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -26,21 +26,21 @@ public class EndUserResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response createEndUser(EndUser endUser)
+	public Response createCart(Cart cart)
 	{
 
-		int idOfInsertedRow = Globals.endUserService.saveEndUser(endUser);
+		int idOfInsertedRow = Globals.cartService.saveCart(cart);
 
-		endUser.setEndUserID(idOfInsertedRow);
+		cart.setCartID(idOfInsertedRow);
 
-		
+
 		if(idOfInsertedRow >=1)
 		{
 			
 			
 			Response response = Response.status(Status.CREATED)
-					.location(URI.create("/api/Distributor/" + idOfInsertedRow))
-					.entity(endUser)
+					.location(URI.create("/api/Cart/" + idOfInsertedRow))
+					.entity(cart)
 					.build();
 			
 			return response;
@@ -62,16 +62,16 @@ public class EndUserResource {
 
 	
 	@PUT
-	@Path("/{EndUserID}")
+	@Path("/{CartID}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateDistributor(@PathParam("EndUserID")int endUserID, EndUser endUser)
+	public Response updateCart(@PathParam("CartID")int cartID, Cart cart)
 	{
 
-		endUser.setEndUserID(endUserID);
+		cart.setCartID(cartID);
 
-		int rowCount = Globals.endUserService.updateEndUser(endUser);
-		
-		
+		int rowCount = Globals.cartService.updateCart(cart);
+
+
 		if(rowCount >= 1)
 		{
 			Response response = Response.status(Status.OK)
@@ -88,19 +88,18 @@ public class EndUserResource {
 			
 			return response;
 		}
-		
-		
+
+
 		return null;
-		
 	}
 
+
 	@DELETE
-	@Path("/{EndUserID}")
-	//@Produces(MediaType.APPLICATION_JSON)
-	public Response deleteDistributor(@PathParam("EndUserID")int endUserID)
+	@Path("/{CartID}")
+	public Response deleteCart(@PathParam("CartID")int cartID)
 	{
 
-		int rowCount = Globals.endUserService.deleteEndUser(endUserID);
+		int rowCount = Globals.cartService.deleteCart(cartID);
 		
 		
 		if(rowCount>=1)
@@ -128,18 +127,19 @@ public class EndUserResource {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getEndUsers()
+	public Response getCarts(@QueryParam("EndUserID")int endUserID,
+							 @QueryParam("ShopID")int shopID)
+
 	{
 
+		List<Cart> cartList = Globals.cartService.readCarts(endUserID,shopID);
 
-		List<EndUser> list = Globals.endUserService.getEndUser();
-
-		GenericEntity<List<EndUser>> listEntity = new GenericEntity<List<EndUser>>(list){
+		GenericEntity<List<Cart>> listEntity = new GenericEntity<List<Cart>>(cartList){
 			
 		};
 	
 		
-		if(list.size()<=0)
+		if(cartList.size()<=0)
 		{
 			Response response = Response.status(Status.NO_CONTENT)
 					.entity(listEntity)
@@ -160,17 +160,17 @@ public class EndUserResource {
 	
 	
 	@GET
-	@Path("/{EndUserID}")
+	@Path("/{CartID}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getEndUser(@PathParam("EndUserID")int endUserID)
+	public Response getCart(@PathParam("CartID")int cartID)
 	{
 
-		EndUser endUser = Globals.endUserService.getEndUser(endUserID);
+		Cart cart = Globals.cartService.readCart(cartID);
 		
-		if(endUser!= null)
+		if(cart != null)
 		{
 			Response response = Response.status(Status.OK)
-			.entity(endUser)
+			.entity(cart)
 			.build();
 			
 			return response;
@@ -179,7 +179,7 @@ public class EndUserResource {
 		{
 			
 			Response response = Response.status(Status.NO_CONTENT)
-					.entity(endUser)
+					.entity(cart)
 					.build();
 			
 			return response;

@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response.Status;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.ShopItem;
 
+
 @Path("/ShopItem")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -118,19 +119,19 @@ public class ShopItemResource {
 	@GET
 	public Response getShopItems(
 			@QueryParam("ShopID")int ShopID, @QueryParam("ItemID") int itemID,
-			@QueryParam("ItemCategoryID")int itemCategoryID,
 			@QueryParam("latCenter")double latCenter,@QueryParam("lonCenter")double lonCenter,
 			@QueryParam("deliveryRangeMax")double deliveryRangeMax,
 			@QueryParam("deliveryRangeMin")double deliveryRangeMin,
-			@QueryParam("proximity")double proximity
+			@QueryParam("proximity")double proximity,
+			@QueryParam("EndUserID") int endUserID,@QueryParam("IsFilledCart") boolean isFilledCart
 	)
 	{
 		List<ShopItem> shopItemsList = Globals.shopItemService.getShopItems(
-				ShopID, itemID,itemCategoryID,
+				ShopID, itemID,
 				latCenter, lonCenter,
-				deliveryRangeMin,deliveryRangeMax, proximity);
-
-
+				deliveryRangeMin,deliveryRangeMax,
+				proximity,
+				endUserID,isFilledCart);
 
 
 		for(ShopItem shopItem: shopItemsList)

@@ -7,11 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import org.nearbyshops.ContractClasses.ItemCategoryContract;
-import org.nearbyshops.ContractClasses.ItemContract;
-import org.nearbyshops.ContractClasses.JDBCContract;
-import org.nearbyshops.ContractClasses.ShopContract;
-import org.nearbyshops.ContractClasses.ShopItemContract;
+import org.nearbyshops.ContractClasses.*;
 import org.nearbyshops.Model.ShopItem;
 import org.nearbyshops.Utility.GeoLocation;
 
@@ -227,12 +223,13 @@ public class ShopItemService {
 
 
 
+
 public ArrayList<ShopItem> getShopItems(
 											int shopID, int itemID,
-											int itemCategoryID,
 											double latCenter, double lonCenter,
 											double deliveryRangeMin, double deliveryRangeMax,
-											double proximity
+											double proximity,
+											int endUserID, boolean isFilledCart
 )
 {
 
@@ -274,7 +271,8 @@ public ArrayList<ShopItem> getShopItems(
 			+ "I." + ItemContract.ITEM_CATEGORY_ID + "=" + "IC." + ItemCategoryContract.ITEM_CATEGORY_ID;
 	
 	*/
-	
+
+
 	
 	
 	String queryJoin = "SELECT DISTINCT "
@@ -298,7 +296,32 @@ public ArrayList<ShopItem> getShopItems(
 			+ "="
 			+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.ITEM_CATEGORY_ID;
 	
-	
+
+
+	if(endUserID>0)
+	{
+		if(isFilledCart)
+		{
+			queryJoin = queryJoin + " AND "
+					+ ShopItemContract.TABLE_NAME
+					+ "."
+					+ ShopItemContract.SHOP_ID + " IN "
+					+ " (SELECT " + CartContract.SHOP_ID + " FROM " + CartContract.TABLE_NAME + " WHERE "
+					+ CartContract.END_USER_ID + " = " + endUserID + ")";
+		}else
+		{
+			queryJoin = queryJoin + " AND "
+					+ ShopItemContract.TABLE_NAME
+					+ "."
+					+ ShopItemContract.SHOP_ID + " NOT IN "
+					+ " (SELECT " + CartContract.SHOP_ID + " FROM " + CartContract.TABLE_NAME + " WHERE "
+					+ CartContract.END_USER_ID + " = " + endUserID + ")";
+
+		}
+
+	}
+
+
 
 	if(shopID > 0)
 	{
@@ -337,7 +360,8 @@ public ArrayList<ShopItem> getShopItems(
 
 	}
 	
-	
+
+	/*
 	
 	if(itemCategoryID > 0)
 	{
@@ -349,6 +373,7 @@ public ArrayList<ShopItem> getShopItems(
 			
 	}
 
+	*/
 
 
 
@@ -458,7 +483,7 @@ public ArrayList<ShopItem> getShopItems(
 	 */
 
 
-	if(itemCategoryID == 0 && (latCenter== 0 || lonCenter==0) && deliveryRangeMax == 0 && proximity == 0)
+	if((latCenter== 0 || lonCenter==0) && deliveryRangeMax == 0 && proximity == 0)
 	{
 		query = queryNormal;
 

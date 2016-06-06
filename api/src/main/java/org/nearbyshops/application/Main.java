@@ -6,6 +6,7 @@ import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.nearbyshops.Globals.Globals;
+import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ItemCategory;
 
 
@@ -372,8 +373,8 @@ public class Main implements ActionListener {
 					+ " " + OrderItemContract.ORDER_ID + " INT,"
 					+ " " + OrderItemContract.ITEM_PRICE_AT_ORDER + " FLOAT,"
 					+ " " + OrderItemContract.ITEM_QUANTITY + " INT,"
-					+ " FOREIGN KEY(" + OrderItemContract.ITEM_ID +") REFERENCES " + EndUserContract.TABLE_NAME + "(" + EndUserContract.END_USER_ID + "),"
-					+ " FOREIGN KEY(" + OrderItemContract.ORDER_ID +") REFERENCES " + ShopContract.TABLE_NAME + "(" + ShopContract.SHOP_ID + "),"
+					+ " FOREIGN KEY(" + OrderItemContract.ITEM_ID +") REFERENCES " + ItemContract.TABLE_NAME + "(" + ItemContract.ITEM_ID + "),"
+					+ " FOREIGN KEY(" + OrderItemContract.ORDER_ID +") REFERENCES " + OrderContract.TABLE_NAME + "(" + OrderContract.ORDER_ID + "),"
 					+ " PRIMARY KEY (" + OrderItemContract.ITEM_ID + ", " + OrderItemContract.ORDER_ID + ")"
 					+ ")";
 
@@ -382,6 +383,28 @@ public class Main implements ActionListener {
 
 
 
+			String createTableCartPostgres = "CREATE TABLE IF NOT EXISTS " + CartContract.TABLE_NAME + "("
+					+ " " + CartContract.CART_ID + " SERIAL PRIMARY KEY,"
+					+ " " + CartContract.END_USER_ID + " INT,"
+					+ " " + CartContract.SHOP_ID + " INT,"
+					+ " FOREIGN KEY(" + CartContract.END_USER_ID +") REFERENCES " + EndUserContract.TABLE_NAME + "(" + EndUserContract.END_USER_ID + "),"
+					+ " FOREIGN KEY(" + CartContract.SHOP_ID +") REFERENCES " + ShopContract.TABLE_NAME + "(" + ShopContract.SHOP_ID + "),"
+					+ " UNIQUE (" + CartContract.END_USER_ID + "," + CartContract.SHOP_ID + ")"
+					+ ")";
+
+			stmt.executeUpdate(createTableCartPostgres);
+
+			String createtableCartItemPostgres = "CREATE TABLE IF NOT EXISTS " + CartItemContract.TABLE_NAME + "("
+					+ " " + CartItemContract.ITEM_ID + " INT,"
+					+ " " + CartItemContract.CART_ID + " INT,"
+					+ " " + CartItemContract.ITEM_QUANTITY + " INT,"
+					+ " FOREIGN KEY(" + CartItemContract.ITEM_ID +") REFERENCES " + ItemContract.TABLE_NAME + "(" + ItemContract.ITEM_ID + "),"
+					+ " FOREIGN KEY(" + CartItemContract.CART_ID +") REFERENCES " + CartContract.TABLE_NAME + "(" + CartContract.CART_ID + "),"
+					+ " PRIMARY KEY (" + CartItemContract.ITEM_ID + ", " + CartItemContract.CART_ID + ")"
+					+ ")";
+
+
+			stmt.executeUpdate(createtableCartItemPostgres);
 
 
 			// Insert the root category whose ID is 1

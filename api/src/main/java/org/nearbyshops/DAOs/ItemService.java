@@ -14,7 +14,6 @@ import org.nearbyshops.ContractClasses.JDBCContract;
 import org.nearbyshops.ContractClasses.ShopContract;
 import org.nearbyshops.ContractClasses.ShopItemContract;
 import org.nearbyshops.Model.Item;
-import org.nearbyshops.Model.ItemCategory;
 import org.nearbyshops.ModelStats.ItemStats;
 import org.nearbyshops.Utility.GeoLocation;
 
