@@ -206,12 +206,9 @@ public class CartItemResource {
 	
 
 
-
-
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getCartItem(@QueryParam("CartID")int cartID,
-							 	@QueryParam("ItemID")int itemID,
+	public Response getCartItem(@QueryParam("CartID")int cartID, @QueryParam("ItemID")int itemID,
 								@QueryParam("EndUserID") int endUserID,
 								@QueryParam("ShopID") int shopID)
 	{

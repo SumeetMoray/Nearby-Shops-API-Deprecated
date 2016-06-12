@@ -2,6 +2,8 @@ package org.nearbyshops.Globals;
 
 import org.nearbyshops.DAOs.*;
 import org.nearbyshops.ModelStats.CartStats;
+import org.nearbyshops.ModelStats.DeliveryAddress;
+import org.nearbyshops.RESTInterfaces.OrderResource;
 
 
 public class Globals {
@@ -25,5 +27,9 @@ public class Globals {
 	public static CartItemService cartItemService = new CartItemService();
 
 	public static CartStatsDAO cartStatsDAO = new CartStatsDAO();
+
+	public static OrderService orderService = new OrderService();
+
+	public static DeliveryAddressService deliveryAddressService = new DeliveryAddressService();
 
 }

@@ -77,7 +77,73 @@ public class ShopItemService {
 
 		return rowCount;
 	}
-	
+
+
+
+
+	public int updateAvailableItemQuantity(int orderID)
+	{
+
+
+
+		String updateQuantity =
+
+			" Update shop_item SET available_item_quantity = available_item_quantity - item_quantity from order_item,customer_order " +
+			" where order_item.item_id = shop_item.item_id " +
+			" and customer_order.order_id = order_item.order_id " +
+			" and shop_item.shop_id = customer_order.shop_id " +
+			" and customer_order.order_id = " + orderID;
+
+
+
+		Connection conn = null;
+		Statement stmt = null;
+		int updatedRows = -1;
+
+		try {
+
+			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
+					JDBCContract.CURRENT_USERNAME,
+					JDBCContract.CURRENT_PASSWORD);
+
+			stmt = conn.createStatement();
+
+			updatedRows = stmt.executeUpdate(updateQuantity);
+
+
+			System.out.println("Total rows updated: " + updatedRows);
+
+			//conn.close();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally
+
+		{
+
+			try {
+
+				if(stmt!=null)
+				{stmt.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(conn!=null)
+				{conn.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return updatedRows;
+	}
 	
 	
 	public int updateShopItem(ShopItem shopItem)

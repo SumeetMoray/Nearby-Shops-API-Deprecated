@@ -28,11 +28,11 @@ public class CartStatsResource {
 	@GET
 	@Path("/{EndUserID}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAllDistributors(@PathParam("EndUserID") int endUserID,
+	public Response getCartStats(@PathParam("EndUserID")int endUserID,@QueryParam("CartID") int cartID,
 									   @QueryParam("latCenter")double latCenter, @QueryParam("lonCenter")double lonCenter)
 	{
 
-		List<CartStats> cartStats = Globals.cartStatsDAO.getCartStats(endUserID);
+		List<CartStats> cartStats = Globals.cartStatsDAO.getCartStats(endUserID,cartID);
 
 
 		for(CartStats cartStatsItem: cartStats)

@@ -7,6 +7,8 @@ import org.nearbyshops.Model.Shop;
  */
 public class CartStats {
 
+    int cartID;
+
     int itemsInCart;
 
     double cart_Total;
@@ -16,6 +18,14 @@ public class CartStats {
 
     Shop shop;
 
+
+    public int getCartID() {
+        return cartID;
+    }
+
+    public void setCartID(int cartID) {
+        this.cartID = cartID;
+    }
 
     public Shop getShop() {
         return shop;

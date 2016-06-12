@@ -347,17 +347,37 @@ public class Main implements ActionListener {
 			stmt.executeUpdate(createTableEndUserPostgres);
 
 
+			// create Delivery Address
+
+			String createTableDeliveryAddressPostgres = "CREATE TABLE IF NOT EXISTS " + DeliveryAddressContract.TABLE_NAME + "("
+					+ " " + DeliveryAddressContract.ID + " SERIAL PRIMARY KEY,"
+					+ " " + DeliveryAddressContract.END_USER_ID + " INT,"
+					+ " " + DeliveryAddressContract.CITY + " VARCHAR(40),"
+					+ " " + DeliveryAddressContract.DELIVERY_ADDRESS + " VARCHAR(100),"
+					+ " " + DeliveryAddressContract.LANDMARK + " VARCHAR(100),"
+					+ " " + DeliveryAddressContract.NAME + " VARCHAR(100),"
+					+ " " + DeliveryAddressContract.PHONE_NUMBER + " BIGINT,"
+					+ " " + DeliveryAddressContract.PINCODE + " BIGINT,"
+					+ " FOREIGN KEY(" + DeliveryAddressContract.END_USER_ID +") REFERENCES " + EndUserContract.TABLE_NAME + "(" + EndUserContract.END_USER_ID + ")"
+					+ ")";
+
+
+			stmt.executeUpdate(createTableDeliveryAddressPostgres);
 
 			// Create Table Order In postgres
 
 			String createTableOrderPostgres = "CREATE TABLE IF NOT EXISTS " + OrderContract.TABLE_NAME + "("
 					+ " " + OrderContract.ORDER_ID + " SERIAL PRIMARY KEY,"
-					+ " " + OrderContract.DELIVERY_CHARGES + " INT,"
-					+ " " + OrderContract.ORDER_STATUS + " INT,"
 					+ " " + OrderContract.END_USER_ID + " INT,"
 					+ " " + OrderContract.SHOP_ID + " INT,"
+					+ " " + OrderContract.ORDER_STATUS + " INT,"
+					+ " " + OrderContract.DELIVERY_CHARGES + " INT,"
+					+ " " + OrderContract.DELIVERY_ADDRESS_ID + " INT,"
+					+ " " + OrderContract.PICK_FROM_SHOP + " boolean,"
+					+ " " + OrderContract.DATE_TIME_PLACED + " timestamp with time zone NOT NULL DEFAULT now(),"
 					+ " FOREIGN KEY(" + OrderContract.END_USER_ID +") REFERENCES " + EndUserContract.TABLE_NAME + "(" + EndUserContract.END_USER_ID + "),"
-					+ " FOREIGN KEY(" + OrderContract.SHOP_ID +") REFERENCES " + ShopContract.TABLE_NAME + "(" + ShopContract.SHOP_ID + ")"
+					+ " FOREIGN KEY(" + OrderContract.SHOP_ID +") REFERENCES " + ShopContract.TABLE_NAME + "(" + ShopContract.SHOP_ID + "),"
+					+ " FOREIGN KEY(" + OrderContract.DELIVERY_ADDRESS_ID +") REFERENCES " + DeliveryAddressContract.TABLE_NAME + "(" + DeliveryAddressContract.ID + ")"
 					+ ")";
 
 			//System.out.println("Into the create table");
@@ -375,9 +395,9 @@ public class Main implements ActionListener {
 					+ " " + OrderItemContract.ITEM_QUANTITY + " INT,"
 					+ " FOREIGN KEY(" + OrderItemContract.ITEM_ID +") REFERENCES " + ItemContract.TABLE_NAME + "(" + ItemContract.ITEM_ID + "),"
 					+ " FOREIGN KEY(" + OrderItemContract.ORDER_ID +") REFERENCES " + OrderContract.TABLE_NAME + "(" + OrderContract.ORDER_ID + "),"
-					+ " PRIMARY KEY (" + OrderItemContract.ITEM_ID + ", " + OrderItemContract.ORDER_ID + ")"
+					+ " PRIMARY KEY (" + OrderItemContract.ITEM_ID + ", " + OrderItemContract.ORDER_ID + "),"
+					+ " UNIQUE (" + OrderItemContract.ITEM_ID + "," + OrderItemContract.ORDER_ID  + ")"
 					+ ")";
-
 
 			stmt.executeUpdate(createtableOrderItemPostgres);
 

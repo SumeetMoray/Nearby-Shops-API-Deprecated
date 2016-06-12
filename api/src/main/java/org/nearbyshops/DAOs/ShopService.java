@@ -372,6 +372,7 @@ public class ShopService {
 					+ latCenter + ")) * cos( radians( lat_center) ) * cos(radians( lon_center ) - radians("
 					+ lonCenter + "))"
 					+ " + sin( radians(" + latCenter + ")) * sin(radians(lat_center))) <= delivery_range ";
+
 			//+ " BETWEEN " + latmax + " AND " + latmin;
 
 			queryNormal = queryNormal + queryPartlatLonCenter;
@@ -604,8 +605,7 @@ public class ShopService {
 				e.printStackTrace();
 			}
 		}
-		
-								
+
 		return shopList;
 	}
 	
@@ -613,7 +613,8 @@ public class ShopService {
 	
 	public Shop getShop(int ShopID,
 						double latCenter, double lonCenter)
-	{		
+	{
+
 		String query = "SELECT "
 						+ " (6371.01 * acos(cos( radians("
 						+ latCenter

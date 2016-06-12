@@ -14,7 +14,7 @@ import java.util.List;
 public class CartStatsDAO {
 
 
-    public List<CartStats> getCartStats(int endUserID)
+    public List<CartStats> getCartStats(int endUserID, int cartID)
     {
 
 
@@ -40,7 +40,9 @@ public class CartStatsDAO {
 
                 ") as Items_In_Cart," +
 
-                CartContract.TABLE_NAME + "." +CartContract.SHOP_ID +
+                CartContract.TABLE_NAME + "." +CartContract.SHOP_ID + ","
+
+                + CartContract.TABLE_NAME + "." + CartContract.CART_ID  +
 
                 " from " +
 
@@ -69,18 +71,31 @@ public class CartStatsDAO {
 
                 " = " +
 
-                "cart_item.item_id " +
+                "cart_item.item_id "
 
-                "and " +
+                + "and " + "end_user_id = " +
 
-                "end_user_id = " +
+                endUserID ;
 
-                endUserID +
 
-                " group by " +
 
-                " cart.shop_id";
 
+        if(cartID > 0)
+        {
+            query = query + "and " + CartContract.TABLE_NAME + "." + CartContract.CART_ID + " = " + cartID;
+        }
+
+
+
+
+
+        String groupByQueryPart =  " group by " +
+
+                                    " cart.shop_id," + CartContract.TABLE_NAME + "." + CartContract.CART_ID;
+
+
+
+        query = query + groupByQueryPart;
 
 
         Connection conn = null;
@@ -103,6 +118,7 @@ public class CartStatsDAO {
             {
                 CartStats cartStats = new CartStats();
 
+                cartStats.setCartID(rs.getInt(CartContract.CART_ID));
                 cartStats.setShopID(rs.getInt("shop_id"));
                 cartStats.setItemsInCart(rs.getInt("items_in_cart"));
                 cartStats.setCart_Total(rs.getDouble("cart_total"));
@@ -151,8 +167,5 @@ public class CartStatsDAO {
 
         return cartStatsList;
     }
-
-
-
 
 }

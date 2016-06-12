@@ -156,9 +156,30 @@ public class CartItemService {
 	public int deleteCartItem(int itemID,int cartID)
 	{
 
-		String deleteStatement = "DELETE FROM " + CartItemContract.TABLE_NAME
-				+ " WHERE " + CartItemContract.ITEM_ID + " = " + itemID
-				+ " AND " + CartItemContract.CART_ID + " = " + cartID;
+		String deleteStatement = "DELETE FROM " + CartItemContract.TABLE_NAME;
+
+
+		boolean isFirst = true;
+
+		if(itemID > 0)
+		{
+			deleteStatement = deleteStatement + " WHERE " + CartItemContract.ITEM_ID + " = " + itemID;
+			isFirst = false;
+		}
+
+		if(cartID > 0)
+		{
+			if(isFirst)
+			{
+				deleteStatement = deleteStatement + " WHERE " + CartItemContract.CART_ID + " = " + cartID;
+			}else
+			{
+				deleteStatement = deleteStatement + " AND " + CartItemContract.CART_ID + " = " + cartID;
+			}
+
+		}
+
+
 
 
 		Connection conn= null;

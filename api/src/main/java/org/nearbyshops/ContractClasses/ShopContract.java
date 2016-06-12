@@ -18,7 +18,12 @@ public class ShopContract {
 
 	//public static final String AVERAGE_RATING = "AVERAGE_RATING";
 	public static final String DELIVERY_CHARGES = "DELIVERY_CHARGES";
+	public static final String AMOUNT_FOR_FREE_DELIVERY = "AMOUNT_FOR_FREE_DELIVERY";
 	public static final String DISTRIBUTOR_ID = "DISTRIBUTOR_ID";
 	public static final String IMAGE_PATH = "IMAGE_PATH";
+	public static final String ADDRESS_STATE = "address_state";
+	public static final String ADDRESS_CITY = "address_city";
+	public static final String ADDRESS_PINCODE = "address_pincode";
+	public static final String ADDRESS_ = "address_state";
 
 }
