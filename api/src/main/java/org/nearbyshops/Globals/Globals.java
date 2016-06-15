@@ -3,6 +3,7 @@ package org.nearbyshops.Globals;
 import org.nearbyshops.DAOs.*;
 import org.nearbyshops.ModelStats.CartStats;
 import org.nearbyshops.ModelStats.DeliveryAddress;
+import org.nearbyshops.ModelStats.DeliveryVehicleSelf;
 import org.nearbyshops.RESTInterfaces.OrderResource;
 
 
@@ -31,5 +32,9 @@ public class Globals {
 	public static OrderService orderService = new OrderService();
 
 	public static DeliveryAddressService deliveryAddressService = new DeliveryAddressService();
+
+	public static OrderItemService orderItemService = new OrderItemService();
+
+	public static DeliveryVehicleSelfDAO deliveryVehicleSelfDAO = new DeliveryVehicleSelfDAO();
 
 }

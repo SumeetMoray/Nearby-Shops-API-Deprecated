@@ -8,6 +8,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ItemCategory;
+import org.nearbyshops.ModelStats.DeliveryVehicleSelf;
 
 
 import java.awt.BorderLayout;
@@ -364,20 +365,26 @@ public class Main implements ActionListener {
 
 			stmt.executeUpdate(createTableDeliveryAddressPostgres);
 
+
 			// Create Table Order In postgres
 
 			String createTableOrderPostgres = "CREATE TABLE IF NOT EXISTS " + OrderContract.TABLE_NAME + "("
 					+ " " + OrderContract.ORDER_ID + " SERIAL PRIMARY KEY,"
 					+ " " + OrderContract.END_USER_ID + " INT,"
 					+ " " + OrderContract.SHOP_ID + " INT,"
-					+ " " + OrderContract.ORDER_STATUS + " INT,"
+					+ " " + OrderContract.STATUS_HOME_DELIVERY + " INT,"
+					+ " " + OrderContract.STATUS_PICK_FROM_SHOP + " INT,"
+					+ " " + OrderContract.DELIVERY_RECEIVED + " boolean,"
+					+ " " + OrderContract.PAYMENT_RECEIVED + " boolean,"
 					+ " " + OrderContract.DELIVERY_CHARGES + " INT,"
 					+ " " + OrderContract.DELIVERY_ADDRESS_ID + " INT,"
 					+ " " + OrderContract.PICK_FROM_SHOP + " boolean,"
+					+ " " + OrderContract.DELIVERY_VEHICLE_SELF_ID + " INT,"
 					+ " " + OrderContract.DATE_TIME_PLACED + " timestamp with time zone NOT NULL DEFAULT now(),"
 					+ " FOREIGN KEY(" + OrderContract.END_USER_ID +") REFERENCES " + EndUserContract.TABLE_NAME + "(" + EndUserContract.END_USER_ID + "),"
 					+ " FOREIGN KEY(" + OrderContract.SHOP_ID +") REFERENCES " + ShopContract.TABLE_NAME + "(" + ShopContract.SHOP_ID + "),"
-					+ " FOREIGN KEY(" + OrderContract.DELIVERY_ADDRESS_ID +") REFERENCES " + DeliveryAddressContract.TABLE_NAME + "(" + DeliveryAddressContract.ID + ")"
+					+ " FOREIGN KEY(" + OrderContract.DELIVERY_ADDRESS_ID +") REFERENCES " + DeliveryAddressContract.TABLE_NAME + "(" + DeliveryAddressContract.ID + "),"
+					+ " FOREIGN KEY(" + OrderContract.DELIVERY_VEHICLE_SELF_ID +") REFERENCES " + DeliveryVehicleSelfContract.TABLE_NAME + "(" + DeliveryVehicleSelfContract.ID + ")"
 					+ ")";
 
 			//System.out.println("Into the create table");
@@ -425,6 +432,20 @@ public class Main implements ActionListener {
 
 
 			stmt.executeUpdate(createtableCartItemPostgres);
+
+			// Create table Delivery Vehicle Self
+
+
+			String createtableDeliveryVehicleSelfPostgres = "CREATE TABLE IF NOT EXISTS " + DeliveryVehicleSelfContract.TABLE_NAME + "("
+					+ " " + DeliveryVehicleSelfContract.ID + " SERIAL PRIMARY KEY,"
+					+ " " + DeliveryVehicleSelfContract.VEHICLE_NAME + " VARCHAR(30),"
+					+ " " + DeliveryVehicleSelfContract.SHOP_ID + " INT,"
+					+ " FOREIGN KEY(" + DeliveryVehicleSelfContract.SHOP_ID +") REFERENCES " + ShopContract.TABLE_NAME + "(" + ShopContract.SHOP_ID + ")"
+					+ ")";
+
+
+			stmt.executeUpdate(createtableDeliveryVehicleSelfPostgres);
+
 
 
 			// Insert the root category whose ID is 1

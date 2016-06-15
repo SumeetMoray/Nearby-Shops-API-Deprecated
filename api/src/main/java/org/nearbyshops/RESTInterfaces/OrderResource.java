@@ -3,6 +3,7 @@ package org.nearbyshops.RESTInterfaces;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Cart;
 import org.nearbyshops.Model.Order;
+import org.nearbyshops.ModelStats.OrderStats;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
@@ -90,16 +91,89 @@ public class OrderResource {
 	}
 
 
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateOrderBulk(List<Order> ordersList)
+	{
+
+		int rowCount = 0;
+
+		for(Order orderItem: ordersList)
+		{
+			rowCount = rowCount + Globals.orderService.updateOrder(orderItem);
+		}
+
+
+
+
+		if(rowCount == 0)
+		{
+			Response response = Response.status(Status.NOT_MODIFIED)
+					.entity(null)
+					.build();
+
+			return response;
+		}
+		else if(rowCount >= ordersList.size())
+		{
+			Response response = Response.status(Status.OK)
+					.entity(null)
+					.build();
+
+			return response;
+		}
+
+
+		return null;
+	}
+
 
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getOrders(@QueryParam("EndUserID")int endUserID,
-							 @QueryParam("ShopID")int shopID)
+							  @QueryParam("ShopID")int shopID,
+							  @QueryParam("PickFromShop") Boolean pickFromShop,
+							  @QueryParam("StatusHomeDelivery")int homeDeliveryStatus,
+							  @QueryParam("StatusPickFromShopStatus")int pickFromShopStatus,
+							  @QueryParam("VehicleSelfID")int vehicleSelfID,
+							  @QueryParam("PaymentsReceived") Boolean paymentsReceived,
+							  @QueryParam("DeliveryReceived") Boolean deliveryReceived,
+							  @QueryParam("GetDeliveryAddress")boolean getDeliveryAddress,
+							  @QueryParam("GetStats")boolean getStats)
 
 	{
 
-		List<Order> ordersList = Globals.orderService.readOrders(endUserID,shopID);
+		List<Order> ordersList = Globals.orderService.readOrders(endUserID,shopID,
+				pickFromShop,homeDeliveryStatus,pickFromShopStatus,vehicleSelfID,
+				paymentsReceived,deliveryReceived);
+
+
+		if(getDeliveryAddress)
+		{
+			for(Order order: ordersList)
+			{
+
+				order.setDeliveryAddress(
+						Globals.deliveryAddressService
+								.readAddress(order.getDeliveryAddressID())
+				);
+
+			}
+
+		}
+
+
+		if(getStats) {
+
+			for (Order order : ordersList) {
+
+				order.setOrderStats(Globals.orderItemService.getOrderStats(order.getOrderID()));
+			}
+
+		}
+
+
 
 		GenericEntity<List<Order>> listEntity = new GenericEntity<List<Order>>(ordersList){
 
@@ -129,7 +203,7 @@ public class OrderResource {
 	@GET
 	@Path("/{OrderID}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getCart(@PathParam("OrderID")int orderID)
+	public Response getOrder(@PathParam("OrderID")int orderID)
 	{
 
 		Order order = Globals.orderService.readOrder(orderID);
@@ -155,5 +229,35 @@ public class OrderResource {
 
 	}
 
+
+
+	@GET
+	@Path("/Stats/{OrderID}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getOrderStats(@PathParam("OrderID")int orderID)
+	{
+
+		OrderStats orderStats = Globals.orderItemService.getOrderStats(orderID);
+
+		if(orderStats != null)
+		{
+			Response response = Response.status(Status.OK)
+					.entity(orderStats)
+					.build();
+
+			return response;
+
+		} else
+		{
+
+			Response response = Response.status(Status.NO_CONTENT)
+					.entity(orderStats)
+					.build();
+
+			return response;
+
+		}
+
+	}
 
 }

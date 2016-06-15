@@ -1,5 +1,8 @@
 package org.nearbyshops.Model;
 
+import org.nearbyshops.ModelStats.DeliveryAddress;
+import org.nearbyshops.ModelStats.OrderStats;
+
 import java.sql.Timestamp;
 
 /**
@@ -10,13 +13,81 @@ public class Order {
     int orderID;
     int endUserID;
     int shopID;
-    int orderStatus;
+    //int orderStatus;
+
+    int statusHomeDelivery;
+    int statusPickFromShop;
+    boolean deliveryReceived;
+    boolean paymentReceived;
 
     int deliveryCharges;
     int deliveryAddressID;
     boolean pickFromShop;
 
+    int deliveryVehicleSelfID;
+
     Timestamp dateTimePlaced;
+
+
+    DeliveryAddress deliveryAddress;
+
+    OrderStats orderStats;
+
+    public int getDeliveryVehicleSelfID() {
+        return deliveryVehicleSelfID;
+    }
+
+    public void setDeliveryVehicleSelfID(int deliveryVehicleSelfID) {
+        this.deliveryVehicleSelfID = deliveryVehicleSelfID;
+    }
+
+    public OrderStats getOrderStats() {
+        return orderStats;
+    }
+
+    public void setOrderStats(OrderStats orderStats) {
+        this.orderStats = orderStats;
+    }
+
+    public DeliveryAddress getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(DeliveryAddress deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
+
+    public boolean isDeliveryReceived() {
+        return deliveryReceived;
+    }
+
+    public void setDeliveryReceived(boolean deliveryReceived) {
+        this.deliveryReceived = deliveryReceived;
+    }
+
+    public boolean isPaymentReceived() {
+        return paymentReceived;
+    }
+
+    public void setPaymentReceived(boolean paymentReceived) {
+        this.paymentReceived = paymentReceived;
+    }
+
+    public int getStatusHomeDelivery() {
+        return statusHomeDelivery;
+    }
+
+    public void setStatusHomeDelivery(int statusHomeDelivery) {
+        this.statusHomeDelivery = statusHomeDelivery;
+    }
+
+    public int getStatusPickFromShop() {
+        return statusPickFromShop;
+    }
+
+    public void setStatusPickFromShop(int statusPickFromShop) {
+        this.statusPickFromShop = statusPickFromShop;
+    }
 
 
     public int getDeliveryAddressID() {
@@ -51,13 +122,6 @@ public class Order {
         this.shopID = shopID;
     }
 
-    public int getOrderStatus() {
-        return orderStatus;
-    }
-
-    public void setOrderStatus(int orderStatus) {
-        this.orderStatus = orderStatus;
-    }
 
     public int getDeliveryCharges() {
         return deliveryCharges;

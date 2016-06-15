@@ -7,6 +7,7 @@ import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Cart;
 import org.nearbyshops.Model.Order;
 
+import javax.ws.rs.QueryParam;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -67,11 +68,17 @@ public class OrderService {
             if(order.getPickFromShop())
             {
                order.setDeliveryCharges(0);
+                order.setStatusPickFromShop(1);
 
             }else
             {
                 order.setDeliveryCharges((int)Globals.shopService.getShop(tempOrder.getShopID(),0,0).getDeliveryCharges());
+                order.setStatusHomeDelivery(1);
             }
+
+            order.setPaymentReceived(false);
+            order.setDeliveryReceived(false);
+
 
             updateOrder(order);
 
@@ -261,9 +268,14 @@ public class OrderService {
                 order.setDeliveryAddressID(rs.getInt(OrderContract.DELIVERY_ADDRESS_ID));
                 order.setEndUserID(rs.getInt(OrderContract.END_USER_ID));
                 order.setOrderID(rs.getInt(OrderContract.ORDER_ID));
-                order.setOrderStatus(rs.getInt(OrderContract.ORDER_STATUS));
                 order.setPickFromShop(rs.getBoolean(OrderContract.PICK_FROM_SHOP));
                 order.setDateTimePlaced(rs.getTimestamp(OrderContract.DATE_TIME_PLACED));
+                order.setDeliveryVehicleSelfID(rs.getInt(OrderContract.DELIVERY_VEHICLE_SELF_ID));
+
+                order.setStatusHomeDelivery(rs.getInt(OrderContract.STATUS_HOME_DELIVERY));
+                order.setStatusPickFromShop(rs.getInt(OrderContract.STATUS_PICK_FROM_SHOP));
+                order.setDeliveryReceived(rs.getBoolean(OrderContract.DELIVERY_RECEIVED));
+                order.setPaymentReceived(rs.getBoolean(OrderContract.PAYMENT_RECEIVED));
             }
 
 
@@ -309,7 +321,11 @@ public class OrderService {
     }
 
 
-    public ArrayList<Order> readOrders(int endUserID, int shopID)
+    public ArrayList<Order> readOrders(int endUserID, int shopID,
+                                        Boolean pickFromShop, int homeDeliveryStatus,int pickFromShopStatus,
+                                       int vehicleSelfID,
+                                       Boolean paymentsReceived,
+                                       Boolean deliveryReceived)
     {
         String query = "SELECT * FROM " + OrderContract.TABLE_NAME;
 
@@ -328,6 +344,8 @@ public class OrderService {
             {
                 query = query + " WHERE " + OrderContract.SHOP_ID + " = " + shopID;
 
+                isFirst = false;
+
             }else
             {
                 query = query + " AND " + OrderContract.SHOP_ID + " = " + shopID;
@@ -335,6 +353,112 @@ public class OrderService {
             }
 
         }
+
+
+
+        if(homeDeliveryStatus > 0 )
+        {
+            if(isFirst)
+            {
+                query = query + " WHERE " + OrderContract.STATUS_HOME_DELIVERY + " = " + homeDeliveryStatus;
+
+                isFirst = false;
+
+            }else
+            {
+                query = query + " AND " + OrderContract.STATUS_HOME_DELIVERY + " = " + homeDeliveryStatus;
+
+            }
+
+        }
+
+
+        if(pickFromShopStatus > 0 )
+        {
+            if(isFirst)
+            {
+                query = query + " WHERE " + OrderContract.STATUS_PICK_FROM_SHOP + " = " + pickFromShopStatus;
+
+                isFirst = false;
+
+            }else
+            {
+                query = query + " AND " + OrderContract.STATUS_PICK_FROM_SHOP + " = " + pickFromShopStatus;
+            }
+        }
+
+
+
+        if(pickFromShop != null)
+        {
+            if(isFirst)
+            {
+                query = query + " WHERE " + OrderContract.PICK_FROM_SHOP + " = " + pickFromShop;
+
+                isFirst = false;
+
+            }else
+            {
+                query = query + " AND " + OrderContract.PICK_FROM_SHOP + " = " + pickFromShop;
+            }
+
+        }
+
+
+
+        if(vehicleSelfID > 0)
+        {
+            if(isFirst)
+            {
+                query = query + " WHERE " + OrderContract.DELIVERY_VEHICLE_SELF_ID + " = " + vehicleSelfID;
+
+                isFirst = false;
+
+            }else
+            {
+                query = query + " AND " + OrderContract.DELIVERY_VEHICLE_SELF_ID + " = " + vehicleSelfID;
+            }
+
+        }
+
+
+
+        if(paymentsReceived!=null)
+        {
+
+            if(isFirst)
+            {
+                query = query + " WHERE " + OrderContract.PAYMENT_RECEIVED + " = " + paymentsReceived;
+
+                isFirst = false;
+
+            }else
+            {
+                query = query + " AND " + OrderContract.PAYMENT_RECEIVED + " = " + paymentsReceived;
+            }
+
+        }
+
+
+
+        if(deliveryReceived!=null)
+        {
+
+            if(isFirst)
+            {
+                query = query + " WHERE " + OrderContract.DELIVERY_RECEIVED + " = " + deliveryReceived;
+
+                isFirst = false;
+
+            }else
+            {
+                query = query + " AND " + OrderContract.DELIVERY_RECEIVED + " = " + deliveryReceived;
+            }
+
+        }
+
+
+
 
 
 
@@ -363,9 +487,15 @@ public class OrderService {
                 order.setDeliveryAddressID(rs.getInt(OrderContract.DELIVERY_ADDRESS_ID));
                 order.setEndUserID(rs.getInt(OrderContract.END_USER_ID));
                 order.setOrderID(rs.getInt(OrderContract.ORDER_ID));
-                order.setOrderStatus(rs.getInt(OrderContract.ORDER_STATUS));
                 order.setPickFromShop(rs.getBoolean(OrderContract.PICK_FROM_SHOP));
                 order.setDateTimePlaced(rs.getTimestamp(OrderContract.DATE_TIME_PLACED));
+                order.setDeliveryVehicleSelfID(rs.getInt(OrderContract.DELIVERY_VEHICLE_SELF_ID));
+
+
+                order.setStatusHomeDelivery(rs.getInt(OrderContract.STATUS_HOME_DELIVERY));
+                order.setStatusPickFromShop(rs.getInt(OrderContract.STATUS_PICK_FROM_SHOP));
+                order.setDeliveryReceived(rs.getBoolean(OrderContract.DELIVERY_RECEIVED));
+                order.setPaymentReceived(rs.getBoolean(OrderContract.PAYMENT_RECEIVED));
 
                 ordersList.add(order);
 
@@ -420,28 +550,51 @@ public class OrderService {
 
     public int updateOrder(Order order)
     {
-        String updateStatement = "UPDATE " + OrderContract.TABLE_NAME
+        String updateStatementPart = "UPDATE " + OrderContract.TABLE_NAME
+
                 + " SET "
-                + OrderContract.END_USER_ID + " = "
-                + " " + order.getEndUserID() + " "
-                + ","
-                + " " + OrderContract.SHOP_ID + " = "
-                + " " + order.getShopID() + " "
-                + ","
-                + " " + OrderContract.ORDER_STATUS + " = "
-                + " " + order.getOrderStatus() + " "
-                + ","
-                + " " + OrderContract.DELIVERY_CHARGES + " = "
-                + " " + order.getDeliveryCharges() + " "
-                + ","
-                + " " + OrderContract.DELIVERY_ADDRESS_ID + " = "
-                + " " + order.getDeliveryAddressID() + " "
-                + ","
-                + " " + OrderContract.PICK_FROM_SHOP + " = "
-                + " " + order.getPickFromShop() + " "
-                + ""
+                + OrderContract.END_USER_ID + " = " + " " + order.getEndUserID() + " " + ","
+
+                + " " + OrderContract.SHOP_ID + " = " + " " + order.getShopID() + " " + ","
+
+                + " " + OrderContract.STATUS_HOME_DELIVERY + " = " + " " + order.getStatusHomeDelivery() + " " + ","
+
+                + " " + OrderContract.STATUS_PICK_FROM_SHOP + " = " + " " + order.getStatusPickFromShop() + " " + ","
+
+                + " " + OrderContract.PAYMENT_RECEIVED + " = " + " " + order.isPaymentReceived() + " " + ","
+
+                + " " + OrderContract.DELIVERY_RECEIVED + " = " + " " + order.isDeliveryReceived() + " " + ","
+
+                + " " + OrderContract.DELIVERY_CHARGES + " = " + " " + order.getDeliveryCharges() + " " + ","
+
+                + " " + OrderContract.DELIVERY_ADDRESS_ID + " = " + " " + order.getDeliveryAddressID() + " " + ",";
+
+
+        String deliveryAddressPart = "";
+
+
+
+        String deliveryVehiclePart = "";
+
+        if(order.getDeliveryVehicleSelfID() == 0)
+        {
+            //deliveryVehiclePart = " " + OrderContract.DELIVERY_VEHICLE_SELF_ID + " = " + " " +   + " " + ",";
+            //deliveryVehiclePart = " " + OrderContract.DELIVERY_VEHICLE_SELF_ID + " = " + " " + " " + ",";
+
+        }else
+        {
+            deliveryVehiclePart = " " + OrderContract.DELIVERY_VEHICLE_SELF_ID + " = " + " " + order.getDeliveryVehicleSelfID() + " " + ",";
+        }
+
+
+        String updatePartLast = " " + OrderContract.PICK_FROM_SHOP + " = " + " " + order.getPickFromShop() + " " + ""
                 + " WHERE " + OrderContract.ORDER_ID + " = "
                 + order.getOrderID();
+
+
+        String updateStatement = updateStatementPart + deliveryVehiclePart + updatePartLast;
+
+
 
         Connection conn = null;
         Statement stmt = null;

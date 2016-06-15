@@ -21,5 +21,8 @@ public class DeliveryAddressContract {
     public static final String LANDMARK = "LANDMARK";
     public static final String END_USER_ID = "END_USER_ID"; // Primary Key
 
+    public static final String LATITUDE = "LATITUDE";
+    public static final String LONGITUDE = "LONGITUDE";
+
 
 }
