@@ -48,14 +48,12 @@ public class ItemService {
 				+ ItemContract.TABLE_NAME 
 				+ "(" + ItemContract.ITEM_NAME + "," 
 				+ ItemContract.ITEM_DESC + "," 
-				+ ItemContract.ITEM_IMAGE_URL + "," 
-				+ ItemContract.ITEM_BRAND_NAME + "," 
+				+ ItemContract.ITEM_IMAGE_URL + ","
 				+ ItemContract.ITEM_CATEGORY_ID 
 				+ ") VALUES("
 				+ "'" + item.getItemName() + "',"
 				+ "'" + item.getItemDescription() + "'," 
-				+ "'" + item.getItemImageURL() + "'," 
-				+ "'" + item.getBrandName() + "'," 
+				+ "'" + item.getItemImageURL() + "',"
 				+ item.getItemCategoryID()
 				+ ")";
 		
@@ -122,17 +120,10 @@ public class ItemService {
 		String updateStatement = "UPDATE ITEM SET ITEM_NAME = "
 				+ "'" + item.getItemName() + "'"
 				+ ","
-				+ " ITEM_DESC = "
-				+ "'" + item.getItemDescription() + "'"
-				+ ","
-				+ " ITEM_IMAGE_URL = "
-				+ "'" + item.getItemImageURL() + "'"
-				+ ","
-				+ " ITEM_BRAND_NAME = "
-				+ "'" + item.getBrandName() + "'"
-				+ ","
-				+ " ITEM_CATEGORY_ID = "
-				+  item.getItemCategoryID()
+				+ " ITEM_DESC = " + "'" + item.getItemDescription() + "'" + ","
+				+ " ITEM_IMAGE_URL = " + "'" + item.getItemImageURL() + "'" + ","
+				+ " ITEM_CATEGORY_ID = " +  item.getItemCategoryID()
+
 				+ " WHERE ITEM_ID = "
 				+ item.getItemID();
 		
@@ -272,7 +263,6 @@ public class ItemService {
 				item.setItemName(rs.getString("ITEM_NAME"));
 				item.setItemDescription(rs.getString("ITEM_DESC"));
 				item.setItemImageURL(rs.getString("ITEM_IMAGE_URL"));
-				item.setBrandName(rs.getString("ITEM_BRAND_NAME"));
 				item.setItemCategoryID(rs.getInt("ITEM_CATEGORY_ID"));
 				
 				itemList.add(item);
@@ -586,7 +576,6 @@ public class ItemService {
 				+ "min(" + ShopItemContract.ITEM_PRICE + ") as min_price" + ","
 				+ "max(" + ShopItemContract.ITEM_PRICE + ") as max_price" + ","
 				+ "count(" + ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID + ") as shop_count" + ","
-				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_BRAND_NAME + ","
 				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_CATEGORY_ID + ","
 				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_ID + ","
 				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_IMAGE_URL + ","
@@ -742,7 +731,6 @@ public class ItemService {
 		// all the non-aggregate columns which are present in select must be present in group by also.
 		queryJoin = queryJoin
 				+ " group by "
-				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_BRAND_NAME + ","
 				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_CATEGORY_ID + ","
 				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_ID + ","
 				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_IMAGE_URL + ","
@@ -799,7 +787,6 @@ public class ItemService {
 				item.setItemName(rs.getString("ITEM_NAME"));
 				item.setItemDescription(rs.getString("ITEM_DESC"));
 				item.setItemImageURL(rs.getString("ITEM_IMAGE_URL"));
-				item.setBrandName(rs.getString("ITEM_BRAND_NAME"));
 				item.setItemCategoryID(rs.getInt("ITEM_CATEGORY_ID"));
 
 
@@ -897,7 +884,6 @@ public class ItemService {
 				item.setItemName(rs.getString("ITEM_NAME"));
 				item.setItemDescription(rs.getString("ITEM_DESC"));		
 				item.setItemImageURL(rs.getString("ITEM_IMAGE_URL"));
-				item.setBrandName(rs.getString("ITEM_BRAND_NAME"));
 				item.setItemCategoryID(rs.getInt("ITEM_CATEGORY_ID"));
 			
 				System.out.println("Get Item by ID : " + item.getItemID());

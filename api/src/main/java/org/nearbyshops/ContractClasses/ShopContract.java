@@ -22,6 +22,8 @@ public class ShopContract {
 	public static final String IMAGE_PATH = "IMAGE_PATH";
 	public static final String BACKDROP_IMAGE_PATH = "BACKDROP_IMAGE_PATH";
 	public static final String LOGO_IMAGE_PATH = "LOGO_IMAGE_PATH";
+
+	// recently Added
 	public static final String SHOP_ADDRESS = "SHOP_ADDRESS";
 	public static final String CITY = "CITY";
 	public static final String PINCODE = "PINCODE";

@@ -34,7 +34,19 @@ public class ShopService {
 				+ ShopContract.LAT_MAX + ","
 				+ ShopContract.LON_MIN + ","
 				+ ShopContract.LAT_MIN + ","
-				+ ShopContract.IMAGE_PATH + ""
+				+ ShopContract.IMAGE_PATH + ","
+
+				+ ShopContract.SHOP_ADDRESS + ","
+				+ ShopContract.CITY + ","
+				+ ShopContract.PINCODE + ","
+				+ ShopContract.LANDMARK + ","
+				+ ShopContract.BILL_AMOUNT_FOR_FREE_DELIVERY + ","
+				+ ShopContract.CUSTOMER_HELPLINE_NUMBER + ","
+				+ ShopContract.DELIVERY_HELPLINE_NUMBER + ","
+				+ ShopContract.SHORT_DESCRIPTION + ","
+				+ ShopContract.LONG_DESCRIPTION + ","
+				+ ShopContract.IS_OPEN + ""
+
 				+ " ) VALUES ("
 				+ "'" + shop.getShopName() + "',"
 				+ "" + shop.getDeliveryCharges() + ","
@@ -46,7 +58,19 @@ public class ShopService {
 				+ "" + shop.getLatMax() + ","
 				+ "" + shop.getLonMin() + ","
 				+ "" + shop.getLatMin() + ","
-				+ "'" + shop.getImagePath() + "'" + ")";
+				+ "'" + shop.getImagePath() + "',"
+
+				+ "'" + shop.getShopAddress() + "',"
+				+ "'" + shop.getCity() + "',"
+				+ "'" + shop.getPincode() + "',"
+				+ "'" + shop.getLandmark() + "',"
+				+ "" + shop.getBillAmountForFreeDelivery() + ","
+				+ "'" + shop.getCustomerHelplineNumber() + "',"
+				+ "'" + shop.getDeliveryHelplineNumber() + "',"
+				+ "'" + shop.getShortDescription() + "',"
+				+ "'" + shop.getLongDescription() + "',"
+				+ "" + shop.getisOpen() + ""
+				+ ")";
 		
 		try {
 			
@@ -106,28 +130,31 @@ public class ShopService {
 		
 		
 		String updateStatement = "UPDATE " + ShopContract.TABLE_NAME 
-				+ " SET " + ShopContract.SHOP_NAME + " = "
-				+ "'" + shop.getShopName() + "',"
-				+ ShopContract.DELIVERY_CHARGES + " ="
-				+ "" + shop.getDeliveryCharges() + ","
-				+ ShopContract.DISTRIBUTOR_ID + " ="
-				+ "" + shop.getDistributorID() + ","
-				+ ShopContract.LAT_CENTER + " ="
-				+ "" + shop.getLatCenter() + ","
-				+ ShopContract.LON_CENTER + " ="
-				+ "" + shop.getLonCenter() + ","
-				+ ShopContract.DELIVERY_RANGE + " ="
-				+ "" + shop.getDeliveryRange() + ","
-				+ ShopContract.LON_MAX + " ="
-				+ "" + shop.getLonMax() + ","
-				+ ShopContract.LAT_MAX + " ="
-				+ "" + shop.getLatMax() + ","
-				+ ShopContract.LON_MIN + " ="
-				+ "" + shop.getLonMin() + ","
-				+ ShopContract.LAT_MIN + " ="
-				+ "" + shop.getLatMin() + ","
-				+ ShopContract.IMAGE_PATH + " ="
-				+ "'" + shop.getImagePath() + "'"
+				+ " SET "
+
+				+ ShopContract.SHOP_NAME + " = " + "'" + shop.getShopName() + "',"
+				+ ShopContract.DELIVERY_CHARGES + " =" + "" + shop.getDeliveryCharges() + ","
+				+ ShopContract.DISTRIBUTOR_ID + " =" + "" + shop.getDistributorID() + ","
+				+ ShopContract.LAT_CENTER + " =" + "" + shop.getLatCenter() + ","
+				+ ShopContract.LON_CENTER + " =" + "" + shop.getLonCenter() + ","
+				+ ShopContract.DELIVERY_RANGE + " =" + "" + shop.getDeliveryRange() + ","
+				+ ShopContract.LON_MAX + " =" + "" + shop.getLonMax() + ","
+				+ ShopContract.LAT_MAX + " =" + "" + shop.getLatMax() + ","
+				+ ShopContract.LON_MIN + " =" + "" + shop.getLonMin() + ","
+				+ ShopContract.LAT_MIN + " =" + "" + shop.getLatMin() + ","
+				+ ShopContract.IMAGE_PATH + " =" + "'" + shop.getImagePath() + "'"
+
+				+ ShopContract.SHOP_ADDRESS + " =" + "'" + shop.getShopAddress() + "'"
+				+ ShopContract.CITY + " =" + "'" + shop.getCity() + "'"
+				+ ShopContract.PINCODE + " =" + "" + shop.getPincode() + ""
+				+ ShopContract.LANDMARK + " =" + "'" + shop.getLandmark() + "'"
+				+ ShopContract.BILL_AMOUNT_FOR_FREE_DELIVERY + " =" + "" + shop.getBillAmountForFreeDelivery() + ""
+				+ ShopContract.CUSTOMER_HELPLINE_NUMBER + " =" + "'" + shop.getCustomerHelplineNumber() + "'"
+				+ ShopContract.DELIVERY_HELPLINE_NUMBER + " =" + "'" + shop.getDeliveryHelplineNumber() + "'"
+				+ ShopContract.SHORT_DESCRIPTION + " =" + "'" + shop.getShortDescription() + "'"
+				+ ShopContract.LONG_DESCRIPTION + " =" + "'" + shop.getLongDescription() + "'"
+				+ ShopContract.IS_OPEN + " =" + "'" + shop.getisOpen() + "'"
+
 				+ " WHERE " + ShopContract.SHOP_ID + " = "
 				+ shop.getShopID();
 		
@@ -255,7 +282,9 @@ public class ShopService {
 			int itemCategoryID,
 			double latCenter, double lonCenter,
 			double deliveryRangeMin,double deliveryRangeMax,
-			double proximity
+			double proximity,
+			String sortBy,
+			int limit, int offset
 	)
 	{
 
@@ -290,23 +319,34 @@ public class ShopService {
 				+ ShopContract.TABLE_NAME + "." + ShopContract.LAT_MAX + ","
 				+ ShopContract.TABLE_NAME + "." + ShopContract.LAT_MIN + ","
 				+ ShopContract.TABLE_NAME + "." + ShopContract.LON_MAX + ","
-				+ ShopContract.TABLE_NAME + "." + ShopContract.LON_MIN
+				+ ShopContract.TABLE_NAME + "." + ShopContract.LON_MIN + ","
+
+				+ ShopContract.TABLE_NAME + "." + ShopContract.SHOP_ADDRESS + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.CITY + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.PINCODE + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.LANDMARK + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.BILL_AMOUNT_FOR_FREE_DELIVERY + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.CUSTOMER_HELPLINE_NUMBER + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.DELIVERY_HELPLINE_NUMBER + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.SHORT_DESCRIPTION + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.LONG_DESCRIPTION + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.IS_OPEN + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.DATE_TIME_STARTED
 
 				+ " FROM "
 				+ ShopContract.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
 				+ ItemContract.TABLE_NAME + "," + ItemCategoryContract.TABLE_NAME
 
 				+ " WHERE "
-				+ ShopContract.TABLE_NAME + "." + ShopContract.SHOP_ID
-				+ "="
+				+ ShopContract.TABLE_NAME + "." + ShopContract.SHOP_ID + "="
 				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID
+
 				+ " AND "
-				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID
-				+ "="
+				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID + "="
 				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_ID
+
 				+ " AND "
-				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_CATEGORY_ID
-				+ "="
+				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_CATEGORY_ID + "="
 				+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.ITEM_CATEGORY_ID;
 
 
@@ -502,6 +542,7 @@ public class ShopService {
 
 		}
 
+
 		if(itemCategoryID>0)
 		{
 			// filter shops by Item Category ID
@@ -509,6 +550,40 @@ public class ShopService {
 					+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.ITEM_CATEGORY_ID
 					+ " = "
 					+ itemCategoryID;
+		}
+
+
+
+		if(sortBy!=null)
+		{
+			if(!sortBy.equals(""))
+			{
+				String queryPartSortBy = " ORDER BY " + sortBy;
+
+				queryNormal = queryNormal + queryPartSortBy;
+				queryJoin = queryJoin + queryPartSortBy;
+			}
+		}
+
+
+
+		if(limit > 0)
+		{
+
+			String queryPartLimitOffset = "";
+
+			if(offset>0)
+			{
+				queryPartLimitOffset = " LIMIT " + limit + " " + " OFFSET " + offset;
+
+			}else
+			{
+				queryPartLimitOffset = " LIMIT " + limit + " " + " OFFSET " + 0;
+			}
+
+
+			queryNormal = queryNormal + queryPartLimitOffset;
+			queryJoin = queryJoin + queryPartLimitOffset;
 		}
 
 
@@ -561,6 +636,19 @@ public class ShopService {
 				shop.setDistributorID(rs.getInt(ShopContract.DISTRIBUTOR_ID));
 				shop.setDeliveryRange(rs.getDouble(ShopContract.DELIVERY_RANGE));
 				shop.setImagePath(rs.getString(ShopContract.IMAGE_PATH));
+
+				shop.setShopAddress(rs.getString(ShopContract.SHOP_ADDRESS));
+				shop.setCity(rs.getString(ShopContract.CITY));
+				shop.setPincode(rs.getLong(ShopContract.PINCODE));
+				shop.setLandmark(rs.getString(ShopContract.LANDMARK));
+				shop.setBillAmountForFreeDelivery(rs.getInt(ShopContract.BILL_AMOUNT_FOR_FREE_DELIVERY));
+				shop.setCustomerHelplineNumber(rs.getString(ShopContract.CUSTOMER_HELPLINE_NUMBER));
+				shop.setDeliveryHelplineNumber(rs.getString(ShopContract.DELIVERY_HELPLINE_NUMBER));
+				shop.setShortDescription(rs.getString(ShopContract.SHORT_DESCRIPTION));
+				shop.setLongDescription(rs.getString(ShopContract.LONG_DESCRIPTION));
+				shop.setDateTimeStarted(rs.getTimestamp(ShopContract.DATE_TIME_STARTED));
+				shop.setisOpen(rs.getBoolean(ShopContract.IS_OPEN));
+
 				shopList.add(shop);
 				
 			}
@@ -668,6 +756,18 @@ public class ShopService {
 				shop.setDistributorID(rs.getInt(ShopContract.DISTRIBUTOR_ID));
 				shop.setDeliveryRange(rs.getDouble(ShopContract.DELIVERY_RANGE));
 				shop.setImagePath(rs.getString(ShopContract.IMAGE_PATH));
+
+				shop.setShopAddress(rs.getString(ShopContract.SHOP_ADDRESS));
+				shop.setCity(rs.getString(ShopContract.CITY));
+				shop.setPincode(rs.getLong(ShopContract.PINCODE));
+				shop.setLandmark(rs.getString(ShopContract.LANDMARK));
+				shop.setBillAmountForFreeDelivery(rs.getInt(ShopContract.BILL_AMOUNT_FOR_FREE_DELIVERY));
+				shop.setCustomerHelplineNumber(rs.getString(ShopContract.CUSTOMER_HELPLINE_NUMBER));
+				shop.setDeliveryHelplineNumber(rs.getString(ShopContract.DELIVERY_HELPLINE_NUMBER));
+				shop.setShortDescription(rs.getString(ShopContract.SHORT_DESCRIPTION));
+				shop.setLongDescription(rs.getString(ShopContract.LONG_DESCRIPTION));
+				shop.setDateTimeStarted(rs.getTimestamp(ShopContract.DATE_TIME_STARTED));
+				shop.setisOpen(rs.getBoolean(ShopContract.IS_OPEN));
 				
 			}
 	

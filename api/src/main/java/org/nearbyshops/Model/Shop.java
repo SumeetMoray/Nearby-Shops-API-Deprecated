@@ -1,15 +1,17 @@
 package org.nearbyshops.Model;
 
 
+import java.sql.Timestamp;
+
 public class Shop {
 
+	// real time variables
+	double distance;
+
+
+	// normal variables
+
 	int shopID;
-	
-	//List<ShopItem> shopItems;
-	
-	//@ManyToOne
-	//@JoinColumn(name="DISTRIBUTOR")
-	//Distributor distributor;
 	
 	String shopName;
 
@@ -27,7 +29,31 @@ public class Shop {
 	double latMin;
 	double lonMin;
 
-	double distance;
+
+	// delivery charger per order
+	double deliveryCharges;
+
+	int distributorID;
+	
+	String imagePath;
+
+
+	// added recently
+	String shopAddress;
+	String city;
+	long pincode;
+	String landmark;
+	int billAmountForFreeDelivery;
+	String customerHelplineNumber;
+	String deliveryHelplineNumber;
+	String shortDescription;
+	String longDescription;
+	Timestamp dateTimeStarted;
+	boolean isOpen;
+
+
+
+
 
 	public double getDistance() {
 		return distance;
@@ -37,17 +63,6 @@ public class Shop {
 		this.distance = distance;
 	}
 
-	// delivery charger per order
-	double deliveryCharges;
-	
-	// column created for JDBC
-	int distributorID;
-
-	
-	//int dateOfStart;
-	
-	
-	String imagePath;
 
 
 	public double getDeliveryRange() {
@@ -152,5 +167,93 @@ public class Shop {
 	public void setShopName(String shopName) {
 		this.shopName = shopName;
 	}
-	
+
+
+	public String getShopAddress() {
+		return shopAddress;
+	}
+
+	public void setShopAddress(String shopAddress) {
+		this.shopAddress = shopAddress;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public long getPincode() {
+		return pincode;
+	}
+
+	public void setPincode(long pincode) {
+		this.pincode = pincode;
+	}
+
+	public String getLandmark() {
+		return landmark;
+	}
+
+	public void setLandmark(String landmark) {
+		this.landmark = landmark;
+	}
+
+	public int getBillAmountForFreeDelivery() {
+		return billAmountForFreeDelivery;
+	}
+
+	public void setBillAmountForFreeDelivery(int billAmountForFreeDelivery) {
+		this.billAmountForFreeDelivery = billAmountForFreeDelivery;
+	}
+
+	public String getCustomerHelplineNumber() {
+		return customerHelplineNumber;
+	}
+
+	public void setCustomerHelplineNumber(String customerHelplineNumber) {
+		this.customerHelplineNumber = customerHelplineNumber;
+	}
+
+	public String getDeliveryHelplineNumber() {
+		return deliveryHelplineNumber;
+	}
+
+	public void setDeliveryHelplineNumber(String deliveryHelplineNumber) {
+		this.deliveryHelplineNumber = deliveryHelplineNumber;
+	}
+
+	public String getShortDescription() {
+		return shortDescription;
+	}
+
+	public void setShortDescription(String shortDescription) {
+		this.shortDescription = shortDescription;
+	}
+
+	public String getLongDescription() {
+		return longDescription;
+	}
+
+	public void setLongDescription(String longDescription) {
+		this.longDescription = longDescription;
+	}
+
+	public Timestamp getDateTimeStarted() {
+		return dateTimeStarted;
+	}
+
+	public void setDateTimeStarted(Timestamp dateTimeStarted) {
+		this.dateTimeStarted = dateTimeStarted;
+	}
+
+	public boolean getisOpen() {
+		return isOpen;
+	}
+
+	public void setisOpen(boolean open) {
+		isOpen = open;
+	}
 }

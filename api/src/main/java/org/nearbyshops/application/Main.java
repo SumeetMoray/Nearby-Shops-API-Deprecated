@@ -264,6 +264,23 @@ public class Main implements ActionListener {
 			stmt.executeUpdate(createTableDeliveryAddressPostgres);
 
 
+
+			// Create table Delivery Vehicle Self
+
+
+			String createtableDeliveryVehicleSelfPostgres = "CREATE TABLE IF NOT EXISTS " + DeliveryVehicleSelfContract.TABLE_NAME + "("
+					+ " " + DeliveryVehicleSelfContract.ID + " SERIAL PRIMARY KEY,"
+					+ " " + DeliveryVehicleSelfContract.VEHICLE_NAME + " VARCHAR(30),"
+					+ " " + DeliveryVehicleSelfContract.SHOP_ID + " INT,"
+					+ " FOREIGN KEY(" + DeliveryVehicleSelfContract.SHOP_ID +") REFERENCES " + ShopContract.TABLE_NAME + "(" + ShopContract.SHOP_ID + ")"
+					+ ")";
+
+
+			stmt.executeUpdate(createtableDeliveryVehicleSelfPostgres);
+
+
+
+
 			// Create Table Order In postgres
 
 			String createTableOrderPostgres = "CREATE TABLE IF NOT EXISTS " + OrderContract.TABLE_NAME + "("
@@ -332,19 +349,7 @@ public class Main implements ActionListener {
 
 
 
-
-			// Create table Delivery Vehicle Self
-
-
-			String createtableDeliveryVehicleSelfPostgres = "CREATE TABLE IF NOT EXISTS " + DeliveryVehicleSelfContract.TABLE_NAME + "("
-					+ " " + DeliveryVehicleSelfContract.ID + " SERIAL PRIMARY KEY,"
-					+ " " + DeliveryVehicleSelfContract.VEHICLE_NAME + " VARCHAR(30),"
-					+ " " + DeliveryVehicleSelfContract.SHOP_ID + " INT,"
-					+ " FOREIGN KEY(" + DeliveryVehicleSelfContract.SHOP_ID +") REFERENCES " + ShopContract.TABLE_NAME + "(" + ShopContract.SHOP_ID + ")"
-					+ ")";
-
-
-			stmt.executeUpdate(createtableDeliveryVehicleSelfPostgres);
+			System.out.println("Tables Created ... !");
 
 
 

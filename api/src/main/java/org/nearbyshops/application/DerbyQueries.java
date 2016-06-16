@@ -65,7 +65,6 @@ public class DerbyQueries {
                 + " " + ItemContract.ITEM_NAME + " VARCHAR(40),"
                 + " " + ItemContract.ITEM_DESC + " VARCHAR(500),"
                 + " " + ItemContract.ITEM_IMAGE_URL + " VARCHAR(100),"
-                + " " + ItemContract.ITEM_BRAND_NAME + " VARCHAR(100),"
                 + " " + ItemContract.ITEM_CATEGORY_ID + " INT,"
                 + " FOREIGN KEY(" + ItemContract.ITEM_CATEGORY_ID +") REFERENCES ITEM_CATEGORY(ID))";
 

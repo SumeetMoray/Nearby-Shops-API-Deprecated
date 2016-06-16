@@ -3,6 +3,8 @@ package org.nearbyshops.Model;
 
 import org.nearbyshops.ModelStats.ItemStats;
 
+import java.sql.Timestamp;
+
 public class Item {
 
 	int itemID;
@@ -13,7 +15,6 @@ public class Item {
 	
 	//technically it is the name of the manufacturer 
 	// Typically its the name of the manufacturer
-	String brandName;
 	
 	// Only required for JDBC
 	int itemCategoryID;
@@ -21,6 +22,41 @@ public class Item {
 
 	ItemStats itemStats;
 
+
+
+
+	// recently added
+	String quantityUnit;
+	Timestamp dateTimeCreated;
+	String itemDescriptionLong;
+
+
+
+
+
+	public String getQuantityUnit() {
+		return quantityUnit;
+	}
+
+	public void setQuantityUnit(String quantityUnit) {
+		this.quantityUnit = quantityUnit;
+	}
+
+	public Timestamp getDateTimeCreated() {
+		return dateTimeCreated;
+	}
+
+	public void setDateTimeCreated(Timestamp dateTimeCreated) {
+		this.dateTimeCreated = dateTimeCreated;
+	}
+
+	public String getItemDescriptionLong() {
+		return itemDescriptionLong;
+	}
+
+	public void setItemDescriptionLong(String itemDescriptionLong) {
+		this.itemDescriptionLong = itemDescriptionLong;
+	}
 
 	public ItemStats getItemStats() {
 		return itemStats;
@@ -102,19 +138,6 @@ public class Item {
 	public void setItemImageURL(String itemImageURL) {
 		this.itemImageURL = itemImageURL;
 	}
-
-
-
-	public String getBrandName() {
-		return brandName;
-	}
-
-
-
-	public void setBrandName(String brandName) {
-		this.brandName = brandName;
-	}
-
 
 
 	public String getItemName() {

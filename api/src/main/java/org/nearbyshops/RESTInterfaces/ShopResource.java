@@ -162,14 +162,16 @@ public class ShopResource {
 							 @QueryParam("latCenter")double latCenter, @QueryParam("lonCenter")double lonCenter,
 							 @QueryParam("deliveryRangeMax")double deliveryRangeMax,
 							 @QueryParam("deliveryRangeMin")double deliveryRangeMin,
-							 @QueryParam("proximity")double proximity)
+							 @QueryParam("proximity")double proximity,
+							 @QueryParam("SortBy") String sortBy,
+							 @QueryParam("Limit") int limit, @QueryParam("Offset") int offset)
 	{
 		
 		List<Shop> list = Globals.shopService.getShops(
 				distributorID,itemCategoryID,
 				latCenter, lonCenter,
 				deliveryRangeMin,deliveryRangeMax,
-				proximity
+				proximity,sortBy,limit,offset
 		);
 				
 		
