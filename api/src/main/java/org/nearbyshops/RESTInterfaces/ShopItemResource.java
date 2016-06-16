@@ -123,7 +123,9 @@ public class ShopItemResource {
 			@QueryParam("deliveryRangeMax")double deliveryRangeMax,
 			@QueryParam("deliveryRangeMin")double deliveryRangeMin,
 			@QueryParam("proximity")double proximity,
-			@QueryParam("EndUserID") int endUserID,@QueryParam("IsFilledCart") boolean isFilledCart
+			@QueryParam("EndUserID") int endUserID,@QueryParam("IsFilledCart") boolean isFilledCart,
+			@QueryParam("IsOutOfStock") Boolean isOutOfStock,@QueryParam("PriceEqualsZero")Boolean priceEqualsZero,
+			@QueryParam("MinPrice")int minPrice,@QueryParam("MaxPrice") int maxPrice
 	)
 	{
 		List<ShopItem> shopItemsList = Globals.shopItemService.getShopItems(
@@ -131,7 +133,7 @@ public class ShopItemResource {
 				latCenter, lonCenter,
 				deliveryRangeMin,deliveryRangeMax,
 				proximity,
-				endUserID,isFilledCart);
+				endUserID,isFilledCart,isOutOfStock,priceEqualsZero);
 
 
 		for(ShopItem shopItem: shopItemsList)

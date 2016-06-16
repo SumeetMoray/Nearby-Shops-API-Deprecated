@@ -139,37 +139,10 @@ public class Main implements ActionListener {
 					,JDBCContract.CURRENT_PASSWORD);
 			
 			stmt = conn.createStatement();
-			
-			//DatabaseMetaData dmd = conn.getMetaData(); 
-			
 
-			// create table ITEM_CATEGORY			
-			//ResultSet rs = dmd.getTables(null,"public", ItemCategoryContract.TABLE_NAME,null); 
-		    //System.out.println("Outside the create table : " + rs.next() + rs.getRow());
-		    
-		    //if (!rs.next()) { 
-		    	
-		    	
-		    System.out.println("Into the create table");
-		    	
-		    	String query2 = "CREATE TABLE ITEM_CATEGORY("
-		        		+ " ID INT PRIMARY KEY "
-		        		+ "GENERATED ALWAYS AS IDENTITY"
-		        		+ "(START WITH 1, INCREMENT BY 1),"
-		        		+ " ITEM_CATEGORY_NAME VARCHAR(40),"
-		        		+ " ITEM_CATEGORY_DESC VARCHAR(500)"
-		        		+ ")";
-		    	
 
-		    	String createTableItemCategoryDerby = "CREATE TABLE "  
-		    			+ ItemCategoryContract.TABLE_NAME + "("
-		        		+ " " + ItemCategoryContract.ITEM_CATEGORY_ID + " INT PRIMARY KEY "
-		        		+ "GENERATED ALWAYS AS IDENTITY"
-		        		+ "(START WITH 1, INCREMENT BY 1),"
-		        		+ " " + ItemCategoryContract.ITEM_CATEGORY_NAME + " VARCHAR(40),"
-		        		+ " " + ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION + " VARCHAR(500)"
-		        		+ ")";
-		    	
+
+
 		    	String createTableItemCategoryPostgres = "CREATE TABLE IF NOT EXISTS "  
 		    			+ ItemCategoryContract.TABLE_NAME + "("
 		        		+ " " + ItemCategoryContract.ITEM_CATEGORY_ID + " SERIAL PRIMARY KEY,"
@@ -185,74 +158,23 @@ public class Main implements ActionListener {
 		        stmt.executeUpdate(createTableItemCategoryPostgres);
 
 
-		    //} 
-		    
-			// create table ITEM
-		    //rs = dmd.getTables(null,null, ItemContract.TABLE_NAME,null); 
-		    System.out.println("Outside the create table");
-		    
-		    //if (!rs.next()) { 
-		    	
-		    	
-		    System.out.println("Into the create table");
-		    	
-		    	String createTableItem = "CREATE TABLE ITEM("
-		        		+ " ITEM_ID INT PRIMARY KEY "
-		        		+ "GENERATED ALWAYS AS IDENTITY"
-		        		+ "(START WITH 1, INCREMENT BY 1),"
-		        		+ " ITEM_NAME VARCHAR(40),"
-		        		+ " ITEM_DESC VARCHAR(500),"
-		        		+ " ITEM_IMAGE_URL VARCHAR(100),"
-		        		+ " ITEM_BRAND_NAME VARCHAR(100),"
-		        		+ " ITEM_CATEGORY_ID INT,"
-		        		+ " FOREIGN KEY(ITEM_CATEGORY_ID) REFERENCES ITEM_CATEGORY(ID))";
-		    	
-		    	String createTableItemDerby = "CREATE TABLE " 
-		    			+ ItemContract.TABLE_NAME + "("
-		        		+ " " + ItemContract.ITEM_ID + " INT PRIMARY KEY "
-		        		+ "GENERATED ALWAYS AS IDENTITY"
-		        		+ "(START WITH 1, INCREMENT BY 1),"
-		        		+ " " + ItemContract.ITEM_NAME + " VARCHAR(40),"
-		        		+ " " + ItemContract.ITEM_DESC + " VARCHAR(500),"
-		        		+ " " + ItemContract.ITEM_IMAGE_URL + " VARCHAR(100),"
-		        		+ " " + ItemContract.ITEM_BRAND_NAME + " VARCHAR(100),"
-		        		+ " " + ItemContract.ITEM_CATEGORY_ID + " INT,"
-		        		+ " FOREIGN KEY(" + ItemContract.ITEM_CATEGORY_ID +") REFERENCES ITEM_CATEGORY(ID))";
 		    	
 		    	String createTableItemPostgres = "CREATE TABLE IF NOT EXISTS " 
 		    			+ ItemContract.TABLE_NAME + "("
 		        		+ " " + ItemContract.ITEM_ID + " SERIAL PRIMARY KEY,"
 		        		+ " " + ItemContract.ITEM_NAME + " VARCHAR(40),"
-		        		+ " " + ItemContract.ITEM_DESC + " VARCHAR(500),"
+		        		+ " " + ItemContract.ITEM_DESC + " VARCHAR(30),"
+						+ " " + ItemContract.ITEM_DESCRIPTION_LONG + " VARCHAR(500),"
 		        		+ " " + ItemContract.ITEM_IMAGE_URL + " VARCHAR(100),"
-		        		+ " " + ItemContract.ITEM_BRAND_NAME + " VARCHAR(100),"
 						+ " " + ItemContract.QUANTITY_UNIT + " VARCHAR(40),"
 		        		+ " " + ItemContract.ITEM_CATEGORY_ID + " INT,"
+						+ " " + ItemContract.DATE_TIME_CREATED + "  timestamp with time zone NOT NULL DEFAULT now(),"
 		        		+ " FOREIGN KEY(" + ItemContract.ITEM_CATEGORY_ID +") REFERENCES ITEM_CATEGORY(ID))";
 		    	
 		    	
 		        stmt.executeUpdate(createTableItemPostgres); 
 		        
-		    //}
-		    
-		        //create table Distributor
-		    //rs = dmd.getTables(null,null, DistributorContract.TABLE_NAME,null); 
-		    //System.out.println("Outside the create table");
-		    
-		    //if (!rs.next()) { 
-		    	
-		    	
-		    System.out.println("Into the create table");
-		    	
-		    	
-		    	String createTableDistributorDerby = "CREATE TABLE " 
-		    			+ DistributorContract.TABLE_NAME + "("
-		        		+ " " + DistributorContract.DISTRIBUTOR_ID + " INT PRIMARY KEY "
-		        		+ "GENERATED ALWAYS AS IDENTITY"
-		        		+ "(START WITH 1, INCREMENT BY 1),"
-		        		+ " " + DistributorContract.DISTRIBUTOR_NAME + " VARCHAR(40)"
-		        		+ ")";
-		    	
+
 
 		    	String createTableDistributorPostgres = "CREATE TABLE IF NOT EXISTS " 
 		    			+ DistributorContract.TABLE_NAME + "("
@@ -261,29 +183,9 @@ public class Main implements ActionListener {
 		        		+ ")";
 		    	
 		        stmt.executeUpdate(createTableDistributorPostgres); 
-		        
-		    //}
-		    
-		    
-		 // create table SHOP
-		    //rs = dmd.getTables(null,null, ShopContract.TABLE_NAME,null); 
-		    //System.out.println("Outside the create table");
-		    
-		    //if (!rs.next()) { 
-		    	
-		    	
-		    System.out.println("Into the create table");
-		    	
-		    	
-		    	String createTableShopDerby = "CREATE TABLE " + ShopContract.TABLE_NAME + "("
-		        		+ " " + ShopContract.SHOP_ID + " INT PRIMARY KEY "
-		        		+ "GENERATED ALWAYS AS IDENTITY"
-		        		+ "(START WITH 1, INCREMENT BY 1),"
-		        		+ " " + ShopContract.SHOP_NAME + " VARCHAR(40),"
-		        		+ " " + ShopContract.DELIVERY_CHARGES + " FLOAT,"
-		        		+ " " + ShopContract.DISTRIBUTOR_ID + " INT,"
-		        		+ " " + ShopContract.IMAGE_PATH + " VARCHAR(60),"
-		        		+ " FOREIGN KEY(" + ShopContract.DISTRIBUTOR_ID +") REFERENCES DISTRIBUTOR(ID))";
+
+
+
 		    	
 		    	
 		    	String createTableShopPostgres = "CREATE TABLE IF NOT EXISTS " + ShopContract.TABLE_NAME + "("
@@ -299,29 +201,22 @@ public class Main implements ActionListener {
 		        		+ " " + ShopContract.DELIVERY_CHARGES + " FLOAT,"
 		        		+ " " + ShopContract.DISTRIBUTOR_ID + " INT,"
 		        		+ " " + ShopContract.IMAGE_PATH + " VARCHAR(60),"
+						+ " " + ShopContract.SHOP_ADDRESS + " VARCHAR(100),"
+						+ " " + ShopContract.CITY + " VARCHAR(20),"
+						+ " " + ShopContract.PINCODE + " INT,"
+						+ " " + ShopContract.LANDMARK + " VARCHAR(100),"
+						+ " " + ShopContract.BILL_AMOUNT_FOR_FREE_DELIVERY + " INT,"
+						+ " " + ShopContract.CUSTOMER_HELPLINE_NUMBER + " VARCHAR(30),"
+						+ " " + ShopContract.DELIVERY_HELPLINE_NUMBER + " VARCHAR(30),"
+						+ " " + ShopContract.SHORT_DESCRIPTION + " VARCHAR(40),"
+						+ " " + ShopContract.LONG_DESCRIPTION + " VARCHAR(500),"
+						+ " " + ShopContract.DATE_TIME_STARTED + " timestamp with time zone NOT NULL DEFAULT now(),"
+						+ " " + ShopContract.IS_OPEN + " boolean,"
 		        		+ " FOREIGN KEY(" + ShopContract.DISTRIBUTOR_ID +") REFERENCES DISTRIBUTOR(ID))";
 
 		        stmt.executeUpdate(createTableShopPostgres);
 
 
-
-		    System.out.println("Into the create table");
-
-
-
-		    	String createTableShopItemDerby = "CREATE TABLE " + ShopItemContract.TABLE_NAME + "("
-		        		+ " " + ShopItemContract.ITEM_ID + " INT,"
-		        		+ " " + ShopItemContract.SHOP_ID + " INT,"
-		        		+ " " + ShopItemContract.AVAILABLE_ITEM_QUANTITY + " INT,"
-		        		+ " " + ShopItemContract.ITEM_PRICE + " FLOAT,"
-		        		+ " FOREIGN KEY(" + ShopItemContract.SHOP_ID +") REFERENCES SHOP(SHOP_ID),"
-		        		+ " FOREIGN KEY(" + ShopItemContract.ITEM_ID +") REFERENCES ITEM(ITEM_ID)," 
-		        		+ " PRIMARY KEY (" + ShopItemContract.SHOP_ID + ", " + ShopItemContract.ITEM_ID + ")"
-		        		+ ")";
-
-
-					//+ " " + ShopItemContract.QUANTITY_UNIT + " VARCHAR(40),"
-					//+ " " + ShopItemContract.QUANTITY_MULTIPLE + " INT,"
 
 
 		    	String createTableShopItemPostgres = "CREATE TABLE IF NOT EXISTS " + ShopItemContract.TABLE_NAME + "("
@@ -329,6 +224,9 @@ public class Main implements ActionListener {
 		        		+ " " + ShopItemContract.SHOP_ID + " INT,"
 		        		+ " " + ShopItemContract.AVAILABLE_ITEM_QUANTITY + " INT,"
 		        		+ " " + ShopItemContract.ITEM_PRICE + " FLOAT,"
+						+ " " + ShopItemContract.LAST_UPDATE_DATE_TIME + " timestamp with time zone,"
+						+ " " + ShopItemContract.EXTRA_DELIVERY_CHARGE + " FLOAT,"
+						+ " " + ShopItemContract.DATE_TIME_ADDED + " timestamp with time zone NOT NULL DEFAULT now(),"
 		        		+ " FOREIGN KEY(" + ShopItemContract.SHOP_ID +") REFERENCES SHOP(SHOP_ID),"
 		        		+ " FOREIGN KEY(" + ShopItemContract.ITEM_ID +") REFERENCES ITEM(ITEM_ID)," 
 		        		+ " PRIMARY KEY (" + ShopItemContract.SHOP_ID + ", " + ShopItemContract.ITEM_ID + ")"
@@ -387,9 +285,6 @@ public class Main implements ActionListener {
 					+ " FOREIGN KEY(" + OrderContract.DELIVERY_VEHICLE_SELF_ID +") REFERENCES " + DeliveryVehicleSelfContract.TABLE_NAME + "(" + DeliveryVehicleSelfContract.ID + ")"
 					+ ")";
 
-			//System.out.println("Into the create table");
-
-			//System.out.println(createTableOrderPostgres);
 
 			stmt.executeUpdate(createTableOrderPostgres);
 
@@ -421,6 +316,8 @@ public class Main implements ActionListener {
 
 			stmt.executeUpdate(createTableCartPostgres);
 
+
+
 			String createtableCartItemPostgres = "CREATE TABLE IF NOT EXISTS " + CartItemContract.TABLE_NAME + "("
 					+ " " + CartItemContract.ITEM_ID + " INT,"
 					+ " " + CartItemContract.CART_ID + " INT,"
@@ -432,6 +329,9 @@ public class Main implements ActionListener {
 
 
 			stmt.executeUpdate(createtableCartItemPostgres);
+
+
+
 
 			// Create table Delivery Vehicle Self
 
@@ -477,38 +377,9 @@ public class Main implements ActionListener {
 
 			}
 
-			//ItemCategory itemCategory = new ItemCategory();
-			//itemCategory.setCategoryName("Root");
-
-			//Globals.itemCategoryService.saveItemCategory(itemCategory);
 
 
-			//+ ItemCategoryContract.PARENT_CATEGORY_ID + ","
 
-			// + "" + "NULL" + ","
-	    	/*
-
-	    	String queryPostgresAbstractCategory = "CREATE TABLE IF NOT EXISTS " + AbstractCategoryContract.TABLE_NAME + "("
-	        		+ " " + AbstractCategoryContract.CATEGORY_ID + " SERIAL PRIMARY KEY,"
-	        		+ " " + AbstractCategoryContract.CATEGORY_IMAGE_URL + " VARCHAR(100),"
-	        		+ " " + AbstractCategoryContract.CATEGORY_NAME + " VARCHAR(40),"
-	        		+ " " + AbstractCategoryContract.DEPTH + " INT,"
-	        		+ " " + AbstractCategoryContract.PARENT_CATEGORY_ID + " INT,"
-	        		+ " FOREIGN KEY(" + AbstractCategoryContract.PARENT_CATEGORY_ID +") REFERENCES " 
-	        		+ AbstractCategoryContract.TABLE_NAME + "(" + AbstractCategoryContract.CATEGORY_ID + ")"
-	        		+ ")";
-	    	
-	    	
-	        int status = stmt.executeUpdate(queryPostgresAbstractCategory); 
-	        
-		    
-	        System.out.println(queryPostgresAbstractCategory + "\n" + " Status : " + status);
-	        
-	        */
-
-		   // String insert = "INSERT INTO SAMP (ITEM_NAME,ITEM_DESC) VALUES('Rakesh','Kumar')";
-	        
-	        //stmt.executeUpdate(insert);
 			
 			
 		} catch (SQLException e) {

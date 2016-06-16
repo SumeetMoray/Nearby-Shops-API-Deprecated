@@ -295,7 +295,8 @@ public ArrayList<ShopItem> getShopItems(
 											double latCenter, double lonCenter,
 											double deliveryRangeMin, double deliveryRangeMax,
 											double proximity,
-											int endUserID, boolean isFilledCart
+											int endUserID, boolean isFilledCart,
+											Boolean isOutOfStock, Boolean priceEqualsZero
 )
 {
 
@@ -418,6 +419,9 @@ public ArrayList<ShopItem> getShopItems(
 		{
 			queryNormal = queryNormal + " WHERE "
 					+ ShopItemContract.ITEM_ID + " = " + itemID;
+
+			isFirst = false;
+
 		}else
 		{
 			queryNormal = queryNormal + " AND "
@@ -425,7 +429,59 @@ public ArrayList<ShopItem> getShopItems(
 		}
 
 	}
-	
+
+
+	if(priceEqualsZero!=null)
+	{
+		if(priceEqualsZero)
+		{
+			queryJoin = queryJoin + " AND "
+					+ ShopItemContract.TABLE_NAME  + "." + ShopItemContract.ITEM_PRICE + " = " + 0;
+
+			if(isFirst)
+			{
+				queryNormal = queryNormal + " WHERE "
+						+ ShopItemContract.ITEM_PRICE + " = " + 0;
+
+				isFirst = false;
+
+			}else
+			{
+				queryNormal = queryNormal + " AND "
+						+ ShopItemContract.ITEM_PRICE + " = " + 0;
+
+			}
+
+		}
+
+	}
+
+
+	if(isOutOfStock!=null)
+	{
+		if(isOutOfStock)
+		{
+			queryJoin = queryJoin + " AND "
+					+ ShopItemContract.TABLE_NAME  + "." + ShopItemContract.AVAILABLE_ITEM_QUANTITY + " = " + 0;
+
+			if(isFirst)
+			{
+				queryNormal = queryNormal + " WHERE "
+						+ ShopItemContract.AVAILABLE_ITEM_QUANTITY + " = " + 0;
+
+				isFirst = false;
+
+			}else
+			{
+				queryNormal = queryNormal + " AND "
+						+ ShopItemContract.AVAILABLE_ITEM_QUANTITY + " = " + 0;
+
+			}
+
+		}
+
+	}
+
 
 	/*
 	

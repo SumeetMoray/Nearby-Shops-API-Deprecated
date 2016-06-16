@@ -17,6 +17,11 @@ public class ShopItemContract {
 
 	public static final String MIN_QUANTITY_PER_ORDER = "MIN_QUANTITY_PER_ORDER";
 	public static final String MAX_QUANTITY_PER_ORDER = "MAX_QUANTITY_PER_ORDER";
+
+	public static final String DATE_TIME_ADDED = "DATE_TIME_ADDED";
+	public static final String LAST_UPDATE_DATE_TIME = "LAST_UPDATE_DATE_TIME";
+	public static final String EXTRA_DELIVERY_CHARGE = "EXTRA_DELIVERY_CHARGE";
+
 	
 	
 }
