@@ -18,8 +18,6 @@ public class ShopItem{
 
 
 	Shop shop;
-	
-	//int itemID;
 	Item item;
 	
 
@@ -27,12 +25,8 @@ public class ShopItem{
 	// variables
 
 	int shopID;
-
 	int itemID;
-	
-	
 	int availableItemQuantity;
-	
 	double itemPrice;
 	
 		
@@ -67,9 +61,6 @@ public class ShopItem{
 	Timestamp lastUpdateDateTime;
 		
 
-	
-	
-	
 	
 	public double getItemPrice() {
 		return itemPrice;

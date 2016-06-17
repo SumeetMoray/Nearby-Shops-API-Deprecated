@@ -132,7 +132,9 @@ public class ItemResource {
 			@QueryParam("latCenter") double latCenter, @QueryParam("lonCenter") double lonCenter,
 			@QueryParam("deliveryRangeMax")double deliveryRangeMax,
 			@QueryParam("deliveryRangeMin")double deliveryRangeMin,
-			@QueryParam("proximity")double proximity)
+			@QueryParam("proximity")double proximity,
+			@QueryParam("SortBy") String sortBy,
+			@QueryParam("Limit") int limit, @QueryParam("Offset") int offset)
 	
 	{
 				
@@ -145,7 +147,8 @@ public class ItemResource {
 						latCenter, lonCenter,
 						deliveryRangeMin,
 						deliveryRangeMax,
-						proximity
+						proximity,
+						sortBy,limit,offset
 				);
 		
 		

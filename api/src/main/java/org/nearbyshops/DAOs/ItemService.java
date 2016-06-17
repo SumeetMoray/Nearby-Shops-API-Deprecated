@@ -46,15 +46,22 @@ public class ItemService {
 
 		String insertItemCategory = "INSERT INTO " 
 				+ ItemContract.TABLE_NAME 
-				+ "(" + ItemContract.ITEM_NAME + "," 
+				+ "("
+				+ ItemContract.ITEM_NAME + ","
 				+ ItemContract.ITEM_DESC + "," 
 				+ ItemContract.ITEM_IMAGE_URL + ","
-				+ ItemContract.ITEM_CATEGORY_ID 
+				+ ItemContract.ITEM_CATEGORY_ID + ","
+
+				+ ItemContract.QUANTITY_UNIT + ","
+				+ ItemContract.ITEM_DESCRIPTION_LONG
+
 				+ ") VALUES("
 				+ "'" + item.getItemName() + "',"
 				+ "'" + item.getItemDescription() + "'," 
 				+ "'" + item.getItemImageURL() + "',"
-				+ item.getItemCategoryID()
+				+ item.getItemCategoryID() + ","
+				+ "'" + item.getQuantityUnit() + "',"
+				+ "'" + item.getItemDescriptionLong() + "'"
 				+ ")";
 		
 		try {
@@ -122,7 +129,10 @@ public class ItemService {
 				+ ","
 				+ " ITEM_DESC = " + "'" + item.getItemDescription() + "'" + ","
 				+ " ITEM_IMAGE_URL = " + "'" + item.getItemImageURL() + "'" + ","
-				+ " ITEM_CATEGORY_ID = " +  item.getItemCategoryID()
+				+ " ITEM_CATEGORY_ID = " +  item.getItemCategoryID() + ","
+
+				+ " " + ItemContract.QUANTITY_UNIT + " = " + "'" + item.getQuantityUnit() + "'" + ","
+				+ " " + ItemContract.ITEM_DESCRIPTION_LONG + " = " + "'" + item.getItemDescriptionLong() + "'" + ""
 
 				+ " WHERE ITEM_ID = "
 				+ item.getItemID();
@@ -264,6 +274,8 @@ public class ItemService {
 				item.setItemDescription(rs.getString("ITEM_DESC"));
 				item.setItemImageURL(rs.getString("ITEM_IMAGE_URL"));
 				item.setItemCategoryID(rs.getInt("ITEM_CATEGORY_ID"));
+
+
 				
 				itemList.add(item);
 				
@@ -315,6 +327,9 @@ public class ItemService {
 		return itemList;
 		
 	}
+
+
+
 
 
 
@@ -565,7 +580,9 @@ public class ItemService {
 					int itemCategoryID, int shopID,
 					double latCenter, double lonCenter,
 					double deliveryRangeMin,double deliveryRangeMax,
-					double proximity
+					double proximity,
+					String sortBy,
+					int limit, int offset
 	) {
 		String query = "";
 		
@@ -580,8 +597,12 @@ public class ItemService {
 				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_ID + ","
 				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_IMAGE_URL + ","
 				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_NAME + ","
-				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_DESC + ""
-				
+				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_DESC + ","
+
+				+ ItemContract.TABLE_NAME + "." + ItemContract.QUANTITY_UNIT + ","
+				+ ItemContract.TABLE_NAME + "." + ItemContract.DATE_TIME_CREATED + ","
+				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_DESCRIPTION_LONG + ""
+
 				+ " FROM " 
 				+ ShopContract.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + "," 
 				+ ItemContract.TABLE_NAME + "," + ItemCategoryContract.TABLE_NAME
@@ -740,11 +761,57 @@ public class ItemService {
 
 		// + ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID
 		//
+
+
+
+
+
+		if(sortBy!=null)
+		{
+			if(!sortBy.equals(""))
+			{
+				String queryPartSortBy = " ORDER BY " + sortBy;
+
+				queryNormal = queryNormal + queryPartSortBy;
+				queryJoin = queryJoin + queryPartSortBy;
+			}
+		}
+
+
+
+		if(limit > 0)
+		{
+
+			String queryPartLimitOffset = "";
+
+			if(offset>0)
+			{
+				queryPartLimitOffset = " LIMIT " + limit + " " + " OFFSET " + offset;
+
+			}else
+			{
+				queryPartLimitOffset = " LIMIT " + limit + " " + " OFFSET " + 0;
+			}
+
+
+			queryNormal = queryNormal + queryPartLimitOffset;
+			queryJoin = queryJoin + queryPartLimitOffset;
+		}
+
+
+
+
+
+
 		/*
 
 		Applying filters Ends
 
 		 */
+
+
+
+
 
 		boolean isJoinQuery = false;
 
@@ -788,6 +855,10 @@ public class ItemService {
 				item.setItemDescription(rs.getString("ITEM_DESC"));
 				item.setItemImageURL(rs.getString("ITEM_IMAGE_URL"));
 				item.setItemCategoryID(rs.getInt("ITEM_CATEGORY_ID"));
+
+				item.setItemDescriptionLong(rs.getString(ItemContract.ITEM_DESCRIPTION_LONG));
+				item.setDateTimeCreated(rs.getTimestamp(ItemContract.DATE_TIME_CREATED));
+				item.setQuantityUnit(rs.getString(ItemContract.QUANTITY_UNIT));
 
 
 				if(isJoinQuery)
@@ -885,6 +956,10 @@ public class ItemService {
 				item.setItemDescription(rs.getString("ITEM_DESC"));		
 				item.setItemImageURL(rs.getString("ITEM_IMAGE_URL"));
 				item.setItemCategoryID(rs.getInt("ITEM_CATEGORY_ID"));
+
+				item.setItemDescriptionLong(rs.getString(ItemContract.ITEM_DESCRIPTION_LONG));
+				item.setDateTimeCreated(rs.getTimestamp(ItemContract.DATE_TIME_CREATED));
+				item.setQuantityUnit(rs.getString(ItemContract.QUANTITY_UNIT));
 			
 				System.out.println("Get Item by ID : " + item.getItemID());
 			}

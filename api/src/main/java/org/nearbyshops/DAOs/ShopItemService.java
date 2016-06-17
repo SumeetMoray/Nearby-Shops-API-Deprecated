@@ -29,12 +29,18 @@ public class ShopItemService {
 				+ ShopItemContract.SHOP_ID + ","
 				+ ShopItemContract.ITEM_PRICE + ","
 				+ ShopItemContract.ITEM_ID + ","
-				+ ShopItemContract.AVAILABLE_ITEM_QUANTITY
+				+ ShopItemContract.AVAILABLE_ITEM_QUANTITY + ","
+
+				+ ShopItemContract.EXTRA_DELIVERY_CHARGE + ","
+				+ ShopItemContract.LAST_UPDATE_DATE_TIME
 				+ " ) VALUES ("
 				+ "" + shopItem.getShopID() + ","
 				+ "" + shopItem.getItemPrice() + ","
 				+ "" + shopItem.getItemID() + ","
-				+ "" + shopItem.getAvailableItemQuantity()
+				+ "" + shopItem.getAvailableItemQuantity() + ","
+
+				+ "" + shopItem.getExtraDeliveryCharge() + ","
+				+ "" + "now()" + ""
 				+ ")";
 		
 		try {
@@ -157,18 +163,18 @@ public class ShopItemService {
 		 */
 
 		String updateStatement = "UPDATE " + ShopItemContract.TABLE_NAME 
-				+ " SET " + ShopItemContract.AVAILABLE_ITEM_QUANTITY + " = "
-				+ "" + shopItem.getAvailableItemQuantity() + ","
-				+ ShopItemContract.ITEM_ID + " ="
-				+ "" + shopItem.getItemID() + ","
-				+ ShopItemContract.ITEM_PRICE + " ="
-				+ "" + shopItem.getItemPrice() + ","
-				+ ShopItemContract.SHOP_ID + " ="
-				+ "" + shopItem.getShopID() + ""
-				+ " WHERE " + ShopItemContract.SHOP_ID + " = "
-				+ shopItem.getShopID() + " AND "
-				+ ShopItemContract.ITEM_ID + " = " 
-				+ shopItem.getItemID();
+				+ " SET "
+				+ ShopItemContract.AVAILABLE_ITEM_QUANTITY + " = " + "" + shopItem.getAvailableItemQuantity() + ","
+				+ ShopItemContract.ITEM_ID + " =" + "" + shopItem.getItemID() + ","
+				+ ShopItemContract.ITEM_PRICE + " =" + "" + shopItem.getItemPrice() + ","
+				+ ShopItemContract.SHOP_ID + " =" + "" + shopItem.getShopID() + ","
+
+				+ ShopItemContract.EXTRA_DELIVERY_CHARGE + " = " + "" + shopItem.getExtraDeliveryCharge() + ","
+				+ ShopItemContract.LAST_UPDATE_DATE_TIME + " = " + "" + "now()" + ""
+				+ " WHERE "
+				+ ShopItemContract.SHOP_ID + " = " + shopItem.getShopID()
+				+ " AND "
+				+ ShopItemContract.ITEM_ID + " = " + shopItem.getItemID();
 		
 		System.out.println("Query:" + updateStatement);
 		
@@ -296,7 +302,10 @@ public ArrayList<ShopItem> getShopItems(
 											double deliveryRangeMin, double deliveryRangeMax,
 											double proximity,
 											int endUserID, boolean isFilledCart,
-											Boolean isOutOfStock, Boolean priceEqualsZero
+											Boolean isOutOfStock, Boolean priceEqualsZero,
+											String sortBy,
+											int limit, int offset
+
 )
 {
 
@@ -308,61 +317,36 @@ public ArrayList<ShopItem> getShopItems(
 		
 		
 		String queryNormal = "SELECT * FROM " + ShopItemContract.TABLE_NAME;
-	
-
-		String query2 = "SELECT " 
-			+ "SI." + ShopItemContract.ITEM_ID + ","
-			+ "SI." + ShopItemContract.SHOP_ID + ","
-			+ "SI." + ShopItemContract.ITEM_PRICE + ","
-			+ "SI." + ShopItemContract.AVAILABLE_ITEM_QUANTITY + ""
-			+ " FROM " 
-			+ ShopContract.TABLE_NAME + " S" 
-			+ " INNER JOIN " 
-			+ ShopItemContract.TABLE_NAME + " SI"
-			+ " INNER JOIN "
-			+ ItemContract.TABLE_NAME + " I"
-			+ " INNER JOIN "
-			+ ItemCategoryContract.TABLE_NAME + " IC";
-		
-	
-	
-	
-	
-	
-	/*
-			+ " ON " 
-			+ "S." + ShopContract.SHOP_ID + "=" + "SI." + ShopItemContract.SHOP_ID
-			+ " ON "
-			+ "SI." + ShopItemContract.ITEM_ID + "=" + "I." + ItemContract.ITEM_ID
-			+ " ON "
-			+ "I." + ItemContract.ITEM_CATEGORY_ID + "=" + "IC." + ItemCategoryContract.ITEM_CATEGORY_ID;
-	
-	*/
 
 
 	
 	
-	String queryJoin = "SELECT DISTINCT "
-			+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID + ","
-			+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID + ","
-			+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_PRICE + ","
-			+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.AVAILABLE_ITEM_QUANTITY + ""
-			+ " FROM " 
-			+ ShopContract.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + "," 
-			+ ItemContract.TABLE_NAME + "," + ItemCategoryContract.TABLE_NAME
-			+ " WHERE " 
-			+ ShopContract.TABLE_NAME + "." + ShopContract.SHOP_ID 
-			+ "="
-			+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID
-			+ " AND "
-			+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID
-			+ "="
-			+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_ID
-			+ " AND "
-			+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_CATEGORY_ID
-			+ "="
-			+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.ITEM_CATEGORY_ID;
-	
+		String queryJoin = "SELECT DISTINCT "
+				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID + ","
+				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID + ","
+				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_PRICE + ","
+				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.AVAILABLE_ITEM_QUANTITY + ""
+
+				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.EXTRA_DELIVERY_CHARGE + ","
+				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.DATE_TIME_ADDED + ","
+				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.LAST_UPDATE_DATE_TIME + ""
+
+				+ " FROM "
+				+ ShopContract.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
+				+ ItemContract.TABLE_NAME + "," + ItemCategoryContract.TABLE_NAME
+				+ " WHERE "
+				+ ShopContract.TABLE_NAME + "." + ShopContract.SHOP_ID
+				+ "="
+				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID
+				+ " AND "
+				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID
+				+ "="
+				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_ID
+				+ " AND "
+				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_CATEGORY_ID
+				+ "="
+				+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.ITEM_CATEGORY_ID;
+
 
 
 	if(endUserID>0)
@@ -484,15 +468,15 @@ public ArrayList<ShopItem> getShopItems(
 
 
 	/*
-	
+
 	if(itemCategoryID > 0)
 	{
 
 			queryJoin = queryJoin + " AND "
-					+ ItemCategoryContract.TABLE_NAME 
+					+ ItemCategoryContract.TABLE_NAME
 					+ "."
 					+ ItemCategoryContract.ITEM_CATEGORY_ID + " = " + itemCategoryID;
-			
+
 	}
 
 	*/
@@ -600,6 +584,40 @@ public ArrayList<ShopItem> getShopItems(
 
 
 
+
+	if(sortBy!=null)
+	{
+		if(!sortBy.equals(""))
+		{
+			String queryPartSortBy = " ORDER BY " + sortBy;
+
+			queryNormal = queryNormal + queryPartSortBy;
+			queryJoin = queryJoin + queryPartSortBy;
+		}
+	}
+
+
+
+	if(limit > 0)
+	{
+
+		String queryPartLimitOffset = "";
+
+		if(offset>0)
+		{
+			queryPartLimitOffset = " LIMIT " + limit + " " + " OFFSET " + offset;
+
+		}else
+		{
+			queryPartLimitOffset = " LIMIT " + limit + " " + " OFFSET " + 0;
+		}
+
+		queryNormal = queryNormal + queryPartLimitOffset;
+		queryJoin = queryJoin + queryPartLimitOffset;
+	}
+
+
+
 	/*
 			Applying Filters Ends
 	 */
@@ -613,75 +631,8 @@ public ArrayList<ShopItem> getShopItems(
 	{
 		query = queryJoin;
 	}
-	
-	/*
-		
-		if(shopID > 0)
-		{
-			if(isFirst == true)
-			{
-			query = query + " WHERE " 
-					+ "SI." + ShopItemContract.SHOP_ID + " = " + shopID;
-			
-			isFirst = false;
-			
-			} else 
-				
-			{
-				query = query + " AND "
-						+ ShopItemContract.SHOP_ID + " = " + shopID; 
-			}
-			
-			
-		}
-		
-		
-		if(itemID > 0)
-		{
-			if(isFirst == true)
-			{
-				query = query + " WHERE " 
-		
-						+ "SI." + ShopItemContract.ITEM_ID + " = " + itemID;
-				
-				isFirst = false;
-				
-			} else 
-			{
-				query = query + " AND "
-						+ "SI." + ShopItemContract.ITEM_ID + " = " + itemID;
-				
-			}
-			
-		}
-		
-		
-		
-		if(itemCategoryID > 0)
-		{
-			
 
-			if(isFirst == true)
-			{
-				query = query + " WHERE " 
-						+ "IC." + ItemCategoryContract.ITEM_CATEGORY_ID + " = " + itemCategoryID;
-				
-				isFirst = false;
-				
-			} else 
-			{
-				query = query + " AND "
-						+ "IC." + ItemCategoryContract.ITEM_CATEGORY_ID + " = " + itemCategoryID;
-				
-			}
-		
-			
-		}
-		
-		*/
-		
-		
-	System.out.println("query: " + queryJoin);
+
 		
 		
 		
@@ -713,6 +664,10 @@ public ArrayList<ShopItem> getShopItems(
 				shopItem.setItemID(rs.getInt(ShopItemContract.ITEM_ID));
 				shopItem.setAvailableItemQuantity(rs.getInt(ShopItemContract.AVAILABLE_ITEM_QUANTITY));
 				shopItem.setItemPrice(rs.getDouble(ShopItemContract.ITEM_PRICE));
+
+				shopItem.setDateTimeAdded(rs.getTimestamp(ShopItemContract.DATE_TIME_ADDED));
+				shopItem.setLastUpdateDateTime(rs.getTimestamp(ShopItemContract.LAST_UPDATE_DATE_TIME));
+				shopItem.setExtraDeliveryCharge(rs.getInt(ShopItemContract.EXTRA_DELIVERY_CHARGE));
 				
 				shopItemList.add(shopItem);
 				
