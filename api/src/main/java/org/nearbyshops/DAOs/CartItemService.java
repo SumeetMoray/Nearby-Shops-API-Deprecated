@@ -354,7 +354,7 @@ public class CartItemService {
 
 
 		String query = "SELECT cart.cart_id,cart_item.item_id," +
-						" available_item_quantity, item_price, item_quantity, quantity_unit ," +
+						" available_item_quantity, item_price, item_quantity, " +
 						" (item_quantity * item_price) as Item_total" +
 						" FROM " +
 						" shop_item, cart_item, cart " +
@@ -399,7 +399,6 @@ public class CartItemService {
 				cartItem.setItemQuantity(rs.getInt(CartItemContract.ITEM_QUANTITY));
 				cartItem.setRt_availableItemQuantity(rs.getInt("available_item_quantity"));
 				cartItem.setRt_itemPrice(rs.getDouble("item_price"));
-				cartItem.setRt_quantityUnit(rs.getString("quantity_unit"));
 
 
 				//cartItem.setItem(Globals.itemService.getItem(cartItem.getItemID()));

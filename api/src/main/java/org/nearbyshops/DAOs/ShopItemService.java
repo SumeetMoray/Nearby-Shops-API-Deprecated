@@ -325,8 +325,7 @@ public ArrayList<ShopItem> getShopItems(
 				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID + ","
 				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID + ","
 				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_PRICE + ","
-				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.AVAILABLE_ITEM_QUANTITY + ""
-
+				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.AVAILABLE_ITEM_QUANTITY + ","
 				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.EXTRA_DELIVERY_CHARGE + ","
 				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.DATE_TIME_ADDED + ","
 				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.LAST_UPDATE_DATE_TIME + ""
