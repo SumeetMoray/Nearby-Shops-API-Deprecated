@@ -12,4 +12,8 @@ public class EndUserContract {
 
     public static final String END_USER_ID = "ID";
     public static final String END_USER_NAME = "END_USER_NAME";
+
+    public static final String END_USER_PASSWORD = "END_USER_PASSWORD";
+
+
 }

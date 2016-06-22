@@ -11,6 +11,15 @@ public class Distributor {
 
 	int distributorID;
 	String distributorName;
+	String password;
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 	public int getDistributorID() {
 		return distributorID;

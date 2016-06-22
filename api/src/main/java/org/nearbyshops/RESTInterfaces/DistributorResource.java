@@ -3,14 +3,7 @@ package org.nearbyshops.RESTInterfaces;
 import java.net.URI;
 import java.util.List;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -42,6 +35,8 @@ public class DistributorResource {
 		System.out.println(distributor.getDistributorName() + " | " + distributor.getDistributorID());
 	
 		distributor.setDistributorID(idOfInsertedRow);
+
+		distributor.setPassword(null);
 		
 		if(idOfInsertedRow >=1)
 		{
@@ -172,17 +167,55 @@ public class DistributorResource {
 	@GET
 	@Path("/{DistributorID}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getDistributor(@PathParam("DistributorID")int distributorID)
+	public Response getDistributor(@PathParam("DistributorID")int distributorID,@QueryParam("Password")String password)
 	{		
 		
 		Distributor distributor = Globals.distributorService.getDistributor(distributorID);
-		
+
+
+//		boolean isValid = false;
+
+
+//		Distributor tempDistributor = Globals.distributorService.getDistributorPassword(distributorID);
+//
+//
+//		if(tempDistributor!=null );
+//		{
+//			if(tempDistributor!=null && tempDistributor.getPassword()!=null && tempDistributor.getPassword().equals(password))
+//			{
+//				isValid = true;
+//			}
+//
+//		}
+
+
+
+
 		if(distributor!= null)
 		{
-			Response response = Response.status(Status.OK)
-			.entity(distributor)
-			.build();
-			
+
+			Response response;
+
+			response = Response.status(Status.OK)
+					.entity(distributor)
+					.build();
+
+
+//			if(isValid)
+//			{
+//				response = Response.status(Status.OK)
+//						.entity(distributor)
+//						.build();
+//
+//			}
+//
+//			else
+//			{
+//				response = Response.status(Status.UNAUTHORIZED)
+//						.entity(distributor)
+//						.build();
+//			}
+
 			return response;
 			
 		} else 
@@ -196,5 +229,66 @@ public class DistributorResource {
 			
 		}
 		
-	}	
+	}
+
+
+
+	// @PathParam("DistributorID")int distributorID,
+
+	@GET
+	@Path("/Validate")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response validateDistributor(@QueryParam("Password")String password,@QueryParam("Username")String userName,@QueryParam("ID")Integer id)
+	{
+
+		boolean isValid = false;
+
+		Distributor tempDistributor = null;
+
+		if(id!=null)
+		{
+			tempDistributor = Globals.distributorService.getDistributorPassword(id,null);
+
+			System.out.println(id + " : " + userName);
+
+		}else if(userName !=null)
+		{
+			tempDistributor = Globals.distributorService.getDistributorPassword(null,userName);
+		}
+
+
+		if(tempDistributor!=null && tempDistributor.getPassword()!=null && tempDistributor.getPassword().equals(password))
+		{
+			isValid = true;
+		}
+
+		tempDistributor.setPassword(null);
+
+
+		if(isValid)
+		{
+			Response response = Response.status(Status.OK)
+					.entity(tempDistributor)
+					.build();
+
+			return response;
+
+		} else
+		{
+
+			Response response = Response.status(Status.UNAUTHORIZED)
+					.entity(null)
+					.build();
+
+			return response;
+
+		}
+
+	}
+
+
+
+
+
 }

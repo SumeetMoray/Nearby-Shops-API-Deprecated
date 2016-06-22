@@ -1,16 +1,17 @@
 package org.nearbyshops.DAOs;
 
-import org.nearbyshops.ContractClasses.DistributorContract;
 import org.nearbyshops.ContractClasses.EndUserContract;
 import org.nearbyshops.ContractClasses.JDBCContract;
-import org.nearbyshops.Model.Distributor;
+import org.nearbyshops.ContractClasses.ServiceProviderContract;
 import org.nearbyshops.Model.EndUser;
+import org.nearbyshops.Model.Service;
+import org.nearbyshops.Model.ServiceProvider;
 
 import java.sql.*;
 import java.util.ArrayList;
 
 
-public class EndUserService {
+public class ServiceProviderDAO {
 
 	
 	@Override
@@ -21,7 +22,7 @@ public class EndUserService {
 	
 	
 	
-	public int saveEndUser(EndUser endUser)
+	public int saveServiceProvider(ServiceProvider serviceProvider)
 	{	
 		
 		Connection conn = null;
@@ -29,13 +30,11 @@ public class EndUserService {
 		int rowIdOfInsertedRow = -1;
 
 		String insertEndUser = "INSERT INTO "
-				+ EndUserContract.TABLE_NAME
+				+ ServiceProviderContract.TABLE_NAME
 				+ "("  
-				+ EndUserContract.END_USER_NAME + ","
-				+ EndUserContract.END_USER_PASSWORD
+				+ ServiceProviderContract.SERVICE_PROVIDER_NAME
 				+ ") VALUES("
-				+ "'" + endUser.getEndUserName() + "'" + ","
-				+ "'" + endUser.getPassword() + "'" + ")";
+				+ "'" + serviceProvider.getServiceProviderName()	+ "')";
 		
 		try {
 			
@@ -89,14 +88,13 @@ public class EndUserService {
 	}
 	
 
-	public int updateEndUser(EndUser endUser)
+	public int updateServiceProvider(ServiceProvider serviceProvider)
 	{	
-		String updateStatement = "UPDATE " + EndUserContract.TABLE_NAME
-				+ " SET "
-				+ EndUserContract.END_USER_NAME + " = " + "'" + endUser.getEndUserName() + "'" + ","
-				+ EndUserContract.END_USER_PASSWORD + " = " + "'" + endUser.getPassword() + "'"
-				+ " WHERE "
-				+ EndUserContract.END_USER_ID  + " = " + endUser.getEndUserID();
+		String updateStatement = "UPDATE " + ServiceProviderContract.TABLE_NAME
+				+ " SET " + ServiceProviderContract.SERVICE_PROVIDER_NAME + " = "
+				+ "'" + serviceProvider.getServiceProviderName() + "'"
+				+ " WHERE ID = "
+				+ serviceProvider.getServiceProviderID();
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -148,11 +146,11 @@ public class EndUserService {
 	}
 	
 
-	public int deleteEndUser(int endUserID)
+	public int deleteServiceProvider(int serviceProviderID)
 	{
 		
-		String deleteStatement = "DELETE FROM " + EndUserContract.TABLE_NAME + " WHERE ID = "
-				+ endUserID;
+		String deleteStatement = "DELETE FROM " + ServiceProviderContract.TABLE_NAME + " WHERE ID = "
+				+ serviceProviderID;
 		
 		
 		Connection conn= null;
@@ -207,10 +205,10 @@ public class EndUserService {
 	
 	
 	
-	public ArrayList<EndUser> getEndUser()
+	public ArrayList<ServiceProvider> getServiceProvider()
 	{
-		String query = "SELECT * FROM " + EndUserContract.TABLE_NAME;
-		ArrayList<EndUser> endUsersList = new ArrayList<EndUser>();
+		String query = "SELECT * FROM " + ServiceProviderContract.TABLE_NAME;
+		ArrayList<ServiceProvider> serviceProvidersList = new ArrayList<ServiceProvider>();
 		
 		
 		Connection conn = null;
@@ -230,12 +228,13 @@ public class EndUserService {
 			while(rs.next())
 			{
 
-				EndUser endUser = new EndUser();
+				ServiceProvider serviceProvider = new ServiceProvider();
 
-				endUser.setEndUserID(rs.getInt(EndUserContract.END_USER_ID));
-				endUser.setEndUserName(rs.getString(EndUserContract.END_USER_NAME));
+				serviceProvider.setServiceProviderID(rs.getInt(ServiceProviderContract.SERVICE_PROVIDER_ID));
+				serviceProvider.setServiceProviderName(rs.getString(ServiceProviderContract.SERVICE_PROVIDER_NAME));
 
-				endUsersList.add(endUser);
+				serviceProvidersList.add(serviceProvider);
+
 			}
 			
 
@@ -278,15 +277,15 @@ public class EndUserService {
 		}
 		
 								
-		return endUsersList;
+		return serviceProvidersList;
 	}
 
 	
-	public EndUser getEndUser(int endUserID)
+	public ServiceProvider getServiceProvider(int serviceProviderID)
 	{
 		
-		String query = "SELECT * FROM " + EndUserContract.TABLE_NAME
-						+ " WHERE ID = " + endUserID;
+		String query = "SELECT * FROM " + ServiceProviderContract.TABLE_NAME
+						+ " WHERE " + ServiceProviderContract.SERVICE_PROVIDER_ID  + " = " + serviceProviderID;
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -294,7 +293,7 @@ public class EndUserService {
 		
 	
 		//Distributor distributor = null;
-		EndUser endUser = null;
+		ServiceProvider serviceProvider = null;
 		
 		try {
 			
@@ -307,9 +306,11 @@ public class EndUserService {
 			
 			while(rs.next())
 			{
-				endUser = new EndUser();
-				endUser.setEndUserID(rs.getInt(EndUserContract.END_USER_ID));
-				endUser.setEndUserName(rs.getString(EndUserContract.END_USER_NAME));
+				serviceProvider = new ServiceProvider();
+
+				serviceProvider.setServiceProviderID(rs.getInt(ServiceProviderContract.SERVICE_PROVIDER_ID));
+				serviceProvider.setServiceProviderName(rs.getString(ServiceProviderContract.SERVICE_PROVIDER_NAME));
+
 			}
 			
 			
@@ -351,111 +352,6 @@ public class EndUserService {
 			}
 		}
 	
-		return endUser;
-	}
-
-
-
-
-	public EndUser getEndUserPassword(Integer endUserID, String username)
-	{
-
-
-		String query = "";
-
-
-		if(endUserID!=null)
-		{
-			query = "SELECT * FROM " + EndUserContract.TABLE_NAME
-					+ " WHERE ID = " + endUserID;
-
-		}
-
-		else if(username!=null)
-		{
-			query = "SELECT * FROM " + EndUserContract.TABLE_NAME
-					+ " WHERE " +  EndUserContract.END_USER_NAME + " = " + "'" + username + "'";
-
-		}
-
-
-
-		if(query.equals(""))
-		{
-			return null;
-		}
-
-
-
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-//		Distributor distributor = null;
-		EndUser endUser = null;
-
-		try {
-
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
-					JDBCContract.CURRENT_USERNAME,JDBCContract.CURRENT_PASSWORD);
-
-			stmt = conn.createStatement();
-
-			rs = stmt.executeQuery(query);
-
-			while(rs.next())
-			{
-				endUser = new EndUser();
-
-				endUser.setEndUserID(rs.getInt(EndUserContract.END_USER_ID));
-				endUser.setEndUserName(rs.getString(EndUserContract.END_USER_NAME));
-				endUser.setPassword(rs.getString(EndUserContract.END_USER_PASSWORD));
-			}
-
-
-			//System.out.println("Total itemCategories queried " + itemCategoryList.size());
-
-
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally
-
-		{
-
-			try {
-				if(rs!=null)
-				{rs.close();}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			try {
-
-				if(stmt!=null)
-				{stmt.close();}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			try {
-
-				if(conn!=null)
-				{conn.close();}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		return endUser;
-	}
-
-
-
-
+		return serviceProvider;
+	}	
 }

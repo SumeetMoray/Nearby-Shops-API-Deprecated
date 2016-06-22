@@ -7,7 +7,15 @@ public class EndUser {
 
     int endUserID;
     String endUserName;
+    String password;
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public int getEndUserID() {
         return endUserID;

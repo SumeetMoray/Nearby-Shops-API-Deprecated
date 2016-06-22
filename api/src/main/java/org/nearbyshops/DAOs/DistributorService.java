@@ -33,9 +33,12 @@ public class DistributorService {
 		String insertItemCategory = "INSERT INTO "
 				+ DistributorContract.TABLE_NAME				
 				+ "("  
-				+ DistributorContract.DISTRIBUTOR_NAME 
+				+ DistributorContract.DISTRIBUTOR_NAME + ","
+				+ DistributorContract.DISTRIBUTOR_PASSWORD
 				+ ") VALUES("
-				+ "'" + distributor.getDistributorName()	+ "')";
+				+ "'" + distributor.getDistributorName()	+ "'" + ","
+				+ "'" + distributor.getPassword() + "'" +
+				")";
 		
 		try {
 			
@@ -92,8 +95,9 @@ public class DistributorService {
 	public int updateDistributor(Distributor distributor)
 	{	
 		String updateStatement = "UPDATE " + DistributorContract.TABLE_NAME 
-				+ " SET " + DistributorContract.DISTRIBUTOR_NAME + " = "
-				+ "'" + distributor.getDistributorName() + "'"				
+				+ " SET "
+				+ DistributorContract.DISTRIBUTOR_NAME + " = " + "'" + distributor.getDistributorName() + "'" + ","
+				+ DistributorContract.DISTRIBUTOR_PASSWORD + " = " + "'" + distributor.getPassword() + "'"
 				+ " WHERE ID = "
 				+ distributor.getDistributorID();
 		
@@ -354,5 +358,101 @@ public class DistributorService {
 		}
 	
 		return distributor;
-	}	
+	}
+
+	public Distributor getDistributorPassword(Integer distributorID, String username)
+	{
+
+
+		String query = "";
+
+
+		if(distributorID!=null)
+		{
+			query = "SELECT * FROM " + DistributorContract.TABLE_NAME
+					+ " WHERE ID = " + distributorID;
+
+		}
+
+		else if(username!=null)
+		{
+			query = "SELECT * FROM " + DistributorContract.TABLE_NAME
+					+ " WHERE " +  DistributorContract.DISTRIBUTOR_NAME + " = " + "'" + username + "'";
+
+		}
+
+
+
+		if(query.equals(""))
+		{
+			return null;
+		}
+
+
+
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+
+
+		Distributor distributor = null;
+
+		try {
+
+			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
+					JDBCContract.CURRENT_USERNAME,JDBCContract.CURRENT_PASSWORD);
+
+			stmt = conn.createStatement();
+
+			rs = stmt.executeQuery(query);
+
+			while(rs.next())
+			{
+				distributor = new Distributor();
+				distributor.setDistributorID(rs.getInt(DistributorContract.DISTRIBUTOR_ID));
+				distributor.setDistributorName(rs.getString(DistributorContract.DISTRIBUTOR_NAME));
+				distributor.setPassword(rs.getString(DistributorContract.DISTRIBUTOR_PASSWORD));
+			}
+
+
+			//System.out.println("Total itemCategories queried " + itemCategoryList.size());
+
+
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally
+
+		{
+
+			try {
+				if(rs!=null)
+				{rs.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(stmt!=null)
+				{stmt.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(conn!=null)
+				{conn.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return distributor;
+	}
 }

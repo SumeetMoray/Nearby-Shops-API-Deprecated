@@ -6,9 +6,6 @@ import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.Model.Item;
-import org.nearbyshops.Model.ItemCategory;
-import org.nearbyshops.ModelStats.DeliveryVehicleSelf;
 
 
 import java.awt.BorderLayout;
@@ -68,8 +65,7 @@ public class Main implements ActionListener {
     	
     	main.start();
     	//main.isServerStart = true;
-    	
-    
+
     }
     
     public void go()
@@ -179,7 +175,8 @@ public class Main implements ActionListener {
 		    	String createTableDistributorPostgres = "CREATE TABLE IF NOT EXISTS " 
 		    			+ DistributorContract.TABLE_NAME + "("
 		        		+ " " + DistributorContract.DISTRIBUTOR_ID + " SERIAL PRIMARY KEY,"
-		        		+ " " + DistributorContract.DISTRIBUTOR_NAME + " VARCHAR(40)"
+		        		+ " " + DistributorContract.DISTRIBUTOR_NAME + " VARCHAR(100) UNIQUE,"
+						+ " " + DistributorContract.DISTRIBUTOR_PASSWORD + " VARCHAR(100)"
 		        		+ ")";
 		    	
 		        stmt.executeUpdate(createTableDistributorPostgres); 
@@ -241,9 +238,21 @@ public class Main implements ActionListener {
 
 			String createTableEndUserPostgres = "CREATE TABLE IF NOT EXISTS " + EndUserContract.TABLE_NAME + "("
 					+ " " + EndUserContract.END_USER_ID + " SERIAL PRIMARY KEY,"
-					+ " " + EndUserContract.END_USER_NAME + " VARCHAR(40)" + ")";
+					+ " " + EndUserContract.END_USER_NAME + " VARCHAR(100) UNIQUE,"
+					+ " " + EndUserContract.END_USER_PASSWORD + " VARCHAR(100)"
+					+ ")";
 
 			stmt.executeUpdate(createTableEndUserPostgres);
+
+
+
+			// Create Table EndUser
+
+			String createTableServiceProviderPostgres = "CREATE TABLE IF NOT EXISTS " + ServiceProviderContract.TABLE_NAME + "("
+					+ " " + ServiceProviderContract.SERVICE_PROVIDER_ID + " SERIAL PRIMARY KEY,"
+					+ " " + ServiceProviderContract.SERVICE_PROVIDER_NAME + " VARCHAR(40)" + ")";
+
+			stmt.executeUpdate(createTableServiceProviderPostgres);
 
 
 			// create Delivery Address
@@ -349,6 +358,59 @@ public class Main implements ActionListener {
 
 
 
+
+
+
+			String createTableServicePostgres = "CREATE TABLE IF NOT EXISTS " + ServiceContract.TABLE_NAME + "("
+					+ " " + ServiceContract.SERVICE_ID + " SERIAL PRIMARY KEY,"
+					+ " " + ServiceContract.IMAGE_PATH + " VARCHAR(100),"
+					+ " " + ServiceContract.LOGO_IMAGE_PATH + " VARCHAR(100),"
+					+ " " + ServiceContract.BACKDROP_IMAGE_PATH + " VARCHAR(100),"
+					+ " " + ServiceContract.SERVICE_NAME + " VARCHAR(100),"
+					+ " " + ServiceContract.HELPLINE_NUMBER + " VARCHAR(100),"
+					+ " " + ServiceContract.ADDRESS + " VARCHAR(250),"
+					+ " " + ServiceContract.CITY + " VARCHAR(100),"
+					+ " " + ServiceContract.PINCODE + " BIGINT,"
+					+ " " + ServiceContract.LANDMARK + " VARCHAR(100),"
+					+ " " + ServiceContract.STATE + " VARCHAR(100),"
+					+ " " + ServiceContract.COUNTRY + " VARCHAR(100),"
+					+ " " + ServiceContract.ISO_COUNTRY_CODE + " VARCHAR(10),"
+					+ " " + ServiceContract.ISO_LANGUAGE_CODE + " VARCHAR(10),"
+					+ " " + ServiceContract.SERVICE_TYPE + " INT,"
+					+ " " + ServiceContract.SERVICE_LEVEL + " INT,"
+					+ " " + ServiceContract.LAT_CENTER + " FLOAT,"
+					+ " " + ServiceContract.LON_CENTER + " FLOAT,"
+					+ " " + ServiceContract.SERVICE_RANGE + " INT,"
+					+ " " + ServiceContract.IS_ETHICAL_SERVICE_PROVIDER + " BOOLEAN,"
+					+ " " + ServiceContract.IS_VERIFIED + " BOOLEAN,"
+					+ " " + ServiceContract.LAT_MAX + " FLOAT,"
+					+ " " + ServiceContract.LON_MAX + " FLOAT,"
+					+ " " + ServiceContract.LAT_MIN + " FLOAT,"
+					+ " " + ServiceContract.LON_MIN + " FLOAT,"
+					+ " " + ServiceContract.CONFIGURATION_NICKNAME + " VARCHAR(50),"
+					+ " " + ServiceContract.UPDATED + " timestamp with time zone,"
+					+ " " + ServiceContract.CREATED + " timestamp with time zone NOT NULL DEFAULT now(),"
+					+ " " + ServiceContract.SERVICE_URL + " VARCHAR(150)"
+					+ ")";
+
+
+			stmt.executeUpdate(createTableServicePostgres);
+
+
+
+
+
+
+			String createTableServiceConfigPostgres = "CREATE TABLE IF NOT EXISTS " + ServiceConfigurationContract.TABLE_NAME + "("
+					+ " " + ServiceConfigurationContract.CONFIGURATION_ID + " SERIAL PRIMARY KEY,"
+					+ " " + ServiceConfigurationContract.NAME + " VARCHAR(100),"
+					+ " " + ServiceConfigurationContract.SERVICE_ID + " INT,"
+					+ " FOREIGN KEY(" + ServiceConfigurationContract.SERVICE_ID +") REFERENCES " + ServiceContract.TABLE_NAME + "(" + ServiceContract.SERVICE_ID + ")"
+					+ ")";
+
+			stmt.executeUpdate(createTableServiceConfigPostgres);
+
+
 			System.out.println("Tables Created ... !");
 
 
@@ -379,6 +441,24 @@ public class Main implements ActionListener {
 						+ ")";
 
 				stmt.executeUpdate(insertItemCategory);
+
+			}
+
+
+			String insertServiceConfig = "";
+
+			if(Globals.serviceConfigDAO.readConfig(1)==null)
+			{
+				insertServiceConfig = "INSERT INTO "
+						+ ServiceConfigurationContract.TABLE_NAME
+						+ "("
+						+ ServiceConfigurationContract.CONFIGURATION_ID + ","
+						+ ServiceConfigurationContract.NAME + ") VALUES ("
+						+ "" + "1" + ","
+						+ "'" + "ROOT_CONFIGURATION" + "')";
+
+
+				stmt.executeUpdate(insertServiceConfig);
 
 			}
 

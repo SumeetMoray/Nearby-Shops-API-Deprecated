@@ -1,6 +1,8 @@
 package org.nearbyshops.Globals;
 
 import org.nearbyshops.DAOs.*;
+import org.nearbyshops.Model.ServiceConfiguration;
+import org.nearbyshops.Model.ServiceProvider;
 import org.nearbyshops.ModelStats.CartStats;
 import org.nearbyshops.ModelStats.DeliveryAddress;
 import org.nearbyshops.ModelStats.DeliveryVehicleSelf;
@@ -36,5 +38,11 @@ public class Globals {
 	public static OrderItemService orderItemService = new OrderItemService();
 
 	public static DeliveryVehicleSelfDAO deliveryVehicleSelfDAO = new DeliveryVehicleSelfDAO();
+
+	public static ServiceDAO serviceDAO = new ServiceDAO();
+
+	public static ServiceProviderDAO serviceProviderDAO = new ServiceProviderDAO();
+
+	public static ServiceConfigDAO serviceConfigDAO = new ServiceConfigDAO();
 
 }
