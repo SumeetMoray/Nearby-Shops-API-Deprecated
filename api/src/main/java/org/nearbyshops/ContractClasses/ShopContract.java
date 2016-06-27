@@ -12,6 +12,7 @@ public class ShopContract {
 	public static final String DELIVERY_RANGE = "DELIVERY_RANGE";
 	public static final String LAT_CENTER = "LAT_CENTER";
 	public static final String LON_CENTER = "LON_CENTER";
+
 	public static final String LAT_MAX = "LAT_MAX";
 	public static final String LON_MAX = "LON_MAX";
 	public static final String LAT_MIN = "LAT_MIN";
@@ -35,5 +36,9 @@ public class ShopContract {
 	public static final String LONG_DESCRIPTION = "LONG_DESCRIPTION";
 	public static final String DATE_TIME_STARTED = "DATE_TIME_STARTED";
 	public static final String IS_OPEN = "IS_SHOP_OPEN";
+
+	// to be added
+	public static final String PICK_FROM_SHOP_AVAILABLE = "PICK_FROM_SHOP_AVAILABLE";
+	public static final String HOME_DELIVERY_AVAILABLE = "HOME_DELIVERY_AVAILABLE";
 
 }

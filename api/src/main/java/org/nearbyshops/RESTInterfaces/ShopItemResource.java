@@ -118,35 +118,38 @@ public class ShopItemResource {
 
 	@GET
 	public Response getShopItems(
-			@QueryParam("ShopID")int ShopID, @QueryParam("ItemID") int itemID,
-			@QueryParam("latCenter")double latCenter,@QueryParam("lonCenter")double lonCenter,
-			@QueryParam("deliveryRangeMax")double deliveryRangeMax,
-			@QueryParam("deliveryRangeMin")double deliveryRangeMin,
-			@QueryParam("proximity")double proximity,
-			@QueryParam("EndUserID") int endUserID,@QueryParam("IsFilledCart") boolean isFilledCart,
+			@QueryParam("ShopID")Integer ShopID, @QueryParam("ItemID") Integer itemID,
+			@QueryParam("latCenter")Double latCenter,@QueryParam("lonCenter")Double lonCenter,
+			@QueryParam("deliveryRangeMax")Double deliveryRangeMax,
+			@QueryParam("deliveryRangeMin")Double deliveryRangeMin,
+			@QueryParam("proximity")Double proximity,
+			@QueryParam("EndUserID") Integer endUserID,@QueryParam("IsFilledCart") Boolean isFilledCart,
 			@QueryParam("IsOutOfStock") Boolean isOutOfStock,@QueryParam("PriceEqualsZero")Boolean priceEqualsZero,
-			@QueryParam("MinPrice")int minPrice,@QueryParam("MaxPrice") int maxPrice,
+			@QueryParam("MinPrice")Integer minPrice,@QueryParam("MaxPrice")Integer maxPrice,
 			@QueryParam("SortBy") String sortBy,
-			@QueryParam("Limit") int limit, @QueryParam("Offset") int offset
+			@QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset
 	)
 	{
 		List<ShopItem> shopItemsList = Globals.shopItemService.getShopItems(
 				ShopID, itemID,
 				latCenter, lonCenter,
 				deliveryRangeMin,deliveryRangeMax,
-				proximity,
-				endUserID,isFilledCart,isOutOfStock,priceEqualsZero,
-				sortBy,limit,offset);
+				proximity, endUserID,
+				isFilledCart,
+				isOutOfStock,
+				priceEqualsZero,
+				sortBy,
+				limit,offset);
 
 
 		for(ShopItem shopItem: shopItemsList)
 		{
-			if(ShopID == 0)
+			if(ShopID == null)
 			{
 				shopItem.setShop(Globals.shopService.getShop(shopItem.getShopID(),latCenter,lonCenter));
 			}
 
-			if(itemID == 0)
+			if(itemID == null)
 			{
 				shopItem.setItem(Globals.itemService.getItem(shopItem.getItemID()));
 			}

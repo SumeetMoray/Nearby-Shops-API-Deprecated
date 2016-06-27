@@ -223,10 +223,6 @@ public class EndUserResource {
 
 
 
-
-
-
-
 		if(isValid)
 		{
 			Response response = Response.status(Status.OK)

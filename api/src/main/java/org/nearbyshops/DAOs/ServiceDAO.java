@@ -375,7 +375,7 @@ public class ServiceDAO {
 		// apply visibility filter
 
 
-		if(latCenterQuery>0 && lonCenterQuery >0)
+		if(latCenterQuery!=null && lonCenterQuery!=null)
 		{
 
 			String queryPartVisibilityFilter = "";
@@ -400,6 +400,8 @@ public class ServiceDAO {
 					+ ServiceContract.LAT_CENTER
 					+ ")))) <= "
 					+ ServiceContract.SERVICE_RANGE ;
+
+
 
 
 

@@ -15,4 +15,8 @@ public class ItemCategoryContract {
 	public static final String IS_LEAF_NODE = "IS_LEAF";
 	public static final String IMAGE_PATH = "IMAGE_PATH";
 
+	// to be implemented
+	public static final String ITEM_CATEGORY_DESCRIPTION_SHORT = "ITEM_CATEGORY_DESCRIPTION_SHORT";
+	public static final String IS_ABSTRACT = "IS_ABSTRACT";
+	
 }

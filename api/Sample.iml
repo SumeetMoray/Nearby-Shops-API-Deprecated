@@ -10,6 +10,13 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: com.google.dagger:dagger:2.2" level="project" />
+    <orderEntry type="library" name="Maven: javax.inject:javax.inject:1" level="project" />
+    <orderEntry type="library" name="Maven: com.google.dagger:dagger-compiler:2.2" level="project" />
+    <orderEntry type="library" name="Maven: com.google.dagger:dagger-producers:2.2" level="project" />
+    <orderEntry type="library" name="Maven: com.google.guava:guava:19.0" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okhttp3:okhttp:3.3.1" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okio:okio:1.8.0" level="project" />
     <orderEntry type="library" name="Maven: org.glassfish.jersey.containers:jersey-container-grizzly2-http:2.22.1" level="project" />
     <orderEntry type="library" name="Maven: org.glassfish.hk2.external:javax.inject:2.4.0-b31" level="project" />
     <orderEntry type="library" name="Maven: org.glassfish.grizzly:grizzly-http-server:2.3.23" level="project" />
@@ -50,7 +57,6 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: net.java.dev.jna:jna:4.1.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: net.java.dev.jna:jna-platform:4.1.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.slf4j:slf4j-api:1.7.7" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: com.google.guava:guava:18.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.slf4j:slf4j-simple:1.7.7" level="project" />
   </component>
 </module>

@@ -127,14 +127,14 @@ public class ItemResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getItems(
-			@QueryParam("ItemCategoryID")int itemCategoryID,
-			@QueryParam("ShopID")int shopID,
-			@QueryParam("latCenter") double latCenter, @QueryParam("lonCenter") double lonCenter,
-			@QueryParam("deliveryRangeMax")double deliveryRangeMax,
-			@QueryParam("deliveryRangeMin")double deliveryRangeMin,
-			@QueryParam("proximity")double proximity,
+			@QueryParam("ItemCategoryID")Integer itemCategoryID,
+			@QueryParam("ShopID")Integer shopID,
+			@QueryParam("latCenter") Double latCenter, @QueryParam("lonCenter") Double lonCenter,
+			@QueryParam("deliveryRangeMax")Double deliveryRangeMax,
+			@QueryParam("deliveryRangeMin")Double deliveryRangeMin,
+			@QueryParam("proximity")Double proximity,
 			@QueryParam("SortBy") String sortBy,
-			@QueryParam("Limit") int limit, @QueryParam("Offset") int offset)
+			@QueryParam("Limit")Integer limit, @QueryParam("Offset")Integer offset)
 	
 	{
 				

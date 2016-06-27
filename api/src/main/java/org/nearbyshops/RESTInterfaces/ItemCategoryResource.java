@@ -62,40 +62,7 @@ public class ItemCategoryResource {
 			
 			return response;
 		}
-		
-		
-		return null;
-	}
-	
-	
-	@PUT
-	@Path("/{ItemCategoryID}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateItemCategory(@PathParam("ItemCategoryID")int itemCategoryID, ItemCategory itemCategory)
-	{
-		itemCategory.setItemCategoryID(itemCategoryID);
-	
-		System.out.println("ItemCategoryID: " + itemCategoryID + " " + itemCategory.getCategoryName()
-		+ " " + itemCategory.getCategoryDescription());
-		
-		int rowCount = Globals.itemCategoryService.updateItemCategory(itemCategory);
-		
-		if(rowCount >= 1)
-		{
-			Response response = Response.status(Status.OK)
-					.entity(null)
-					.build();
-			
-			return response;
-		}
-		if(rowCount == 0)
-		{
-			Response response = Response.status(Status.NOT_MODIFIED)
-					.entity(null)
-					.build();
-			
-			return response;
-		}
+
 
 		return null;
 	}
@@ -106,53 +73,125 @@ public class ItemCategoryResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteItemCategory(@PathParam("ItemCategoryID")int itemCategoryID)
 	{
-		
+
 		String message = "";
-		
-		
+
+
 		int rowCount = Globals.itemCategoryService.deleteItemCategory(itemCategoryID);
-		
+
 		message = "Total Deleted : " + rowCount;
-		
+
 		if(rowCount>=1)
 		{
 			Response response = Response.status(Status.OK)
 					.entity(null)
 					.build();
-			
+
 			return response;
 		}
-		
+
 		if(rowCount == 0)
 		{
 			Response response = Response.status(Status.NOT_MODIFIED)
 					.entity(null)
 					.build();
-			
+
 			return response;
 		}
-		
+
 		return null;
 	}
 
+
+	@PUT
+	@Path("/{ItemCategoryID}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateItemCategory(@PathParam("ItemCategoryID")int itemCategoryID, ItemCategory itemCategory)
+	{
+		itemCategory.setItemCategoryID(itemCategoryID);
+
+		System.out.println("ItemCategoryID: " + itemCategoryID + " " + itemCategory.getCategoryName()
+				+ " " + itemCategory.getCategoryDescription());
+
+		int rowCount = Globals.itemCategoryService.updateItemCategory(itemCategory);
+
+		if(rowCount >= 1)
+		{
+			Response response = Response.status(Status.OK)
+					.entity(null)
+					.build();
+
+			return response;
+		}
+		if(rowCount == 0)
+		{
+			Response response = Response.status(Status.NOT_MODIFIED)
+					.entity(null)
+					.build();
+
+			return response;
+		}
+
+		return null;
+	}
+
+
+
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateItemCategoryBulk(List<ItemCategory> itemCategoryList)
+	{
+		int rowCountSum = 0;
+
+		for(ItemCategory itemCategory : itemCategoryList)
+		{
+			rowCountSum = rowCountSum + Globals.itemCategoryService.updateItemCategory(itemCategory);
+		}
+
+		if(rowCountSum ==  itemCategoryList.size())
+		{
+			Response response = Response.status(Status.OK)
+					.entity(null)
+					.build();
+
+			return response;
+		}
+		else if( rowCountSum < itemCategoryList.size() && rowCountSum > 0)
+		{
+			Response response = Response.status(Status.PARTIAL_CONTENT)
+					.entity(null)
+					.build();
+
+			return response;
+		}
+		else if(rowCountSum == 0 ) {
+
+			Response response = Response.status(Status.NOT_MODIFIED)
+					.entity(null)
+					.build();
+
+			return response;
+		}
+
+		return null;
+	}
 
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllItemCategory(
-			@QueryParam("ShopID")int shopID,
-			@QueryParam("ParentID")int parentID,
-			@QueryParam("latCenter")double latCenter,@QueryParam("lonCenter")double lonCenter,
-			@QueryParam("deliveryRangeMax")double deliveryRangeMax,
-			@QueryParam("deliveryRangeMin")double deliveryRangeMin,
-			@QueryParam("proximity")double proximity)
+			@QueryParam("ShopID")Integer shopID,
+			@QueryParam("ParentID")Integer parentID,@QueryParam("IsDetached")Boolean parentIsNull,
+			@QueryParam("latCenter")Double latCenter,@QueryParam("lonCenter")Double lonCenter,
+			@QueryParam("deliveryRangeMax")Double deliveryRangeMax,
+			@QueryParam("deliveryRangeMin")Double deliveryRangeMin,
+			@QueryParam("proximity")Double proximity)
 	{
-
 
 
 		List<ItemCategory> list = 
 				Globals.itemCategoryService.getItemCategories(
-						shopID, parentID,
+						shopID, parentID,parentIsNull,
 						latCenter,lonCenter,
 						deliveryRangeMin,
 						deliveryRangeMax,
@@ -188,7 +227,7 @@ public class ItemCategoryResource {
 	@GET
 	@Path("/{itemCategoryID}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getItemCategory(@PathParam("itemCategoryID")int itemCategoryID)
+	public Response getItemCategory(@PathParam("itemCategoryID")Integer itemCategoryID)
 	{	
 		ItemCategory itemCategory = Globals.itemCategoryService.getItemCategory(itemCategoryID);
 		

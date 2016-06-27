@@ -13,7 +13,7 @@ import java.net.URI;
 import java.util.List;
 
 
-@Path("/ServiceConfig")
+@Path("/ServiceConfiguration")
 public class ServiceConfigurationResource {
 
 

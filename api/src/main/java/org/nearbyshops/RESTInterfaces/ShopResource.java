@@ -157,14 +157,14 @@ public class ShopResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getShops(@QueryParam("DistributorID")int distributorID,
-							 @QueryParam("LeafNodeItemCategoryID")int itemCategoryID,
-							 @QueryParam("latCenter")double latCenter, @QueryParam("lonCenter")double lonCenter,
-							 @QueryParam("deliveryRangeMax")double deliveryRangeMax,
-							 @QueryParam("deliveryRangeMin")double deliveryRangeMin,
-							 @QueryParam("proximity")double proximity,
+	public Response getShops(@QueryParam("DistributorID")Integer distributorID,
+							 @QueryParam("LeafNodeItemCategoryID")Integer itemCategoryID,
+							 @QueryParam("latCenter")Double latCenter, @QueryParam("lonCenter")Double lonCenter,
+							 @QueryParam("deliveryRangeMax")Double deliveryRangeMax,
+							 @QueryParam("deliveryRangeMin")Double deliveryRangeMin,
+							 @QueryParam("proximity")Double proximity,
 							 @QueryParam("SortBy") String sortBy,
-							 @QueryParam("Limit") int limit, @QueryParam("Offset") int offset)
+							 @QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset)
 	{
 		
 		List<Shop> list = Globals.shopService.getShops(

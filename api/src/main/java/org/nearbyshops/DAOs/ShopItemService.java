@@ -297,14 +297,14 @@ public class ShopItemService {
 
 
 public ArrayList<ShopItem> getShopItems(
-											int shopID, int itemID,
-											double latCenter, double lonCenter,
-											double deliveryRangeMin, double deliveryRangeMax,
-											double proximity,
-											int endUserID, boolean isFilledCart,
+											Integer shopID, Integer itemID,
+											Double latCenter, Double lonCenter,
+											Double deliveryRangeMin, Double deliveryRangeMax,
+											Double proximity,
+											Integer endUserID, Boolean isFilledCart,
 											Boolean isOutOfStock, Boolean priceEqualsZero,
 											String sortBy,
-											int limit, int offset
+											Integer limit, Integer offset
 
 )
 {
@@ -322,6 +322,10 @@ public ArrayList<ShopItem> getShopItems(
 	
 	
 		String queryJoin = "SELECT DISTINCT "
+				+ "6371 * acos(cos( radians("
+				+ latCenter + ")) * cos( radians( lat_center) ) * cos(radians( lon_center ) - radians("
+				+ lonCenter + "))"
+				+ " + sin( radians(" + latCenter + ")) * sin(radians(lat_center))) as distance" + ","
 				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID + ","
 				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID + ","
 				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_PRICE + ","
@@ -348,32 +352,36 @@ public ArrayList<ShopItem> getShopItems(
 
 
 
-	if(endUserID>0)
+	if(endUserID!=null)
 	{
-		if(isFilledCart)
+
+		if(isFilledCart!=null)
 		{
-			queryJoin = queryJoin + " AND "
-					+ ShopItemContract.TABLE_NAME
-					+ "."
-					+ ShopItemContract.SHOP_ID + " IN "
-					+ " (SELECT " + CartContract.SHOP_ID + " FROM " + CartContract.TABLE_NAME + " WHERE "
-					+ CartContract.END_USER_ID + " = " + endUserID + ")";
-		}else
-		{
-			queryJoin = queryJoin + " AND "
-					+ ShopItemContract.TABLE_NAME
-					+ "."
-					+ ShopItemContract.SHOP_ID + " NOT IN "
-					+ " (SELECT " + CartContract.SHOP_ID + " FROM " + CartContract.TABLE_NAME + " WHERE "
-					+ CartContract.END_USER_ID + " = " + endUserID + ")";
+			if(isFilledCart)
+			{
+				queryJoin = queryJoin + " AND "
+						+ ShopItemContract.TABLE_NAME
+						+ "."
+						+ ShopItemContract.SHOP_ID + " IN "
+						+ " (SELECT " + CartContract.SHOP_ID + " FROM " + CartContract.TABLE_NAME + " WHERE "
+						+ CartContract.END_USER_ID + " = " + endUserID + ")";
+			}else
+			{
+				queryJoin = queryJoin + " AND "
+						+ ShopItemContract.TABLE_NAME
+						+ "."
+						+ ShopItemContract.SHOP_ID + " NOT IN "
+						+ " (SELECT " + CartContract.SHOP_ID + " FROM " + CartContract.TABLE_NAME + " WHERE "
+						+ CartContract.END_USER_ID + " = " + endUserID + ")";
+
+			}
 
 		}
-
 	}
 
 
 
-	if(shopID > 0)
+	if(shopID !=null)
 	{
 			queryJoin = queryJoin + " AND "
 					+ ShopItemContract.TABLE_NAME 
@@ -389,7 +397,7 @@ public ArrayList<ShopItem> getShopItems(
 	}
 	
 	
-	if(itemID > 0)
+	if(itemID !=null)
 	{	
 	
 		queryJoin = queryJoin + " AND "
@@ -488,12 +496,15 @@ public ArrayList<ShopItem> getShopItems(
 
 
 
-	if(latCenter>0 && latCenter>0)
+	if(latCenter != null && lonCenter != null)
 	{
 		// Applying shop visibility filter. Gives all the shops which are visible at the given location defined by
 		// latCenter and lonCenter. For more information see the API documentation.
 
-		queryJoin = queryJoin
+
+		String queryPartLatLonCenterTwo = "";
+
+		queryPartLatLonCenterTwo = queryPartLatLonCenterTwo
 				+ " AND "
 				+ ShopContract.TABLE_NAME
 				+ "."
@@ -516,27 +527,77 @@ public ArrayList<ShopItem> getShopItems(
 				+ " <= " + lonCenter;
 
 		//+ " BETWEEN " + latmax + " AND " + latmin;
+
+		String queryPartlatLonCenter = "";
+
+		queryPartlatLonCenter = queryPartlatLonCenter + " 6371.01 * acos( cos( radians("
+				+ latCenter + ")) * cos( radians( lat_center) ) * cos(radians( lon_center ) - radians("
+				+ lonCenter + "))"
+				+ " + sin( radians(" + latCenter + ")) * sin(radians(lat_center))) <= delivery_range ";
+
+
+
+		if(isFirst)
+		{
+			queryNormal = queryNormal + " WHERE ";
+
+			// reset the flag
+			isFirst = false;
+
+		}else
+		{
+			queryNormal = queryNormal + " AND ";
+		}
+
+
+//		queryNormal = queryNormal + queryPartlatLonCenter;
+
+		queryJoin = queryJoin + " AND " + queryPartlatLonCenter;
 	}
 
 
 
-	if(deliveryRangeMin > 0||deliveryRangeMax>0){
+	if(deliveryRangeMin !=null && deliveryRangeMax!=null){
 
 		// apply delivery range filter
 
-		queryJoin = queryJoin
-				+ " AND "
+		// apply delivery range filter
+		String queryPartDeliveryRange = "";
+
+		queryPartDeliveryRange = queryPartDeliveryRange
 				+ ShopContract.TABLE_NAME
 				+ "."
 				+ ShopContract.DELIVERY_RANGE
 				+ " BETWEEN " + deliveryRangeMin + " AND " + deliveryRangeMax;
 				//+ " <= " + deliveryRange;
+
+
+
+		if(isFirst)
+		{
+			queryNormal = queryNormal + " WHERE ";
+
+			// reset the flag
+			isFirst = false;
+
+		}else
+		{
+			queryNormal = queryNormal + " AND ";
+		}
+
+
+//		queryNormal = queryNormal + queryPartDeliveryRange;
+
+		System.out.println("Delivery Range Min : "  + deliveryRangeMin + " Max : " + deliveryRangeMax);
+
+		queryJoin = queryJoin + " AND " + queryPartDeliveryRange;
+
 	}
 
 
 	// proximity cannot be greater than the delivery range if the delivery range is supplied. Otherwise this condition is
 	// not required.
-	if(proximity > 0 && (deliveryRangeMax ==0 || (deliveryRangeMax > 0 && proximity <= deliveryRangeMax)))
+	if(proximity !=null)
 	{
 		// generate bounding coordinates for the shop based on the required location and its
 
@@ -554,7 +615,11 @@ public ArrayList<ShopItem> getShopItems(
 
 		// Make sure that shop center lies between the bounding coordinates generated by proximity bounding box
 
-		queryJoin = queryJoin
+		String queryPartProximity = "";
+		String queryPartProximityTwo = "";
+
+
+		queryPartProximityTwo = queryPartProximityTwo
 
 				+ " AND "
 				+ ShopContract.TABLE_NAME
@@ -579,6 +644,45 @@ public ArrayList<ShopItem> getShopItems(
 				+ "."
 				+ ShopContract.LON_CENTER
 				+ " > " + lonMin;
+
+
+		// filter using Haversine formula using SQL math functions
+		queryPartProximity = queryPartProximity
+				+ " (6371.01 * acos(cos( radians("
+				+ latCenter
+				+ ")) * cos( radians("
+				+ ShopContract.LAT_CENTER
+				+ " )) * cos(radians( "
+				+ ShopContract.LON_CENTER
+				+ ") - radians("
+				+ lonCenter
+				+ "))"
+				+ " + sin( radians("
+				+ latCenter
+				+ ")) * sin(radians("
+				+ ShopContract.LAT_CENTER
+				+ ")))) <= "
+				+ proximity ;
+
+
+		if(isFirst)
+		{
+			queryNormal = queryNormal + " WHERE ";
+
+			// reset the flag
+			isFirst = false;
+
+		}else
+		{
+			queryNormal = queryNormal + " AND ";
+		}
+
+
+
+//		queryNormal = queryNormal + queryPartProximity;
+
+		queryJoin = queryJoin + " AND " + queryPartProximity;
+
 	}
 
 
@@ -597,12 +701,12 @@ public ArrayList<ShopItem> getShopItems(
 
 
 
-	if(limit > 0)
+	if(limit !=null)
 	{
 
 		String queryPartLimitOffset = "";
 
-		if(offset>0)
+		if(offset !=null)
 		{
 			queryPartLimitOffset = " LIMIT " + limit + " " + " OFFSET " + offset;
 
@@ -622,12 +726,14 @@ public ArrayList<ShopItem> getShopItems(
 	 */
 
 
-	if((latCenter== 0 || lonCenter==0) && deliveryRangeMax == 0 && proximity == 0)
+	if(latCenter==null || lonCenter ==null)
 	{
 		query = queryNormal;
 
 	} else
 	{
+		System.out.println("Query Join : "  + queryJoin);
+
 		query = queryJoin;
 	}
 

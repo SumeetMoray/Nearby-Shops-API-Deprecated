@@ -7,7 +7,6 @@ import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.nearbyshops.Globals.Globals;
 
-
 import java.awt.BorderLayout;
 
 import java.awt.event.ActionEvent;
@@ -246,7 +245,7 @@ public class Main implements ActionListener {
 
 
 
-			// Create Table EndUser
+			// Create Table Service Provider
 
 			String createTableServiceProviderPostgres = "CREATE TABLE IF NOT EXISTS " + ServiceProviderContract.TABLE_NAME + "("
 					+ " " + ServiceProviderContract.SERVICE_PROVIDER_ID + " SERIAL PRIMARY KEY,"
@@ -412,6 +411,10 @@ public class Main implements ActionListener {
 
 
 			System.out.println("Tables Created ... !");
+
+
+			// developers Note: whenever adding a table please check that its dependencies are already created.
+
 
 
 

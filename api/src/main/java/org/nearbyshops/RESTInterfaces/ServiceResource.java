@@ -94,10 +94,12 @@ public class ServiceResource {
 
 	@DELETE
 	@Path("/{ServiceID}")
-	public Response deleteCart(@PathParam("ServiceID")int cartID)
+	public Response deleteCart(@PathParam("ServiceID")int serviceID)
 	{
 
-		int rowCount = Globals.cartService.deleteCart(cartID);
+		//int rowCount = Globals.cartService.deleteCart(cartID);
+
+		int rowCount = Globals.serviceDAO.deleteService(serviceID);
 		
 		
 		if(rowCount>=1)
@@ -127,12 +129,13 @@ public class ServiceResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getService(@QueryParam("ServiceLevel") int serviceLevel,
 								 @QueryParam("ServiceType") int serviceType,
-								 @QueryParam("LatCenter") double latCenterQuery,
-								 @QueryParam("LonCenter") double lonCenterQuery,
+								 @QueryParam("LatCenter") Double latCenterQuery,
+								 @QueryParam("LonCenter") Double lonCenterQuery,
 							   @QueryParam("SortBy") String sortBy,
 							   @QueryParam("Limit") int limit, @QueryParam("Offset") int offset)
 
 	{
+
 
 		List<Service> servicesList = Globals.serviceDAO.readServices(serviceLevel,serviceType,latCenterQuery,lonCenterQuery,
                                     								sortBy,limit,offset);
