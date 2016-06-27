@@ -142,10 +142,14 @@ public class Main implements ActionListener {
 		    			+ ItemCategoryContract.TABLE_NAME + "("
 		        		+ " " + ItemCategoryContract.ITEM_CATEGORY_ID + " SERIAL PRIMARY KEY,"
 		        		+ " " + ItemCategoryContract.ITEM_CATEGORY_NAME + " VARCHAR(40),"
-		        		+ " " + ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION + " VARCHAR(500),"
+		        		+ " " + ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION + " VARCHAR(1000),"
 		        		+ " " + ItemCategoryContract.PARENT_CATEGORY_ID + " INT,"
 		        		+ " " + ItemCategoryContract.IS_LEAF_NODE + " boolean,"
 		        		+ " " + ItemCategoryContract.IMAGE_PATH + " VARCHAR(100),"
+
+						+ " " + ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION_SHORT + " VARCHAR(100),"
+						+ " " + ItemCategoryContract.IS_ABSTRACT + " boolean,"
+
 		        		+ " FOREIGN KEY(" + ItemCategoryContract.PARENT_CATEGORY_ID +") REFERENCES " 
 		        		+ ItemCategoryContract.TABLE_NAME + "(" + ItemCategoryContract.ITEM_CATEGORY_ID + ")" 
 		        		+ ")"; 

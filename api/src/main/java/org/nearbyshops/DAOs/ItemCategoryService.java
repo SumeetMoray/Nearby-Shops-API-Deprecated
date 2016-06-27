@@ -55,11 +55,19 @@ public class ItemCategoryService {
 					+ ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION + ","
 					+ ItemCategoryContract.PARENT_CATEGORY_ID + ","
 					+ ItemCategoryContract.IMAGE_PATH + ","
+
+					+ ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION_SHORT + ","
+					+ ItemCategoryContract.IS_ABSTRACT + ","
+
 					+ ItemCategoryContract.IS_LEAF_NODE + ") VALUES("
 					+ "'" + itemCategory.getCategoryName()	+ "'," 
 					+ "'" + itemCategory.getCategoryDescription() + "',"
 					+ "" + itemCategory.getParentCategoryID() + ","
 					+ "'" + itemCategory.getImagePath() + "',"
+
+					+ "'" + itemCategory.getDescriptionShort() + "',"
+					+ "'" + itemCategory.getAbstractNode() + "',"
+
 					+ "'" + itemCategory.getIsLeafNode() + "'"
 					+ ")";
 		}
@@ -75,11 +83,19 @@ public class ItemCategoryService {
 					+ ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION + ","
 					+ ItemCategoryContract.PARENT_CATEGORY_ID + ","
 					+ ItemCategoryContract.IMAGE_PATH + ","
+
+					+ ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION_SHORT + ","
+					+ ItemCategoryContract.IS_ABSTRACT + ","
+
 					+ ItemCategoryContract.IS_LEAF_NODE + ") VALUES("
 					+ "'" + itemCategory.getCategoryName()	+ "'," 
 					+ "'" + itemCategory.getCategoryDescription() + "',"
 					+ "" + "NULL" + ","
 					+ "'" + itemCategory.getImagePath() + "',"
+
+					+ "'" + itemCategory.getDescriptionShort() + "',"
+					+ "'" + itemCategory.getAbstractNode() + "',"
+
 					+ "'" + itemCategory.getIsLeafNode() + "'"
 					+ ")";
 		
@@ -166,20 +182,19 @@ public class ItemCategoryService {
 				
 				+ ItemCategoryContract.TABLE_NAME 
 				
-				+ " SET " + ItemCategoryContract.ITEM_CATEGORY_NAME + " = "
-				+ "'" + itemCategory.getCategoryName() + "',"
-				
-				+ " " + ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION + " = "
-				+ "'" + itemCategory.getCategoryDescription() + "',"
-				
-				+ " " + ItemCategoryContract.IMAGE_PATH + " = "
-				+ "'" + itemCategory.getImagePath() + "',"
-				
-				+ " " + ItemCategoryContract.PARENT_CATEGORY_ID + " = "
-				+ "" + itemCategory.getParentCategoryID() + ","
-				
-				+ " " + ItemCategoryContract.IS_LEAF_NODE + " = "
-				+ "'" + itemCategory.getIsLeafNode() + "'"
+				+ " SET "
+
+				+ ItemCategoryContract.ITEM_CATEGORY_NAME + " = " + "'" + itemCategory.getCategoryName() + "',"
+				+ " " + ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION + " = " + "'" + itemCategory.getCategoryDescription() + "',"
+				+ " " + ItemCategoryContract.IMAGE_PATH + " = " + "'" + itemCategory.getImagePath() + "',"
+				+ " " + ItemCategoryContract.PARENT_CATEGORY_ID + " = " + "" + itemCategory.getParentCategoryID() + ","
+
+				+ " " + ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION_SHORT + " = " + "'" + itemCategory.getDescriptionShort() + "',"
+				+ " " + ItemCategoryContract.IS_ABSTRACT + " = " + "'" + itemCategory.getAbstractNode() + "',"
+
+				+ " " + ItemCategoryContract.IS_LEAF_NODE + " = " + "'" + itemCategory.getIsLeafNode() + "'"
+
+
 				
 				+ " WHERE " +  ItemCategoryContract.ITEM_CATEGORY_ID + "="
 				+ itemCategory.getItemCategoryID();
@@ -194,20 +209,17 @@ public class ItemCategoryService {
 					
 				+ ItemCategoryContract.TABLE_NAME 
 				
-				+ " SET " + ItemCategoryContract.ITEM_CATEGORY_NAME + " = "
-				+ "'" + itemCategory.getCategoryName() + "',"
-				
-				+ " " + ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION + " = "
-				+ "'" + itemCategory.getCategoryDescription() + "',"
-				
-				+ " " + ItemCategoryContract.IMAGE_PATH + " = "
-				+ "'" + itemCategory.getImagePath() + "',"
-				
-				+ " " + ItemCategoryContract.PARENT_CATEGORY_ID + " = "
-				+ "" + "NULL" + ","
-				
-				+ " " + ItemCategoryContract.IS_LEAF_NODE + " = "
-				+ "'" + itemCategory.getIsLeafNode() + "'"
+				+ " SET "
+
+				+ ItemCategoryContract.ITEM_CATEGORY_NAME + " = " + "'" + itemCategory.getCategoryName() + "',"
+				+ " " + ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION + " = " + "'" + itemCategory.getCategoryDescription() + "',"
+				+ " " + ItemCategoryContract.IMAGE_PATH + " = " + "'" + itemCategory.getImagePath() + "',"
+				+ " " + ItemCategoryContract.PARENT_CATEGORY_ID + " = " + "" + "NULL" + ","
+
+				+ " " + ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION_SHORT + " = " + "'" + itemCategory.getDescriptionShort() + "',"
+				+ " " + ItemCategoryContract.IS_ABSTRACT + " = " + "'" + itemCategory.getAbstractNode() + "',"
+
+					+ " " + ItemCategoryContract.IS_LEAF_NODE + " = " + "'" + itemCategory.getIsLeafNode() + "'"
 				
 				+ " WHERE " +  ItemCategoryContract.ITEM_CATEGORY_ID + "="
 				+ itemCategory.getItemCategoryID();
@@ -323,6 +335,8 @@ public class ItemCategoryService {
 	}
 
 
+
+
 	
 	
 	public ArrayList<ItemCategory> getItemCategories(
@@ -374,7 +388,11 @@ public class ItemCategoryService {
 					+ ItemCategoryContract.PARENT_CATEGORY_ID + "," 
 					+ ItemCategoryContract.IMAGE_PATH + ","
 					+ ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION + ","
-					+ ItemCategoryContract.IS_LEAF_NODE + "," 
+
+				+ ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION_SHORT + ","
+				+ ItemCategoryContract.IS_ABSTRACT + ","
+
+				+ ItemCategoryContract.IS_LEAF_NODE + ","
 					+ ItemCategoryContract.ITEM_CATEGORY_NAME + ") AS (";
 		
 		
@@ -384,6 +402,10 @@ public class ItemCategoryService {
 				+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.PARENT_CATEGORY_ID + ","
 				+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.IMAGE_PATH + ","
 				+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION + ","
+
+				+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION_SHORT + ","
+				+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.IS_ABSTRACT + ","
+
 				+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.IS_LEAF_NODE + ","
 				+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.ITEM_CATEGORY_NAME
 				
@@ -569,8 +591,13 @@ public class ItemCategoryService {
 				+ "cat." + ItemCategoryContract.PARENT_CATEGORY_ID + ","
 				+ "cat." + ItemCategoryContract.IMAGE_PATH + ","
 				+ "cat." + ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION + ","
+
+				+ "cat." + ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION_SHORT + ","
+				+ "cat." + ItemCategoryContract.IS_ABSTRACT + ","
+
 				+ "cat." + ItemCategoryContract.IS_LEAF_NODE + ","
 				+ "cat." + ItemCategoryContract.ITEM_CATEGORY_NAME
+
 				+ " FROM category_tree tempCat," + 	ItemCategoryContract.TABLE_NAME + " cat"
 				+ " WHERE cat." + ItemCategoryContract.ITEM_CATEGORY_ID
 				+ " = tempcat." + ItemCategoryContract.PARENT_CATEGORY_ID
@@ -582,6 +609,10 @@ public class ItemCategoryService {
 				+ ItemCategoryContract.PARENT_CATEGORY_ID + ","
 				+ ItemCategoryContract.IMAGE_PATH + ","
 				+ ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION + ","
+
+				+ ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION_SHORT + ","
+				+ ItemCategoryContract.IS_ABSTRACT + ","
+
 				+ ItemCategoryContract.IS_LEAF_NODE + ","
 				+ ItemCategoryContract.ITEM_CATEGORY_NAME
 				+ " FROM category_tree";
@@ -638,6 +669,10 @@ public class ItemCategoryService {
 				itemCategory.setIsLeafNode(rs.getBoolean(ItemCategoryContract.IS_LEAF_NODE));
 				itemCategory.setImagePath(rs.getString(ItemCategoryContract.IMAGE_PATH));
 				itemCategory.setCategoryName(rs.getString(ItemCategoryContract.ITEM_CATEGORY_NAME));
+
+				itemCategory.setAbstractNode(rs.getBoolean(ItemCategoryContract.IS_ABSTRACT));
+				itemCategory.setDescriptionShort(rs.getString(ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION_SHORT));
+
 				itemCategory.setCategoryDescription(rs.getString(ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION));
 				itemCategoryList.add(itemCategory);		
 			}
@@ -727,6 +762,10 @@ public class ItemCategoryService {
 				itemCategory.setCategoryDescription(rs.getString(ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION));
 				itemCategory.setParentCategoryID(rs.getInt(ItemCategoryContract.PARENT_CATEGORY_ID));
 				itemCategory.setIsLeafNode(rs.getBoolean(ItemCategoryContract.IS_LEAF_NODE));
+
+				itemCategory.setAbstractNode(rs.getBoolean(ItemCategoryContract.IS_ABSTRACT));
+				itemCategory.setDescriptionShort(rs.getString(ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION_SHORT));
+
 				itemCategory.setImagePath(rs.getString(ItemCategoryContract.IMAGE_PATH));
 			}
 			

@@ -11,8 +11,12 @@ public class ItemCategory {
 	
 	int parentCategoryID;
 	boolean isLeafNode;
-	
+
 	String imagePath;
+
+	// recently added
+	boolean isAbstractNode;
+	String descriptionShort;
 	
 	
 	//no-args Constructor
@@ -22,7 +26,24 @@ public class ItemCategory {
 	}
 	
 	//Getters and Setters
-	
+
+
+	public Boolean getAbstractNode() {
+		return isAbstractNode;
+	}
+
+	public void setAbstractNode(Boolean abstractNode) {
+		isAbstractNode = abstractNode;
+	}
+
+	public String getDescriptionShort() {
+		return descriptionShort;
+	}
+
+	public void setDescriptionShort(String descriptionShort) {
+		this.descriptionShort = descriptionShort;
+	}
+
 	public String getCategoryName() {
 		return categoryName;
 	}
