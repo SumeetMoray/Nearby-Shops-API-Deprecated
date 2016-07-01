@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Item;
+import org.nearbyshops.Model.ItemCategory;
 
 
 @Path("/Item")
@@ -89,6 +90,47 @@ public class ItemResource {
 
 		return null;
 
+	}
+
+
+
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateItemBulk(List<Item> itemList)
+	{
+		int rowCountSum = 0;
+
+		for(Item item : itemList)
+		{
+			rowCountSum = rowCountSum + Globals.itemService.updateItem(item);
+		}
+
+		if(rowCountSum ==  itemList.size())
+		{
+			Response response = Response.status(Status.OK)
+					.entity(null)
+					.build();
+
+			return response;
+		}
+		else if( rowCountSum < itemList.size() && rowCountSum > 0)
+		{
+			Response response = Response.status(Status.PARTIAL_CONTENT)
+					.entity(null)
+					.build();
+
+			return response;
+		}
+		else if(rowCountSum == 0 ) {
+
+			Response response = Response.status(Status.NOT_MODIFIED)
+					.entity(null)
+					.build();
+
+			return response;
+		}
+
+		return null;
 	}
 	
 	

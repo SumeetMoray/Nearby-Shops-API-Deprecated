@@ -1,6 +1,7 @@
 package org.nearbyshops.RESTInterfaces;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -19,6 +20,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.ItemCategory;
+import org.nearbyshops.ModelEndPoints.ItemCategoryEndPoint;
 
 @Path("/ItemCategory")
 public class ItemCategoryResource {
@@ -176,8 +178,11 @@ public class ItemCategoryResource {
 		return null;
 	}
 
-	
+
+
+
 	@GET
+	@Path("/Depricated")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllItemCategory(
 			@QueryParam("ShopID")Integer shopID,
@@ -185,7 +190,9 @@ public class ItemCategoryResource {
 			@QueryParam("latCenter")Double latCenter,@QueryParam("lonCenter")Double lonCenter,
 			@QueryParam("deliveryRangeMax")Double deliveryRangeMax,
 			@QueryParam("deliveryRangeMin")Double deliveryRangeMin,
-			@QueryParam("proximity")Double proximity)
+			@QueryParam("proximity")Double proximity,
+			@QueryParam("SortBy") String sortBy,
+			@QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset)
 	{
 
 
@@ -195,7 +202,9 @@ public class ItemCategoryResource {
 						latCenter,lonCenter,
 						deliveryRangeMin,
 						deliveryRangeMax,
-						proximity);
+						proximity,
+						sortBy,
+						limit,offset);
 		
 		
 		GenericEntity<List<ItemCategory>> listEntity = new GenericEntity<List<ItemCategory>>(list){
@@ -221,9 +230,85 @@ public class ItemCategoryResource {
 			}
 			
 	}
-	
-	
-	
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllItemCategory(
+			@QueryParam("ShopID")Integer shopID,
+			@QueryParam("ParentID")Integer parentID,@QueryParam("IsDetached")Boolean parentIsNull,
+			@QueryParam("latCenter")Double latCenter,@QueryParam("lonCenter")Double lonCenter,
+			@QueryParam("deliveryRangeMax")Double deliveryRangeMax,
+			@QueryParam("deliveryRangeMin")Double deliveryRangeMin,
+			@QueryParam("proximity")Double proximity,
+			@QueryParam("SortBy") String sortBy,
+			@QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset,
+			@QueryParam("metadata_only")Boolean metaonly)
+	{
+
+
+		int set_limit = 30;
+		int set_offset = 0;
+
+		if(limit!= null)
+		{
+			set_limit = limit;
+		}
+
+		if(offset!=null)
+		{
+			set_offset = offset;
+		}
+
+		ItemCategoryEndPoint endPoint = Globals.itemCategoryService
+				.getEndPointMetaData(parentID,parentIsNull);
+
+		endPoint.setLimit(set_limit);
+		endPoint.setOffset(set_offset);
+
+		ArrayList<ItemCategory> list = null;
+
+
+		if(metaonly==null || (!metaonly))
+		{
+			list = Globals.itemCategoryService.getItemCategories(
+							shopID, parentID,parentIsNull,
+							latCenter,lonCenter,
+							deliveryRangeMin,
+							deliveryRangeMax,
+							proximity,
+							sortBy,
+							set_limit,set_offset);
+
+			endPoint.setResults(list);
+		}
+
+
+
+//		GenericEntity<List<ItemCategory>> listEntity = new GenericEntity<List<ItemCategory>>(list){
+//
+//		};
+
+
+
+		if(endPoint==null)
+		{
+
+			return Response.status(Status.NO_CONTENT)
+					.build();
+
+		}else
+		{
+
+			return Response.status(Status.OK)
+					.entity(endPoint)
+					.build();
+		}
+
+	}
+
+
+
+
 	@GET
 	@Path("/{itemCategoryID}")
 	@Produces(MediaType.APPLICATION_JSON)

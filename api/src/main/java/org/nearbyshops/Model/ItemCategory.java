@@ -17,8 +17,8 @@ public class ItemCategory {
 	// recently added
 	boolean isAbstractNode;
 	String descriptionShort;
-	
-	
+
+
 	//no-args Constructor
 	public ItemCategory() {
 		super();
@@ -28,11 +28,11 @@ public class ItemCategory {
 	//Getters and Setters
 
 
-	public Boolean getAbstractNode() {
+	public Boolean getisAbstractNode() {
 		return isAbstractNode;
 	}
 
-	public void setAbstractNode(Boolean abstractNode) {
+	public void setisAbstractNode(Boolean abstractNode) {
 		isAbstractNode = abstractNode;
 	}
 

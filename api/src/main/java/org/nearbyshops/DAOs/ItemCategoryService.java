@@ -13,7 +13,10 @@ import org.nearbyshops.ContractClasses.JDBCContract;
 import org.nearbyshops.ContractClasses.ShopContract;
 import org.nearbyshops.ContractClasses.ShopItemContract;
 import org.nearbyshops.Model.ItemCategory;
+import org.nearbyshops.ModelEndPoints.ItemCategoryEndPoint;
 import org.nearbyshops.Utility.GeoLocation;
+
+import javax.ws.rs.QueryParam;
 
 
 public class ItemCategoryService {
@@ -66,7 +69,7 @@ public class ItemCategoryService {
 					+ "'" + itemCategory.getImagePath() + "',"
 
 					+ "'" + itemCategory.getDescriptionShort() + "',"
-					+ "'" + itemCategory.getAbstractNode() + "',"
+					+ "'" + itemCategory.getisAbstractNode() + "',"
 
 					+ "'" + itemCategory.getIsLeafNode() + "'"
 					+ ")";
@@ -94,7 +97,7 @@ public class ItemCategoryService {
 					+ "'" + itemCategory.getImagePath() + "',"
 
 					+ "'" + itemCategory.getDescriptionShort() + "',"
-					+ "'" + itemCategory.getAbstractNode() + "',"
+					+ "'" + itemCategory.getisAbstractNode() + "',"
 
 					+ "'" + itemCategory.getIsLeafNode() + "'"
 					+ ")";
@@ -190,7 +193,7 @@ public class ItemCategoryService {
 				+ " " + ItemCategoryContract.PARENT_CATEGORY_ID + " = " + "" + itemCategory.getParentCategoryID() + ","
 
 				+ " " + ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION_SHORT + " = " + "'" + itemCategory.getDescriptionShort() + "',"
-				+ " " + ItemCategoryContract.IS_ABSTRACT + " = " + "'" + itemCategory.getAbstractNode() + "',"
+				+ " " + ItemCategoryContract.IS_ABSTRACT + " = " + "'" + itemCategory.getisAbstractNode() + "',"
 
 				+ " " + ItemCategoryContract.IS_LEAF_NODE + " = " + "'" + itemCategory.getIsLeafNode() + "'"
 
@@ -217,7 +220,7 @@ public class ItemCategoryService {
 				+ " " + ItemCategoryContract.PARENT_CATEGORY_ID + " = " + "" + "NULL" + ","
 
 				+ " " + ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION_SHORT + " = " + "'" + itemCategory.getDescriptionShort() + "',"
-				+ " " + ItemCategoryContract.IS_ABSTRACT + " = " + "'" + itemCategory.getAbstractNode() + "',"
+				+ " " + ItemCategoryContract.IS_ABSTRACT + " = " + "'" + itemCategory.getisAbstractNode() + "',"
 
 					+ " " + ItemCategoryContract.IS_LEAF_NODE + " = " + "'" + itemCategory.getIsLeafNode() + "'"
 				
@@ -343,7 +346,9 @@ public class ItemCategoryService {
 			Integer shopID, Integer parentID, Boolean parentIsNull,
 			Double latCenter, Double lonCenter,
 			Double deliveryRangeMin, Double deliveryRangeMax,
-			Double proximity)
+			Double proximity,
+			String sortBy,
+			Integer limit, Integer offset)
 	{
 
 		String query = "";
@@ -389,11 +394,12 @@ public class ItemCategoryService {
 					+ ItemCategoryContract.IMAGE_PATH + ","
 					+ ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION + ","
 
-				+ ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION_SHORT + ","
-				+ ItemCategoryContract.IS_ABSTRACT + ","
+					+ ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION_SHORT + ","
+					+ ItemCategoryContract.IS_ABSTRACT + ","
 
-				+ ItemCategoryContract.IS_LEAF_NODE + ","
-					+ ItemCategoryContract.ITEM_CATEGORY_NAME + ") AS (";
+					+ ItemCategoryContract.IS_LEAF_NODE + ","
+					+ ItemCategoryContract.ITEM_CATEGORY_NAME
+					+ ") AS (";
 		
 		
 		String queryJoin = "SELECT DISTINCT " 
@@ -626,8 +632,43 @@ public class ItemCategoryService {
 		}
 		
 		String queryRecursive = withRecursiveStart + queryJoin + union + querySelect +  queryLast;
-				
-		
+
+
+
+
+		if(sortBy!=null)
+		{
+			if(!sortBy.equals(""))
+			{
+				String queryPartSortBy = " ORDER BY " + sortBy;
+
+				queryNormal = queryNormal + queryPartSortBy;
+				queryRecursive = queryRecursive + queryPartSortBy;
+			}
+		}
+
+
+
+		if(limit !=null)
+		{
+
+			String queryPartLimitOffset = "";
+
+			if(offset!=null)
+			{
+				queryPartLimitOffset = " LIMIT " + limit + " " + " OFFSET " + offset;
+
+			}else
+			{
+				queryPartLimitOffset = " LIMIT " + limit + " " + " OFFSET " + 0;
+			}
+
+
+			queryNormal = queryNormal + queryPartLimitOffset;
+			queryRecursive = queryRecursive + queryPartLimitOffset;
+		}
+
+
 		
 		if(shopID==null && latCenter == null && lonCenter == null)
 		{
@@ -670,7 +711,7 @@ public class ItemCategoryService {
 				itemCategory.setImagePath(rs.getString(ItemCategoryContract.IMAGE_PATH));
 				itemCategory.setCategoryName(rs.getString(ItemCategoryContract.ITEM_CATEGORY_NAME));
 
-				itemCategory.setAbstractNode(rs.getBoolean(ItemCategoryContract.IS_ABSTRACT));
+				itemCategory.setisAbstractNode(rs.getBoolean(ItemCategoryContract.IS_ABSTRACT));
 				itemCategory.setDescriptionShort(rs.getString(ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION_SHORT));
 
 				itemCategory.setCategoryDescription(rs.getString(ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION));
@@ -724,10 +765,122 @@ public class ItemCategoryService {
 		
 		return itemCategoryList;
 	}
-	
-	
-	
-	
+
+
+
+	public ItemCategoryEndPoint getEndPointMetaData(Integer parentID, Boolean parentIsNull)
+	{
+
+		String query = "";
+
+		String queryNormal = "SELECT count(*) as item_count FROM " + ItemCategoryContract.TABLE_NAME;
+
+
+		boolean queryNormalFirst = true;
+
+		if(parentID!=null)
+		{
+			queryNormal = queryNormal + " WHERE "
+					+ ItemCategoryContract.PARENT_CATEGORY_ID
+					+ "=" + parentID ;
+
+			queryNormalFirst = false;
+		}
+
+
+		if(parentIsNull!=null&& parentIsNull)
+		{
+
+			String queryNormalPart = ItemCategoryContract.PARENT_CATEGORY_ID + " IS NULL";
+
+			if(queryNormalFirst)
+			{
+				queryNormal = queryNormal + " WHERE " + queryNormalPart;
+
+			}else
+			{
+				queryNormal = queryNormal + " AND " + queryNormalPart;
+
+			}
+		}
+
+
+			query = queryNormal;
+
+
+
+
+		ItemCategoryEndPoint endPoint = new ItemCategoryEndPoint();
+
+
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
+					JDBCContract.CURRENT_USERNAME,
+					JDBCContract.CURRENT_PASSWORD);
+
+			stmt = conn.createStatement();
+
+			rs = stmt.executeQuery(query);
+
+			while(rs.next())
+			{
+				endPoint.setItemCount(rs.getInt("item_count"));
+			}
+
+
+			System.out.println("Item Category EndPoint call count :  " + endPoint.getItemCount());
+
+		}
+
+
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+		finally
+
+		{
+
+			try {
+				if(rs!=null)
+				{rs.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(stmt!=null)
+				{stmt.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(conn!=null)
+				{conn.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return endPoint;
+	}
+
+
+
+
 	public ItemCategory getItemCategory(int itemCategoryID)
 	{
 		
@@ -763,7 +916,7 @@ public class ItemCategoryService {
 				itemCategory.setParentCategoryID(rs.getInt(ItemCategoryContract.PARENT_CATEGORY_ID));
 				itemCategory.setIsLeafNode(rs.getBoolean(ItemCategoryContract.IS_LEAF_NODE));
 
-				itemCategory.setAbstractNode(rs.getBoolean(ItemCategoryContract.IS_ABSTRACT));
+				itemCategory.setisAbstractNode(rs.getBoolean(ItemCategoryContract.IS_ABSTRACT));
 				itemCategory.setDescriptionShort(rs.getString(ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION_SHORT));
 
 				itemCategory.setImagePath(rs.getString(ItemCategoryContract.IMAGE_PATH));
