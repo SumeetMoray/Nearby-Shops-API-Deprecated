@@ -6,8 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.nearbyshops.ContractClasses.*;
+import org.nearbyshops.Model.ItemCategory;
 import org.nearbyshops.Model.Shop;
 import org.nearbyshops.Utility.GeoLocation;
 
@@ -704,31 +706,367 @@ public class ShopService {
 
 		return shopList;
 	}
+
+
+
+
+
+
+	public List<Shop> filterShopsByItemCategory(Integer itemCategoryID,
+												Integer distributorID,
+												Double latCenter, Double lonCenter,
+												Double deliveryRangeMin,Double deliveryRangeMax,
+												Double proximity,
+												String sortBy,
+												Integer limit, Integer offset)
+	{
+
+
+
+
+			// a recursive CTE (Common table Expression) query. This query is used for retrieving hierarchical / tree set data.
+
+			String withRecursiveStart = "WITH RECURSIVE category_tree("
+					+ ItemCategoryContract.ITEM_CATEGORY_ID + ","
+					+ ItemCategoryContract.PARENT_CATEGORY_ID + ","
+					+ ") AS (";
+
+
+			String queryJoin = "SELECT DISTINCT "
+
+					+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.ITEM_CATEGORY_ID + ","
+					+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.PARENT_CATEGORY_ID + ","
+
+					+ " FROM "
+					+ ItemCategoryContract.TABLE_NAME
+
+					+ " WHERE "
+					+ ItemCategoryContract.ITEM_CATEGORY_ID  + " = " + itemCategoryID;
+
+
+			String union = " UNION ";
+
+			String querySelect = " SELECT "
+
+					+ "cat." + ItemCategoryContract.ITEM_CATEGORY_ID + ","
+					+ "cat." + ItemCategoryContract.PARENT_CATEGORY_ID + ","
+
+					+ " FROM category_tree tempCat," + 	ItemCategoryContract.TABLE_NAME + " cat"
+					+ " WHERE cat." + ItemCategoryContract.PARENT_CATEGORY_ID
+					+ " = tempcat." + ItemCategoryContract.ITEM_CATEGORY_ID
+					+ " )";
+
+
+			String queryLast = " SELECT "
+					+ ItemCategoryContract.ITEM_CATEGORY_ID
+					+ " FROM category_tree";
+
+
+
+			String queryRecursive = withRecursiveStart + queryJoin + union + querySelect +  queryLast;
+
+
+
+
+
+//		System.out.println(query);
+
+		queryJoin = "SELECT DISTINCT "
+				+ "6371 * acos(cos( radians("
+				+ latCenter + ")) * cos( radians( lat_center) ) * cos(radians( lon_center ) - radians("
+				+ lonCenter + "))"
+				+ " + sin( radians(" + latCenter + ")) * sin(radians(lat_center))) as distance" + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.SHOP_ID + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.SHOP_NAME + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.LON_CENTER + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.LAT_CENTER + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.DELIVERY_RANGE + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.DELIVERY_CHARGES + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.DISTRIBUTOR_ID + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.IMAGE_PATH + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.LAT_MAX + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.LAT_MIN + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.LON_MAX + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.LON_MIN + ","
+
+				+ ShopContract.TABLE_NAME + "." + ShopContract.SHOP_ADDRESS + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.CITY + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.PINCODE + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.LANDMARK + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.BILL_AMOUNT_FOR_FREE_DELIVERY + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.CUSTOMER_HELPLINE_NUMBER + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.DELIVERY_HELPLINE_NUMBER + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.SHORT_DESCRIPTION + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.LONG_DESCRIPTION + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.IS_OPEN + ","
+				+ ShopContract.TABLE_NAME + "." + ShopContract.DATE_TIME_STARTED
+
+				+ " FROM "
+				+ ShopContract.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
+				+ ItemContract.TABLE_NAME + "," + ItemCategoryContract.TABLE_NAME
+
+				+ " WHERE "
+				+ ShopContract.TABLE_NAME + "." + ShopContract.SHOP_ID + "="
+				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID
+
+				+ " AND "
+				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID + "="
+				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_ID
+
+				+ " AND "
+				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_CATEGORY_ID + "="
+				+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.ITEM_CATEGORY_ID;
+
+
+
+		queryJoin = queryJoin + " AND "
+				+ ItemCategoryContract.TABLE_NAME
+				+ "."
+				+ ItemCategoryContract.ITEM_CATEGORY_ID + " IN "
+				+ " (" + queryRecursive + ")";
+
+
+
+		if(distributorID != null)
+		{
+			queryJoin = queryJoin + " AND "
+					+ ShopContract.TABLE_NAME + "." + ShopContract.DISTRIBUTOR_ID
+					+ " = " + distributorID;
+		}
+
+
+		// Visibility Filter : Apply
+		if(latCenter != null && lonCenter != null)
+		{
+			// Applying shop visibility filter. Gives all the shops which are visible at the given location defined by
+			// latCenter and lonCenter. For more information see the API documentation.
+
+
+			String queryPartlatLonCenter = "";
+
+			queryPartlatLonCenter = queryPartlatLonCenter + " 6371.01 * acos( cos( radians("
+					+ latCenter + ")) * cos( radians( lat_center) ) * cos(radians( lon_center ) - radians("
+					+ lonCenter + "))"
+					+ " + sin( radians(" + latCenter + ")) * sin(radians(lat_center))) <= delivery_range ";
+
+			queryJoin = queryJoin + " AND " + queryPartlatLonCenter;
+		}
+
+
+
+		// Delivery Range Filter : apply
+		if(deliveryRangeMin != null || deliveryRangeMax != null){
+
+			// apply delivery range filter
+			String queryPartDeliveryRange = "";
+
+			queryPartDeliveryRange = queryPartDeliveryRange + ShopContract.TABLE_NAME
+					+ "."
+					+ ShopContract.DELIVERY_RANGE
+					+ " BETWEEN " + deliveryRangeMin + " AND " + deliveryRangeMax;
+			//+ " <= " + deliveryRange;
+
+			queryJoin = queryJoin + " AND " + queryPartDeliveryRange;
+
+		}
+
+
+		// Proximity Filter
+		if(proximity != null)
+		{
+			// proximity > 0 && (deliveryRangeMax==0 || (deliveryRangeMax > 0 && proximity <= deliveryRangeMax))
+
+			String queryPartProximity = "";
+
+
+			// filter using Haversine formula using SQL math functions
+			queryPartProximity = queryPartProximity
+					+ " (6371.01 * acos(cos( radians("
+					+ latCenter
+					+ ")) * cos( radians("
+					+ ShopContract.LAT_CENTER
+					+ " )) * cos(radians( "
+					+ ShopContract.LON_CENTER
+					+ ") - radians("
+					+ lonCenter
+					+ "))"
+					+ " + sin( radians("
+					+ latCenter
+					+ ")) * sin(radians("
+					+ ShopContract.LAT_CENTER
+					+ ")))) <= "
+					+ proximity ;
+
+			queryJoin = queryJoin + " AND " + queryPartProximity;
+
+
+		}
+
+
+		if(sortBy!=null)
+		{
+			if(!sortBy.equals(""))
+			{
+				String queryPartSortBy = " ORDER BY " + sortBy;
+
+				queryJoin = queryJoin + queryPartSortBy;
+			}
+		}
+
+
+
+		if(limit !=null)
+		{
+
+			String queryPartLimitOffset = "";
+
+			if(offset!=null)
+			{
+				queryPartLimitOffset = " LIMIT " + limit + " " + " OFFSET " + offset;
+
+			}else
+			{
+				queryPartLimitOffset = " LIMIT " + limit + " " + " OFFSET " + 0;
+			}
+
+			queryJoin = queryJoin + queryPartLimitOffset;
+		}
+
+
+
+		ArrayList<Shop> shopList = new ArrayList<Shop>();
+
+
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
+					JDBCContract.CURRENT_USERNAME,
+					JDBCContract.CURRENT_PASSWORD);
+
+			stmt = conn.createStatement();
+
+			rs = stmt.executeQuery(queryJoin);
+
+			while(rs.next())
+			{
+
+				Shop shop = new Shop();
+				shop.setDistance(rs.getDouble("distance"));
+				shop.setShopID(rs.getInt(ShopContract.SHOP_ID));
+				shop.setShopName(rs.getString(ShopContract.SHOP_NAME));
+				shop.setLatCenter(rs.getFloat(ShopContract.LAT_CENTER));
+				shop.setLonCenter(rs.getFloat(ShopContract.LON_CENTER));
+				shop.setDeliveryCharges(rs.getFloat(ShopContract.DELIVERY_CHARGES));
+				shop.setLatMax(rs.getDouble(ShopContract.LAT_MAX));
+				shop.setLonMax(rs.getDouble(ShopContract.LON_MAX));
+				shop.setLatMin(rs.getDouble(ShopContract.LAT_MIN));
+				shop.setLonMin(rs.getDouble(ShopContract.LON_MIN));
+				shop.setDistributorID(rs.getInt(ShopContract.DISTRIBUTOR_ID));
+				shop.setDeliveryRange(rs.getDouble(ShopContract.DELIVERY_RANGE));
+				shop.setImagePath(rs.getString(ShopContract.IMAGE_PATH));
+
+				shop.setShopAddress(rs.getString(ShopContract.SHOP_ADDRESS));
+				shop.setCity(rs.getString(ShopContract.CITY));
+				shop.setPincode(rs.getLong(ShopContract.PINCODE));
+				shop.setLandmark(rs.getString(ShopContract.LANDMARK));
+				shop.setBillAmountForFreeDelivery(rs.getInt(ShopContract.BILL_AMOUNT_FOR_FREE_DELIVERY));
+				shop.setCustomerHelplineNumber(rs.getString(ShopContract.CUSTOMER_HELPLINE_NUMBER));
+				shop.setDeliveryHelplineNumber(rs.getString(ShopContract.DELIVERY_HELPLINE_NUMBER));
+				shop.setShortDescription(rs.getString(ShopContract.SHORT_DESCRIPTION));
+				shop.setLongDescription(rs.getString(ShopContract.LONG_DESCRIPTION));
+				shop.setDateTimeStarted(rs.getTimestamp(ShopContract.DATE_TIME_STARTED));
+				shop.setisOpen(rs.getBoolean(ShopContract.IS_OPEN));
+
+				shopList.add(shop);
+
+			}
+
+			System.out.println("Total Shops queried " + shopList.size());
+
+
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		finally
+
+			{
+
+				try {
+					if(rs!=null)
+					{rs.close();}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				try {
+
+					if(stmt!=null)
+					{stmt.close();}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				try {
+
+					if(conn!=null)
+					{conn.close();}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+
+			return shopList;
+	}
 	
 	
 	
 	public Shop getShop(int ShopID,
-						double latCenter, double lonCenter)
+						Double latCenter, Double lonCenter)
 	{
 
-		String query = "SELECT "
-						+ " (6371.01 * acos(cos( radians("
-						+ latCenter
-						+ ")) * cos( radians("
-						+ ShopContract.LAT_CENTER
-						+ " )) * cos(radians( "
-						+ ShopContract.LON_CENTER
-						+ ") - radians("
-						+ lonCenter
-						+ "))"
-						+ " + sin( radians("
-						+ latCenter
-						+ ")) * sin(radians("
-						+ ShopContract.LAT_CENTER
-						+ "))))"
-						+ " as distance , * FROM " + ShopContract.TABLE_NAME
-						+ " WHERE "	+  ShopContract.SHOP_ID + "= " + ShopID;
+		String query = " ";
 
+		boolean distancePreset = false;
+
+		if(latCenter!=null & lonCenter!=null)
+		{
+			query = "SELECT "
+					+ " (6371.01 * acos(cos( radians("
+					+ latCenter
+					+ ")) * cos( radians("
+					+ ShopContract.LAT_CENTER
+					+ " )) * cos(radians( "
+					+ ShopContract.LON_CENTER
+					+ ") - radians("
+					+ lonCenter
+					+ "))"
+					+ " + sin( radians("
+					+ latCenter
+					+ ")) * sin(radians("
+					+ ShopContract.LAT_CENTER
+					+ "))))"
+					+ " as distance , * FROM " + ShopContract.TABLE_NAME
+					+ " WHERE "	+  ShopContract.SHOP_ID + "= " + ShopID;
+
+			distancePreset = true;
+
+		}else
+		{
+			query = "SELECT * FROM " + ShopContract.TABLE_NAME
+					+ " WHERE "	+  ShopContract.SHOP_ID + "= " + ShopID;
+
+		}
 
 		
 		Connection conn = null;
@@ -751,7 +1089,11 @@ public class ShopService {
 			{
 				
 				shop = new Shop();
-				shop.setDistance(rs.getDouble("distance"));
+
+				if(distancePreset) {
+					shop.setDistance(rs.getDouble("distance"));
+				}
+
 				shop.setShopID(rs.getInt(ShopContract.SHOP_ID));
 				shop.setShopName(rs.getString(ShopContract.SHOP_NAME));
 				shop.setLatCenter(rs.getFloat(ShopContract.LAT_CENTER));

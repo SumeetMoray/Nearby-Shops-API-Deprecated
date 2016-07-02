@@ -48,7 +48,7 @@ public class ItemCategoryService {
 		System.out.println("isLeaf : " + itemCategory.getIsLeafNode());
 
 		
-		if(itemCategory.getParentCategoryID()>0)
+		if(itemCategory.getParentCategoryID()!=null)
 		{
 		
 			insertItemCategory = "INSERT INTO "
@@ -76,7 +76,7 @@ public class ItemCategoryService {
 		}
 		
 		
-		if(itemCategory.getParentCategoryID() == 0)
+		if(itemCategory.getParentCategoryID() == null)
 		{
 			
 			insertItemCategory = "INSERT INTO "
@@ -178,34 +178,54 @@ public class ItemCategoryService {
 		String updateStatement = "";
 		
 		
-		if(itemCategory.getParentCategoryID()!=0)
+		if(itemCategory.getParentCategoryID()!=null)
 		{
-		
-		updateStatement = "UPDATE " 
-				
-				+ ItemCategoryContract.TABLE_NAME 
-				
-				+ " SET "
 
-				+ ItemCategoryContract.ITEM_CATEGORY_NAME + " = " + "'" + itemCategory.getCategoryName() + "',"
-				+ " " + ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION + " = " + "'" + itemCategory.getCategoryDescription() + "',"
-				+ " " + ItemCategoryContract.IMAGE_PATH + " = " + "'" + itemCategory.getImagePath() + "',"
-				+ " " + ItemCategoryContract.PARENT_CATEGORY_ID + " = " + "" + itemCategory.getParentCategoryID() + ","
+			if(itemCategory.getParentCategoryID()==-1)
+			{
+				updateStatement = "UPDATE "
 
-				+ " " + ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION_SHORT + " = " + "'" + itemCategory.getDescriptionShort() + "',"
-				+ " " + ItemCategoryContract.IS_ABSTRACT + " = " + "'" + itemCategory.getisAbstractNode() + "',"
+						+ ItemCategoryContract.TABLE_NAME
 
-				+ " " + ItemCategoryContract.IS_LEAF_NODE + " = " + "'" + itemCategory.getIsLeafNode() + "'"
+						+ " SET "
 
+						+ ItemCategoryContract.ITEM_CATEGORY_NAME + " = " + "'" + itemCategory.getCategoryName() + "',"
+						+ " " + ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION + " = " + "'" + itemCategory.getCategoryDescription() + "',"
+						+ " " + ItemCategoryContract.IMAGE_PATH + " = " + "'" + itemCategory.getImagePath() + "',"
+						+ " " + ItemCategoryContract.PARENT_CATEGORY_ID + " = " + "" + "NULL" + ","
 
-				
-				+ " WHERE " +  ItemCategoryContract.ITEM_CATEGORY_ID + "="
-				+ itemCategory.getItemCategoryID();
-		
+						+ " " + ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION_SHORT + " = " + "'" + itemCategory.getDescriptionShort() + "',"
+						+ " " + ItemCategoryContract.IS_ABSTRACT + " = " + "'" + itemCategory.getisAbstractNode() + "',"
+
+						+ " " + ItemCategoryContract.IS_LEAF_NODE + " = " + "'" + itemCategory.getIsLeafNode() + "'"
+
+						+ " WHERE " +  ItemCategoryContract.ITEM_CATEGORY_ID + "="
+						+ itemCategory.getItemCategoryID();
+
+			}else
+			{
+				updateStatement = "UPDATE "
+
+						+ ItemCategoryContract.TABLE_NAME
+
+						+ " SET "
+
+						+ ItemCategoryContract.ITEM_CATEGORY_NAME + " = " + "'" + itemCategory.getCategoryName() + "',"
+						+ " " + ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION + " = " + "'" + itemCategory.getCategoryDescription() + "',"
+						+ " " + ItemCategoryContract.IMAGE_PATH + " = " + "'" + itemCategory.getImagePath() + "',"
+						+ " " + ItemCategoryContract.PARENT_CATEGORY_ID + " = " + "" + itemCategory.getParentCategoryID() + ","
+
+						+ " " + ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION_SHORT + " = " + "'" + itemCategory.getDescriptionShort() + "',"
+						+ " " + ItemCategoryContract.IS_ABSTRACT + " = " + "'" + itemCategory.getisAbstractNode() + "',"
+
+						+ " " + ItemCategoryContract.IS_LEAF_NODE + " = " + "'" + itemCategory.getIsLeafNode() + "'"
+
+						+ " WHERE " +  ItemCategoryContract.ITEM_CATEGORY_ID + "="
+						+ itemCategory.getItemCategoryID();
+			}
+
 		}
-		
-		
-		if(itemCategory.getParentCategoryID()==0)
+		else
 		{
 			
 			updateStatement = "UPDATE " 
@@ -366,6 +386,7 @@ public class ItemCategoryService {
 
 			queryNormalFirst = false;
 		}
+
 
 		if(parentIsNull!=null&& parentIsNull)
 		{
@@ -717,8 +738,23 @@ public class ItemCategoryService {
 				itemCategory.setCategoryDescription(rs.getString(ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION));
 				itemCategoryList.add(itemCategory);		
 			}
-			
-			
+
+
+
+			if(parentIsNull!=null&& parentIsNull)
+			{
+				// exclude the root category
+				for(ItemCategory itemCategory : itemCategoryList)
+				{
+					if(itemCategory.getItemCategoryID()==1)
+					{
+						itemCategoryList.remove(itemCategory);
+						break;
+					}
+				}
+			}
+
+
 //			conn.close();
 
 			System.out.println("Total itemCategories queried " + itemCategoryList.size());	
@@ -830,6 +866,13 @@ public class ItemCategoryService {
 			while(rs.next())
 			{
 				endPoint.setItemCount(rs.getInt("item_count"));
+			}
+
+
+			if(parentIsNull!=null&& parentIsNull)
+			{
+				// exclude the root category
+				endPoint.setItemCount(endPoint.getItemCount()-1);
 			}
 
 

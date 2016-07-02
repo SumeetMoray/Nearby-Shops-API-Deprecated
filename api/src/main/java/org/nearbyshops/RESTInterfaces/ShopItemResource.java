@@ -1,5 +1,6 @@
 package org.nearbyshops.RESTInterfaces;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -17,12 +18,13 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.nearbyshops.Globals.Globals;
+import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ShopItem;
+import org.nearbyshops.ModelEndPoints.ItemEndPoint;
+import org.nearbyshops.ModelEndPoints.ShopItemEndPoint;
 
 
-@Path("/ShopItem")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
+@Path("/v1/ShopItem")
 public class ShopItemResource {
 
 	@POST
@@ -117,6 +119,8 @@ public class ShopItemResource {
 	
 
 	@GET
+	@Path("/Deprecated")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response getShopItems(
 			@QueryParam("ShopID")Integer ShopID, @QueryParam("ItemID") Integer itemID,
 			@QueryParam("latCenter")Double latCenter,@QueryParam("lonCenter")Double lonCenter,
@@ -180,6 +184,102 @@ public class ShopItemResource {
 		
 			
 		}
+	}
+
+
+
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getShopItems(
+			@QueryParam("ShopID")Integer ShopID, @QueryParam("ItemID") Integer itemID,
+			@QueryParam("latCenter")Double latCenter,@QueryParam("lonCenter")Double lonCenter,
+			@QueryParam("deliveryRangeMax")Double deliveryRangeMax,
+			@QueryParam("deliveryRangeMin")Double deliveryRangeMin,
+			@QueryParam("proximity")Double proximity,
+			@QueryParam("EndUserID") Integer endUserID,@QueryParam("IsFilledCart") Boolean isFilledCart,
+			@QueryParam("IsOutOfStock") Boolean isOutOfStock,@QueryParam("PriceEqualsZero")Boolean priceEqualsZero,
+			@QueryParam("MinPrice")Integer minPrice,@QueryParam("MaxPrice")Integer maxPrice,
+			@QueryParam("SortBy") String sortBy,
+			@QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset,
+			@QueryParam("metadata_only")Boolean metaonly
+	)
+	{
+
+		int set_limit = 30;
+		int set_offset = 0;
+		final int max_limit = 100;
+
+
+		if(limit!= null) {
+
+			if (limit >= max_limit) {
+
+				set_limit = max_limit;
+			}
+			else
+			{
+
+				set_limit = limit;
+			}
+
+		}
+
+		if(offset!=null)
+		{
+			set_offset = offset;
+		}
+
+		ShopItemEndPoint endPoint = Globals.shopItemService.getEndpointMetadata(
+				ShopID,itemID,
+				latCenter,lonCenter,
+				deliveryRangeMin,deliveryRangeMax,
+				proximity,endUserID,
+				isFilledCart,isOutOfStock,priceEqualsZero);
+
+		endPoint.setLimit(set_limit);
+		endPoint.setMax_limit(max_limit);
+		endPoint.setOffset(set_offset);
+
+
+		ArrayList<ShopItem> shopItemsList = null;
+
+
+		if(metaonly==null || (!metaonly)) {
+
+			shopItemsList = Globals.shopItemService.getShopItems(
+					ShopID, itemID,
+					latCenter, lonCenter,
+					deliveryRangeMin,deliveryRangeMax,
+					proximity, endUserID,
+					isFilledCart,
+					isOutOfStock,
+					priceEqualsZero,
+					sortBy,
+					limit,offset);
+
+
+			for(ShopItem shopItem: shopItemsList)
+			{
+				if(ShopID == null)
+				{
+					shopItem.setShop(Globals.shopService.getShop(shopItem.getShopID(),latCenter,lonCenter));
+				}
+
+				if(itemID == null)
+				{
+					shopItem.setItem(Globals.itemService.getItem(shopItem.getItemID()));
+				}
+
+			}
+
+			endPoint.setResults(shopItemsList);
+		}
+
+		//Marker
+		return Response.status(Status.OK)
+				.entity(endPoint)
+				.build();
 	}
 	
 }

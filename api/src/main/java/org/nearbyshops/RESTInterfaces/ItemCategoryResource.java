@@ -22,7 +22,7 @@ import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.ItemCategory;
 import org.nearbyshops.ModelEndPoints.ItemCategoryEndPoint;
 
-@Path("/ItemCategory")
+@Path("/v1/ItemCategory")
 public class ItemCategoryResource {
 	
 	
@@ -248,10 +248,20 @@ public class ItemCategoryResource {
 
 		int set_limit = 30;
 		int set_offset = 0;
+		final int max_limit = 100;
 
 		if(limit!= null)
 		{
-			set_limit = limit;
+
+			if (limit >= max_limit) {
+
+				set_limit = max_limit;
+			}
+			else
+			{
+
+				set_limit = limit;
+			}
 		}
 
 		if(offset!=null)
@@ -263,46 +273,33 @@ public class ItemCategoryResource {
 				.getEndPointMetaData(parentID,parentIsNull);
 
 		endPoint.setLimit(set_limit);
+		endPoint.setMax_limit(max_limit);
 		endPoint.setOffset(set_offset);
 
 		ArrayList<ItemCategory> list = null;
 
 
-		if(metaonly==null || (!metaonly))
-		{
+		if(metaonly==null || (!metaonly)) {
 			list = Globals.itemCategoryService.getItemCategories(
-							shopID, parentID,parentIsNull,
-							latCenter,lonCenter,
-							deliveryRangeMin,
-							deliveryRangeMax,
-							proximity,
-							sortBy,
-							set_limit,set_offset);
+					shopID, parentID, parentIsNull,
+					latCenter, lonCenter,
+					deliveryRangeMin,
+					deliveryRangeMax,
+					proximity,
+					sortBy,
+					set_limit, set_offset);
 
 			endPoint.setResults(list);
 		}
-
-
 
 //		GenericEntity<List<ItemCategory>> listEntity = new GenericEntity<List<ItemCategory>>(list){
 //
 //		};
 
 
-
-		if(endPoint==null)
-		{
-
-			return Response.status(Status.NO_CONTENT)
-					.build();
-
-		}else
-		{
-
-			return Response.status(Status.OK)
-					.entity(endPoint)
-					.build();
-		}
+		return Response.status(Status.OK)
+                .entity(endPoint)
+                .build();
 
 	}
 

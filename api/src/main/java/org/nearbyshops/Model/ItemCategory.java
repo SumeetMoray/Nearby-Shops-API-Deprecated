@@ -9,7 +9,7 @@ public class ItemCategory {
 	String categoryName;
 	String categoryDescription;
 	
-	int parentCategoryID;
+	Integer parentCategoryID;
 	boolean isLeafNode;
 
 	String imagePath;
@@ -68,11 +68,12 @@ public class ItemCategory {
 		this.itemCategoryID = itemCategoryID;
 	}
 
-	public int getParentCategoryID() {
+
+	public Integer getParentCategoryID() {
 		return parentCategoryID;
 	}
 
-	public void setParentCategoryID(int parentCategoryID) {
+	public void setParentCategoryID(Integer parentCategoryID) {
 		this.parentCategoryID = parentCategoryID;
 	}
 

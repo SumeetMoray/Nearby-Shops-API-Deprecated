@@ -1,6 +1,7 @@
 package org.nearbyshops.RESTInterfaces;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -20,9 +21,11 @@ import javax.ws.rs.core.Response.Status;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ItemCategory;
+import org.nearbyshops.ModelEndPoints.ItemCategoryEndPoint;
+import org.nearbyshops.ModelEndPoints.ItemEndPoint;
 
 
-@Path("/Item")
+@Path("/v1/Item")
 public class ItemResource {
 	
 	@POST
@@ -167,6 +170,7 @@ public class ItemResource {
 	
 	
 	@GET
+	@Path("/Deprecated")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getItems(
 			@QueryParam("ItemCategoryID")Integer itemCategoryID,
@@ -216,8 +220,85 @@ public class ItemResource {
 				return response;
 			}	
 	}
-	
-	
+
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getItems(
+			@QueryParam("ItemCategoryID")Integer itemCategoryID,
+			@QueryParam("ShopID")Integer shopID,
+			@QueryParam("latCenter") Double latCenter, @QueryParam("lonCenter") Double lonCenter,
+			@QueryParam("deliveryRangeMax")Double deliveryRangeMax,
+			@QueryParam("deliveryRangeMin")Double deliveryRangeMin,
+			@QueryParam("proximity")Double proximity,
+			@QueryParam("SortBy") String sortBy,
+			@QueryParam("Limit")Integer limit, @QueryParam("Offset")Integer offset,
+			@QueryParam("metadata_only")Boolean metaonly)
+	{
+
+		int set_limit = 30;
+		int set_offset = 0;
+		final int max_limit = 100;
+
+		if(limit!= null)
+		{
+
+			if (limit >= max_limit) {
+
+				set_limit = max_limit;
+			}
+			else
+			{
+
+				set_limit = limit;
+			}
+
+		}
+
+		if(offset!=null)
+		{
+			set_offset = offset;
+		}
+
+		ItemEndPoint endPoint = Globals.itemService.getEndPointMetadata(itemCategoryID,
+				shopID,latCenter,lonCenter,deliveryRangeMin,deliveryRangeMax,proximity);
+
+		endPoint.setLimit(set_limit);
+		endPoint.setMax_limit(max_limit);
+		endPoint.setOffset(set_offset);
+
+		List<Item> list = null;
+
+
+		if(metaonly==null || (!metaonly)) {
+
+			list =
+					Globals.itemService.getItems(
+							itemCategoryID,
+							shopID,
+							latCenter, lonCenter,
+							deliveryRangeMin,
+							deliveryRangeMax,
+							proximity,
+							sortBy,set_limit,set_offset
+					);
+
+			endPoint.setResults(list);
+		}
+
+
+		//Marker
+
+		return Response.status(Status.OK)
+                .entity(endPoint)
+                .build();
+
+	}
+
+
+
+
+
 	@GET
 	@Path("/{ItemID}")
 	@Produces(MediaType.APPLICATION_JSON)

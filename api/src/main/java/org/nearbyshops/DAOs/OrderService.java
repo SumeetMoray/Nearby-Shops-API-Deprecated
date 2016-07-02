@@ -72,7 +72,7 @@ public class OrderService {
 
             }else
             {
-                order.setDeliveryCharges((int)Globals.shopService.getShop(tempOrder.getShopID(),0,0).getDeliveryCharges());
+                order.setDeliveryCharges((int)Globals.shopService.getShop(tempOrder.getShopID(),null,null).getDeliveryCharges());
                 order.setStatusHomeDelivery(1);
             }
 

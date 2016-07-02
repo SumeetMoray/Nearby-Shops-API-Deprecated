@@ -198,6 +198,56 @@ public class ShopResource {
 			}
 	
 	}
+
+
+
+	@GET
+	@Path("/FilterByItemCat/{ItemCategoryID}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response filterShopsByItemCategory(
+							 @PathParam("ItemCategoryID")Integer itemCategoryID,
+							 @QueryParam("DistributorID")Integer distributorID,
+							 @QueryParam("latCenter")Double latCenter, @QueryParam("lonCenter")Double lonCenter,
+							 @QueryParam("deliveryRangeMax")Double deliveryRangeMax,
+							 @QueryParam("deliveryRangeMin")Double deliveryRangeMin,
+							 @QueryParam("proximity")Double proximity,
+							 @QueryParam("SortBy") String sortBy,
+							 @QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset)
+	{
+
+		List<Shop> list = Globals.shopService.filterShopsByItemCategory(
+				distributorID,itemCategoryID,
+				latCenter, lonCenter,
+				deliveryRangeMin,deliveryRangeMax,
+				proximity,sortBy,limit,offset
+		);
+
+
+		GenericEntity<List<Shop>> listEntity = new GenericEntity<List<Shop>>(list){
+
+		};
+
+
+		if(list.size()<=0)
+		{
+			Response response = Response.status(Status.NO_CONTENT)
+					.entity(listEntity)
+					.build();
+
+			return response;
+
+		}else
+		{
+			Response response = Response.status(Status.OK)
+					.entity(listEntity)
+					.build();
+
+			return response;
+		}
+
+	}
+
+
 	
 
 	@GET

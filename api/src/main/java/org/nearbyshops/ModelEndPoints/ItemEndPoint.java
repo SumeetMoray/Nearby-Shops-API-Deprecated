@@ -1,19 +1,21 @@
 package org.nearbyshops.ModelEndPoints;
 
+import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ItemCategory;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sumeet on 30/6/16.
  */
-public class ItemCategoryEndPoint {
+public class ItemEndPoint {
 
     Integer itemCount;
     Integer offset;
     Integer limit;
     Integer max_limit;
-    ArrayList<ItemCategory> results;
+    List<Item> results;
 
 
     public Integer getItemCount() {
@@ -40,14 +42,14 @@ public class ItemCategoryEndPoint {
         this.limit = limit;
     }
 
-    public ArrayList<ItemCategory> getResults() {
+
+    public List<Item> getResults() {
         return results;
     }
 
-    public void setResults(ArrayList<ItemCategory> results) {
+    public void setResults(List<Item> results) {
         this.results = results;
     }
-
 
     public Integer getMax_limit() {
         return max_limit;
