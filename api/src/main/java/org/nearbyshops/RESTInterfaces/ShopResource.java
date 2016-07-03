@@ -1,6 +1,7 @@
 package org.nearbyshops.RESTInterfaces;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -19,9 +20,10 @@ import javax.ws.rs.core.Response.Status;
 
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Shop;
+import org.nearbyshops.ModelEndPoints.ShopEndPoint;
 import org.nearbyshops.Utility.GeoLocation;
 
-@Path("/Shop")
+@Path("/v1/Shop")
 @Produces(MediaType.APPLICATION_JSON)
 public class ShopResource {
 
@@ -156,6 +158,7 @@ public class ShopResource {
 	
 
 	@GET
+	@Path("/Deprecated")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getShops(@QueryParam("DistributorID")Integer distributorID,
 							 @QueryParam("LeafNodeItemCategoryID")Integer itemCategoryID,
@@ -201,6 +204,80 @@ public class ShopResource {
 
 
 
+
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getShopItems(
+			@QueryParam("DistributorID")Integer distributorID,
+			@QueryParam("LeafNodeItemCategoryID")Integer itemCategoryID,
+			@QueryParam("latCenter")Double latCenter, @QueryParam("lonCenter")Double lonCenter,
+			@QueryParam("deliveryRangeMax")Double deliveryRangeMax,
+			@QueryParam("deliveryRangeMin")Double deliveryRangeMin,
+			@QueryParam("proximity")Double proximity,
+			@QueryParam("SortBy") String sortBy,
+			@QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset,
+			@QueryParam("metadata_only")Boolean metaonly
+	)
+	{
+
+		int set_limit = 30;
+		int set_offset = 0;
+		final int max_limit = 100;
+
+
+		if(limit!= null) {
+
+			if (limit >= max_limit) {
+
+				set_limit = max_limit;
+			}
+			else
+			{
+
+				set_limit = limit;
+			}
+
+		}
+
+		if(offset!=null)
+		{
+			set_offset = offset;
+		}
+
+
+		ShopEndPoint endPoint = Globals.shopService.getEndPointMetadata(distributorID,
+				itemCategoryID, latCenter,lonCenter,deliveryRangeMin,deliveryRangeMax,proximity);
+
+
+		endPoint.setLimit(set_limit);
+		endPoint.setMax_limit(max_limit);
+		endPoint.setOffset(set_offset);
+
+
+		ArrayList<Shop> shopsList = null;
+
+
+		if(metaonly==null || (!metaonly)) {
+
+
+			shopsList = Globals.shopService.getShops(distributorID,itemCategoryID,
+					latCenter,lonCenter,deliveryRangeMin,deliveryRangeMax,proximity,sortBy,
+					limit,offset);
+
+			endPoint.setResults(shopsList);
+		}
+
+		//Marker
+		return Response.status(Status.OK)
+				.entity(endPoint)
+				.build();
+	}
+
+
+
+
+
 	@GET
 	@Path("/FilterByItemCat/{ItemCategoryID}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -212,38 +289,68 @@ public class ShopResource {
 							 @QueryParam("deliveryRangeMin")Double deliveryRangeMin,
 							 @QueryParam("proximity")Double proximity,
 							 @QueryParam("SortBy") String sortBy,
-							 @QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset)
+							 @QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset,
+							 @QueryParam("metadata_only")Boolean metaonly)
 	{
 
-		List<Shop> list = Globals.shopService.filterShopsByItemCategory(
-				distributorID,itemCategoryID,
-				latCenter, lonCenter,
-				deliveryRangeMin,deliveryRangeMax,
-				proximity,sortBy,limit,offset
-		);
+
+		int set_limit = 30;
+		int set_offset = 0;
+		final int max_limit = 100;
 
 
-		GenericEntity<List<Shop>> listEntity = new GenericEntity<List<Shop>>(list){
+		if(limit!= null) {
 
-		};
+			if (limit >= max_limit) {
 
+				set_limit = max_limit;
+			}
+			else
+			{
 
-		if(list.size()<=0)
-		{
-			Response response = Response.status(Status.NO_CONTENT)
-					.entity(listEntity)
-					.build();
+				set_limit = limit;
+			}
 
-			return response;
-
-		}else
-		{
-			Response response = Response.status(Status.OK)
-					.entity(listEntity)
-					.build();
-
-			return response;
 		}
+
+		if(offset!=null)
+		{
+			set_offset = offset;
+		}
+
+
+		ShopEndPoint endPoint = Globals.shopService.endPointMetadataFilterShops(itemCategoryID,distributorID,
+				 latCenter,lonCenter,deliveryRangeMin,deliveryRangeMax,proximity);
+
+
+		endPoint.setLimit(set_limit);
+		endPoint.setMax_limit(max_limit);
+		endPoint.setOffset(set_offset);
+
+
+		ArrayList<Shop> shopsList = null;
+
+
+		if(metaonly==null || (!metaonly)) {
+
+
+			shopsList = Globals.shopService.filterShopsByItemCategory(
+					itemCategoryID, distributorID,
+					latCenter,lonCenter,
+					deliveryRangeMin,deliveryRangeMax,
+					proximity,sortBy, limit,offset
+			);
+
+			endPoint.setResults(shopsList);
+		}
+
+
+
+
+		//Marker
+		return Response.status(Status.OK)
+				.entity(endPoint)
+				.build();
 
 	}
 

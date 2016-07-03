@@ -182,7 +182,7 @@ public class ItemCategoryResource {
 
 
 	@GET
-	@Path("/Depricated")
+	@Path("/Deprecated")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllItemCategory(
 			@QueryParam("ShopID")Integer shopID,

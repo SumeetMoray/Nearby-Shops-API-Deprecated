@@ -27,6 +27,95 @@ import org.nearbyshops.ModelEndPoints.ShopItemEndPoint;
 @Path("/v1/ShopItem")
 public class ShopItemResource {
 
+
+
+
+	@PUT
+	@Path("/UpdateBulk")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateShopItemBulk(List<ShopItem> itemList)
+	{
+		int rowCountSum = 0;
+
+		for(ShopItem shopItem : itemList)
+		{
+			rowCountSum = rowCountSum + Globals.shopItemService.updateShopItem(shopItem);
+		}
+
+
+		if(rowCountSum ==  itemList.size())
+		{
+			Response response = Response.status(Status.OK)
+					.entity(null)
+					.build();
+
+			return response;
+		}
+		else if( rowCountSum < itemList.size() && rowCountSum > 0)
+		{
+			Response response = Response.status(Status.PARTIAL_CONTENT)
+					.entity(null)
+					.build();
+
+			return response;
+		}
+		else if(rowCountSum == 0 ) {
+
+			Response response = Response.status(Status.NOT_MODIFIED)
+					.entity(null)
+					.build();
+
+			return response;
+		}
+
+		return null;
+	}
+
+
+	@POST
+	@Path("/CreateBulk")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response createShopItemBulk(List<ShopItem> itemList)
+	{
+		int rowCountSum = 0;
+
+		for(ShopItem shopItem : itemList)
+		{
+			rowCountSum = rowCountSum + Globals.shopItemService.insertShopItem(shopItem);
+		}
+
+
+		if(rowCountSum ==  itemList.size())
+		{
+			Response response = Response.status(Status.OK)
+					.entity(null)
+					.build();
+
+			return response;
+		}
+		else if( rowCountSum < itemList.size() && rowCountSum > 0)
+		{
+			Response response = Response.status(Status.PARTIAL_CONTENT)
+					.entity(null)
+					.build();
+
+			return response;
+		}
+		else if(rowCountSum == 0 ) {
+
+			Response response = Response.status(Status.NOT_MODIFIED)
+					.entity(null)
+					.build();
+
+			return response;
+		}
+
+		return null;
+	}
+
+
+
+
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response saveShopItem(ShopItem shopItem)
@@ -115,6 +204,49 @@ public class ShopItemResource {
 	
 		return null;
 	}
+
+
+	@POST
+	@Path("/DeleteBulk")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response deleteShopItemBulk(List<ShopItem> itemList)
+	{
+		int rowCountSum = 0;
+
+		for(ShopItem shopItem : itemList)
+		{
+			rowCountSum = rowCountSum + Globals.shopItemService
+					.deleteShopItem(shopItem.getShopID(),shopItem.getItemID());
+		}
+
+
+		if(rowCountSum ==  itemList.size())
+		{
+			Response response = Response.status(Status.OK)
+					.entity(null)
+					.build();
+
+			return response;
+		}
+		else if( rowCountSum < itemList.size() && rowCountSum > 0)
+		{
+			Response response = Response.status(Status.PARTIAL_CONTENT)
+					.entity(null)
+					.build();
+
+			return response;
+		}
+		else if(rowCountSum == 0 ) {
+
+			Response response = Response.status(Status.NOT_MODIFIED)
+					.entity(null)
+					.build();
+
+			return response;
+		}
+
+		return null;
+	}
 	
 	
 
@@ -122,6 +254,7 @@ public class ShopItemResource {
 	@Path("/Deprecated")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getShopItems(
+			@QueryParam("ItemCategoryID")Integer ItemCategoryID,
 			@QueryParam("ShopID")Integer ShopID, @QueryParam("ItemID") Integer itemID,
 			@QueryParam("latCenter")Double latCenter,@QueryParam("lonCenter")Double lonCenter,
 			@QueryParam("deliveryRangeMax")Double deliveryRangeMax,
@@ -135,6 +268,7 @@ public class ShopItemResource {
 	)
 	{
 		List<ShopItem> shopItemsList = Globals.shopItemService.getShopItems(
+				ItemCategoryID,
 				ShopID, itemID,
 				latCenter, lonCenter,
 				deliveryRangeMin,deliveryRangeMax,
@@ -192,6 +326,7 @@ public class ShopItemResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getShopItems(
+			@QueryParam("ItemCategoryID")Integer ItemCategoryID,
 			@QueryParam("ShopID")Integer ShopID, @QueryParam("ItemID") Integer itemID,
 			@QueryParam("latCenter")Double latCenter,@QueryParam("lonCenter")Double lonCenter,
 			@QueryParam("deliveryRangeMax")Double deliveryRangeMax,
@@ -231,6 +366,7 @@ public class ShopItemResource {
 		}
 
 		ShopItemEndPoint endPoint = Globals.shopItemService.getEndpointMetadata(
+				ItemCategoryID,
 				ShopID,itemID,
 				latCenter,lonCenter,
 				deliveryRangeMin,deliveryRangeMax,
@@ -248,6 +384,7 @@ public class ShopItemResource {
 		if(metaonly==null || (!metaonly)) {
 
 			shopItemsList = Globals.shopItemService.getShopItems(
+					ItemCategoryID,
 					ShopID, itemID,
 					latCenter, lonCenter,
 					deliveryRangeMin,deliveryRangeMax,

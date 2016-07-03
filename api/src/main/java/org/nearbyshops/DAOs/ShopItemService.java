@@ -19,7 +19,7 @@ public class ShopItemService {
 		
 		Connection conn = null;
 		Statement stmt = null;
-		int rowCount = -1;
+		int rowCount = 0;
 
 		//+ "" + shopItem.getQuantityUnit() + ","
 		//+ "" + shopItem.getQuantityMultiple() + ","
@@ -182,7 +182,7 @@ public class ShopItemService {
 		
 		Connection conn = null;
 		Statement stmt = null;
-		int updatedRows = -1;
+		int updatedRows = 0;
 		
 		try {
 			
@@ -297,6 +297,7 @@ public class ShopItemService {
 
 
 public ArrayList<ShopItem> getShopItems(
+											Integer itemCategoryID,
 											Integer shopID, Integer itemID,
 											Double latCenter, Double lonCenter,
 											Double deliveryRangeMin, Double deliveryRangeMax,
@@ -417,6 +418,31 @@ public ArrayList<ShopItem> getShopItems(
 		{
 			queryNormal = queryNormal + " AND "
 					+ ShopItemContract.ITEM_ID + " = " + itemID;
+		}
+
+	}
+
+
+	if(itemCategoryID !=null)
+	{
+
+		queryJoin = queryJoin + " AND "
+				+ ItemCategoryContract.TABLE_NAME
+				+ "."
+				+ ItemCategoryContract.ITEM_CATEGORY_ID + " = " + itemCategoryID;
+
+
+		if(isFirst)
+		{
+			queryNormal = queryNormal + " WHERE "
+					+ ItemCategoryContract.ITEM_CATEGORY_ID + " = " + itemCategoryID;
+
+			isFirst = false;
+
+		}else
+		{
+			queryNormal = queryNormal + " AND "
+					+ ItemCategoryContract.ITEM_CATEGORY_ID + " = " + itemCategoryID;
 		}
 
 	}
@@ -726,15 +752,16 @@ public ArrayList<ShopItem> getShopItems(
 	 */
 
 
-	if(latCenter==null || lonCenter ==null)
+	if(itemCategoryID!=null || (latCenter==null && lonCenter ==null))
 	{
-		query = queryNormal;
+
+		query = queryJoin;
+		System.out.println("Query Join : "  + queryJoin);
 
 	} else
 	{
-		System.out.println("Query Join : "  + queryJoin);
 
-		query = queryJoin;
+		query = queryNormal;
 	}
 
 
@@ -826,6 +853,7 @@ public ArrayList<ShopItem> getShopItems(
 
 
 	public ShopItemEndPoint getEndpointMetadata(
+			Integer itemCategoryID,
 			Integer shopID, Integer itemID,
 			Double latCenter, Double lonCenter,
 			Double deliveryRangeMin, Double deliveryRangeMax,
@@ -939,6 +967,31 @@ public ArrayList<ShopItem> getShopItems(
 			{
 				queryNormal = queryNormal + " AND "
 						+ ShopItemContract.ITEM_ID + " = " + itemID;
+			}
+
+		}
+
+
+		if(itemCategoryID !=null)
+		{
+
+			queryJoin = queryJoin + " AND "
+					+ ItemCategoryContract.TABLE_NAME
+					+ "."
+					+ ItemCategoryContract.ITEM_CATEGORY_ID + " = " + itemCategoryID;
+
+
+			if(isFirst)
+			{
+				queryNormal = queryNormal + " WHERE "
+						+ ItemCategoryContract.ITEM_CATEGORY_ID + " = " + itemCategoryID;
+
+				isFirst = false;
+
+			}else
+			{
+				queryNormal = queryNormal + " AND "
+						+ ItemCategoryContract.ITEM_CATEGORY_ID + " = " + itemCategoryID;
 			}
 
 		}
@@ -1148,6 +1201,7 @@ public ArrayList<ShopItem> getShopItems(
 			Applying Filters Ends
 	 */
 
+/*
 
 		if(latCenter==null || lonCenter ==null)
 		{
@@ -1158,6 +1212,22 @@ public ArrayList<ShopItem> getShopItems(
 
 			query = queryJoin;
 		}
+*/
+
+
+
+		if(itemCategoryID!=null || (latCenter==null && lonCenter ==null))
+		{
+
+			query = queryJoin;
+			System.out.println("Query Join : "  + queryJoin);
+
+		} else
+		{
+
+			query = queryNormal;
+		}
+
 
 
 
