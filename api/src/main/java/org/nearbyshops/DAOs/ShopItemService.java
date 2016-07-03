@@ -752,11 +752,12 @@ public ArrayList<ShopItem> getShopItems(
 	 */
 
 
-	if(itemCategoryID!=null || (latCenter==null && lonCenter ==null))
+	if(itemCategoryID!=null || (latCenter!=null && lonCenter!=null))
 	{
 
 		query = queryJoin;
-		System.out.println("Query Join : "  + queryJoin);
+
+//		System.out.println("Query Join : "  + queryJoin);
 
 	} else
 	{
@@ -1216,11 +1217,13 @@ public ArrayList<ShopItem> getShopItems(
 
 
 
-		if(itemCategoryID!=null || (latCenter==null && lonCenter ==null))
+		if(itemCategoryID!=null || (latCenter!=null && lonCenter!=null))
 		{
 
 			query = queryJoin;
-			System.out.println("Query Join : "  + queryJoin);
+
+//			System.out.println("Query Join : "  + queryJoin);
+
 
 		} else
 		{
