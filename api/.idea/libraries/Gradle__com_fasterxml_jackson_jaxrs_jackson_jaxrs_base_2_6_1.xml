@@ -4,6 +4,8 @@
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/2.6.1/3119b335cdddae137404c0fa7597b6fd4692a438/jackson-jaxrs-base-2.6.1.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/2.6.1/1c3bfe5091a9f127d1bcb673b36f101392b8210f/jackson-jaxrs-base-2.6.1-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

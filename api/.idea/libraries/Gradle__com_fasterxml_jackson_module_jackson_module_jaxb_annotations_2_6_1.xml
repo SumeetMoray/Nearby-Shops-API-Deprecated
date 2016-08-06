@@ -4,6 +4,8 @@
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.module/jackson-module-jaxb-annotations/2.6.1/6e49b856747d22cc74fd0dddf8c584de1522916c/jackson-module-jaxb-annotations-2.6.1.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.module/jackson-module-jaxb-annotations/2.6.1/734cceaaa227a9f7000962da49fbea79d23614df/jackson-module-jaxb-annotations-2.6.1-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

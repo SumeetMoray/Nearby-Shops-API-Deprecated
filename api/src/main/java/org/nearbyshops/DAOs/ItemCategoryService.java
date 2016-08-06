@@ -804,7 +804,294 @@ public class ItemCategoryService {
 
 
 
-	public ItemCategoryEndPoint getEndPointMetaData(Integer parentID, Boolean parentIsNull)
+	public ItemCategoryEndPoint getEndPointMetadata(
+			Integer shopID, Integer parentID, Boolean parentIsNull,
+			Double latCenter, Double lonCenter,
+			Double deliveryRangeMin, Double deliveryRangeMax,
+			Double proximity)
+	{
+
+		String query = "";
+
+		String queryNormal = "SELECT * FROM " + ItemCategoryContract.TABLE_NAME;
+
+
+		boolean queryNormalFirst = true;
+
+		if(parentID!=null)
+		{
+			queryNormal = queryNormal + " WHERE "
+					+ ItemCategoryContract.PARENT_CATEGORY_ID
+					+ "=" + parentID ;
+
+			queryNormalFirst = false;
+		}
+
+
+		if(parentIsNull!=null&& parentIsNull)
+		{
+
+			String queryNormalPart = ItemCategoryContract.PARENT_CATEGORY_ID + " IS NULL";
+
+			if(queryNormalFirst)
+			{
+				queryNormal = queryNormal + " WHERE " + queryNormalPart;
+
+			}else
+			{
+				queryNormal = queryNormal + " AND " + queryNormalPart;
+
+			}
+		}
+
+
+
+		// a recursive CTE (Common table Expression) query. This query is used for retrieving hierarchical / tree set data.
+
+
+		String withRecursiveStart = "WITH RECURSIVE category_tree("
+				+ ItemCategoryContract.ITEM_CATEGORY_ID + ","
+				+ ItemCategoryContract.PARENT_CATEGORY_ID
+				+ ") AS (";
+
+
+		String queryJoin = "SELECT DISTINCT "
+
+				+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.ITEM_CATEGORY_ID + ","
+				+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.PARENT_CATEGORY_ID
+
+				+ " FROM "
+				+ ShopContract.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
+				+ ItemContract.TABLE_NAME + "," + ItemCategoryContract.TABLE_NAME
+				+ " WHERE "
+				+ ShopContract.TABLE_NAME + "." + ShopContract.SHOP_ID
+				+ "="
+				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID
+				+ " AND "
+				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID
+				+ "="
+				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_ID
+				+ " AND "
+				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_CATEGORY_ID
+				+ "="
+				+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.ITEM_CATEGORY_ID;
+
+
+
+		if(shopID!=null)
+		{
+			queryJoin = queryJoin + " AND "
+					+ ShopContract.TABLE_NAME
+					+ "."
+					+ ShopContract.SHOP_ID + " = " + shopID;
+
+		}
+
+		if(latCenter!=null && lonCenter!=null)
+		{
+			// Applying shop visibility filter. Gives all the shops which are visible at the given location defined by
+			// latCenter and lonCenter. For more information see the API documentation.
+
+
+			String queryPartlatLonCenter = "";
+
+			queryPartlatLonCenter = queryPartlatLonCenter + " 6371.01 * acos( cos( radians("
+					+ latCenter + ")) * cos( radians( lat_center) ) * cos(radians( lon_center ) - radians("
+					+ lonCenter + "))"
+					+ " + sin( radians(" + latCenter + ")) * sin(radians(lat_center))) <= delivery_range ";
+
+
+			queryJoin = queryJoin + " AND " + queryPartlatLonCenter;
+
+
+		}
+
+
+
+		if(deliveryRangeMax !=null || deliveryRangeMin != null)
+		{
+
+			// apply delivery range filter
+			queryJoin = queryJoin
+					+ " AND "
+					+ ShopContract.TABLE_NAME
+					+ "."
+					+ ShopContract.DELIVERY_RANGE
+					+ " BETWEEN " + deliveryRangeMin + " AND " + deliveryRangeMax;
+		}
+
+
+		// proximity cannot be greater than the delivery range if the delivery range is supplied. Otherwise this condition is
+		// not required.
+		if(proximity != null)
+		{
+
+
+			String queryPartProximityHaversine = "";
+
+
+			// filter using Haversine formula using SQL math functions
+			queryPartProximityHaversine = queryPartProximityHaversine
+					+ " (6371.01 * acos(cos( radians("
+					+ latCenter
+					+ ")) * cos( radians("
+					+ ShopContract.LAT_CENTER
+					+ " )) * cos(radians( "
+					+ ShopContract.LON_CENTER
+					+ ") - radians("
+					+ lonCenter
+					+ "))"
+					+ " + sin( radians("
+					+ latCenter
+					+ ")) * sin(radians("
+					+ ShopContract.LAT_CENTER
+					+ ")))) <= "
+					+ proximity ;
+
+
+			queryJoin = queryJoin + " AND " + queryPartProximityHaversine;
+
+		}
+
+
+		String union = " UNION ";
+
+		String querySelect = " SELECT "
+
+				+ "cat." + ItemCategoryContract.ITEM_CATEGORY_ID + ","
+				+ "cat." + ItemCategoryContract.PARENT_CATEGORY_ID
+
+				+ " FROM category_tree tempCat," + 	ItemCategoryContract.TABLE_NAME + " cat"
+				+ " WHERE cat." + ItemCategoryContract.ITEM_CATEGORY_ID
+				+ " = tempcat." + ItemCategoryContract.PARENT_CATEGORY_ID
+				+ " )";
+
+
+		String queryLast = " SELECT "
+				+ ItemCategoryContract.ITEM_CATEGORY_ID + ","
+				+ ItemCategoryContract.PARENT_CATEGORY_ID
+				+ " FROM category_tree";
+
+
+		if(parentID!=null)
+		{
+			queryLast = queryLast + " WHERE "
+					+ ItemCategoryContract.PARENT_CATEGORY_ID
+					+ "=" + parentID ;
+		}
+
+		String queryRecursive = withRecursiveStart + queryJoin + union + querySelect +  queryLast;
+
+
+
+		if(shopID==null && latCenter == null && lonCenter == null)
+		{
+			query = queryNormal;
+
+		}else
+		{
+			query = queryRecursive;
+		}
+
+
+
+//		System.out.println(query);
+
+
+		ArrayList<ItemCategory> itemCategoryList = new ArrayList<ItemCategory>();
+
+
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
+					JDBCContract.CURRENT_USERNAME,
+					JDBCContract.CURRENT_PASSWORD);
+
+			stmt = conn.createStatement();
+
+			rs = stmt.executeQuery(query);
+
+			while(rs.next())
+			{
+				ItemCategory itemCategory = new ItemCategory();
+
+				itemCategory.setItemCategoryID(rs.getInt(ItemCategoryContract.ITEM_CATEGORY_ID));
+				itemCategory.setParentCategoryID(rs.getInt(ItemCategoryContract.PARENT_CATEGORY_ID));
+
+				itemCategoryList.add(itemCategory);
+			}
+
+
+
+			if(parentIsNull!=null&& parentIsNull)
+			{
+				// exclude the root category
+				for(ItemCategory itemCategory : itemCategoryList)
+				{
+					if(itemCategory.getItemCategoryID()==1)
+					{
+						itemCategoryList.remove(itemCategory);
+						break;
+					}
+				}
+			}
+
+
+
+
+//			conn.close();
+
+			System.out.println("Total itemCategories queried " + itemCategoryList.size());
+
+		}
+
+
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+		finally
+
+		{
+
+			try {
+				if(rs!=null)
+				{rs.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(stmt!=null)
+				{stmt.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(conn!=null)
+				{conn.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return null;
+	}
+
+
+	public ItemCategoryEndPoint getEndPointMetaDataTwo(Integer parentID, Boolean parentIsNull)
 	{
 
 		String query = "";

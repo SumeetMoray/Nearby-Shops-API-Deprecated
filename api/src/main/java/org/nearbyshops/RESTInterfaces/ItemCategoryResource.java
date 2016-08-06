@@ -270,7 +270,7 @@ public class ItemCategoryResource {
 		}
 
 		ItemCategoryEndPoint endPoint = Globals.itemCategoryService
-				.getEndPointMetaData(parentID,parentIsNull);
+				.getEndPointMetaDataTwo(parentID,parentIsNull);
 
 		endPoint.setLimit(set_limit);
 		endPoint.setMax_limit(max_limit);

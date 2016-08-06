@@ -983,13 +983,13 @@ public class ItemService {
 		String query = "";
 
 		String queryNormal = "SELECT "
-				+ "count(" + ItemContract.ITEM_ID + ") as item_count" + ""
+				+ "count( DISTINCT " + ItemContract.ITEM_ID + ") as item_count" + ""
 				+ " FROM " + ItemContract.TABLE_NAME;
 
 
 		String queryJoin = "SELECT "
 
-				+ "count(" + ItemContract.TABLE_NAME + "." + ItemContract.ITEM_ID + ") as item_count" + ""
+				+ "count( DISTINCT " + ItemContract.TABLE_NAME + "." + ItemContract.ITEM_ID + ") as item_count" + ""
 
 				+ " FROM "
 				+ ShopContract.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
