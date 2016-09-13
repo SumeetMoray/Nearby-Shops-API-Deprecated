@@ -67,5 +67,8 @@ dependencies {
     //compile 'javax.annotation:jsr250-api:1.0'
 
 
+    // Dependencies for Hikari Connection Pooling
 
+    // https://mvnrepository.com/artifact/com.zaxxer/HikariCP
+    compile group: 'com.zaxxer', name: 'HikariCP', version: '2.4.7'
 }

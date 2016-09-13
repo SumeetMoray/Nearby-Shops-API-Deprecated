@@ -1,7 +1,7 @@
-package org.nearbyshops.RESTInterfaces;
+package org.nearbyshops.RESTEndpoints;
 
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.Model.Service;
+import org.nearbyshops.Model.ServiceProvider;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
@@ -12,11 +12,11 @@ import java.net.URI;
 import java.util.List;
 
 
-@Path("/Service")
-public class ServiceResource {
+@Path("/ServiceProvider")
+public class ServiceProviderResource {
 
 
-	public ServiceResource() {
+	public ServiceProviderResource() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -25,21 +25,22 @@ public class ServiceResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response createService(Service service)
+	public Response createServiceProvider(ServiceProvider serviceProvider)
 	{
 
-		int idOfInsertedRow = Globals.serviceDAO.saveService(service);
-
-		service.setServiceID(idOfInsertedRow);
+		int idOfInsertedRow = Globals.serviceProviderDAO.saveServiceProvider(serviceProvider);
 
 
+		serviceProvider.setServiceProviderID(idOfInsertedRow);
+
+		
 		if(idOfInsertedRow >=1)
 		{
 			
 			
 			Response response = Response.status(Status.CREATED)
-					.location(URI.create("/api/Service/" + idOfInsertedRow))
-					.entity(service)
+					.location(URI.create("/api/ServiceProvider/" + idOfInsertedRow))
+					.entity(serviceProvider)
 					.build();
 			
 			return response;
@@ -61,15 +62,16 @@ public class ServiceResource {
 
 	
 	@PUT
-	@Path("/{ServiceID}")
+	@Path("/{ServiceProviderID}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateService(@PathParam("ServiceID")int serviceID, Service service)
+	public Response updateDistributor(@PathParam("ServiceProviderID")int serviceProviderID, ServiceProvider serviceProvider)
 	{
 
-		service.setServiceID(serviceID);
+		serviceProvider.setServiceProviderID(serviceProviderID);
 
-		int rowCount = Globals.serviceDAO.updateService(service);
-
+		int rowCount = Globals.serviceProviderDAO.updateServiceProvider(serviceProvider);
+		
+		
 		if(rowCount >= 1)
 		{
 			Response response = Response.status(Status.OK)
@@ -86,20 +88,19 @@ public class ServiceResource {
 			
 			return response;
 		}
-
-
+		
+		
 		return null;
+		
 	}
 
-
 	@DELETE
-	@Path("/{ServiceID}")
-	public Response deleteCart(@PathParam("ServiceID")int serviceID)
+	@Path("/{ServiceProviderID}")
+	//@Produces(MediaType.APPLICATION_JSON)
+	public Response deleteServiceProvider(@PathParam("ServiceProviderID")int serviceProviderID)
 	{
 
-		//int rowCount = Globals.cartService.deleteCart(cartID);
-
-		int rowCount = Globals.serviceDAO.deleteService(serviceID);
+		int rowCount = Globals.serviceProviderDAO.deleteServiceProvider(serviceProviderID);
 		
 		
 		if(rowCount>=1)
@@ -127,25 +128,18 @@ public class ServiceResource {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getService(@QueryParam("ServiceLevel") int serviceLevel,
-								 @QueryParam("ServiceType") int serviceType,
-								 @QueryParam("LatCenter") Double latCenterQuery,
-								 @QueryParam("LonCenter") Double lonCenterQuery,
-							   @QueryParam("SortBy") String sortBy,
-							   @QueryParam("Limit") int limit, @QueryParam("Offset") int offset)
-
+	public Response getServiceProviders()
 	{
 
 
-		List<Service> servicesList = Globals.serviceDAO.readServices(serviceLevel,serviceType,latCenterQuery,lonCenterQuery,
-                                    								sortBy,limit,offset);
+		List<ServiceProvider> list = Globals.serviceProviderDAO.getServiceProvider();
 
-		GenericEntity<List<Service>> listEntity = new GenericEntity<List<Service>>(servicesList){
+		GenericEntity<List<ServiceProvider>> listEntity = new GenericEntity<List<ServiceProvider>>(list){
 			
 		};
 	
 		
-		if(servicesList.size()<=0)
+		if(list.size()<=0)
 		{
 			Response response = Response.status(Status.NO_CONTENT)
 					.entity(listEntity)
@@ -166,17 +160,17 @@ public class ServiceResource {
 	
 	
 	@GET
-	@Path("/{ServiceID}")
+	@Path("/{ServiceProviderID}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getService(@PathParam("ServiceID")int serviceID)
+	public Response getServiceProvider(@PathParam("ServiceProviderID")int serviceProviderID)
 	{
 
-		Service service = Globals.serviceDAO.readService(serviceID);
+		ServiceProvider serviceProvider = Globals.serviceProviderDAO.getServiceProvider(serviceProviderID);
 		
-		if(service != null)
+		if(serviceProvider!= null)
 		{
 			Response response = Response.status(Status.OK)
-			.entity(service)
+			.entity(serviceProvider)
 			.build();
 			
 			return response;
@@ -185,10 +179,11 @@ public class ServiceResource {
 		{
 			
 			Response response = Response.status(Status.NO_CONTENT)
-					.entity(service)
+					.entity(serviceProvider)
 					.build();
 			
 			return response;
+			
 		}
 		
 	}	

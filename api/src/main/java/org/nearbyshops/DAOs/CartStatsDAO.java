@@ -1,7 +1,7 @@
 package org.nearbyshops.DAOs;
 
 import org.nearbyshops.ContractClasses.*;
-import org.nearbyshops.Model.Distributor;
+import org.nearbyshops.JDBCContract;
 import org.nearbyshops.ModelStats.CartStats;
 
 import java.sql.*;

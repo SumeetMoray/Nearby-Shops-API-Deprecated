@@ -6,9 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.nearbyshops.ContractClasses.*;
+import org.nearbyshops.JDBCContract;
+import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ItemCategory;
 import org.nearbyshops.Model.Shop;
 import org.nearbyshops.ModelEndPoints.ShopEndPoint;
@@ -338,7 +339,7 @@ public class ShopService {
 
 				+ " FROM "
 				+ ShopContract.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
-				+ ItemContract.TABLE_NAME + "," + ItemCategoryContract.TABLE_NAME
+				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
 
 				+ " WHERE "
 				+ ShopContract.TABLE_NAME + "." + ShopContract.SHOP_ID + "="
@@ -346,11 +347,11 @@ public class ShopService {
 
 				+ " AND "
 				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID + "="
-				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_ID
+				+ Item.TABLE_NAME + "." + Item.ITEM_ID
 
 				+ " AND "
-				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_CATEGORY_ID + "="
-				+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.ITEM_CATEGORY_ID;
+				+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "="
+				+ ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
 
 
 
@@ -558,7 +559,7 @@ public class ShopService {
 		{
 			// filter shops by Item Category ID
 			queryJoin = queryJoin + " AND "
-					+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.ITEM_CATEGORY_ID
+					+ ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID
 					+ " = "
 					+ itemCategoryID;
 		}
@@ -736,7 +737,7 @@ public class ShopService {
 				+ " count(*) as item_count "
 				+ " FROM "
 				+ ShopContract.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
-				+ ItemContract.TABLE_NAME + "," + ItemCategoryContract.TABLE_NAME
+				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
 
 				+ " WHERE "
 				+ ShopContract.TABLE_NAME + "." + ShopContract.SHOP_ID + "="
@@ -744,11 +745,11 @@ public class ShopService {
 
 				+ " AND "
 				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID + "="
-				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_ID
+				+ Item.TABLE_NAME + "." + Item.ITEM_ID
 
 				+ " AND "
-				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_CATEGORY_ID + "="
-				+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.ITEM_CATEGORY_ID;
+				+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "="
+				+ ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
 
 
 
@@ -893,7 +894,7 @@ public class ShopService {
 		{
 			// filter shops by Item Category ID
 			queryJoin = queryJoin + " AND "
-					+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.ITEM_CATEGORY_ID
+					+ ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID
 					+ " = "
 					+ itemCategoryID;
 		}
@@ -999,38 +1000,38 @@ public class ShopService {
 			// a recursive CTE (Common table Expression) query. This query is used for retrieving hierarchical / tree set data.
 
 			String withRecursiveStart = "WITH RECURSIVE category_tree("
-					+ ItemCategoryContract.ITEM_CATEGORY_ID + ","
-					+ ItemCategoryContract.PARENT_CATEGORY_ID
+					+ ItemCategory.ITEM_CATEGORY_ID + ","
+					+ ItemCategory.PARENT_CATEGORY_ID
 					+ ") AS (";
 
 
 			String queryJoin = "SELECT DISTINCT "
 
-					+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.ITEM_CATEGORY_ID + ","
-					+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.PARENT_CATEGORY_ID
+					+ ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID + ","
+					+ ItemCategory.TABLE_NAME + "." + ItemCategory.PARENT_CATEGORY_ID
 
 					+ " FROM "
-					+ ItemCategoryContract.TABLE_NAME
+					+ ItemCategory.TABLE_NAME
 
 					+ " WHERE "
-					+ ItemCategoryContract.ITEM_CATEGORY_ID  + " = " + itemCategoryID;
+					+ ItemCategory.ITEM_CATEGORY_ID  + " = " + itemCategoryID;
 
 
 			String union = " UNION ";
 
 			String querySelect = " SELECT "
 
-					+ "cat." + ItemCategoryContract.ITEM_CATEGORY_ID + ","
-					+ "cat." + ItemCategoryContract.PARENT_CATEGORY_ID
+					+ "cat." + ItemCategory.ITEM_CATEGORY_ID + ","
+					+ "cat." + ItemCategory.PARENT_CATEGORY_ID
 
-					+ " FROM category_tree tempCat," + 	ItemCategoryContract.TABLE_NAME + " cat"
-					+ " WHERE cat." + ItemCategoryContract.PARENT_CATEGORY_ID
-					+ " = tempcat." + ItemCategoryContract.ITEM_CATEGORY_ID
+					+ " FROM category_tree tempCat," + 	ItemCategory.TABLE_NAME + " cat"
+					+ " WHERE cat." + ItemCategory.PARENT_CATEGORY_ID
+					+ " = tempcat." + ItemCategory.ITEM_CATEGORY_ID
 					+ " )";
 
 
 			String queryLast = " SELECT "
-					+ ItemCategoryContract.ITEM_CATEGORY_ID
+					+ ItemCategory.ITEM_CATEGORY_ID
 					+ " FROM category_tree";
 
 
@@ -1075,7 +1076,7 @@ public class ShopService {
 
 				+ " FROM "
 				+ ShopContract.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
-				+ ItemContract.TABLE_NAME + "," + ItemCategoryContract.TABLE_NAME
+				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
 
 				+ " WHERE "
 				+ ShopContract.TABLE_NAME + "." + ShopContract.SHOP_ID + "="
@@ -1083,18 +1084,18 @@ public class ShopService {
 
 				+ " AND "
 				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID + "="
-				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_ID
+				+ Item.TABLE_NAME + "." + Item.ITEM_ID
 
 				+ " AND "
-				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_CATEGORY_ID + "="
-				+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.ITEM_CATEGORY_ID;
+				+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "="
+				+ ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
 
 
 
 		queryJoin = queryJoin + " AND "
-				+ ItemCategoryContract.TABLE_NAME
+				+ ItemCategory.TABLE_NAME
 				+ "."
-				+ ItemCategoryContract.ITEM_CATEGORY_ID + " IN "
+				+ ItemCategory.ITEM_CATEGORY_ID + " IN "
 				+ " (" + queryRecursive + ")";
 
 
@@ -1315,38 +1316,38 @@ public class ShopService {
 		// a recursive CTE (Common table Expression) query. This query is used for retrieving hierarchical / tree set data.
 
 		String withRecursiveStart = "WITH RECURSIVE category_tree("
-				+ ItemCategoryContract.ITEM_CATEGORY_ID + ","
-				+ ItemCategoryContract.PARENT_CATEGORY_ID
+				+ ItemCategory.ITEM_CATEGORY_ID + ","
+				+ ItemCategory.PARENT_CATEGORY_ID
 				+ ") AS (";
 
 
 		String queryJoin = "SELECT DISTINCT "
 
-				+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.ITEM_CATEGORY_ID + ","
-				+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.PARENT_CATEGORY_ID
+				+ ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID + ","
+				+ ItemCategory.TABLE_NAME + "." + ItemCategory.PARENT_CATEGORY_ID
 
 				+ " FROM "
-				+ ItemCategoryContract.TABLE_NAME
+				+ ItemCategory.TABLE_NAME
 
 				+ " WHERE "
-				+ ItemCategoryContract.ITEM_CATEGORY_ID  + " = " + itemCategoryID;
+				+ ItemCategory.ITEM_CATEGORY_ID  + " = " + itemCategoryID;
 
 
 		String union = " UNION ";
 
 		String querySelect = " SELECT "
 
-				+ "cat." + ItemCategoryContract.ITEM_CATEGORY_ID + ","
-				+ "cat." + ItemCategoryContract.PARENT_CATEGORY_ID
+				+ "cat." + ItemCategory.ITEM_CATEGORY_ID + ","
+				+ "cat." + ItemCategory.PARENT_CATEGORY_ID
 
-				+ " FROM category_tree tempCat," + 	ItemCategoryContract.TABLE_NAME + " cat"
-				+ " WHERE cat." + ItemCategoryContract.PARENT_CATEGORY_ID
-				+ " = tempcat." + ItemCategoryContract.ITEM_CATEGORY_ID
+				+ " FROM category_tree tempCat," + 	ItemCategory.TABLE_NAME + " cat"
+				+ " WHERE cat." + ItemCategory.PARENT_CATEGORY_ID
+				+ " = tempcat." + ItemCategory.ITEM_CATEGORY_ID
 				+ " )";
 
 
 		String queryLast = " SELECT "
-				+ ItemCategoryContract.ITEM_CATEGORY_ID
+				+ ItemCategory.ITEM_CATEGORY_ID
 				+ " FROM category_tree";
 
 
@@ -1367,7 +1368,7 @@ public class ShopService {
 
 				+ " FROM "
 				+ ShopContract.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
-				+ ItemContract.TABLE_NAME + "," + ItemCategoryContract.TABLE_NAME
+				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
 
 				+ " WHERE "
 				+ ShopContract.TABLE_NAME + "." + ShopContract.SHOP_ID + "="
@@ -1375,18 +1376,18 @@ public class ShopService {
 
 				+ " AND "
 				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID + "="
-				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_ID
+				+ Item.TABLE_NAME + "." + Item.ITEM_ID
 
 				+ " AND "
-				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_CATEGORY_ID + "="
-				+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.ITEM_CATEGORY_ID;
+				+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "="
+				+ ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
 
 
 
 		queryJoin = queryJoin + " AND "
-				+ ItemCategoryContract.TABLE_NAME
+				+ ItemCategory.TABLE_NAME
 				+ "."
-				+ ItemCategoryContract.ITEM_CATEGORY_ID + " IN "
+				+ ItemCategory.ITEM_CATEGORY_ID + " IN "
 				+ " (" + queryRecursive + ")";
 
 

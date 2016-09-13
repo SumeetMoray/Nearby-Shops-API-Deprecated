@@ -1,4 +1,4 @@
-	package org.nearbyshops.application;
+	package org.nearbyshops;
 
 
 import org.nearbyshops.ContractClasses.*;
@@ -6,6 +6,8 @@ import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.nearbyshops.Globals.Globals;
+import org.nearbyshops.Model.Item;
+import org.nearbyshops.Model.ItemCategory;
 
 import java.awt.BorderLayout;
 
@@ -43,7 +45,7 @@ public class Main implements ActionListener {
     public static HttpServer startServer() {
         // create a resource config that scans for JAX-RS resources and providers
         // in org.sumeet.restsamples.Sample package
-        final ResourceConfig rc = new ResourceConfig().packages("org.nearbyshops.RESTInterfaces","org.nearbyshops");
+        final ResourceConfig rc = new ResourceConfig().packages("org.nearbyshops.RESTEndpoints","org.nearbyshops");
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
@@ -108,7 +110,8 @@ public class Main implements ActionListener {
                 + "\nHit enter to stop it...", BASE_URI));
         //System.in.read();
         isServerStart = true;
-        
+
+		createDB();
         createTables();
 
 	}
@@ -117,6 +120,62 @@ public class Main implements ActionListener {
 	{
 		server.stop();
 		isServerStart = false;
+	}
+
+	public void createDB()
+	{
+
+		Connection conn = null;
+		Statement stmt = null;
+
+		try {
+
+			conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres"
+					, JDBCContract.CURRENT_USERNAME
+					, JDBCContract.CURRENT_PASSWORD);
+
+			stmt = conn.createStatement();
+
+			String createDB = "CREATE DATABASE \"NearbyShopsDB\" WITH ENCODING='UTF8' OWNER=postgres CONNECTION LIMIT=-1";
+
+			stmt.executeUpdate(createDB);
+
+		}
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		finally{
+
+
+			// close the connection and statement object
+
+			if(stmt !=null)
+			{
+
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+
+
+			if(conn!=null)
+			{
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+
+
 	}
 	
 	
@@ -132,49 +191,16 @@ public class Main implements ActionListener {
 			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL
 					,JDBCContract.CURRENT_USERNAME
 					,JDBCContract.CURRENT_PASSWORD);
-			
+
 			stmt = conn.createStatement();
 
 
 
-
-		    	String createTableItemCategoryPostgres = "CREATE TABLE IF NOT EXISTS "  
-		    			+ ItemCategoryContract.TABLE_NAME + "("
-		        		+ " " + ItemCategoryContract.ITEM_CATEGORY_ID + " SERIAL PRIMARY KEY,"
-		        		+ " " + ItemCategoryContract.ITEM_CATEGORY_NAME + " VARCHAR(40),"
-		        		+ " " + ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION + " VARCHAR(1000),"
-		        		+ " " + ItemCategoryContract.PARENT_CATEGORY_ID + " INT,"
-		        		+ " " + ItemCategoryContract.IS_LEAF_NODE + " boolean,"
-		        		+ " " + ItemCategoryContract.IMAGE_PATH + " VARCHAR(100),"
-
-						+ " " + ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION_SHORT + " VARCHAR(100),"
-						+ " " + ItemCategoryContract.IS_ABSTRACT + " boolean,"
-
-		        		+ " FOREIGN KEY(" + ItemCategoryContract.PARENT_CATEGORY_ID +") REFERENCES " 
-		        		+ ItemCategoryContract.TABLE_NAME + "(" + ItemCategoryContract.ITEM_CATEGORY_ID + ")" 
-		        		+ ")"; 
-		    	
-		        stmt.executeUpdate(createTableItemCategoryPostgres);
-
-
-		    	
-		    	String createTableItemPostgres = "CREATE TABLE IF NOT EXISTS " 
-		    			+ ItemContract.TABLE_NAME + "("
-		        		+ " " + ItemContract.ITEM_ID + " SERIAL PRIMARY KEY,"
-		        		+ " " + ItemContract.ITEM_NAME + " VARCHAR(40),"
-		        		+ " " + ItemContract.ITEM_DESC + " VARCHAR(150),"
-						+ " " + ItemContract.ITEM_DESCRIPTION_LONG + " VARCHAR(1000),"
-		        		+ " " + ItemContract.ITEM_IMAGE_URL + " VARCHAR(100),"
-						+ " " + ItemContract.QUANTITY_UNIT + " VARCHAR(40),"
-		        		+ " " + ItemContract.ITEM_CATEGORY_ID + " INT,"
-						+ " " + ItemContract.DATE_TIME_CREATED + "  timestamp with time zone NOT NULL DEFAULT now(),"
-		        		+ " FOREIGN KEY(" + ItemContract.ITEM_CATEGORY_ID +") REFERENCES ITEM_CATEGORY(ID))";
-		    	
-		    	
-		        stmt.executeUpdate(createTableItemPostgres); 
+		        stmt.executeUpdate(ItemCategory.createTableItemCategoryPostgres);
+		        stmt.executeUpdate(Item.createTableItemPostgres);
 		        
 
-
+			
 		    	String createTableDistributorPostgres = "CREATE TABLE IF NOT EXISTS " 
 		    			+ DistributorContract.TABLE_NAME + "("
 		        		+ " " + DistributorContract.DISTRIBUTOR_ID + " SERIAL PRIMARY KEY,"
@@ -324,7 +350,7 @@ public class Main implements ActionListener {
 					+ " " + OrderItemContract.ORDER_ID + " INT,"
 					+ " " + OrderItemContract.ITEM_PRICE_AT_ORDER + " FLOAT,"
 					+ " " + OrderItemContract.ITEM_QUANTITY + " INT,"
-					+ " FOREIGN KEY(" + OrderItemContract.ITEM_ID +") REFERENCES " + ItemContract.TABLE_NAME + "(" + ItemContract.ITEM_ID + "),"
+					+ " FOREIGN KEY(" + OrderItemContract.ITEM_ID +") REFERENCES " + Item.TABLE_NAME + "(" + Item.ITEM_ID + "),"
 					+ " FOREIGN KEY(" + OrderItemContract.ORDER_ID +") REFERENCES " + OrderContract.TABLE_NAME + "(" + OrderContract.ORDER_ID + "),"
 					+ " PRIMARY KEY (" + OrderItemContract.ITEM_ID + ", " + OrderItemContract.ORDER_ID + "),"
 					+ " UNIQUE (" + OrderItemContract.ITEM_ID + "," + OrderItemContract.ORDER_ID  + ")"
@@ -351,7 +377,7 @@ public class Main implements ActionListener {
 					+ " " + CartItemContract.ITEM_ID + " INT,"
 					+ " " + CartItemContract.CART_ID + " INT,"
 					+ " " + CartItemContract.ITEM_QUANTITY + " INT,"
-					+ " FOREIGN KEY(" + CartItemContract.ITEM_ID +") REFERENCES " + ItemContract.TABLE_NAME + "(" + ItemContract.ITEM_ID + "),"
+					+ " FOREIGN KEY(" + CartItemContract.ITEM_ID +") REFERENCES " + Item.TABLE_NAME + "(" + Item.ITEM_ID + "),"
 					+ " FOREIGN KEY(" + CartItemContract.CART_ID +") REFERENCES " + CartContract.TABLE_NAME + "(" + CartContract.CART_ID + "),"
 					+ " PRIMARY KEY (" + CartItemContract.ITEM_ID + ", " + CartItemContract.CART_ID + ")"
 					+ ")";
@@ -427,18 +453,18 @@ public class Main implements ActionListener {
 			String insertItemCategory = "";
 
 			// The root ItemCategory has id 1. If the root category does not exist then insert it.
-			if(Globals.itemCategoryService.getItemCategory(1) == null)
+			if(Globals.itemCategoryDAO.getItemCategory(1) == null)
 			{
 
 				insertItemCategory = "INSERT INTO "
-						+ ItemCategoryContract.TABLE_NAME
+						+ ItemCategory.TABLE_NAME
 						+ "("
-						+ ItemCategoryContract.ITEM_CATEGORY_ID + ","
-						+ ItemCategoryContract.ITEM_CATEGORY_NAME + ","
-						+ ItemCategoryContract.PARENT_CATEGORY_ID + ","
-						+ ItemCategoryContract.ITEM_CATEGORY_DESCRIPTION + ","
-						+ ItemCategoryContract.IMAGE_PATH + ","
-						+ ItemCategoryContract.IS_LEAF_NODE + ") VALUES("
+						+ ItemCategory.ITEM_CATEGORY_ID + ","
+						+ ItemCategory.ITEM_CATEGORY_NAME + ","
+						+ ItemCategory.PARENT_CATEGORY_ID + ","
+						+ ItemCategory.ITEM_CATEGORY_DESCRIPTION + ","
+						+ ItemCategory.IMAGE_PATH + ","
+						+ ItemCategory.IS_LEAF_NODE + ") VALUES("
 						+ "" + "1"	+ ","
 						+ "'" + "ROOT"	+ "',"
 						+ "" + "NULL" + ","

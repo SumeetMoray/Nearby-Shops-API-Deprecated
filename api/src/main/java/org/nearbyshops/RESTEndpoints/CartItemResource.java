@@ -1,5 +1,6 @@
-package org.nearbyshops.RESTInterfaces;
+package org.nearbyshops.RESTEndpoints;
 
+import org.nearbyshops.DAOsPrepared.ItemDAO;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Cart;
 import org.nearbyshops.Model.CartItem;
@@ -14,6 +15,9 @@ import java.util.List;
 
 @Path("/CartItem")
 public class CartItemResource {
+
+
+	ItemDAO itemDAO = Globals.itemDAO;
 
 
 	public CartItemResource() {
@@ -226,7 +230,7 @@ public class CartItemResource {
 			for(CartItem cartItem: cartList)
 			{
 
-				cartItem.setItem(Globals.itemService.getItem(cartItem.getItemID()));
+				cartItem.setItem(itemDAO.getItem(cartItem.getItemID()));
 
 			}
 
@@ -245,7 +249,7 @@ public class CartItemResource {
 
 				if(itemID == 0)
 				{
-					cartItem.setItem(Globals.itemService.getItem(cartItem.getItemID()));
+					cartItem.setItem(itemDAO.getItem(cartItem.getItemID()));
 				}
 
 			}

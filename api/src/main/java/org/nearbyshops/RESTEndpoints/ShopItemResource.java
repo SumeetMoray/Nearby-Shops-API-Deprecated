@@ -1,8 +1,7 @@
-package org.nearbyshops.RESTInterfaces;
+package org.nearbyshops.RESTEndpoints;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -17,10 +16,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.nearbyshops.DAOsPrepared.ItemDAO;
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ShopItem;
-import org.nearbyshops.ModelEndPoints.ItemEndPoint;
 import org.nearbyshops.ModelEndPoints.ShopItemEndPoint;
 
 
@@ -28,6 +26,7 @@ import org.nearbyshops.ModelEndPoints.ShopItemEndPoint;
 public class ShopItemResource {
 
 
+	private ItemDAO itemDAO = Globals.itemDAO;
 
 
 	@PUT
@@ -289,7 +288,7 @@ public class ShopItemResource {
 
 			if(itemID == null)
 			{
-				shopItem.setItem(Globals.itemService.getItem(shopItem.getItemID()));
+				shopItem.setItem(itemDAO.getItem(shopItem.getItemID()));
 			}
 
 		}
@@ -405,7 +404,7 @@ public class ShopItemResource {
 
 				if(itemID == null)
 				{
-					shopItem.setItem(Globals.itemService.getItem(shopItem.getItemID()));
+					shopItem.setItem(itemDAO.getItem(shopItem.getItemID()));
 				}
 
 			}

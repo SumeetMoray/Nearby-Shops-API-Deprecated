@@ -1,7 +1,7 @@
-package org.nearbyshops.RESTInterfaces;
+package org.nearbyshops.RESTEndpoints;
 
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.ModelStats.DeliveryAddress;
+import org.nearbyshops.Model.Service;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
@@ -12,11 +12,11 @@ import java.net.URI;
 import java.util.List;
 
 
-@Path("/DeliveryAddress")
-public class DeliveryAddressResource {
+@Path("/Service")
+public class ServiceResource {
 
 
-	public DeliveryAddressResource() {
+	public ServiceResource() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -25,12 +25,12 @@ public class DeliveryAddressResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response createAddress(DeliveryAddress address)
+	public Response createService(Service service)
 	{
 
-		int idOfInsertedRow = Globals.deliveryAddressService.saveAddress(address);
+		int idOfInsertedRow = Globals.serviceDAO.saveService(service);
 
-		address.setId(idOfInsertedRow);
+		service.setServiceID(idOfInsertedRow);
 
 
 		if(idOfInsertedRow >=1)
@@ -38,8 +38,8 @@ public class DeliveryAddressResource {
 			
 			
 			Response response = Response.status(Status.CREATED)
-					.location(URI.create("/api/DeliveryAddress/" + idOfInsertedRow))
-					.entity(address)
+					.location(URI.create("/api/Service/" + idOfInsertedRow))
+					.entity(service)
 					.build();
 			
 			return response;
@@ -61,15 +61,14 @@ public class DeliveryAddressResource {
 
 	
 	@PUT
-	@Path("/{DeliveryAddressID}")
+	@Path("/{ServiceID}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateCart(@PathParam("DeliveryAddressID")int addressID, DeliveryAddress deliveryAddress)
+	public Response updateService(@PathParam("ServiceID")int serviceID, Service service)
 	{
 
-		deliveryAddress.setId(addressID);
+		service.setServiceID(serviceID);
 
-		int rowCount = Globals.deliveryAddressService.updateAddress(deliveryAddress);
-
+		int rowCount = Globals.serviceDAO.updateService(service);
 
 		if(rowCount >= 1)
 		{
@@ -94,11 +93,13 @@ public class DeliveryAddressResource {
 
 
 	@DELETE
-	@Path("/{DeliveryAddressID}")
-	public Response deleteCart(@PathParam("DeliveryAddressID")int addressID)
+	@Path("/{ServiceID}")
+	public Response deleteCart(@PathParam("ServiceID")int serviceID)
 	{
 
-		int rowCount = Globals.deliveryAddressService.deleteAddress(addressID);
+		//int rowCount = Globals.cartService.deleteCart(cartID);
+
+		int rowCount = Globals.serviceDAO.deleteService(serviceID);
 		
 		
 		if(rowCount>=1)
@@ -126,19 +127,25 @@ public class DeliveryAddressResource {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getDeliveryAddresses(@QueryParam("EndUserID")int endUserID)
+	public Response getService(@QueryParam("ServiceLevel") int serviceLevel,
+								 @QueryParam("ServiceType") int serviceType,
+								 @QueryParam("LatCenter") Double latCenterQuery,
+								 @QueryParam("LonCenter") Double lonCenterQuery,
+							   @QueryParam("SortBy") String sortBy,
+							   @QueryParam("Limit") int limit, @QueryParam("Offset") int offset)
 
 	{
 
-		//List<Cart> cartList = Globals.cartService.readCarts(endUserID,shopID);
-		List<DeliveryAddress> addressesList = Globals.deliveryAddressService.readAddresses(endUserID);
 
-		GenericEntity<List<DeliveryAddress>> listEntity = new GenericEntity<List<DeliveryAddress>>(addressesList){
+		List<Service> servicesList = Globals.serviceDAO.readServices(serviceLevel,serviceType,latCenterQuery,lonCenterQuery,
+                                    								sortBy,limit,offset);
+
+		GenericEntity<List<Service>> listEntity = new GenericEntity<List<Service>>(servicesList){
 			
 		};
 	
 		
-		if(addressesList.size()<=0)
+		if(servicesList.size()<=0)
 		{
 			Response response = Response.status(Status.NO_CONTENT)
 					.entity(listEntity)
@@ -159,17 +166,17 @@ public class DeliveryAddressResource {
 	
 	
 	@GET
-	@Path("/{DeliveryAddressID}")
+	@Path("/{ServiceID}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getDeliveryAddress(@PathParam("DeliveryAddressID")int addressID)
+	public Response getService(@PathParam("ServiceID")int serviceID)
 	{
 
-		DeliveryAddress deliveryAddress = Globals.deliveryAddressService.readAddress(addressID);
+		Service service = Globals.serviceDAO.readService(serviceID);
 		
-		if(deliveryAddress != null)
+		if(service != null)
 		{
 			Response response = Response.status(Status.OK)
-			.entity(deliveryAddress)
+			.entity(service)
 			.build();
 			
 			return response;
@@ -178,11 +185,10 @@ public class DeliveryAddressResource {
 		{
 			
 			Response response = Response.status(Status.NO_CONTENT)
-					.entity(deliveryAddress)
+					.entity(service)
 					.build();
 			
 			return response;
-			
 		}
 		
 	}	

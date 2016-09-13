@@ -1,13 +1,10 @@
 package org.nearbyshops.DAOs;
 
-import org.nearbyshops.ContractClasses.CartContract;
-import org.nearbyshops.ContractClasses.JDBCContract;
+import org.nearbyshops.JDBCContract;
 import org.nearbyshops.ContractClasses.OrderContract;
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.Model.Cart;
 import org.nearbyshops.Model.Order;
 
-import javax.ws.rs.QueryParam;
 import java.sql.*;
 import java.util.ArrayList;
 

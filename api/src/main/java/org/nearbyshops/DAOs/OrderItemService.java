@@ -1,10 +1,7 @@
 package org.nearbyshops.DAOs;
 
-import org.nearbyshops.ContractClasses.CartContract;
-import org.nearbyshops.ContractClasses.CartItemContract;
-import org.nearbyshops.ContractClasses.JDBCContract;
+import org.nearbyshops.JDBCContract;
 import org.nearbyshops.ContractClasses.OrderItemContract;
-import org.nearbyshops.Model.CartItem;
 import org.nearbyshops.Model.OrderItem;
 import org.nearbyshops.ModelStats.OrderStats;
 

@@ -1,23 +1,20 @@
-package org.nearbyshops.RESTInterfaces;
+package org.nearbyshops.RESTEndpoints;
 
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.Model.Cart;
-import org.nearbyshops.Model.EndUser;
+import org.nearbyshops.Model.ServiceConfiguration;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import java.net.URI;
-import java.util.List;
 
 
-@Path("/Cart")
-public class CartResource {
+@Path("/ServiceConfiguration")
+public class ServiceConfigurationResource {
 
 
-	public CartResource() {
+	public ServiceConfigurationResource() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -26,15 +23,13 @@ public class CartResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response createCart(Cart cart)
+	public Response createServiceConfig(ServiceConfiguration serviceConfiguration)
 	{
 
-		int idOfInsertedRow = Globals.cartService.saveCart(cart);
-
-		cart.setCartID(idOfInsertedRow);
+		int idOfInsertedRow = Globals.serviceConfigDAO.saveConfig(serviceConfiguration);
 
 
-		
+		serviceConfiguration.setServiceID(idOfInsertedRow);
 
 
 		if(idOfInsertedRow >=1)
@@ -42,8 +37,8 @@ public class CartResource {
 			
 			
 			Response response = Response.status(Status.CREATED)
-					.location(URI.create("/api/Cart/" + idOfInsertedRow))
-					.entity(cart)
+					.location(URI.create("/api/ServiceConfig/" + idOfInsertedRow))
+					.entity(serviceConfiguration)
 					.build();
 			
 			return response;
@@ -65,15 +60,14 @@ public class CartResource {
 
 	
 	@PUT
-	@Path("/{CartID}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateCart(@PathParam("CartID")int cartID, Cart cart)
+	public Response updateServiceConfig(ServiceConfiguration config)
 	{
 
-		cart.setCartID(cartID);
+		//cart.setCartID(cartID);
+		config.setConfigurationID(1);
 
-		int rowCount = Globals.cartService.updateCart(cart);
-
+		int rowCount = Globals.serviceConfigDAO.updateServiceConfig(config);
 
 		if(rowCount >= 1)
 		{
@@ -97,12 +91,10 @@ public class CartResource {
 	}
 
 
-	@DELETE
-	@Path("/{CartID}")
-	public Response deleteCart(@PathParam("CartID")int cartID)
+	public Response deleteServiceConfig()
 	{
 
-		int rowCount = Globals.cartService.deleteCart(cartID);
+		int rowCount = Globals.serviceConfigDAO.deleteServiceConfiguration(1);
 		
 		
 		if(rowCount>=1)
@@ -128,6 +120,7 @@ public class CartResource {
 	}
 	
 	
+	/*
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getCarts(@QueryParam("EndUserID")int endUserID,
@@ -160,20 +153,24 @@ public class CartResource {
 		}
 		
 	}
+
+	*/
 	
 	
 	@GET
-	@Path("/{CartID}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getCart(@PathParam("CartID")int cartID)
+	public Response getCart()
 	{
 
-		Cart cart = Globals.cartService.readCart(cartID);
+		ServiceConfiguration configuration = Globals.serviceConfigDAO.readConfig(1);
+
+		configuration.setService(Globals.serviceDAO.readService(configuration.getServiceID()));
+
 		
-		if(cart != null)
+		if(configuration != null)
 		{
 			Response response = Response.status(Status.OK)
-			.entity(cart)
+			.entity(configuration)
 			.build();
 			
 			return response;
@@ -182,7 +179,7 @@ public class CartResource {
 		{
 			
 			Response response = Response.status(Status.NO_CONTENT)
-					.entity(cart)
+					.entity(configuration)
 					.build();
 			
 			return response;

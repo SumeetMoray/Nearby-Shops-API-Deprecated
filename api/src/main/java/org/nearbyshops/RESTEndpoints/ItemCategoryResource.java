@@ -1,4 +1,4 @@
-package org.nearbyshops.RESTInterfaces;
+package org.nearbyshops.RESTEndpoints;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -18,13 +18,18 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.nearbyshops.DAOsPrepared.ItemCategoryDAO;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.ItemCategory;
 import org.nearbyshops.ModelEndPoints.ItemCategoryEndPoint;
 
 @Path("/v1/ItemCategory")
 public class ItemCategoryResource {
-	
+
+
+	private ItemCategoryDAO itemCategoryDAO = Globals.itemCategoryDAO;
+
+
 	
 	public ItemCategoryResource() {
 		super();
@@ -39,7 +44,7 @@ public class ItemCategoryResource {
 	{
 		System.out.println(itemCategory.getCategoryName() + " | " + itemCategory.getCategoryDescription());
 	
-		int idOfInsertedRow = Globals.itemCategoryService.saveItemCategory(itemCategory);
+		int idOfInsertedRow = itemCategoryDAO.saveItemCategory(itemCategory);
 		
 		
 		itemCategory.setItemCategoryID(idOfInsertedRow);
@@ -79,7 +84,7 @@ public class ItemCategoryResource {
 		String message = "";
 
 
-		int rowCount = Globals.itemCategoryService.deleteItemCategory(itemCategoryID);
+		int rowCount = itemCategoryDAO.deleteItemCategory(itemCategoryID);
 
 		message = "Total Deleted : " + rowCount;
 
@@ -115,7 +120,7 @@ public class ItemCategoryResource {
 		System.out.println("ItemCategoryID: " + itemCategoryID + " " + itemCategory.getCategoryName()
 				+ " " + itemCategory.getCategoryDescription());
 
-		int rowCount = Globals.itemCategoryService.updateItemCategory(itemCategory);
+		int rowCount = itemCategoryDAO.updateItemCategory(itemCategory);
 
 		if(rowCount >= 1)
 		{
@@ -147,7 +152,7 @@ public class ItemCategoryResource {
 
 		for(ItemCategory itemCategory : itemCategoryList)
 		{
-			rowCountSum = rowCountSum + Globals.itemCategoryService.updateItemCategory(itemCategory);
+			rowCountSum = rowCountSum + itemCategoryDAO.updateItemCategory(itemCategory);
 		}
 
 		if(rowCountSum ==  itemCategoryList.size())
@@ -197,7 +202,7 @@ public class ItemCategoryResource {
 
 
 		List<ItemCategory> list = 
-				Globals.itemCategoryService.getItemCategories(
+				itemCategoryDAO.getItemCategories(
 						shopID, parentID,parentIsNull,
 						latCenter,lonCenter,
 						deliveryRangeMin,
@@ -269,7 +274,7 @@ public class ItemCategoryResource {
 			set_offset = offset;
 		}
 
-		ItemCategoryEndPoint endPoint = Globals.itemCategoryService
+		ItemCategoryEndPoint endPoint = itemCategoryDAO
 				.getEndPointMetaDataTwo(parentID,parentIsNull);
 
 		endPoint.setLimit(set_limit);
@@ -280,7 +285,7 @@ public class ItemCategoryResource {
 
 
 		if(metaonly==null || (!metaonly)) {
-			list = Globals.itemCategoryService.getItemCategories(
+			list = itemCategoryDAO.getItemCategories(
 					shopID, parentID, parentIsNull,
 					latCenter, lonCenter,
 					deliveryRangeMin,
@@ -311,7 +316,7 @@ public class ItemCategoryResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getItemCategory(@PathParam("itemCategoryID")Integer itemCategoryID)
 	{	
-		ItemCategory itemCategory = Globals.itemCategoryService.getItemCategory(itemCategoryID);
+		ItemCategory itemCategory = itemCategoryDAO.getItemCategory(itemCategoryID);
 		
 		if(itemCategory!= null)
 		{

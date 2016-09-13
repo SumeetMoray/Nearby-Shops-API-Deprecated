@@ -1,9 +1,8 @@
 package org.nearbyshops.DAOs;
 
 import org.nearbyshops.ContractClasses.*;
-import org.nearbyshops.Globals.Globals;
+import org.nearbyshops.JDBCContract;
 import org.nearbyshops.Model.CartItem;
-import org.nearbyshops.Model.EndUser;
 
 import java.sql.*;
 import java.util.ArrayList;

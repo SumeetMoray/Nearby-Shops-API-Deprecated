@@ -8,7 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import org.nearbyshops.ContractClasses.DistributorContract;
-import org.nearbyshops.ContractClasses.JDBCContract;
+import org.nearbyshops.JDBCContract;
 import org.nearbyshops.Model.Distributor;
 
 

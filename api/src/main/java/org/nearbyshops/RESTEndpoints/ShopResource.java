@@ -1,4 +1,4 @@
-package org.nearbyshops.RESTInterfaces;
+package org.nearbyshops.RESTEndpoints;
 
 import java.net.URI;
 import java.util.ArrayList;

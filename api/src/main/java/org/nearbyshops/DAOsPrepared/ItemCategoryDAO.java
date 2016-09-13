@@ -1,24 +1,22 @@
-package org.nearbyshops.DAOs;
+package org.nearbyshops.DAOsPrepared;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-
-
-import org.nearbyshops.JDBCContract;
+import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.ContractClasses.ShopContract;
 import org.nearbyshops.ContractClasses.ShopItemContract;
+import org.nearbyshops.Globals.Globals;
+import org.nearbyshops.JDBCContract;
 import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ItemCategory;
 import org.nearbyshops.ModelEndPoints.ItemCategoryEndPoint;
 import org.nearbyshops.Utility.GeoLocation;
 
+import java.sql.*;
+import java.util.ArrayList;
 
-public class ItemCategoryService {
 
+public class ItemCategoryDAO {
+
+	HikariDataSource dataSource = Globals.getDataSource();
 
 	GeoLocation center;
 
@@ -39,15 +37,14 @@ public class ItemCategoryService {
 		
 		int rowCount = 0;	
 		Connection conn = null;
-		Statement stmt = null;
-		
+//		Statement stmt = null;
+		PreparedStatement statement = null;
+
+
 		String insertItemCategory = "";
-		
-		System.out.println("isLeaf : " + itemCategory.getIsLeafNode());
+//		System.out.println("isLeaf : " + itemCategory.getIsLeafNode());
 
-		
-		if(itemCategory.getParentCategoryID()!=null)
-		{
+
 		
 			insertItemCategory = "INSERT INTO "
 					+ ItemCategory.TABLE_NAME				
@@ -55,69 +52,35 @@ public class ItemCategoryService {
 					+ ItemCategory.ITEM_CATEGORY_NAME + ","
 					+ ItemCategory.ITEM_CATEGORY_DESCRIPTION + ","
 					+ ItemCategory.PARENT_CATEGORY_ID + ","
-					+ ItemCategory.IMAGE_PATH + ","
 
+					+ ItemCategory.IMAGE_PATH + ","
 					+ ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT + ","
 					+ ItemCategory.IS_ABSTRACT + ","
 
-					+ ItemCategory.IS_LEAF_NODE + ") VALUES("
-					+ "'" + itemCategory.getCategoryName()	+ "'," 
-					+ "'" + itemCategory.getCategoryDescription() + "',"
-					+ "" + itemCategory.getParentCategoryID() + ","
-					+ "'" + itemCategory.getImagePath() + "',"
+					+ ItemCategory.IS_LEAF_NODE
+					+ ") VALUES(?,?,? ,?,?,? ,?)";
 
-					+ "'" + itemCategory.getDescriptionShort() + "',"
-					+ "'" + itemCategory.getisAbstractNode() + "',"
-
-					+ "'" + itemCategory.getIsLeafNode() + "'"
-					+ ")";
-		}
-		
-		
-		if(itemCategory.getParentCategoryID() == null)
-		{
-			
-			insertItemCategory = "INSERT INTO "
-					+ ItemCategory.TABLE_NAME				
-					+ "("  
-					+ ItemCategory.ITEM_CATEGORY_NAME + ","
-					+ ItemCategory.ITEM_CATEGORY_DESCRIPTION + ","
-					+ ItemCategory.PARENT_CATEGORY_ID + ","
-					+ ItemCategory.IMAGE_PATH + ","
-
-					+ ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT + ","
-					+ ItemCategory.IS_ABSTRACT + ","
-
-					+ ItemCategory.IS_LEAF_NODE + ") VALUES("
-					+ "'" + itemCategory.getCategoryName()	+ "'," 
-					+ "'" + itemCategory.getCategoryDescription() + "',"
-					+ "" + "NULL" + ","
-					+ "'" + itemCategory.getImagePath() + "',"
-
-					+ "'" + itemCategory.getDescriptionShort() + "',"
-					+ "'" + itemCategory.getisAbstractNode() + "',"
-
-					+ "'" + itemCategory.getIsLeafNode() + "'"
-					+ ")";
-		
-		}
-		
-		
 		int idOfInsertedRow = 0;
 		
 		try {
 			
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
-					JDBCContract.CURRENT_USERNAME,
-					JDBCContract.CURRENT_PASSWORD);
+			conn = dataSource.getConnection();
+			statement = conn.prepareStatement(insertItemCategory,PreparedStatement.RETURN_GENERATED_KEYS);
+
+			statement.setString(1,itemCategory.getCategoryName());
+			statement.setString(2,itemCategory.getCategoryDescription());
+			statement.setInt(3,itemCategory.getParentCategoryID());
+
+			statement.setString(4,itemCategory.getImagePath());
+			statement.setString(5,itemCategory.getDescriptionShort());
+			statement.setBoolean(6,itemCategory.getisAbstractNode());
+
+			statement.setBoolean(7,itemCategory.getIsLeafNode());
+
+
+			rowCount = statement.executeUpdate();
 			
-			stmt = conn.createStatement();
-		
-			
-			
-			rowCount = stmt.executeUpdate(insertItemCategory,Statement.RETURN_GENERATED_KEYS);
-			
-			ResultSet rs = stmt.getGeneratedKeys();
+			ResultSet rs = statement.getGeneratedKeys();
 			
 			if(rs.next())
 			{
@@ -135,8 +98,8 @@ public class ItemCategoryService {
 			
 			try {
 			
-				if(stmt!=null)
-				{stmt.close();}
+				if(statement!=null)
+				{statement.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -157,115 +120,64 @@ public class ItemCategoryService {
 
 	
 
+
+
 	public int updateItemCategory(ItemCategory itemCategory)
 	{
 		int rowCount = 0;
 
 
-
 		if(itemCategory.getParentCategoryID() == itemCategory.getItemCategoryID())
 		{
-
 			// an Item category cannot have itself as its own parent so abort this operation and return
-
 			return 0;
 		}
 		
-		System.out.println("isLeaf : " + itemCategory.getIsLeafNode());
-		
 		String updateStatement = "";
-		
-		
-		if(itemCategory.getParentCategoryID()!=null)
-		{
 
-			if(itemCategory.getParentCategoryID()==-1)
-			{
-				updateStatement = "UPDATE "
+		updateStatement = "UPDATE "
 
-						+ ItemCategory.TABLE_NAME
-
-						+ " SET "
-
-						+ ItemCategory.ITEM_CATEGORY_NAME + " = " + "'" + itemCategory.getCategoryName() + "',"
-						+ " " + ItemCategory.ITEM_CATEGORY_DESCRIPTION + " = " + "'" + itemCategory.getCategoryDescription() + "',"
-						+ " " + ItemCategory.IMAGE_PATH + " = " + "'" + itemCategory.getImagePath() + "',"
-						+ " " + ItemCategory.PARENT_CATEGORY_ID + " = " + "" + "NULL" + ","
-
-						+ " " + ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT + " = " + "'" + itemCategory.getDescriptionShort() + "',"
-						+ " " + ItemCategory.IS_ABSTRACT + " = " + "'" + itemCategory.getisAbstractNode() + "',"
-
-						+ " " + ItemCategory.IS_LEAF_NODE + " = " + "'" + itemCategory.getIsLeafNode() + "'"
-
-						+ " WHERE " +  ItemCategory.ITEM_CATEGORY_ID + "="
-						+ itemCategory.getItemCategoryID();
-
-			}else
-			{
-				updateStatement = "UPDATE "
-
-						+ ItemCategory.TABLE_NAME
-
-						+ " SET "
-
-						+ ItemCategory.ITEM_CATEGORY_NAME + " = " + "'" + itemCategory.getCategoryName() + "',"
-						+ " " + ItemCategory.ITEM_CATEGORY_DESCRIPTION + " = " + "'" + itemCategory.getCategoryDescription() + "',"
-						+ " " + ItemCategory.IMAGE_PATH + " = " + "'" + itemCategory.getImagePath() + "',"
-						+ " " + ItemCategory.PARENT_CATEGORY_ID + " = " + "" + itemCategory.getParentCategoryID() + ","
-
-						+ " " + ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT + " = " + "'" + itemCategory.getDescriptionShort() + "',"
-						+ " " + ItemCategory.IS_ABSTRACT + " = " + "'" + itemCategory.getisAbstractNode() + "',"
-
-						+ " " + ItemCategory.IS_LEAF_NODE + " = " + "'" + itemCategory.getIsLeafNode() + "'"
-
-						+ " WHERE " +  ItemCategory.ITEM_CATEGORY_ID + "="
-						+ itemCategory.getItemCategoryID();
-			}
-
-		}
-		else
-		{
-			
-			updateStatement = "UPDATE " 
-					
-				+ ItemCategory.TABLE_NAME 
-				
+				+ ItemCategory.TABLE_NAME
 				+ " SET "
+				+ " " + ItemCategory.ITEM_CATEGORY_NAME + " = ?,"
+				+ " " + ItemCategory.ITEM_CATEGORY_DESCRIPTION + " = ?,"
+				+ " " + ItemCategory.IMAGE_PATH + " = ?,"
 
-				+ ItemCategory.ITEM_CATEGORY_NAME + " = " + "'" + itemCategory.getCategoryName() + "',"
-				+ " " + ItemCategory.ITEM_CATEGORY_DESCRIPTION + " = " + "'" + itemCategory.getCategoryDescription() + "',"
-				+ " " + ItemCategory.IMAGE_PATH + " = " + "'" + itemCategory.getImagePath() + "',"
-				+ " " + ItemCategory.PARENT_CATEGORY_ID + " = " + "" + "NULL" + ","
+				+ " " + ItemCategory.PARENT_CATEGORY_ID + " = ?,"
+				+ " " + ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT + " = ?,"
+				+ " " + ItemCategory.IS_ABSTRACT + " = ?,"
 
-				+ " " + ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT + " = " + "'" + itemCategory.getDescriptionShort() + "',"
-				+ " " + ItemCategory.IS_ABSTRACT + " = " + "'" + itemCategory.getisAbstractNode() + "',"
+				+ " " + ItemCategory.IS_LEAF_NODE + " = ?"
 
-					+ " " + ItemCategory.IS_LEAF_NODE + " = " + "'" + itemCategory.getIsLeafNode() + "'"
-				
-				+ " WHERE " +  ItemCategory.ITEM_CATEGORY_ID + "="
-				+ itemCategory.getItemCategoryID();
-			
-		}
-		
-		
-		
-		
-		
-		Connection conn = null;
-		Statement stmt = null; 
+				+ " WHERE "
+				+  ItemCategory.ITEM_CATEGORY_ID + "= ?";
+
+
+		Connection connection = null;
+//		Statement stmt = null;
+		PreparedStatement statement = null;
+
+
 		try {
 			
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL
-					,JDBCContract.CURRENT_USERNAME
-					,JDBCContract.CURRENT_PASSWORD);
-			
-			stmt = conn.createStatement();
-			
-			rowCount = stmt.executeUpdate(updateStatement);
-			
-			
-			System.out.println("Total rows updated: " + rowCount);	
-			
+			connection = dataSource.getConnection();
+			statement = connection.prepareStatement(updateStatement);
+
+			statement.setString(1,itemCategory.getCategoryName());
+			statement.setString(2,itemCategory.getCategoryDescription());
+			statement.setString(3,itemCategory.getImagePath());
+
+			statement.setInt(4,itemCategory.getParentCategoryID());
+			statement.setString(5,itemCategory.getDescriptionShort());
+			statement.setBoolean(6,itemCategory.getisAbstractNode());
+
+			statement.setBoolean(7,itemCategory.getIsLeafNode());
+			statement.setInt(8,itemCategory.getItemCategoryID());
+
+			rowCount = statement.executeUpdate();
+
+
+			System.out.println("Total rows updated: " + rowCount);
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -277,8 +189,8 @@ public class ItemCategoryService {
 			
 			try {
 			
-				if(stmt!=null)
-				{stmt.close();}
+				if(statement!=null)
+				{statement.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -286,8 +198,8 @@ public class ItemCategoryService {
 			
 			try {
 				
-				if(conn!=null)
-				{conn.close();}
+				if(connection!=null)
+				{connection.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -303,26 +215,24 @@ public class ItemCategoryService {
 	public int deleteItemCategory(int itemCategoryID)
 	{
 		
-		String deleteStatement = "DELETE FROM ITEM_CATEGORY WHERE ID = " 
-				+ itemCategoryID;
+		String deleteStatement = "DELETE FROM " + ItemCategory.TABLE_NAME + " WHERE "
+								+ ItemCategory.ITEM_CATEGORY_ID + " = ?";
+
 		
-		
-		Connection conn= null;
-		Statement stmt = null;
+		Connection connection= null;
+		PreparedStatement statement = null;
+
 		int rowCountDeleted = 0;
 		try {
 			
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL
-					,JDBCContract.CURRENT_USERNAME
-					,JDBCContract.CURRENT_PASSWORD);
-			
-			stmt = conn.createStatement();
-			
-			rowCountDeleted = stmt.executeUpdate(deleteStatement);
-			
+			connection = dataSource.getConnection();
+			statement = connection.prepareStatement(deleteStatement);
+			statement.setInt(1,itemCategoryID);
+
+			rowCountDeleted = statement.executeUpdate();
 			System.out.println("row Count Deleted: " + rowCountDeleted);	
 			
-			conn.close();	
+			connection.close();
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -335,8 +245,8 @@ public class ItemCategoryService {
 			
 			try {
 			
-				if(stmt!=null)
-				{stmt.close();}
+				if(statement!=null)
+				{statement.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -344,8 +254,8 @@ public class ItemCategoryService {
 			
 			try {
 				
-				if(conn!=null)
-				{conn.close();}
+				if(connection!=null)
+				{connection.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -706,19 +616,17 @@ public class ItemCategoryService {
 		ArrayList<ItemCategory> itemCategoryList = new ArrayList<ItemCategory>();
 		
 		
-		Connection conn = null;
-		Statement stmt = null;
+		Connection connection = null;
+		Statement statement = null;
 		ResultSet rs = null;
 		
 		try {
 			
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
-					JDBCContract.CURRENT_USERNAME,
-					JDBCContract.CURRENT_PASSWORD);
+			connection = dataSource.getConnection();
 			
-			stmt = conn.createStatement();
+			statement = connection.createStatement();
 			
-			rs = stmt.executeQuery(query);
+			rs = statement.executeQuery(query);
 			
 			while(rs.next())
 			{
@@ -780,8 +688,8 @@ public class ItemCategoryService {
 			
 			try {
 			
-				if(stmt!=null)
-				{stmt.close();}
+				if(statement!=null)
+				{statement.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -789,8 +697,8 @@ public class ItemCategoryService {
 			
 			try {
 				
-				if(conn!=null)
-				{conn.close();}
+				if(connection!=null)
+				{connection.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -1005,10 +913,7 @@ public class ItemCategoryService {
 
 		try {
 
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
-					JDBCContract.CURRENT_USERNAME,
-					JDBCContract.CURRENT_PASSWORD);
-
+			conn = dataSource.getConnection();
 			stmt = conn.createStatement();
 
 			rs = stmt.executeQuery(query);
@@ -1218,8 +1123,8 @@ public class ItemCategoryService {
 		
 		
 		
-		Connection conn = null;
-		Statement stmt = null;
+		Connection connection = null;
+		Statement statement = null;
 		ResultSet rs = null;
 		
 		
@@ -1227,13 +1132,10 @@ public class ItemCategoryService {
 		
 		try {
 			
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
-					JDBCContract.CURRENT_USERNAME,
-					JDBCContract.CURRENT_PASSWORD);
+			connection = dataSource.getConnection();
+			statement = connection.createStatement();
 			
-			stmt = conn.createStatement();
-			
-			rs = stmt.executeQuery(query);
+			rs = statement.executeQuery(query);
 			
 			while(rs.next())
 			{
@@ -1272,8 +1174,8 @@ public class ItemCategoryService {
 			
 			try {
 			
-				if(stmt!=null)
-				{stmt.close();}
+				if(statement!=null)
+				{statement.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -1281,8 +1183,8 @@ public class ItemCategoryService {
 			
 			try {
 				
-				if(conn!=null)
-				{conn.close();}
+				if(connection!=null)
+				{connection.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

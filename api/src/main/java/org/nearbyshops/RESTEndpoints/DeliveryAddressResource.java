@@ -1,8 +1,7 @@
-package org.nearbyshops.RESTInterfaces;
+package org.nearbyshops.RESTEndpoints;
 
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.Model.Cart;
-import org.nearbyshops.Model.ServiceConfiguration;
+import org.nearbyshops.ModelStats.DeliveryAddress;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
@@ -13,11 +12,11 @@ import java.net.URI;
 import java.util.List;
 
 
-@Path("/ServiceConfiguration")
-public class ServiceConfigurationResource {
+@Path("/DeliveryAddress")
+public class DeliveryAddressResource {
 
 
-	public ServiceConfigurationResource() {
+	public DeliveryAddressResource() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -26,13 +25,12 @@ public class ServiceConfigurationResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response createServiceConfig(ServiceConfiguration serviceConfiguration)
+	public Response createAddress(DeliveryAddress address)
 	{
 
-		int idOfInsertedRow = Globals.serviceConfigDAO.saveConfig(serviceConfiguration);
+		int idOfInsertedRow = Globals.deliveryAddressService.saveAddress(address);
 
-
-		serviceConfiguration.setServiceID(idOfInsertedRow);
+		address.setId(idOfInsertedRow);
 
 
 		if(idOfInsertedRow >=1)
@@ -40,8 +38,8 @@ public class ServiceConfigurationResource {
 			
 			
 			Response response = Response.status(Status.CREATED)
-					.location(URI.create("/api/ServiceConfig/" + idOfInsertedRow))
-					.entity(serviceConfiguration)
+					.location(URI.create("/api/DeliveryAddress/" + idOfInsertedRow))
+					.entity(address)
 					.build();
 			
 			return response;
@@ -63,14 +61,15 @@ public class ServiceConfigurationResource {
 
 	
 	@PUT
+	@Path("/{DeliveryAddressID}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateServiceConfig(ServiceConfiguration config)
+	public Response updateCart(@PathParam("DeliveryAddressID")int addressID, DeliveryAddress deliveryAddress)
 	{
 
-		//cart.setCartID(cartID);
-		config.setConfigurationID(1);
+		deliveryAddress.setId(addressID);
 
-		int rowCount = Globals.serviceConfigDAO.updateServiceConfig(config);
+		int rowCount = Globals.deliveryAddressService.updateAddress(deliveryAddress);
+
 
 		if(rowCount >= 1)
 		{
@@ -94,10 +93,12 @@ public class ServiceConfigurationResource {
 	}
 
 
-	public Response deleteServiceConfig()
+	@DELETE
+	@Path("/{DeliveryAddressID}")
+	public Response deleteCart(@PathParam("DeliveryAddressID")int addressID)
 	{
 
-		int rowCount = Globals.serviceConfigDAO.deleteServiceConfiguration(1);
+		int rowCount = Globals.deliveryAddressService.deleteAddress(addressID);
 		
 		
 		if(rowCount>=1)
@@ -123,22 +124,21 @@ public class ServiceConfigurationResource {
 	}
 	
 	
-	/*
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getCarts(@QueryParam("EndUserID")int endUserID,
-							 @QueryParam("ShopID")int shopID)
+	public Response getDeliveryAddresses(@QueryParam("EndUserID")int endUserID)
 
 	{
 
-		List<Cart> cartList = Globals.cartService.readCarts(endUserID,shopID);
+		//List<Cart> cartList = Globals.cartService.readCarts(endUserID,shopID);
+		List<DeliveryAddress> addressesList = Globals.deliveryAddressService.readAddresses(endUserID);
 
-		GenericEntity<List<Cart>> listEntity = new GenericEntity<List<Cart>>(cartList){
+		GenericEntity<List<DeliveryAddress>> listEntity = new GenericEntity<List<DeliveryAddress>>(addressesList){
 			
 		};
 	
 		
-		if(cartList.size()<=0)
+		if(addressesList.size()<=0)
 		{
 			Response response = Response.status(Status.NO_CONTENT)
 					.entity(listEntity)
@@ -156,24 +156,20 @@ public class ServiceConfigurationResource {
 		}
 		
 	}
-
-	*/
 	
 	
 	@GET
+	@Path("/{DeliveryAddressID}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getCart()
+	public Response getDeliveryAddress(@PathParam("DeliveryAddressID")int addressID)
 	{
 
-		ServiceConfiguration configuration = Globals.serviceConfigDAO.readConfig(1);
-
-		configuration.setService(Globals.serviceDAO.readService(configuration.getServiceID()));
-
+		DeliveryAddress deliveryAddress = Globals.deliveryAddressService.readAddress(addressID);
 		
-		if(configuration != null)
+		if(deliveryAddress != null)
 		{
 			Response response = Response.status(Status.OK)
-			.entity(configuration)
+			.entity(deliveryAddress)
 			.build();
 			
 			return response;
@@ -182,7 +178,7 @@ public class ServiceConfigurationResource {
 		{
 			
 			Response response = Response.status(Status.NO_CONTENT)
-					.entity(configuration)
+					.entity(deliveryAddress)
 					.build();
 			
 			return response;

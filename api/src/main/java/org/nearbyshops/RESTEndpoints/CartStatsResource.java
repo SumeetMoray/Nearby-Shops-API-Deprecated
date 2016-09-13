@@ -1,9 +1,6 @@
-package org.nearbyshops.RESTInterfaces;
+package org.nearbyshops.RESTEndpoints;
 
-import org.nearbyshops.DAOs.CartStatsDAO;
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.Model.CartItem;
-import org.nearbyshops.Model.Distributor;
 import org.nearbyshops.ModelStats.CartStats;
 
 import javax.ws.rs.*;
@@ -11,7 +8,6 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import java.net.URI;
 import java.util.List;
 
 

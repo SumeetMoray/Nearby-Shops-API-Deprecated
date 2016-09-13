@@ -1,7 +1,6 @@
-package org.nearbyshops.RESTInterfaces;
+package org.nearbyshops.RESTEndpoints;
 
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.Model.Cart;
 import org.nearbyshops.ModelStats.DeliveryVehicleSelf;
 
 import javax.ws.rs.*;

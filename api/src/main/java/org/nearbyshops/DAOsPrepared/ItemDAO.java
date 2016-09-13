@@ -1,24 +1,25 @@
-package org.nearbyshops.DAOs;
+package org.nearbyshops.DAOsPrepared;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.nearbyshops.JDBCContract;
+import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.ContractClasses.ShopContract;
 import org.nearbyshops.ContractClasses.ShopItemContract;
+import org.nearbyshops.Globals.Globals;
+import org.nearbyshops.JDBCContract;
 import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ItemCategory;
 import org.nearbyshops.ModelEndPoints.ItemEndPoint;
 import org.nearbyshops.ModelStats.ItemStats;
 import org.nearbyshops.Utility.GeoLocation;
 
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ItemService {
+
+public class ItemDAO {
+
+
+	HikariDataSource dataSource = Globals.getDataSource();
 
 
 
@@ -40,8 +41,8 @@ public class ItemService {
 	{
 		
 		
-		Connection conn = null;
-		Statement stmt = null;
+		Connection connection = null;
+		PreparedStatement statement = null;
 		int idOfInsertedRow = 0;
 
 		String insertItemCategory = "INSERT INTO " 
@@ -50,32 +51,30 @@ public class ItemService {
 				+ Item.ITEM_NAME + ","
 				+ Item.ITEM_DESC + ","
 				+ Item.ITEM_IMAGE_URL + ","
-				+ Item.ITEM_CATEGORY_ID + ","
 
+				+ Item.ITEM_CATEGORY_ID + ","
 				+ Item.QUANTITY_UNIT + ","
 				+ Item.ITEM_DESCRIPTION_LONG
 
-				+ ") VALUES("
-				+ "'" + item.getItemName() + "',"
-				+ "'" + item.getItemDescription() + "'," 
-				+ "'" + item.getItemImageURL() + "',"
-				+ item.getItemCategoryID() + ","
-				+ "'" + item.getQuantityUnit() + "',"
-				+ "'" + item.getItemDescriptionLong() + "'"
-				+ ")";
+				+ ") VALUES(?,?,? ,?,?,?)";
 		
 		try {
 			
-			conn = DriverManager.getConnection(
-					JDBCContract.CURRENT_CONNECTION_URL,
-					JDBCContract.CURRENT_USERNAME,
-					JDBCContract.CURRENT_PASSWORD);
+			connection = dataSource.getConnection();
+			statement = connection.prepareStatement(insertItemCategory,PreparedStatement.RETURN_GENERATED_KEYS);
+
+			statement.setString(1,item.getItemName());
+			statement.setString(2,item.getItemDescription());
+			statement.setString(3,item.getItemImageURL());
+
+			statement.setInt(4,item.getItemCategoryID());
+			statement.setString(5,item.getQuantityUnit());
+			statement.setString(6,item.getItemDescriptionLong());
+
+
+			idOfInsertedRow = statement.executeUpdate();
 			
-			stmt = conn.createStatement();
-			
-			idOfInsertedRow = stmt.executeUpdate(insertItemCategory,Statement.RETURN_GENERATED_KEYS);
-			
-			ResultSet rs = stmt.getGeneratedKeys();
+			ResultSet rs = statement.getGeneratedKeys();
 			
 			if(rs.next())
 			{
@@ -93,8 +92,8 @@ public class ItemService {
 			
 			try {
 			
-				if(stmt!=null)
-				{stmt.close();}
+				if(statement!=null)
+				{statement.close();}
 			
 			} 
 			catch (SQLException e) {
@@ -104,8 +103,8 @@ public class ItemService {
 			
 			try {
 				
-				if(conn!=null)
-				{conn.close();}
+				if(connection!=null)
+				{connection.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -119,40 +118,42 @@ public class ItemService {
 	
 	public int updateItem(Item item)
 	{
-		
-		//,int itemCategoryID
-		
-		//item.setItemCategoryID(itemCategoryID);
-		
-		String updateStatement = "UPDATE ITEM SET ITEM_NAME = "
-				+ "'" + item.getItemName() + "'"
-				+ ","
-				+ " ITEM_DESC = " + "'" + item.getItemDescription() + "'" + ","
-				+ " ITEM_IMAGE_URL = " + "'" + item.getItemImageURL() + "'" + ","
-				+ " ITEM_CATEGORY_ID = " +  item.getItemCategoryID() + ","
 
-				+ " " + Item.QUANTITY_UNIT + " = " + "'" + item.getQuantityUnit() + "'" + ","
-				+ " " + Item.ITEM_DESCRIPTION_LONG + " = " + "'" + item.getItemDescriptionLong() + "'" + ""
+		String updateStatement = "UPDATE " + Item.TABLE_NAME
 
-				+ " WHERE ITEM_ID = "
-				+ item.getItemID();
-		
-		Connection conn = null;
-		Statement stmt = null; 
+				+ " SET "
+
+				+ " " + Item.ITEM_NAME + " = ?,"
+				+ " " + Item.ITEM_DESC + " = ?,"
+				+ " " + Item.ITEM_IMAGE_URL + " = ?,"
+
+				+ " " + Item.ITEM_CATEGORY_ID + " = ?,"
+				+ " " + Item.QUANTITY_UNIT + " = ?,"
+				+ " " + Item.ITEM_DESCRIPTION_LONG + " = ?"
+
+				+ " WHERE " + Item.ITEM_ID + " = ?";
+
+
+		Connection connection = null;
+		PreparedStatement statement = null;
 		
 		int rowCountUpdated = 0;
 		
 		try {
 			
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
-					JDBCContract.CURRENT_USERNAME,
-					JDBCContract.CURRENT_PASSWORD);
-			
-			stmt = conn.createStatement();
-			
-			rowCountUpdated = stmt.executeUpdate(updateStatement);
-			
-			
+			connection = dataSource.getConnection();
+			statement = connection.prepareStatement(updateStatement);
+
+			statement.setString(1,item.getItemName());
+			statement.setString(2,item.getItemDescription());
+			statement.setString(3,item.getItemImageURL());
+
+			statement.setInt(4,item.getItemCategoryID());
+			statement.setString(5,item.getQuantityUnit());
+			statement.setString(6,item.getItemDescriptionLong());
+			statement.setInt(7,item.getItemID());
+
+			rowCountUpdated = statement.executeUpdate();
 			System.out.println("Total rows updated: " + rowCountUpdated);	
 			
 			
@@ -166,8 +167,8 @@ public class ItemService {
 			
 			try {
 			
-				if(stmt!=null)
-				{stmt.close();}
+				if(statement!=null)
+				{statement.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -175,8 +176,8 @@ public class ItemService {
 			
 			try {
 				
-				if(conn!=null)
-				{conn.close();}
+				if(connection!=null)
+				{connection.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -191,25 +192,20 @@ public class ItemService {
 	public int deleteItem(int itemID)
 	{
 
-		String deleteStatement = "DELETE FROM ITEM WHERE ITEM_ID = " 
-				+ itemID;
-		
-		
-		Connection conn= null;
-		Statement stmt = null;
+		String deleteStatement = "DELETE FROM " + Item.TABLE_NAME + " WHERE " + Item.ITEM_ID + " = ?";
+
+		Connection connection= null;
+		PreparedStatement statement = null;
 		int rowCountDeleted = 0;
 		try {
 			
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
-					JDBCContract.CURRENT_USERNAME,
-					JDBCContract.CURRENT_PASSWORD);
+			connection = dataSource.getConnection();
+			statement = connection.prepareStatement(deleteStatement);
+			statement.setInt(1,itemID);
+
+			rowCountDeleted = statement.executeUpdate();
 			
-			stmt = conn.createStatement();
-			
-			rowCountDeleted = stmt.executeUpdate(deleteStatement);
-			
-			System.out.println("Rows Deleted: " + rowCountDeleted);	
-			
+			System.out.println("Rows Deleted: " + rowCountDeleted);
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -222,8 +218,8 @@ public class ItemService {
 			
 			try {
 			
-				if(stmt!=null)
-				{stmt.close();}
+				if(statement!=null)
+				{statement.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -231,8 +227,8 @@ public class ItemService {
 			
 			try {
 				
-				if(conn!=null)
-				{conn.close();}
+				if(connection!=null)
+				{connection.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -251,19 +247,16 @@ public class ItemService {
 		ArrayList<Item> itemList = new ArrayList<Item>();
 		
 		
-		Connection conn = null;
-		Statement stmt = null;
+		Connection connection = null;
+		Statement statement = null;
 		ResultSet rs = null;
 		
 		try {
 			
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
-					JDBCContract.CURRENT_USERNAME,
-					JDBCContract.CURRENT_PASSWORD);
+			connection = dataSource.getConnection();
+			statement = connection.createStatement();
 			
-			stmt = conn.createStatement();
-			
-			rs = stmt.executeQuery(query);
+			rs = statement.executeQuery(query);
 			
 			while(rs.next())
 			{
@@ -306,8 +299,8 @@ public class ItemService {
 			
 			try {
 			
-				if(stmt!=null)
-				{stmt.close();}
+				if(statement!=null)
+				{statement.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -315,8 +308,8 @@ public class ItemService {
 			
 			try {
 				
-				if(conn!=null)
-				{conn.close();}
+				if(connection!=null)
+				{connection.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -501,19 +494,16 @@ public class ItemService {
 		ArrayList<ItemStats> itemStatsList = new ArrayList<>();
 
 
-		Connection conn = null;
-		Statement stmt = null;
+		Connection connection = null;
+		Statement statement = null;
 		ResultSet rs = null;
 
 		try {
 
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
-					JDBCContract.CURRENT_USERNAME,
-					JDBCContract.CURRENT_PASSWORD);
+			connection = dataSource.getConnection();
+			statement = connection.createStatement();
 
-			stmt = conn.createStatement();
-
-			rs = stmt.executeQuery(queryJoin);
+			rs = statement.executeQuery(queryJoin);
 
 			while(rs.next())
 			{
@@ -551,8 +541,8 @@ public class ItemService {
 
 			try {
 
-				if(stmt!=null)
-				{stmt.close();}
+				if(statement!=null)
+				{statement.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -560,8 +550,8 @@ public class ItemService {
 
 			try {
 
-				if(conn!=null)
-				{conn.close();}
+				if(connection!=null)
+				{connection.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -882,29 +872,27 @@ public class ItemService {
 		ArrayList<Item> itemList = new ArrayList<Item>();
 		
 		
-		Connection conn = null;
-		Statement stmt = null;
+		Connection connection = null;
+		Statement statement = null;
 		ResultSet rs = null;
 		
 		try {
 			
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
-					JDBCContract.CURRENT_USERNAME,
-					JDBCContract.CURRENT_PASSWORD);
+			connection = dataSource.getConnection();
+			statement = connection.createStatement();
 			
-			stmt = conn.createStatement();
-			
-			rs = stmt.executeQuery(query);
+			rs = statement.executeQuery(query);
 			
 			while(rs.next())
 			{
 				Item item = new Item();
 
-				item.setItemID(rs.getInt("ITEM_ID"));
-				item.setItemName(rs.getString("ITEM_NAME"));
-				item.setItemDescription(rs.getString("ITEM_DESC"));
-				item.setItemImageURL(rs.getString("ITEM_IMAGE_URL"));
-				item.setItemCategoryID(rs.getInt("ITEM_CATEGORY_ID"));
+				item.setItemID(rs.getInt(Item.ITEM_ID));
+				item.setItemName(rs.getString(Item.ITEM_NAME));
+				item.setItemDescription(rs.getString(Item.ITEM_DESC));
+
+				item.setItemImageURL(rs.getString(Item.ITEM_IMAGE_URL));
+				item.setItemCategoryID(rs.getInt(Item.ITEM_CATEGORY_ID));
 
 				item.setItemDescriptionLong(rs.getString(Item.ITEM_DESCRIPTION_LONG));
 				item.setDateTimeCreated(rs.getTimestamp(Item.DATE_TIME_CREATED));
@@ -919,8 +907,6 @@ public class ItemService {
 					itemStats.setShopCount(rs.getInt("shop_count"));
 					item.setItemStats(itemStats);
 				}
-
-
 
 				itemList.add(item);
 			}
@@ -949,8 +935,8 @@ public class ItemService {
 			
 			try {
 			
-				if(stmt!=null)
-				{stmt.close();}
+				if(statement!=null)
+				{statement.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -958,8 +944,8 @@ public class ItemService {
 			
 			try {
 				
-				if(conn!=null)
-				{conn.close();}
+				if(connection!=null)
+				{connection.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -1230,26 +1216,16 @@ public class ItemService {
 
 		try {
 
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
-					JDBCContract.CURRENT_USERNAME,
-					JDBCContract.CURRENT_PASSWORD);
-
+			conn = dataSource.getConnection();
 			stmt = conn.createStatement();
-
 			rs = stmt.executeQuery(query);
 
 			while(rs.next())
 			{
 				endPoint.setItemCount(rs.getInt("item_count"));
-
-
 			}
 
-
-
-
 			System.out.println("Item Count : " + endPoint.getItemCount());
-
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -1299,8 +1275,8 @@ public class ItemService {
 				+ " WHERE " + Item.ITEM_ID + " = " + ItemID;
 		
 		
-		Connection conn = null;
-		Statement stmt = null;
+		Connection connection = null;
+		Statement statement = null;
 		ResultSet rs = null;
 		
 		
@@ -1309,24 +1285,22 @@ public class ItemService {
 		
 		try {
 			
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
-					JDBCContract.CURRENT_USERNAME,
-					JDBCContract.CURRENT_PASSWORD);
+			connection = dataSource.getConnection();
+			statement = connection.createStatement();
 			
-			stmt = conn.createStatement();
-			
-			rs = stmt.executeQuery(query);
+			rs = statement.executeQuery(query);
 			
 			
 			
 			while(rs.next())
 			{
 				item = new Item();
-				item.setItemID(rs.getInt("ITEM_ID"));
-				item.setItemName(rs.getString("ITEM_NAME"));
-				item.setItemDescription(rs.getString("ITEM_DESC"));		
-				item.setItemImageURL(rs.getString("ITEM_IMAGE_URL"));
-				item.setItemCategoryID(rs.getInt("ITEM_CATEGORY_ID"));
+				item.setItemID(rs.getInt(Item.ITEM_ID));
+				item.setItemName(rs.getString(Item.ITEM_NAME));
+				item.setItemDescription(rs.getString(Item.ITEM_DESC));
+
+				item.setItemImageURL(rs.getString(Item.ITEM_IMAGE_URL));
+				item.setItemCategoryID(rs.getInt(Item.ITEM_CATEGORY_ID));
 
 				item.setItemDescriptionLong(rs.getString(Item.ITEM_DESCRIPTION_LONG));
 				item.setDateTimeCreated(rs.getTimestamp(Item.DATE_TIME_CREATED));
@@ -1356,8 +1330,8 @@ public class ItemService {
 			
 			try {
 			
-				if(stmt!=null)
-				{stmt.close();}
+				if(statement!=null)
+				{statement.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -1365,8 +1339,8 @@ public class ItemService {
 			
 			try {
 				
-				if(conn!=null)
-				{conn.close();}
+				if(connection!=null)
+				{connection.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

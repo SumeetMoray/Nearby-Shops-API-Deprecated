@@ -8,6 +8,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import org.nearbyshops.ContractClasses.*;
+import org.nearbyshops.JDBCContract;
+import org.nearbyshops.Model.Item;
+import org.nearbyshops.Model.ItemCategory;
 import org.nearbyshops.Model.ShopItem;
 import org.nearbyshops.ModelEndPoints.ShopItemEndPoint;
 import org.nearbyshops.Utility.GeoLocation;
@@ -337,7 +340,7 @@ public ArrayList<ShopItem> getShopItems(
 
 				+ " FROM "
 				+ ShopContract.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
-				+ ItemContract.TABLE_NAME + "," + ItemCategoryContract.TABLE_NAME
+				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
 				+ " WHERE "
 				+ ShopContract.TABLE_NAME + "." + ShopContract.SHOP_ID
 				+ "="
@@ -345,11 +348,11 @@ public ArrayList<ShopItem> getShopItems(
 				+ " AND "
 				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID
 				+ "="
-				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_ID
+				+ Item.TABLE_NAME + "." + Item.ITEM_ID
 				+ " AND "
-				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_CATEGORY_ID
+				+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID
 				+ "="
-				+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.ITEM_CATEGORY_ID;
+				+ ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
 
 
 
@@ -427,22 +430,22 @@ public ArrayList<ShopItem> getShopItems(
 	{
 
 		queryJoin = queryJoin + " AND "
-				+ ItemCategoryContract.TABLE_NAME
+				+ ItemCategory.TABLE_NAME
 				+ "."
-				+ ItemCategoryContract.ITEM_CATEGORY_ID + " = " + itemCategoryID;
+				+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
 
 
 		if(isFirst)
 		{
 			queryNormal = queryNormal + " WHERE "
-					+ ItemCategoryContract.ITEM_CATEGORY_ID + " = " + itemCategoryID;
+					+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
 
 			isFirst = false;
 
 		}else
 		{
 			queryNormal = queryNormal + " AND "
-					+ ItemCategoryContract.ITEM_CATEGORY_ID + " = " + itemCategoryID;
+					+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
 		}
 
 	}
@@ -886,7 +889,7 @@ public ArrayList<ShopItem> getShopItems(
 
 				+ " FROM "
 				+ ShopContract.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
-				+ ItemContract.TABLE_NAME + "," + ItemCategoryContract.TABLE_NAME
+				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
 
 				+ " WHERE "
 				+ ShopContract.TABLE_NAME + "." + ShopContract.SHOP_ID
@@ -895,11 +898,11 @@ public ArrayList<ShopItem> getShopItems(
 				+ " AND "
 				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID
 				+ "="
-				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_ID
+				+ Item.TABLE_NAME + "." + Item.ITEM_ID
 				+ " AND "
-				+ ItemContract.TABLE_NAME + "." + ItemContract.ITEM_CATEGORY_ID
+				+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID
 				+ "="
-				+ ItemCategoryContract.TABLE_NAME + "." + ItemCategoryContract.ITEM_CATEGORY_ID;
+				+ ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
 
 
 
@@ -977,22 +980,22 @@ public ArrayList<ShopItem> getShopItems(
 		{
 
 			queryJoin = queryJoin + " AND "
-					+ ItemCategoryContract.TABLE_NAME
+					+ ItemCategory.TABLE_NAME
 					+ "."
-					+ ItemCategoryContract.ITEM_CATEGORY_ID + " = " + itemCategoryID;
+					+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
 
 
 			if(isFirst)
 			{
 				queryNormal = queryNormal + " WHERE "
-						+ ItemCategoryContract.ITEM_CATEGORY_ID + " = " + itemCategoryID;
+						+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
 
 				isFirst = false;
 
 			}else
 			{
 				queryNormal = queryNormal + " AND "
-						+ ItemCategoryContract.ITEM_CATEGORY_ID + " = " + itemCategoryID;
+						+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
 			}
 
 		}

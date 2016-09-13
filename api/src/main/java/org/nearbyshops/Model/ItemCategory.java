@@ -1,22 +1,60 @@
 package org.nearbyshops.Model;
 
-
 public class ItemCategory {
 
+	// contract class describing the Globals schema for the ItemCategory
 
-	int itemCategoryID;
-	
-	String categoryName;
-	String categoryDescription;
-	
-	Integer parentCategoryID;
-	boolean isLeafNode;
+	// Table Name
+	public static final String TABLE_NAME = "ITEM_CATEGORY";
 
-	String imagePath;
+	// Column Names
+	public static final String ITEM_CATEGORY_ID = "ID";
+	public static final String ITEM_CATEGORY_NAME = "ITEM_CATEGORY_NAME";
+	public static final String ITEM_CATEGORY_DESCRIPTION = "ITEM_CATEGORY_DESC";
+	public static final String PARENT_CATEGORY_ID = "PARENT_CATEGORY_ID";
+	public static final String IS_LEAF_NODE = "IS_LEAF";
+	public static final String IMAGE_PATH = "IMAGE_PATH";
 
+	// to be implemented
+	public static final String ITEM_CATEGORY_DESCRIPTION_SHORT = "ITEM_CATEGORY_DESCRIPTION_SHORT";
+	public static final String IS_ABSTRACT = "IS_ABSTRACT";
+
+
+
+
+	// Create Table Statement
+
+
+	public static final String createTableItemCategoryPostgres = "CREATE TABLE IF NOT EXISTS "
+			+ ItemCategory.TABLE_NAME + "("
+			+ " " + ItemCategory.ITEM_CATEGORY_ID + " SERIAL PRIMARY KEY,"
+			+ " " + ItemCategory.ITEM_CATEGORY_NAME + " text,"
+			+ " " + ItemCategory.ITEM_CATEGORY_DESCRIPTION + " text,"
+			+ " " + ItemCategory.PARENT_CATEGORY_ID + " INT,"
+			+ " " + ItemCategory.IS_LEAF_NODE + " boolean,"
+			+ " " + ItemCategory.IMAGE_PATH + " text,"
+
+			+ " " + ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT + " text,"
+			+ " " + ItemCategory.IS_ABSTRACT + " boolean,"
+
+			+ " FOREIGN KEY(" + ItemCategory.PARENT_CATEGORY_ID +") REFERENCES "
+			+ ItemCategory.TABLE_NAME + "(" + ItemCategory.ITEM_CATEGORY_ID + ")"
+			+ ")";
+
+
+
+	// Instance Variables
+
+
+	private int itemCategoryID;
+	private String categoryName;
+	private String categoryDescription;
+	private Integer parentCategoryID;
+	private boolean isLeafNode;
+	private String imagePath;
 	// recently added
-	boolean isAbstractNode;
-	String descriptionShort;
+	private boolean isAbstractNode;
+	private String descriptionShort;
 
 
 	//no-args Constructor

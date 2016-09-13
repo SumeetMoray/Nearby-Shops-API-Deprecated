@@ -1,8 +1,7 @@
-package org.nearbyshops.RESTInterfaces;
+package org.nearbyshops.RESTEndpoints;
 
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.EndUser;
-import org.nearbyshops.Model.ServiceProvider;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
@@ -13,11 +12,11 @@ import java.net.URI;
 import java.util.List;
 
 
-@Path("/ServiceProvider")
-public class ServiceProviderResource {
+@Path("/EndUser")
+public class EndUserResource {
 
 
-	public ServiceProviderResource() {
+	public EndUserResource() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -26,13 +25,13 @@ public class ServiceProviderResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response createServiceProvider(ServiceProvider serviceProvider)
+	public Response createEndUser(EndUser endUser)
 	{
 
-		int idOfInsertedRow = Globals.serviceProviderDAO.saveServiceProvider(serviceProvider);
+		int idOfInsertedRow = Globals.endUserService.saveEndUser(endUser);
 
-
-		serviceProvider.setServiceProviderID(idOfInsertedRow);
+		endUser.setEndUserID(idOfInsertedRow);
+		endUser.setPassword(null);
 
 		
 		if(idOfInsertedRow >=1)
@@ -40,8 +39,8 @@ public class ServiceProviderResource {
 			
 			
 			Response response = Response.status(Status.CREATED)
-					.location(URI.create("/api/ServiceProvider/" + idOfInsertedRow))
-					.entity(serviceProvider)
+					.location(URI.create("/api/Distributor/" + idOfInsertedRow))
+					.entity(endUser)
 					.build();
 			
 			return response;
@@ -63,14 +62,14 @@ public class ServiceProviderResource {
 
 	
 	@PUT
-	@Path("/{ServiceProviderID}")
+	@Path("/{EndUserID}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateDistributor(@PathParam("ServiceProviderID")int serviceProviderID, ServiceProvider serviceProvider)
+	public Response updateDistributor(@PathParam("EndUserID")int endUserID, EndUser endUser)
 	{
 
-		serviceProvider.setServiceProviderID(serviceProviderID);
+		endUser.setEndUserID(endUserID);
 
-		int rowCount = Globals.serviceProviderDAO.updateServiceProvider(serviceProvider);
+		int rowCount = Globals.endUserService.updateEndUser(endUser);
 		
 		
 		if(rowCount >= 1)
@@ -96,12 +95,12 @@ public class ServiceProviderResource {
 	}
 
 	@DELETE
-	@Path("/{ServiceProviderID}")
+	@Path("/{EndUserID}")
 	//@Produces(MediaType.APPLICATION_JSON)
-	public Response deleteServiceProvider(@PathParam("ServiceProviderID")int serviceProviderID)
+	public Response deleteDistributor(@PathParam("EndUserID")int endUserID)
 	{
 
-		int rowCount = Globals.serviceProviderDAO.deleteServiceProvider(serviceProviderID);
+		int rowCount = Globals.endUserService.deleteEndUser(endUserID);
 		
 		
 		if(rowCount>=1)
@@ -129,13 +128,13 @@ public class ServiceProviderResource {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getServiceProviders()
+	public Response getEndUsers()
 	{
 
 
-		List<ServiceProvider> list = Globals.serviceProviderDAO.getServiceProvider();
+		List<EndUser> list = Globals.endUserService.getEndUser();
 
-		GenericEntity<List<ServiceProvider>> listEntity = new GenericEntity<List<ServiceProvider>>(list){
+		GenericEntity<List<EndUser>> listEntity = new GenericEntity<List<EndUser>>(list){
 			
 		};
 	
@@ -161,17 +160,17 @@ public class ServiceProviderResource {
 	
 	
 	@GET
-	@Path("/{ServiceProviderID}")
+	@Path("/{EndUserID}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getServiceProvider(@PathParam("ServiceProviderID")int serviceProviderID)
+	public Response getEndUser(@PathParam("EndUserID")int endUserID)
 	{
 
-		ServiceProvider serviceProvider = Globals.serviceProviderDAO.getServiceProvider(serviceProviderID);
+		EndUser endUser = Globals.endUserService.getEndUser(endUserID);
 		
-		if(serviceProvider!= null)
+		if(endUser!= null)
 		{
 			Response response = Response.status(Status.OK)
-			.entity(serviceProvider)
+			.entity(endUser)
 			.build();
 			
 			return response;
@@ -180,12 +179,71 @@ public class ServiceProviderResource {
 		{
 			
 			Response response = Response.status(Status.NO_CONTENT)
-					.entity(serviceProvider)
+					.entity(endUser)
 					.build();
 			
 			return response;
 			
 		}
 		
-	}	
+	}
+
+
+	@GET
+	@Path("/Validate")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response validateDistributor(@QueryParam("Password")String password,@QueryParam("Username")String userName,@QueryParam("ID")Integer id)
+	{
+
+		boolean isValid = false;
+
+		EndUser tempEndUser = null;
+
+		if(id!=null)
+		{
+			tempEndUser = Globals.endUserService.getEndUserPassword(id,null);
+
+			System.out.println(id + " : " + userName);
+
+		}else if(userName !=null)
+		{
+			tempEndUser = Globals.endUserService.getEndUserPassword(null,userName);
+		}
+
+
+		if(tempEndUser!=null && tempEndUser.getPassword()!=null && tempEndUser.getPassword().equals(password))
+		{
+			isValid = true;
+
+			tempEndUser.setPassword(null);
+
+		}
+
+
+
+		if(isValid)
+		{
+			Response response = Response.status(Status.OK)
+					.entity(tempEndUser)
+					.build();
+
+			return response;
+
+		} else
+		{
+
+			Response response = Response.status(Status.UNAUTHORIZED)
+					.entity(null)
+					.build();
+
+			return response;
+
+		}
+
+	}
+
+
+
+
 }

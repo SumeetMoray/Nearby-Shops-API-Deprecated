@@ -1,9 +1,7 @@
 package org.nearbyshops.DAOs;
 
-import org.nearbyshops.ContractClasses.DistributorContract;
 import org.nearbyshops.ContractClasses.EndUserContract;
-import org.nearbyshops.ContractClasses.JDBCContract;
-import org.nearbyshops.Model.Distributor;
+import org.nearbyshops.JDBCContract;
 import org.nearbyshops.Model.EndUser;
 
 import java.sql.*;

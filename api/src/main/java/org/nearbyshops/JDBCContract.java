@@ -1,4 +1,4 @@
-package org.nearbyshops.ContractClasses;
+package org.nearbyshops;
 
 public class JDBCContract {
 	
@@ -7,7 +7,7 @@ public class JDBCContract {
 	private static String DERBY_USERNAME = "ME"; 
 	private static String DERBY_PASSWORD = "MINE";
 	
-	private static final String POSTGRES_CONNECTION_URL = "jdbc:postgresql://localhost:5432/postgres";
+	private static final String POSTGRES_CONNECTION_URL = "jdbc:postgresql://localhost:5432/NearbyShopsDB";
 	//"jdbc:postgresql://localhost:5433/postgres"
 	//"jdbc:postgresql://aa1vpy11adzdcrh.cxsl0shv40xg.ap-southeast-1.rds.amazonaws.com:5432/postgres"
 	private static String POSTGRES_USERNAME = "postgres";

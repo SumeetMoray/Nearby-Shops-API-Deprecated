@@ -1,7 +1,6 @@
-package org.nearbyshops.RESTInterfaces;
+package org.nearbyshops.RESTEndpoints;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -18,22 +17,24 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.nearbyshops.DAOsPrepared.ItemDAO;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Item;
-import org.nearbyshops.Model.ItemCategory;
-import org.nearbyshops.ModelEndPoints.ItemCategoryEndPoint;
 import org.nearbyshops.ModelEndPoints.ItemEndPoint;
 
 
 @Path("/v1/Item")
 public class ItemResource {
-	
+
+	private ItemDAO itemDAO = Globals.itemDAO;
+
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response saveItem(Item item)
 	{	
-		int idOfInsertedRow = Globals.itemService.saveItem(item);
+		int idOfInsertedRow = itemDAO.saveItem(item);
 		
 		item.setItemID(idOfInsertedRow);
 		
@@ -72,7 +73,7 @@ public class ItemResource {
 		//System.out.println("ItemCategoryID: " + itemCategoryID + " " + itemCategory.getCategoryName()
 		//+ " " + itemCategory.getCategoryDescription());
 		
-		int rowCount = Globals.itemService.updateItem(item); 
+		int rowCount = itemDAO.updateItem(item);
 		
 		if(rowCount >= 1)
 		{
@@ -105,7 +106,7 @@ public class ItemResource {
 
 		for(Item item : itemList)
 		{
-			rowCountSum = rowCountSum + Globals.itemService.updateItem(item);
+			rowCountSum = rowCountSum + itemDAO.updateItem(item);
 		}
 
 		if(rowCountSum ==  itemList.size())
@@ -143,7 +144,7 @@ public class ItemResource {
 	public Response deleteItem(@PathParam("ItemID")int itemID)
 	{
 		
-		int rowCount = Globals.itemService.deleteItem(itemID);
+		int rowCount = itemDAO.deleteItem(itemID);
 		
 		
 		if(rowCount>=1)
@@ -187,7 +188,7 @@ public class ItemResource {
 		//Marker
 		
 		List<Item> list = 
-				Globals.itemService.getItems(
+				itemDAO.getItems(
 						itemCategoryID,
 						shopID,
 						latCenter, lonCenter,
@@ -260,7 +261,7 @@ public class ItemResource {
 			set_offset = offset;
 		}
 
-		ItemEndPoint endPoint = Globals.itemService.getEndPointMetadata(itemCategoryID,
+		ItemEndPoint endPoint = itemDAO.getEndPointMetadata(itemCategoryID,
 				shopID,latCenter,lonCenter,deliveryRangeMin,deliveryRangeMax,proximity);
 
 		endPoint.setLimit(set_limit);
@@ -273,7 +274,7 @@ public class ItemResource {
 		if(metaonly==null || (!metaonly)) {
 
 			list =
-					Globals.itemService.getItems(
+					itemDAO.getItems(
 							itemCategoryID,
 							shopID,
 							latCenter, lonCenter,
@@ -309,7 +310,7 @@ public class ItemResource {
 		
 		//marker
 		
-		Item item = Globals.itemService.getItem(itemID);
+		Item item = itemDAO.getItem(itemID);
 		
 		if(item!= null)
 		{

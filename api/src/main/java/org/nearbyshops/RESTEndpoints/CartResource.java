@@ -1,23 +1,22 @@
-package org.nearbyshops.RESTInterfaces;
+package org.nearbyshops.RESTEndpoints;
 
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Cart;
-import org.nearbyshops.Model.CartItem;
-import org.nearbyshops.Model.OrderItem;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import java.net.URI;
 import java.util.List;
 
 
-@Path("/OrderItem")
-public class OrderItemResource {
+@Path("/Cart")
+public class CartResource {
 
 
-	public OrderItemResource() {
+	public CartResource() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -26,43 +25,54 @@ public class OrderItemResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response createOrderItem(OrderItem orderItem)
+	public Response createCart(Cart cart)
 	{
 
-		int rowCount = Globals.orderItemService.saveOrderItem(orderItem);
+		int idOfInsertedRow = Globals.cartService.saveCart(cart);
+
+		cart.setCartID(idOfInsertedRow);
 
 
+		
 
-		if(rowCount == 1)
+
+		if(idOfInsertedRow >=1)
 		{
 			
 			
 			Response response = Response.status(Status.CREATED)
-					.entity(null)
+					.location(URI.create("/api/Cart/" + idOfInsertedRow))
+					.entity(cart)
 					.build();
 			
 			return response;
 			
-		}else if(rowCount <= 0)
+		}else if(idOfInsertedRow <=0)
 		{
 			Response response = Response.status(Status.NOT_MODIFIED)
 					.entity(null)
 					.build();
 			
+			//Response.status(Status.CREATED).location(arg0)
+			
 			return response;
 		}
-
+		
 		return null;
+		
 	}
 
-
-
+	
 	@PUT
+	@Path("/{CartID}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateOrderItem(OrderItem orderItem)
+	public Response updateCart(@PathParam("CartID")int cartID, Cart cart)
 	{
 
-		int rowCount = Globals.orderItemService.updateOrderItem(orderItem);
+		cart.setCartID(cartID);
+
+		int rowCount = Globals.cartService.updateCart(cart);
+
 
 		if(rowCount >= 1)
 		{
@@ -87,15 +97,15 @@ public class OrderItemResource {
 
 
 	@DELETE
-	public Response deleteOrderItem(@QueryParam("OrderID")int orderID, @QueryParam("ItemID") int itemID)
+	@Path("/{CartID}")
+	public Response deleteCart(@PathParam("CartID")int cartID)
 	{
 
-		int rowCount = Globals.orderItemService.deleteOrderItem(itemID,orderID);
-
-
+		int rowCount = Globals.cartService.deleteCart(cartID);
+		
+		
 		if(rowCount>=1)
 		{
-
 			Response response = Response.status(Status.OK)
 					.entity(null)
 					.build();
@@ -116,22 +126,22 @@ public class OrderItemResource {
 		return null;
 	}
 	
-
-
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getOrderItem(@QueryParam("OrderID")int orderID, @QueryParam("ItemID")int itemID)
+	public Response getCarts(@QueryParam("EndUserID")int endUserID,
+							 @QueryParam("ShopID")int shopID)
+
 	{
 
+		List<Cart> cartList = Globals.cartService.readCarts(endUserID,shopID);
 
-		List<OrderItem> orderList = Globals.orderItemService.getOrderItem(orderID,itemID);
-
-
-		GenericEntity<List<OrderItem>> listEntity = new GenericEntity<List<OrderItem>>(orderList){
+		GenericEntity<List<Cart>> listEntity = new GenericEntity<List<Cart>>(cartList){
+			
 		};
 	
 		
-		if(orderList.size()<=0)
+		if(cartList.size()<=0)
 		{
 			Response response = Response.status(Status.NO_CONTENT)
 					.entity(listEntity)
@@ -149,5 +159,34 @@ public class OrderItemResource {
 		}
 		
 	}
+	
+	
+	@GET
+	@Path("/{CartID}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getCart(@PathParam("CartID")int cartID)
+	{
 
+		Cart cart = Globals.cartService.readCart(cartID);
+		
+		if(cart != null)
+		{
+			Response response = Response.status(Status.OK)
+			.entity(cart)
+			.build();
+			
+			return response;
+			
+		} else 
+		{
+			
+			Response response = Response.status(Status.NO_CONTENT)
+					.entity(cart)
+					.build();
+			
+			return response;
+			
+		}
+		
+	}	
 }
