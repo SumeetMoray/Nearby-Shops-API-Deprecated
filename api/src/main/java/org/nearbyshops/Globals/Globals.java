@@ -5,6 +5,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.DAOs.*;
 import org.nearbyshops.DAOsPrepared.ItemCategoryDAO;
 import org.nearbyshops.DAOsPrepared.ItemDAO;
+import org.nearbyshops.DAOsPrepared.ItemDAOJoinOuter;
 import org.nearbyshops.JDBCContract;
 
 
@@ -14,6 +15,7 @@ public class Globals {
 	
 	public static ItemCategoryDAO itemCategoryDAO = new ItemCategoryDAO();
 	public static ItemDAO itemDAO = new ItemDAO();
+	public static ItemDAOJoinOuter itemDAOJoinOuter = new ItemDAOJoinOuter();
 	public static DistributorService distributorService = new DistributorService();
 	public static ShopService shopService = new ShopService();
 	public static ShopItemService shopItemService = new ShopItemService();
@@ -25,9 +27,8 @@ public class Globals {
 	public static DeliveryAddressService deliveryAddressService = new DeliveryAddressService();
 	public static OrderItemService orderItemService = new OrderItemService();
 	public static DeliveryVehicleSelfDAO deliveryVehicleSelfDAO = new DeliveryVehicleSelfDAO();
-	public static ServiceDAO serviceDAO = new ServiceDAO();
+	public static ServiceConfigurationDAO serviceConfigurationDAO = new ServiceConfigurationDAO();
 	public static ServiceProviderDAO serviceProviderDAO = new ServiceProviderDAO();
-	public static ServiceConfigDAO serviceConfigDAO = new ServiceConfigDAO();
 
 
 	// Configure Connection Pooling

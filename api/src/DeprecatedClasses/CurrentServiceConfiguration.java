@@ -3,7 +3,7 @@ package org.nearbyshops.ContractClasses;
 /**
  * Created by sumeet on 19/6/16.
  */
-public class ServiceContract {
+public class CurrentServiceConfiguration {
 
 
     // Table Name

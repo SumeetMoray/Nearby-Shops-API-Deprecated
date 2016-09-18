@@ -19,7 +19,7 @@ public class ShopContract {
 	public static final String LON_MIN = "LON_MIN";
 
 	public static final String DELIVERY_CHARGES = "DELIVERY_CHARGES";
-	public static final String DISTRIBUTOR_ID = "DISTRIBUTOR_ID";
+	public static final String DISTRIBUTOR_ID = "Distributor";
 	public static final String IMAGE_PATH = "IMAGE_PATH";
 	public static final String BACKDROP_IMAGE_PATH = "BACKDROP_IMAGE_PATH";
 	public static final String LOGO_IMAGE_PATH = "LOGO_IMAGE_PATH";

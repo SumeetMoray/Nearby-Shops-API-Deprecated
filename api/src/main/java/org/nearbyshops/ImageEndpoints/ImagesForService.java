@@ -1,4 +1,4 @@
-package org.nearbyshops.RESTEndpoints;
+package org.nearbyshops.ImageEndpoints;
 
 
 import org.nearbyshops.Model.Image;
@@ -232,7 +232,7 @@ public class ImagesForService {
 		}
     	  	
     	
-    	if(deleteStatus == false)
+    	if(!deleteStatus)
     	{
     		 response = Response.status(Status.NOT_MODIFIED).build();
     	

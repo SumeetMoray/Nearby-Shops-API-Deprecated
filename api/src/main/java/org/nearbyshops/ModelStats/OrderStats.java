@@ -5,9 +5,9 @@ package org.nearbyshops.ModelStats;
  */
 public class OrderStats {
 
-    int orderID;
-    int itemCount;
-    int itemTotal;
+    private int orderID;
+    private int itemCount;
+    private int itemTotal;
 
     public int getOrderID() {
         return orderID;

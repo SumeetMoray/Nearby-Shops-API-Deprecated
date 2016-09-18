@@ -1,4 +1,4 @@
-package org.nearbyshops.RESTEndpoints;
+package org.nearbyshops.ImageEndpoints;
 
 
 import java.io.File;

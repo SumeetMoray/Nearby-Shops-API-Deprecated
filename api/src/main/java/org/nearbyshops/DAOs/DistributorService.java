@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import org.nearbyshops.ContractClasses.DistributorContract;
+
 import org.nearbyshops.JDBCContract;
 import org.nearbyshops.Model.Distributor;
 
@@ -31,10 +31,10 @@ public class DistributorService {
 		int rowIdOfInsertedRow = -1;
 
 		String insertItemCategory = "INSERT INTO "
-				+ DistributorContract.TABLE_NAME				
+				+ Distributor.TABLE_NAME
 				+ "("  
-				+ DistributorContract.DISTRIBUTOR_NAME + ","
-				+ DistributorContract.DISTRIBUTOR_PASSWORD
+				+ Distributor.DISTRIBUTOR_NAME + ","
+				+ Distributor.DISTRIBUTOR_PASSWORD
 				+ ") VALUES("
 				+ "'" + distributor.getDistributorName()	+ "'" + ","
 				+ "'" + distributor.getPassword() + "'" +
@@ -94,10 +94,10 @@ public class DistributorService {
 
 	public int updateDistributor(Distributor distributor)
 	{	
-		String updateStatement = "UPDATE " + DistributorContract.TABLE_NAME 
+		String updateStatement = "UPDATE " + Distributor.TABLE_NAME
 				+ " SET "
-				+ DistributorContract.DISTRIBUTOR_NAME + " = " + "'" + distributor.getDistributorName() + "'" + ","
-				+ DistributorContract.DISTRIBUTOR_PASSWORD + " = " + "'" + distributor.getPassword() + "'"
+				+ Distributor.DISTRIBUTOR_NAME + " = " + "'" + distributor.getDistributorName() + "'" + ","
+				+ Distributor.DISTRIBUTOR_PASSWORD + " = " + "'" + distributor.getPassword() + "'"
 				+ " WHERE ID = "
 				+ distributor.getDistributorID();
 		
@@ -154,7 +154,7 @@ public class DistributorService {
 	public int deleteDistributor(int distributorID)
 	{
 		
-		String deleteStatement = "DELETE FROM " + DistributorContract.TABLE_NAME + " WHERE ID = " 
+		String deleteStatement = "DELETE FROM " + Distributor.TABLE_NAME + " WHERE ID = "
 				+ distributorID;
 		
 		
@@ -212,7 +212,7 @@ public class DistributorService {
 	
 	public ArrayList<Distributor> readAllDistributor()
 	{
-		String query = "SELECT * FROM " + DistributorContract.TABLE_NAME;
+		String query = "SELECT * FROM " + Distributor.TABLE_NAME;
 		ArrayList<Distributor> distributorList = new ArrayList<Distributor>();
 		
 		
@@ -235,8 +235,8 @@ public class DistributorService {
 				
 				Distributor distributor = new Distributor();
 				
-				distributor.setDistributorID(rs.getInt(DistributorContract.DISTRIBUTOR_ID));
-				distributor.setDistributorName(rs.getString(DistributorContract.DISTRIBUTOR_NAME));
+				distributor.setDistributorID(rs.getInt(Distributor.DISTRIBUTOR_ID));
+				distributor.setDistributorName(rs.getString(Distributor.DISTRIBUTOR_NAME));
 	
 				distributorList.add(distributor);
 				
@@ -292,7 +292,7 @@ public class DistributorService {
 	public Distributor getDistributor(int distributorID)
 	{
 		
-		String query = "SELECT * FROM " + DistributorContract.TABLE_NAME
+		String query = "SELECT * FROM " + Distributor.TABLE_NAME
 						+ " WHERE ID = " + distributorID;
 		
 		Connection conn = null;
@@ -314,8 +314,8 @@ public class DistributorService {
 			while(rs.next())
 			{
 				distributor = new Distributor();
-				distributor.setDistributorID(rs.getInt(DistributorContract.DISTRIBUTOR_ID));
-				distributor.setDistributorName(rs.getString(DistributorContract.DISTRIBUTOR_NAME));
+				distributor.setDistributorID(rs.getInt(Distributor.DISTRIBUTOR_ID));
+				distributor.setDistributorName(rs.getString(Distributor.DISTRIBUTOR_NAME));
 			}
 			
 			
@@ -369,15 +369,15 @@ public class DistributorService {
 
 		if(distributorID!=null)
 		{
-			query = "SELECT * FROM " + DistributorContract.TABLE_NAME
+			query = "SELECT * FROM " + Distributor.TABLE_NAME
 					+ " WHERE ID = " + distributorID;
 
 		}
 
 		else if(username!=null)
 		{
-			query = "SELECT * FROM " + DistributorContract.TABLE_NAME
-					+ " WHERE " +  DistributorContract.DISTRIBUTOR_NAME + " = " + "'" + username + "'";
+			query = "SELECT * FROM " + Distributor.TABLE_NAME
+					+ " WHERE " +  Distributor.DISTRIBUTOR_NAME + " = " + "'" + username + "'";
 
 		}
 
@@ -409,9 +409,9 @@ public class DistributorService {
 			while(rs.next())
 			{
 				distributor = new Distributor();
-				distributor.setDistributorID(rs.getInt(DistributorContract.DISTRIBUTOR_ID));
-				distributor.setDistributorName(rs.getString(DistributorContract.DISTRIBUTOR_NAME));
-				distributor.setPassword(rs.getString(DistributorContract.DISTRIBUTOR_PASSWORD));
+				distributor.setDistributorID(rs.getInt(Distributor.DISTRIBUTOR_ID));
+				distributor.setDistributorName(rs.getString(Distributor.DISTRIBUTOR_NAME));
+				distributor.setPassword(rs.getString(Distributor.DISTRIBUTOR_PASSWORD));
 			}
 
 

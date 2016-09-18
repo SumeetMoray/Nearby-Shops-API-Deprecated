@@ -4,10 +4,12 @@ import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.ServiceConfiguration;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import java.net.URI;
+import java.util.List;
 
 
 @Path("/ServiceConfiguration")
@@ -23,11 +25,10 @@ public class ServiceConfigurationResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response createServiceConfig(ServiceConfiguration serviceConfiguration)
+	public Response createService(ServiceConfiguration serviceConfiguration)
 	{
 
-		int idOfInsertedRow = Globals.serviceConfigDAO.saveConfig(serviceConfiguration);
-
+		int idOfInsertedRow = Globals.serviceConfigurationDAO.saveService(serviceConfiguration);
 
 		serviceConfiguration.setServiceID(idOfInsertedRow);
 
@@ -37,7 +38,7 @@ public class ServiceConfigurationResource {
 			
 			
 			Response response = Response.status(Status.CREATED)
-					.location(URI.create("/api/ServiceConfig/" + idOfInsertedRow))
+					.location(URI.create("/api/CurrentServiceConfiguration/" + idOfInsertedRow))
 					.entity(serviceConfiguration)
 					.build();
 			
@@ -60,14 +61,14 @@ public class ServiceConfigurationResource {
 
 	
 	@PUT
+	@Path("/{ServiceID}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateServiceConfig(ServiceConfiguration config)
+	public Response updateService(@PathParam("ServiceID")int serviceID, ServiceConfiguration serviceConfiguration)
 	{
 
-		//cart.setCartID(cartID);
-		config.setConfigurationID(1);
+		serviceConfiguration.setServiceID(serviceID);
 
-		int rowCount = Globals.serviceConfigDAO.updateServiceConfig(config);
+		int rowCount = Globals.serviceConfigurationDAO.updateService(serviceConfiguration);
 
 		if(rowCount >= 1)
 		{
@@ -91,10 +92,14 @@ public class ServiceConfigurationResource {
 	}
 
 
-	public Response deleteServiceConfig()
+	@DELETE
+	@Path("/{ServiceID}")
+	public Response deleteCart(@PathParam("ServiceID")int serviceID)
 	{
 
-		int rowCount = Globals.serviceConfigDAO.deleteServiceConfiguration(1);
+		//int rowCount = Globals.cartService.deleteCart(cartID);
+
+		int rowCount = Globals.serviceConfigurationDAO.deleteService(serviceID);
 		
 		
 		if(rowCount>=1)
@@ -120,22 +125,27 @@ public class ServiceConfigurationResource {
 	}
 	
 	
-	/*
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getCarts(@QueryParam("EndUserID")int endUserID,
-							 @QueryParam("ShopID")int shopID)
+	public Response getService(	@QueryParam("ServiceLevel") int serviceLevel,
+								 @QueryParam("ServiceType") int serviceType,
+								 @QueryParam("LatCenter") Double latCenterQuery,
+								 @QueryParam("LonCenter") Double lonCenterQuery,
+							   @QueryParam("SortBy") String sortBy,
+							   @QueryParam("Limit") int limit, @QueryParam("Offset") int offset)
 
 	{
 
-		List<Cart> cartList = Globals.cartService.readCarts(endUserID,shopID);
 
-		GenericEntity<List<Cart>> listEntity = new GenericEntity<List<Cart>>(cartList){
+		List<ServiceConfiguration> servicesList = Globals.serviceConfigurationDAO.readServices(serviceLevel,serviceType,latCenterQuery,lonCenterQuery,
+                                    								sortBy,limit,offset);
+
+		GenericEntity<List<ServiceConfiguration>> listEntity = new GenericEntity<List<ServiceConfiguration>>(servicesList){
 			
 		};
 	
 		
-		if(cartList.size()<=0)
+		if(servicesList.size()<=0)
 		{
 			Response response = Response.status(Status.NO_CONTENT)
 					.entity(listEntity)
@@ -153,24 +163,20 @@ public class ServiceConfigurationResource {
 		}
 		
 	}
-
-	*/
 	
 	
 	@GET
+	@Path("/{ServiceID}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getCart()
+	public Response getService(@PathParam("ServiceID")int serviceID)
 	{
 
-		ServiceConfiguration configuration = Globals.serviceConfigDAO.readConfig(1);
-
-		configuration.setService(Globals.serviceDAO.readService(configuration.getServiceID()));
-
+		ServiceConfiguration serviceConfiguration = Globals.serviceConfigurationDAO.readService(serviceID);
 		
-		if(configuration != null)
+		if(serviceConfiguration != null)
 		{
 			Response response = Response.status(Status.OK)
-			.entity(configuration)
+			.entity(serviceConfiguration)
 			.build();
 			
 			return response;
@@ -179,11 +185,10 @@ public class ServiceConfigurationResource {
 		{
 			
 			Response response = Response.status(Status.NO_CONTENT)
-					.entity(configuration)
+					.entity(serviceConfiguration)
 					.build();
 			
 			return response;
-			
 		}
 		
 	}	

@@ -20,6 +20,11 @@ public class ItemCategory {
 	public static final String IS_ABSTRACT = "IS_ABSTRACT";
 
 
+	// to be Implemented
+	public static final String IS_ENABLED = "IS_ENABLED";
+	public static final String IS_WAITLISTED = "IS_WAITLISTED";
+
+
 
 
 	// Create Table Statement
@@ -37,6 +42,8 @@ public class ItemCategory {
 			+ " " + ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT + " text,"
 			+ " " + ItemCategory.IS_ABSTRACT + " boolean,"
 
+			+ " " + ItemCategory.IS_ENABLED + " boolean,"
+			+ " " + ItemCategory.IS_WAITLISTED + " boolean,"
 			+ " FOREIGN KEY(" + ItemCategory.PARENT_CATEGORY_ID +") REFERENCES "
 			+ ItemCategory.TABLE_NAME + "(" + ItemCategory.ITEM_CATEGORY_ID + ")"
 			+ ")";
@@ -55,6 +62,8 @@ public class ItemCategory {
 	// recently added
 	private boolean isAbstractNode;
 	private String descriptionShort;
+	private boolean isEnabled;
+	private boolean isWaitlisted;
 
 
 	//no-args Constructor
@@ -117,6 +126,22 @@ public class ItemCategory {
 
 	public boolean getIsLeafNode() {
 		return isLeafNode;
+	}
+
+	public boolean isEnabled() {
+		return isEnabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		isEnabled = enabled;
+	}
+
+	public boolean isWaitlisted() {
+		return isWaitlisted;
+	}
+
+	public void setWaitlisted(boolean waitlisted) {
+		isWaitlisted = waitlisted;
 	}
 
 	public void setIsLeafNode(boolean isLeafNode) {

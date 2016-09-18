@@ -5,10 +5,10 @@ package org.nearbyshops.Model;
  */
 public class OrderItem {
 
-    int itemID;
-    int orderID;
-    int itemQuantity;
-    int itemPriceAtOrder;
+    private int itemID;
+    private int orderID;
+    private int itemQuantity;
+    private int itemPriceAtOrder;
 
     public int getItemID() {
         return itemID;

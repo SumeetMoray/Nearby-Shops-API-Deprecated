@@ -5,22 +5,19 @@ package org.nearbyshops.Model;
  */
 public class ServiceProvider {
 
-    int serviceProviderID;
-    String serviceProviderName;
+    private int serviceProviderID;
+    private String serviceProviderName;
 
 
     public int getServiceProviderID() {
         return serviceProviderID;
     }
-
     public void setServiceProviderID(int serviceProviderID) {
         this.serviceProviderID = serviceProviderID;
     }
-
     public String getServiceProviderName() {
         return serviceProviderName;
     }
-
     public void setServiceProviderName(String serviceProviderName) {
         this.serviceProviderName = serviceProviderName;
     }

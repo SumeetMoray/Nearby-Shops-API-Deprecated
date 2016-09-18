@@ -23,6 +23,10 @@ public class Item {
 	public static final String DATE_TIME_CREATED = "DATE_TIME_CREATED";
 	public static final String ITEM_DESCRIPTION_LONG = "ITEM_DESCRIPTION_LONG";
 
+	// To be added
+	public static final String IS_ENABLED = "IS_ENABLED";
+	public static final String IS_WAITLISTED = "IS_WAITLISTED";
+
 
 	// Create Table Statement
 	public static final String createTableItemPostgres = "CREATE TABLE IF NOT EXISTS "
@@ -34,6 +38,8 @@ public class Item {
 			+ " " + Item.ITEM_IMAGE_URL + " text,"
 			+ " " + Item.QUANTITY_UNIT + " text,"
 			+ " " + Item.ITEM_CATEGORY_ID + " INT,"
+			+ " " + Item.IS_ENABLED + " boolean,"
+			+ " " + Item.IS_WAITLISTED + " boolean,"
 			+ " " + Item.DATE_TIME_CREATED + "  timestamp with time zone NOT NULL DEFAULT now(),"
 			+ " FOREIGN KEY(" + Item.ITEM_CATEGORY_ID +") REFERENCES ITEM_CATEGORY(ID))";
 
@@ -56,77 +62,73 @@ public class Item {
 	private String quantityUnit;
 	private Timestamp dateTimeCreated;
 	private String itemDescriptionLong;
-
 	private ItemCategory itemCategory;
+	private Boolean isEnabled;
+	private Boolean isWaitlisted;
 
 
 	// Getter and Setter Statements
 
-
-
-	public String getQuantityUnit() {
-		return quantityUnit;
-	}
-
-	public void setQuantityUnit(String quantityUnit) {
-		this.quantityUnit = quantityUnit;
-	}
-
-	public Timestamp getDateTimeCreated() {
-		return dateTimeCreated;
-	}
-
-	public void setDateTimeCreated(Timestamp dateTimeCreated) {
-		this.dateTimeCreated = dateTimeCreated;
-	}
-
-	public String getItemDescriptionLong() {
-		return itemDescriptionLong;
-	}
-
-	public void setItemDescriptionLong(String itemDescriptionLong) {
-		this.itemDescriptionLong = itemDescriptionLong;
-	}
-
-	public ItemStats getItemStats() {
-		return itemStats;
-	}
-
-	public void setItemStats(ItemStats itemStats) {
-		this.itemStats = itemStats;
-	}
-
-	public int getItemCategoryID() {
-		return itemCategoryID;
-	}
-
-
-
-	public void setItemCategoryID(int itemCategoryID) {
-		this.itemCategoryID = itemCategoryID;
-	}
-
-
-	public ItemCategory getItemCategory() {
-		return itemCategory;
-	}
-	public void setItemCategory(ItemCategory itemCategory) {
-		this.itemCategory = itemCategory;
-	}
-
-
-	
 	//No-args constructor
+
+
+	public Boolean getEnabled() {
+		return isEnabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		isEnabled = enabled;
+	}
+
+	public Boolean getWaitlisted() {
+		return isWaitlisted;
+	}
+
+	public void setWaitlisted(Boolean waitlisted) {
+		isWaitlisted = waitlisted;
+	}
 
 	public Item() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-
-	
-	// getters and Setter methods
-
+	public String getQuantityUnit() {
+		return quantityUnit;
+	}
+	public void setQuantityUnit(String quantityUnit) {
+		this.quantityUnit = quantityUnit;
+	}
+	public Timestamp getDateTimeCreated() {
+		return dateTimeCreated;
+	}
+	public void setDateTimeCreated(Timestamp dateTimeCreated) {
+		this.dateTimeCreated = dateTimeCreated;
+	}
+	public String getItemDescriptionLong() {
+		return itemDescriptionLong;
+	}
+	public void setItemDescriptionLong(String itemDescriptionLong) {
+		this.itemDescriptionLong = itemDescriptionLong;
+	}
+	public ItemStats getItemStats() {
+		return itemStats;
+	}
+	public void setItemStats(ItemStats itemStats) {
+		this.itemStats = itemStats;
+	}
+	public int getItemCategoryID() {
+		return itemCategoryID;
+	}
+	public void setItemCategoryID(int itemCategoryID) {
+		this.itemCategoryID = itemCategoryID;
+	}
+	public ItemCategory getItemCategory() {
+		return itemCategory;
+	}
+	public void setItemCategory(ItemCategory itemCategory) {
+		this.itemCategory = itemCategory;
+	}
 	public int getItemID() {
 		return itemID;
 	}

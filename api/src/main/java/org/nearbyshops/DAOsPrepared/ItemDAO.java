@@ -4,7 +4,6 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.ContractClasses.ShopContract;
 import org.nearbyshops.ContractClasses.ShopItemContract;
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.JDBCContract;
 import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ItemCategory;
 import org.nearbyshops.ModelEndPoints.ItemEndPoint;
@@ -19,15 +18,14 @@ import java.util.List;
 public class ItemDAO {
 
 
-	HikariDataSource dataSource = Globals.getDataSource();
+	private HikariDataSource dataSource = Globals.getDataSource();
 
 
 
-	GeoLocation center;
-
-	GeoLocation[] minMaxArray;
-	GeoLocation pointOne;
-	GeoLocation pointTwo;
+	private GeoLocation center;
+	private GeoLocation[] minMaxArray;
+	private GeoLocation pointOne;
+	private GeoLocation pointTwo;
 
 
 	@Override
@@ -333,7 +331,6 @@ public class ItemDAO {
 			Double proximity
 	)
 	{
-
 
 
 		String queryJoin = "SELECT DISTINCT "

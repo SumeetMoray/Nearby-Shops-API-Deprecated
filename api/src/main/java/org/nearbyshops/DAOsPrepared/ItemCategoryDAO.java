@@ -127,10 +127,28 @@ public class ItemCategoryDAO {
 		int rowCount = 0;
 
 
-		if(itemCategory.getParentCategoryID() == itemCategory.getItemCategoryID())
+		if(itemCategory.getParentCategoryID()!=null)
 		{
-			// an Item category cannot have itself as its own parent so abort this operation and return
-			return 0;
+			if(itemCategory.getParentCategoryID() == itemCategory.getItemCategoryID())
+			{
+				// an Item category cannot have itself as its own parent so abort this operation and return
+				return 0;
+			}
+		}
+
+
+		if(itemCategory.getParentCategoryID()!=null)
+		{
+			// a hack for android app. The android parcelable does not support Non primitives.
+			// So cant have null for the ID.
+			// The value of -1 represents the NULL when the request coming from an android app.
+			// So when you see a -1 for parent set it to null which really means a detached item category,
+			// an item category not having any parent
+
+			if(itemCategory.getParentCategoryID()==-1)
+			{
+				itemCategory.setParentCategoryID(null);
+			}
 		}
 		
 		String updateStatement = "";
@@ -167,7 +185,7 @@ public class ItemCategoryDAO {
 			statement.setString(2,itemCategory.getCategoryDescription());
 			statement.setString(3,itemCategory.getImagePath());
 
-			statement.setInt(4,itemCategory.getParentCategoryID());
+			statement.setObject(4,itemCategory.getParentCategoryID());
 			statement.setString(5,itemCategory.getDescriptionShort());
 			statement.setBoolean(6,itemCategory.getisAbstractNode());
 

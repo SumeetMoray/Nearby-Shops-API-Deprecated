@@ -118,7 +118,7 @@ public class ItemCategoryResource {
 		itemCategory.setItemCategoryID(itemCategoryID);
 
 		System.out.println("ItemCategoryID: " + itemCategoryID + " " + itemCategory.getCategoryName()
-				+ " " + itemCategory.getCategoryDescription());
+				+ " " + itemCategory.getCategoryDescription() + " Parent ID : " +  itemCategory.getParentCategoryID());
 
 		int rowCount = itemCategoryDAO.updateItemCategory(itemCategory);
 
@@ -189,7 +189,7 @@ public class ItemCategoryResource {
 	@GET
 	@Path("/Deprecated")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAllItemCategory(
+	public Response getItemCategories(
 			@QueryParam("ShopID")Integer shopID,
 			@QueryParam("ParentID")Integer parentID,@QueryParam("IsDetached")Boolean parentIsNull,
 			@QueryParam("latCenter")Double latCenter,@QueryParam("lonCenter")Double lonCenter,
@@ -238,7 +238,7 @@ public class ItemCategoryResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAllItemCategory(
+	public Response getItemCategories(
 			@QueryParam("ShopID")Integer shopID,
 			@QueryParam("ParentID")Integer parentID,@QueryParam("IsDetached")Boolean parentIsNull,
 			@QueryParam("latCenter")Double latCenter,@QueryParam("lonCenter")Double lonCenter,
@@ -307,7 +307,6 @@ public class ItemCategoryResource {
                 .build();
 
 	}
-
 
 
 

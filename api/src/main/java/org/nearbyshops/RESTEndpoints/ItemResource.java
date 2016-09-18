@@ -12,12 +12,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.nearbyshops.DAOsPrepared.ItemDAO;
+import org.nearbyshops.DAOsPrepared.ItemDAOJoinOuter;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Item;
 import org.nearbyshops.ModelEndPoints.ItemEndPoint;
@@ -27,6 +30,7 @@ import org.nearbyshops.ModelEndPoints.ItemEndPoint;
 public class ItemResource {
 
 	private ItemDAO itemDAO = Globals.itemDAO;
+	private ItemDAOJoinOuter itemDAOJoinOuter = Globals.itemDAOJoinOuter;
 
 
 	@POST
@@ -296,6 +300,146 @@ public class ItemResource {
 
 	}
 
+
+
+
+	@GET
+	@Path("/OuterJoin")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getItems(
+			@QueryParam("ItemCategoryID")Integer itemCategoryID,
+			@QueryParam("SortBy") String sortBy,
+			@QueryParam("Limit")Integer limit, @QueryParam("Offset")Integer offset,
+			@QueryParam("metadata_only")Boolean metaonly)
+	{
+
+		int set_limit = 30;
+		int set_offset = 0;
+		final int max_limit = 100;
+
+		if(limit!= null)
+		{
+
+			if (limit >= max_limit) {
+
+				set_limit = max_limit;
+			}
+			else
+			{
+
+				set_limit = limit;
+			}
+
+		}
+
+		if(offset!=null)
+		{
+			set_offset = offset;
+		}
+
+		ItemEndPoint endPoint = itemDAOJoinOuter.getEndPointMetadata(itemCategoryID);
+
+		endPoint.setLimit(set_limit);
+		endPoint.setMax_limit(max_limit);
+		endPoint.setOffset(set_offset);
+
+		List<Item> list = null;
+
+
+		if(metaonly==null || (!metaonly)) {
+
+			list =
+					itemDAOJoinOuter.getItems(
+							itemCategoryID,
+							sortBy,set_limit,set_offset
+					);
+
+			endPoint.setResults(list);
+		}
+
+
+		//Marker
+
+		return Response.status(Status.OK)
+				.entity(endPoint)
+				.build();
+	}
+
+
+
+	@GET
+	@Path("/Async")
+	@Produces(MediaType.APPLICATION_JSON)
+	public void asyncGet(@Suspended final AsyncResponse asyncResponse,
+						 @QueryParam("ItemCategoryID") final Integer itemCategoryID,
+						 @QueryParam("SortBy") final String sortBy,
+						 @QueryParam("Limit") final Integer limit, @QueryParam("Offset") final Integer offset,
+						 @QueryParam("metadata_only") final Boolean metaonly)
+
+	{
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Response result = veryExpensiveOperation();
+				asyncResponse.resume(result);
+			}
+
+			private Response veryExpensiveOperation() {
+				// ... very expensive operation
+
+				int set_limit = 30;
+				int set_offset = 0;
+				final int max_limit = 100;
+
+				if(limit!= null)
+				{
+
+					if (limit >= max_limit) {
+
+						set_limit = max_limit;
+					}
+					else
+					{
+
+						set_limit = limit;
+					}
+
+				}
+
+				if(offset!=null)
+				{
+					set_offset = offset;
+				}
+
+				ItemEndPoint endPoint = itemDAOJoinOuter.getEndPointMetadata(itemCategoryID);
+
+				endPoint.setLimit(set_limit);
+				endPoint.setMax_limit(max_limit);
+				endPoint.setOffset(set_offset);
+
+				List<Item> list = null;
+
+
+				if(metaonly==null || (!metaonly)) {
+
+					list =
+							itemDAOJoinOuter.getItems(
+									itemCategoryID,
+									sortBy,set_limit,set_offset
+							);
+
+					endPoint.setResults(list);
+				}
+
+
+				return Response.status(Status.OK)
+						.entity(endPoint)
+						.build();
+			}
+
+		}).start();
+	}
 
 
 
