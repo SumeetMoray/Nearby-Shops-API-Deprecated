@@ -1,5 +1,6 @@
 package org.nearbyshops.RESTEndpoints;
 
+import org.nearbyshops.DAOsPrepared.ServiceConfigurationDAOPrepared;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.ServiceConfiguration;
 
@@ -16,6 +17,9 @@ import java.util.List;
 public class ServiceConfigurationResource {
 
 
+	ServiceConfigurationDAOPrepared daoPrepared = Globals.serviceConfigurationDAO;
+
+
 	public ServiceConfigurationResource() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -28,10 +32,9 @@ public class ServiceConfigurationResource {
 	public Response createService(ServiceConfiguration serviceConfiguration)
 	{
 
-		int idOfInsertedRow = Globals.serviceConfigurationDAO.saveService(serviceConfiguration);
+		int idOfInsertedRow = daoPrepared.saveService(serviceConfiguration);
 
 		serviceConfiguration.setServiceID(idOfInsertedRow);
-
 
 		if(idOfInsertedRow >=1)
 		{
@@ -68,7 +71,7 @@ public class ServiceConfigurationResource {
 
 		serviceConfiguration.setServiceID(serviceID);
 
-		int rowCount = Globals.serviceConfigurationDAO.updateService(serviceConfiguration);
+		int rowCount =	daoPrepared.updateService(serviceConfiguration);
 
 		if(rowCount >= 1)
 		{
@@ -99,7 +102,7 @@ public class ServiceConfigurationResource {
 
 		//int rowCount = Globals.cartService.deleteCart(cartID);
 
-		int rowCount = Globals.serviceConfigurationDAO.deleteService(serviceID);
+		int rowCount = daoPrepared.deleteService(serviceID);
 		
 		
 		if(rowCount>=1)
@@ -125,19 +128,19 @@ public class ServiceConfigurationResource {
 	}
 	
 	
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+//	@GET
+//	@Produces(MediaType.APPLICATION_JSON)
 	public Response getService(	@QueryParam("ServiceLevel") int serviceLevel,
-								 @QueryParam("ServiceType") int serviceType,
-								 @QueryParam("LatCenter") Double latCenterQuery,
-								 @QueryParam("LonCenter") Double lonCenterQuery,
+								   @QueryParam("ServiceType") int serviceType,
+								   @QueryParam("LatCenter") Double latCenterQuery,
+								   @QueryParam("LonCenter") Double lonCenterQuery,
 							   @QueryParam("SortBy") String sortBy,
 							   @QueryParam("Limit") int limit, @QueryParam("Offset") int offset)
 
 	{
 
 
-		List<ServiceConfiguration> servicesList = Globals.serviceConfigurationDAO.readServices(serviceLevel,serviceType,latCenterQuery,lonCenterQuery,
+		List<ServiceConfiguration> servicesList = daoPrepared.readServices(serviceLevel,serviceType,latCenterQuery,lonCenterQuery,
                                     								sortBy,limit,offset);
 
 		GenericEntity<List<ServiceConfiguration>> listEntity = new GenericEntity<List<ServiceConfiguration>>(servicesList){
@@ -166,12 +169,13 @@ public class ServiceConfigurationResource {
 	
 	
 	@GET
-	@Path("/{ServiceID}")
+//	@Path("/{ServiceID}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getService(@PathParam("ServiceID")int serviceID)
+	public Response getService()
 	{
+//		@PathParam("ServiceID")int service
 
-		ServiceConfiguration serviceConfiguration = Globals.serviceConfigurationDAO.readService(serviceID);
+		ServiceConfiguration serviceConfiguration = daoPrepared.readServiceConfiguration();
 		
 		if(serviceConfiguration != null)
 		{

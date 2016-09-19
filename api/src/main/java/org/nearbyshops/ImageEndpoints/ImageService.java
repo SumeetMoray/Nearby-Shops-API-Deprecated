@@ -10,8 +10,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -56,7 +54,7 @@ public class ImageService {
         */
         
         // Browse the filtered directory and list all the files.
-        JsonArrayBuilder results = Json.createArrayBuilder();
+//        JsonArrayBuilder results = Json.createArrayBuilder();
         
         List<Image> imagesList = new ArrayList<Image>();
         

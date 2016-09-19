@@ -3,8 +3,6 @@ package org.nearbyshops.ImageEndpoints;
 
 import org.nearbyshops.Model.Image;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -56,7 +54,7 @@ public class ImagesForService {
         */
         
         // Browse the filtered directory and list all the files.
-        JsonArrayBuilder results = Json.createArrayBuilder();
+//        JsonArrayBuilder results = Json.createArrayBuilder();
         
         List<Image> imagesList = new ArrayList<Image>();
         

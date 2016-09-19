@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 
 import org.nearbyshops.JDBCContract;
-import org.nearbyshops.Model.Distributor;
+import org.nearbyshops.ModelRoles.Distributor;
 
 
 public class DistributorService {
@@ -34,7 +34,7 @@ public class DistributorService {
 				+ Distributor.TABLE_NAME
 				+ "("  
 				+ Distributor.DISTRIBUTOR_NAME + ","
-				+ Distributor.DISTRIBUTOR_PASSWORD
+				+ Distributor.PASSWORD
 				+ ") VALUES("
 				+ "'" + distributor.getDistributorName()	+ "'" + ","
 				+ "'" + distributor.getPassword() + "'" +
@@ -97,7 +97,7 @@ public class DistributorService {
 		String updateStatement = "UPDATE " + Distributor.TABLE_NAME
 				+ " SET "
 				+ Distributor.DISTRIBUTOR_NAME + " = " + "'" + distributor.getDistributorName() + "'" + ","
-				+ Distributor.DISTRIBUTOR_PASSWORD + " = " + "'" + distributor.getPassword() + "'"
+				+ Distributor.PASSWORD + " = " + "'" + distributor.getPassword() + "'"
 				+ " WHERE ID = "
 				+ distributor.getDistributorID();
 		
@@ -411,7 +411,7 @@ public class DistributorService {
 				distributor = new Distributor();
 				distributor.setDistributorID(rs.getInt(Distributor.DISTRIBUTOR_ID));
 				distributor.setDistributorName(rs.getString(Distributor.DISTRIBUTOR_NAME));
-				distributor.setPassword(rs.getString(Distributor.DISTRIBUTOR_PASSWORD));
+				distributor.setPassword(rs.getString(Distributor.PASSWORD));
 			}
 
 

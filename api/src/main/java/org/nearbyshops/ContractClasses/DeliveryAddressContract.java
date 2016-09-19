@@ -11,7 +11,7 @@ public class DeliveryAddressContract {
 
     // column Names
     public static final String ID = "ID";
-    public static final String NAME = "NAME";
+    public static final String NAME = "DISTRIBUTOR_NAME";
     public static final String PHONE_NUMBER = "PHONE_NUMBER";
 
     public static final String DELIVERY_ADDRESS = "DELIVERY_ADDRESS";

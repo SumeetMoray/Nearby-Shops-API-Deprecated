@@ -3,6 +3,8 @@ package org.nearbyshops.RESTEndpoints;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+import javax.validation.executable.ValidateOnExecution;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -36,7 +38,7 @@ public class ItemResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response saveItem(Item item)
+	public Response saveItem(@Valid Item item)
 	{	
 		int idOfInsertedRow = itemDAO.saveItem(item);
 		

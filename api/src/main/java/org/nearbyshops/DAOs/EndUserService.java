@@ -1,8 +1,7 @@
 package org.nearbyshops.DAOs;
 
-import org.nearbyshops.ContractClasses.EndUserContract;
 import org.nearbyshops.JDBCContract;
-import org.nearbyshops.Model.EndUser;
+import org.nearbyshops.ModelRoles.EndUser;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -27,12 +26,12 @@ public class EndUserService {
 		int rowIdOfInsertedRow = -1;
 
 		String insertEndUser = "INSERT INTO "
-				+ EndUserContract.TABLE_NAME
-				+ "("  
-				+ EndUserContract.END_USER_NAME + ","
-				+ EndUserContract.END_USER_PASSWORD
+				+ EndUser.TABLE_NAME
+				+ "("
+				+ EndUser.USERNAME + ","
+				+ EndUser.PASSWORD
 				+ ") VALUES("
-				+ "'" + endUser.getEndUserName() + "'" + ","
+				+ "'" + endUser.getUsername() + "'" + ","
 				+ "'" + endUser.getPassword() + "'" + ")";
 		
 		try {
@@ -89,12 +88,12 @@ public class EndUserService {
 
 	public int updateEndUser(EndUser endUser)
 	{	
-		String updateStatement = "UPDATE " + EndUserContract.TABLE_NAME
+		String updateStatement = "UPDATE " + EndUser.TABLE_NAME
 				+ " SET "
-				+ EndUserContract.END_USER_NAME + " = " + "'" + endUser.getEndUserName() + "'" + ","
-				+ EndUserContract.END_USER_PASSWORD + " = " + "'" + endUser.getPassword() + "'"
+				+ EndUser.USERNAME + " = " + "'" + endUser.getUsername() + "'" + ","
+				+ EndUser.PASSWORD + " = " + "'" + endUser.getPassword() + "'"
 				+ " WHERE "
-				+ EndUserContract.END_USER_ID  + " = " + endUser.getEndUserID();
+				+ EndUser.END_USER_ID  + " = " + endUser.getEndUserID();
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -149,7 +148,7 @@ public class EndUserService {
 	public int deleteEndUser(int endUserID)
 	{
 		
-		String deleteStatement = "DELETE FROM " + EndUserContract.TABLE_NAME + " WHERE ID = "
+		String deleteStatement = "DELETE FROM " + EndUser.TABLE_NAME + " WHERE ID = "
 				+ endUserID;
 		
 		
@@ -207,7 +206,7 @@ public class EndUserService {
 	
 	public ArrayList<EndUser> getEndUser()
 	{
-		String query = "SELECT * FROM " + EndUserContract.TABLE_NAME;
+		String query = "SELECT * FROM " + EndUser.TABLE_NAME;
 		ArrayList<EndUser> endUsersList = new ArrayList<EndUser>();
 		
 		
@@ -230,8 +229,8 @@ public class EndUserService {
 
 				EndUser endUser = new EndUser();
 
-				endUser.setEndUserID(rs.getInt(EndUserContract.END_USER_ID));
-				endUser.setEndUserName(rs.getString(EndUserContract.END_USER_NAME));
+				endUser.setEndUserID(rs.getInt(EndUser.END_USER_ID));
+				endUser.setUsername(rs.getString(EndUser.USERNAME));
 
 				endUsersList.add(endUser);
 			}
@@ -283,7 +282,7 @@ public class EndUserService {
 	public EndUser getEndUser(int endUserID)
 	{
 		
-		String query = "SELECT * FROM " + EndUserContract.TABLE_NAME
+		String query = "SELECT * FROM " + EndUser.TABLE_NAME
 						+ " WHERE ID = " + endUserID;
 		
 		Connection conn = null;
@@ -306,8 +305,8 @@ public class EndUserService {
 			while(rs.next())
 			{
 				endUser = new EndUser();
-				endUser.setEndUserID(rs.getInt(EndUserContract.END_USER_ID));
-				endUser.setEndUserName(rs.getString(EndUserContract.END_USER_NAME));
+				endUser.setEndUserID(rs.getInt(EndUser.END_USER_ID));
+				endUser.setUsername(rs.getString(EndUser.USERNAME));
 			}
 			
 			
@@ -364,15 +363,15 @@ public class EndUserService {
 
 		if(endUserID!=null)
 		{
-			query = "SELECT * FROM " + EndUserContract.TABLE_NAME
+			query = "SELECT * FROM " + EndUser.TABLE_NAME
 					+ " WHERE ID = " + endUserID;
 
 		}
 
 		else if(username!=null)
 		{
-			query = "SELECT * FROM " + EndUserContract.TABLE_NAME
-					+ " WHERE " +  EndUserContract.END_USER_NAME + " = " + "'" + username + "'";
+			query = "SELECT * FROM " + EndUser.TABLE_NAME
+					+ " WHERE " +  EndUser.USERNAME + " = " + "'" + username + "'";
 
 		}
 
@@ -406,9 +405,9 @@ public class EndUserService {
 			{
 				endUser = new EndUser();
 
-				endUser.setEndUserID(rs.getInt(EndUserContract.END_USER_ID));
-				endUser.setEndUserName(rs.getString(EndUserContract.END_USER_NAME));
-				endUser.setPassword(rs.getString(EndUserContract.END_USER_PASSWORD));
+				endUser.setEndUserID(rs.getInt(EndUser.END_USER_ID));
+				endUser.setUsername(rs.getString(EndUser.USERNAME));
+				endUser.setPassword(rs.getString(EndUser.PASSWORD));
 			}
 
 

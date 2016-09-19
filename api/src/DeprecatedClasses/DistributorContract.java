@@ -10,7 +10,7 @@ public class DistributorContract {
 	public static final String DISTRIBUTOR_ID = "ID";
 	public static final String DISTRIBUTOR_NAME = "DISTRIBUTOR_NAME";
 
-	public static final String DISTRIBUTOR_PASSWORD = "DISTRIBUTOR_PASSWORD";
+	public static final String DISTRIBUTOR_PASSWORD = "PASSWORD";
 
 			
 }

@@ -2,21 +2,23 @@ package org.nearbyshops.Globals;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.nearbyshops.DAOsPreparedRoles.AdminDAOPrepared;
+import org.nearbyshops.DAOsPreparedRoles.DistributorDAOPrepared;
+import org.nearbyshops.DAOsPreparedRoles.StaffDAOPrepared;
 import org.nearbyshops.DAOs.*;
-import org.nearbyshops.DAOsPrepared.ItemCategoryDAO;
-import org.nearbyshops.DAOsPrepared.ItemDAO;
-import org.nearbyshops.DAOsPrepared.ItemDAOJoinOuter;
+import org.nearbyshops.DAOsPrepared.*;
 import org.nearbyshops.JDBCContract;
 
 
 public class Globals {
-	
+
+
 	//public static ArrayList<ItemCategory> list = new ArrayList<ItemCategory>();
 	
 	public static ItemCategoryDAO itemCategoryDAO = new ItemCategoryDAO();
 	public static ItemDAO itemDAO = new ItemDAO();
 	public static ItemDAOJoinOuter itemDAOJoinOuter = new ItemDAOJoinOuter();
-	public static DistributorService distributorService = new DistributorService();
+	public static DistributorDAOPrepared distributorDAOPrepared = new DistributorDAOPrepared();
 	public static ShopService shopService = new ShopService();
 	public static ShopItemService shopItemService = new ShopItemService();
 	public static EndUserService endUserService = new EndUserService();
@@ -27,8 +29,9 @@ public class Globals {
 	public static DeliveryAddressService deliveryAddressService = new DeliveryAddressService();
 	public static OrderItemService orderItemService = new OrderItemService();
 	public static DeliveryVehicleSelfDAO deliveryVehicleSelfDAO = new DeliveryVehicleSelfDAO();
-	public static ServiceConfigurationDAO serviceConfigurationDAO = new ServiceConfigurationDAO();
-	public static ServiceProviderDAO serviceProviderDAO = new ServiceProviderDAO();
+	public static ServiceConfigurationDAOPrepared serviceConfigurationDAO = new ServiceConfigurationDAOPrepared();
+	public static AdminDAOPrepared adminDAOPrepared = new AdminDAOPrepared();
+	public static StaffDAOPrepared staffDAOPrepared = new StaffDAOPrepared();
 
 
 	// Configure Connection Pooling

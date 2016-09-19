@@ -1,6 +1,9 @@
 package org.nearbyshops.Model;
 
 import org.nearbyshops.ModelStats.ItemStats;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 
 public class Item {
@@ -47,7 +50,12 @@ public class Item {
 	// Instance Variables
 
 	private int itemID;
+
+
+	@NotNull
+	@Size(min = 2, max = 20)
 	private String itemName;
+
 	private String itemDescription;
 	private String itemImageURL;
 	

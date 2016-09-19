@@ -7,7 +7,7 @@
     <artifactId>api</artifactId>
     <packaging>jar</packaging>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Sample</name>
+    <name>NearbyShopsAPI</name>
 
     <dependencyManagement>
         <dependencies>
@@ -22,7 +22,7 @@
     </dependencyManagement>
 
     <dependencies>
-
+<!--
         <dependency>
             <groupId>com.google.dagger</groupId>
             <artifactId>dagger</artifactId>
@@ -42,15 +42,21 @@
             <version>3.3.1</version>
         </dependency>
 
+        -->
+
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-grizzly2-http</artifactId>
         </dependency>
-         
+
+
+        <!-- Jersy Dependency for JSON Converter Support -->
+
+        <!--
          <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-moxy</artifactId>
-        </dependency>
+        </dependency>-->
         
          
         <dependency>
@@ -61,58 +67,78 @@
         </dependency>
 
 
-          <!-- the core, which includes Streaming API, shared low-level abstractions (but NOT data-binding) -->
+        <!--Jackson JSON Converter-->
+<!--
+
+          &lt;!&ndash; the core, which includes Streaming API, shared low-level abstractions (but NOT data-binding) &ndash;&gt;
          <dependency>
            <groupId>com.fasterxml.jackson.core</groupId>
            <artifactId>jackson-core</artifactId>
            <version>${jackson-2-version}</version>
          </dependency>
 
-         <!-- Just the annotations; use this dependency if you want to attach annotations
-              to classes without connecting them to the code. -->
+         &lt;!&ndash; Just the annotations; use this dependency if you want to attach annotations
+              to classes without connecting them to the code. &ndash;&gt;
          <dependency>
            <groupId>com.fasterxml.jackson.core</groupId>
            <artifactId>jackson-annotations</artifactId>
            <version>${jackson-2-version}</version>
         </dependency>
 
-        <!-- databinding; ObjectMapper, JsonNode and related classes are here -->
+        &lt;!&ndash; databinding; ObjectMapper, JsonNode and related classes are here &ndash;&gt;
         <dependency>
           <groupId>com.fasterxml.jackson.core</groupId>
           <artifactId>jackson-databind</artifactId>
           <version>${jackson-2-version}</version>
         </dependency>
 
-        <!-- smile (binary JSON). Other artifacts in this group do other formats. -->
+        &lt;!&ndash; smile (binary JSON). Other artifacts in this group do other formats. &ndash;&gt;
         <dependency>
           <groupId>com.fasterxml.jackson.dataformat</groupId>
           <artifactId>jackson-dataformat-smile</artifactId>
           <version>${jackson-2-version}</version>
         </dependency>
-        <!-- JAX-RS provider -->
+        &lt;!&ndash; JAX-RS provider &ndash;&gt;
         <dependency>
            <groupId>com.fasterxml.jackson.jaxrs</groupId>
            <artifactId>jackson-jaxrs-json-provider</artifactId>
            <version>${jackson-2-version}</version>
         </dependency>
-        <!-- Support for JAX-B annotations as additional configuration -->
+        &lt;!&ndash; Support for JAX-B annotations as additional configuration &ndash;&gt;
         <dependency>
           <groupId>com.fasterxml.jackson.module</groupId>
           <artifactId>jackson-module-jaxb-annotations</artifactId>
           <version>${jackson-2-version}</version>
         </dependency>
+-->
 
+
+
+        <!--Default Jersey JSON Converter-->
+
+<!--
 
         <dependency>
           <groupId>org.glassfish.jersey.media</groupId>
           <artifactId>jersey-media-json-jackson</artifactId>
           <scope>runtime</scope>
         </dependency>
+-->
 
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>9.4-1200-jdbc41</version>
+        </dependency>
+
+
+
+        <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.7</version>
         </dependency>
 
 
@@ -126,6 +152,15 @@
 
 
         <!-- Dependencies for Connection Pooling Hikari CP -->
+
+
+        <!--Enable Data Validation Support -->
+
+        <dependency>
+            <groupId>org.glassfish.jersey.ext</groupId>
+            <artifactId>jersey-bean-validation</artifactId>
+            <version>2.23.2</version>
+        </dependency>
 
 
 </dependencies>
@@ -220,12 +255,23 @@
                     <mainClass>org.nearbyshops.Main</mainClass>
                 </configuration>
             </plugin>
+
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
         </plugins>
+
     </build>
 
     <properties>
     	<jackson-2-version>2.6.1</jackson-2-version>
-        <jersey.version>2.22.1</jersey.version>
+        <jersey.version>2.23.2</jersey.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 </project>

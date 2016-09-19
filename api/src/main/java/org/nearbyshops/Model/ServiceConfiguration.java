@@ -20,18 +20,17 @@ public class ServiceConfiguration {
 
     public static final String SERVICE_NAME = "SERVICE_NAME";
     public static final String HELPLINE_NUMBER = "HELPLINE_NUMBER";
-
     public static final String ADDRESS = "ADDRESS";
+
     public static final String CITY = "CITY";
     public static final String PINCODE = "PINCODE";
-
     public static final String LANDMARK = "LANDMARK";
+
     public static final String STATE = "STATE";
     public static final String COUNTRY = "COUNTRY";
-
     public static final String ISO_COUNTRY_CODE = "ISO_COUNTRY_CODE";
-    public static final String ISO_LANGUAGE_CODE = "ISO_LANGUAGE_CODE";
 
+    public static final String ISO_LANGUAGE_CODE = "ISO_LANGUAGE_CODE";
     public static final String SERVICE_TYPE = "SERVICE_TYPE";
     public static final String SERVICE_LEVEL = "SERVICE_LEVEL";
 
@@ -39,7 +38,7 @@ public class ServiceConfiguration {
     public static final String LON_CENTER = "LON_CENTER";
 
     public static final String SERVICE_RANGE = "SERVICE_RANGE";
-    public static final String SHOP_DELIVERY_RANGE_MAX = "SHOP_DELIVERY_RANGE_MAX";
+//    public static final String SHOP_DELIVERY_RANGE_MAX = "SHOP_DELIVERY_RANGE_MAX";
 
     // to be taken out to global Service Configuration
 //    public static final String IS_ETHICAL_SERVICE_PROVIDER = "IS_ETHICAL_SERVICE_PROVIDER";
@@ -63,31 +62,30 @@ public class ServiceConfiguration {
     public static final String createTableServiceConfigurationPostgres
             = "CREATE TABLE IF NOT EXISTS " + ServiceConfiguration.TABLE_NAME + "("
             + " " + ServiceConfiguration.SERVICE_CONFIGURATION_ID + " SERIAL PRIMARY KEY,"
+
             + " " + ServiceConfiguration.IMAGE_PATH + " text,"
             + " " + ServiceConfiguration.LOGO_IMAGE_PATH + " text,"
-
             + " " + ServiceConfiguration.BACKDROP_IMAGE_PATH + " text,"
+
             + " " + ServiceConfiguration.SERVICE_NAME + " text,"
             + " " + ServiceConfiguration.HELPLINE_NUMBER + " text,"
-
             + " " + ServiceConfiguration.ADDRESS + " text,"
+
             + " " + ServiceConfiguration.CITY + " text,"
             + " " + ServiceConfiguration.PINCODE + " BIGINT,"
-
             + " " + ServiceConfiguration.LANDMARK + " text,"
+
             + " " + ServiceConfiguration.STATE + " text,"
             + " " + ServiceConfiguration.COUNTRY + " text,"
-
             + " " + ServiceConfiguration.ISO_COUNTRY_CODE + " text,"
+
             + " " + ServiceConfiguration.ISO_LANGUAGE_CODE + " text,"
             + " " + ServiceConfiguration.SERVICE_TYPE + " INT,"
-
             + " " + ServiceConfiguration.SERVICE_LEVEL + " INT,"
+
             + " " + ServiceConfiguration.LAT_CENTER + " FLOAT,"
             + " " + ServiceConfiguration.LON_CENTER + " FLOAT,"
-
             + " " + ServiceConfiguration.SERVICE_RANGE + " INT,"
-            + " " + ServiceConfiguration.SHOP_DELIVERY_RANGE_MAX + " INT,"
 
             + " " + ServiceConfiguration.LAT_MAX + " FLOAT,"
             + " " + ServiceConfiguration.LON_MAX + " FLOAT,"

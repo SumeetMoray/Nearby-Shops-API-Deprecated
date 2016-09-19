@@ -56,18 +56,12 @@ public class ServiceConfigurationDAO {
 				+ ServiceConfiguration.LON_CENTER + ","
 				+ ServiceConfiguration.SERVICE_RANGE + ","
 
-				+ ServiceConfiguration.IS_ETHICAL_SERVICE_PROVIDER + ","
-				+ ServiceConfiguration.IS_VERIFIED + ","
 				+ ServiceConfiguration.LAT_MAX + ","
-
 				+ ServiceConfiguration.LON_MAX + ","
 				+ ServiceConfiguration.LAT_MIN + ","
 				+ ServiceConfiguration.LON_MIN + ","
 
-				+ ServiceConfiguration.CONFIGURATION_NICKNAME + ","
 				+ ServiceConfiguration.UPDATED + ","
-
-				+ ServiceConfiguration.SERVICE_URL + ""
 
 				+ " ) VALUES ( "
 
@@ -95,20 +89,13 @@ public class ServiceConfigurationDAO {
 				+ "" + serviceConfiguration.getLonCenter()	+ ","
 				+ "" + serviceConfiguration.getServiceRange()	+ ","
 
-				+ "" + serviceConfiguration.getEthicalServiceProvider()	+ ","
-				+ "" + serviceConfiguration.getVerified()	+ ","
 				+ "" + serviceConfiguration.getLatMax()	+ ","
 
 				+ "" + serviceConfiguration.getLonMax()	+ ","
 				+ "" + serviceConfiguration.getLatMin()	+ ","
 				+ "" + serviceConfiguration.getLonMin()	+ ","
 
-				+ "'" + serviceConfiguration.getConfigurationNickname()	+ "',"
-
 				+ "'" + "now()"	+ "',"
-
-				+ "'" + serviceConfiguration.getServiceURL()	+ "'"
-
 				+ ")";
 		
 		try {
@@ -195,21 +182,17 @@ public class ServiceConfigurationDAO {
 				+ ServiceConfiguration.LON_CENTER + " = " + "" + serviceConfiguration.getLonCenter() + "" + ","
 				+ ServiceConfiguration.SERVICE_RANGE + " = " + "" + serviceConfiguration.getServiceRange() + "" + ","
 
-				+ ServiceConfiguration.IS_ETHICAL_SERVICE_PROVIDER + " = " + "" + serviceConfiguration.getEthicalServiceProvider() + "" + ","
-				+ ServiceConfiguration.IS_VERIFIED + " = " + "" + serviceConfiguration.getVerified() + "" + ","
 				+ ServiceConfiguration.LAT_MAX + " = " + "" + serviceConfiguration.getLatMax() + "" + ","
 
 				+ ServiceConfiguration.LON_MAX + " = " + "" + serviceConfiguration.getLonMax() + "" + ","
 				+ ServiceConfiguration.LAT_MIN + " = " + "" + serviceConfiguration.getLatMin() + "" + ","
 				+ ServiceConfiguration.LON_MIN + " = " + "" + serviceConfiguration.getLonMin() + "" + ","
 
-				+ ServiceConfiguration.CONFIGURATION_NICKNAME + " = " + "'" + serviceConfiguration.getConfigurationNickname() + "'" + ","
 				+ ServiceConfiguration.UPDATED + " = " + "'" + "now()" + "'" + ","
-				+ ServiceConfiguration.SERVICE_URL + " = " + "'" + serviceConfiguration.getServiceURL() + "'" + ""
 
 				+ " WHERE "
 
-				+ ServiceConfiguration.SERVICE_CONFIGURATION_ID + " = " + serviceConfiguration.getServiceID();
+				+ ServiceConfiguration.SERVICE_CONFIGURATION_ID + " = " + 1;
 
 
 		Connection conn = null;
@@ -504,16 +487,12 @@ public class ServiceConfigurationDAO {
 				serviceConfiguration.setLonCenter(rs.getDouble(ServiceConfiguration.LON_CENTER));
 
 				serviceConfiguration.setServiceRange(rs.getInt(ServiceConfiguration.SERVICE_RANGE));
-				serviceConfiguration.setEthicalServiceProvider(rs.getBoolean(ServiceConfiguration.IS_ETHICAL_SERVICE_PROVIDER));
-				serviceConfiguration.setVerified(rs.getBoolean(ServiceConfiguration.IS_VERIFIED));
 
 				serviceConfiguration.setLatMax(rs.getDouble(ServiceConfiguration.LAT_MAX));
 				serviceConfiguration.setLonMax(rs.getDouble(ServiceConfiguration.LON_MAX));
 				serviceConfiguration.setLatMin(rs.getDouble(ServiceConfiguration.LAT_MIN));
 
 				serviceConfiguration.setLonMin(rs.getDouble(ServiceConfiguration.LON_MIN));
-				serviceConfiguration.setConfigurationNickname(rs.getString(ServiceConfiguration.CONFIGURATION_NICKNAME));
-				serviceConfiguration.setServiceURL(rs.getString(ServiceConfiguration.SERVICE_URL));
 
 				serviceConfiguration.setCreated(rs.getTimestamp(ServiceConfiguration.CREATED));
 				serviceConfiguration.setUpdated(rs.getTimestamp(ServiceConfiguration.UPDATED));
@@ -622,16 +601,12 @@ public class ServiceConfigurationDAO {
 				serviceConfiguration.setLonCenter(rs.getDouble(ServiceConfiguration.LON_CENTER));
 
 				serviceConfiguration.setServiceRange(rs.getInt(ServiceConfiguration.SERVICE_RANGE));
-				serviceConfiguration.setEthicalServiceProvider(rs.getBoolean(ServiceConfiguration.IS_ETHICAL_SERVICE_PROVIDER));
-				serviceConfiguration.setVerified(rs.getBoolean(ServiceConfiguration.IS_VERIFIED));
 
 				serviceConfiguration.setLatMax(rs.getDouble(ServiceConfiguration.LAT_MAX));
 				serviceConfiguration.setLonMax(rs.getDouble(ServiceConfiguration.LON_MAX));
 				serviceConfiguration.setLatMin(rs.getDouble(ServiceConfiguration.LAT_MIN));
 
 				serviceConfiguration.setLonMin(rs.getDouble(ServiceConfiguration.LON_MIN));
-				serviceConfiguration.setConfigurationNickname(rs.getString(ServiceConfiguration.CONFIGURATION_NICKNAME));
-				serviceConfiguration.setServiceURL(rs.getString(ServiceConfiguration.SERVICE_URL));
 
 				serviceConfiguration.setCreated(rs.getTimestamp(ServiceConfiguration.CREATED));
 				serviceConfiguration.setUpdated(rs.getTimestamp(ServiceConfiguration.UPDATED));

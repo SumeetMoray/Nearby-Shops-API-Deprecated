@@ -1,12 +1,18 @@
 	package org.nearbyshops;
 
 
+import org.glassfish.jersey.server.ServerProperties;
 import org.nearbyshops.ContractClasses.*;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.*;
+import org.nearbyshops.ModelRoles.Admin;
+import org.nearbyshops.ModelRoles.Distributor;
+import org.nearbyshops.ModelRoles.EndUser;
+import org.nearbyshops.ModelRoles.Staff;
 
 import java.awt.BorderLayout;
 
@@ -33,9 +39,9 @@ public class Main implements ActionListener {
 	//"http://localhost:8080/myapp/"
     public static final String BASE_URI = "http://0.0.0.0:5000/api";
     
-    HttpServer server;
+    private HttpServer server;
     
-    boolean isServerStart = false;
+    private boolean isServerStart = false;
     
     /**
      * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
@@ -44,7 +50,15 @@ public class Main implements ActionListener {
     public static HttpServer startServer() {
         // create a resource config that scans for JAX-RS resources and providers
         // in org.sumeet.restsamples.Sample package
-        final ResourceConfig rc = new ResourceConfig().packages("org.nearbyshops.RESTEndpoints","org.nearbyshops");
+        final ResourceConfig rc = new ResourceConfig();
+		rc.packages(true,"org.nearbyshops");
+
+		// Now you can expect validation errors to be sent to the client.
+    	rc.property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true);
+				// @ValidateOnExecution annotations on subclasses won't cause errors.
+		rc.property(ServerProperties.BV_DISABLE_VALIDATE_ON_EXECUTABLE_OVERRIDE_CHECK, true);
+
+		rc.register(GSONJersey.class);
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
@@ -250,25 +264,13 @@ public class Main implements ActionListener {
 
 
 
-			// Create Table EndUser
-
-			String createTableEndUserPostgres = "CREATE TABLE IF NOT EXISTS " + EndUserContract.TABLE_NAME + "("
-					+ " " + EndUserContract.END_USER_ID + " SERIAL PRIMARY KEY,"
-					+ " " + EndUserContract.END_USER_NAME + " VARCHAR(100) UNIQUE,"
-					+ " " + EndUserContract.END_USER_PASSWORD + " VARCHAR(100)"
-					+ ")";
-
-			stmt.executeUpdate(createTableEndUserPostgres);
+			stmt.executeUpdate(EndUser.createTableEndUserPostgres);
 
 
-
-			// Create Table CurrentServiceConfiguration Provider
-
-			String createTableServiceProviderPostgres = "CREATE TABLE IF NOT EXISTS " + ServiceProviderContract.TABLE_NAME + "("
-					+ " " + ServiceProviderContract.SERVICE_PROVIDER_ID + " SERIAL PRIMARY KEY,"
-					+ " " + ServiceProviderContract.SERVICE_PROVIDER_NAME + " VARCHAR(40)" + ")";
-
-			stmt.executeUpdate(createTableServiceProviderPostgres);
+			// Create Table Admin
+			stmt.executeUpdate(Admin.createTableAdminPostgres);
+			// Create Table Staff
+			stmt.executeUpdate(Staff.createTableStaffPostgres);
 
 
 			// create Delivery Address
@@ -282,7 +284,7 @@ public class Main implements ActionListener {
 					+ " " + DeliveryAddressContract.NAME + " VARCHAR(100),"
 					+ " " + DeliveryAddressContract.PHONE_NUMBER + " BIGINT,"
 					+ " " + DeliveryAddressContract.PINCODE + " BIGINT,"
-					+ " FOREIGN KEY(" + DeliveryAddressContract.END_USER_ID +") REFERENCES " + EndUserContract.TABLE_NAME + "(" + EndUserContract.END_USER_ID + ")"
+					+ " FOREIGN KEY(" + DeliveryAddressContract.END_USER_ID +") REFERENCES " + EndUser.TABLE_NAME + "(" + EndUser.END_USER_ID + ")"
 					+ ")";
 
 
@@ -321,11 +323,12 @@ public class Main implements ActionListener {
 					+ " " + OrderContract.PICK_FROM_SHOP + " boolean,"
 					+ " " + OrderContract.DELIVERY_VEHICLE_SELF_ID + " INT,"
 					+ " " + OrderContract.DATE_TIME_PLACED + " timestamp with time zone NOT NULL DEFAULT now(),"
-					+ " FOREIGN KEY(" + OrderContract.END_USER_ID +") REFERENCES " + EndUserContract.TABLE_NAME + "(" + EndUserContract.END_USER_ID + "),"
+					+ " FOREIGN KEY(" + OrderContract.END_USER_ID +") REFERENCES " + EndUser.TABLE_NAME + "(" + EndUser.END_USER_ID + "),"
 					+ " FOREIGN KEY(" + OrderContract.SHOP_ID +") REFERENCES " + ShopContract.TABLE_NAME + "(" + ShopContract.SHOP_ID + "),"
 					+ " FOREIGN KEY(" + OrderContract.DELIVERY_ADDRESS_ID +") REFERENCES " + DeliveryAddressContract.TABLE_NAME + "(" + DeliveryAddressContract.ID + "),"
 					+ " FOREIGN KEY(" + OrderContract.DELIVERY_VEHICLE_SELF_ID +") REFERENCES " + DeliveryVehicleSelfContract.TABLE_NAME + "(" + DeliveryVehicleSelfContract.ID + ")"
 					+ ")";
+
 
 
 			stmt.executeUpdate(createTableOrderPostgres);
@@ -351,7 +354,7 @@ public class Main implements ActionListener {
 					+ " " + CartContract.CART_ID + " SERIAL PRIMARY KEY,"
 					+ " " + CartContract.END_USER_ID + " INT,"
 					+ " " + CartContract.SHOP_ID + " INT,"
-					+ " FOREIGN KEY(" + CartContract.END_USER_ID +") REFERENCES " + EndUserContract.TABLE_NAME + "(" + EndUserContract.END_USER_ID + "),"
+					+ " FOREIGN KEY(" + CartContract.END_USER_ID +") REFERENCES " + EndUser.TABLE_NAME + "(" + EndUser.END_USER_ID + "),"
 					+ " FOREIGN KEY(" + CartContract.SHOP_ID +") REFERENCES " + ShopContract.TABLE_NAME + "(" + ShopContract.SHOP_ID + "),"
 					+ " UNIQUE (" + CartContract.END_USER_ID + "," + CartContract.SHOP_ID + ")"
 					+ ")";
@@ -373,30 +376,27 @@ public class Main implements ActionListener {
 			stmt.executeUpdate(createtableCartItemPostgres);
 
 
-
 			stmt.executeUpdate(ServiceConfiguration.createTableServiceConfigurationPostgres);
-
-
-
-/*
-
-
-			String createTableServiceConfigPostgres = "CREATE TABLE IF NOT EXISTS " + ServiceConfigurationContract.TABLE_NAME + "("
-					+ " " + ServiceConfigurationContract.CONFIGURATION_ID + " SERIAL PRIMARY KEY,"
-					+ " " + ServiceConfigurationContract.NAME + " VARCHAR(100),"
-					+ " " + ServiceConfigurationContract.SERVICE_CONFIGURATION_ID + " INT,"
-					+ " FOREIGN KEY(" + ServiceConfigurationContract.SERVICE_CONFIGURATION_ID +") REFERENCES " + ServiceConfiguration.TABLE_NAME + "(" + ServiceConfiguration.SERVICE_CONFIGURATION_ID + ")"
-					+ ")";
-
-			stmt.executeUpdate(createTableServiceConfigPostgres);
-
-
-			*/
 
 			System.out.println("Tables Created ... !");
 
 
 			// developers Note: whenever adding a table please check that its dependencies are already created.
+
+
+
+			// Insert the default administrator if it does not exit
+
+			if(Globals.adminDAOPrepared.getAdmin().size()==0)
+			{
+				Admin defaultAdmin = new Admin();
+
+				defaultAdmin.setPassword("password");
+				defaultAdmin.setUsername("username");
+				defaultAdmin.setAdministratorName("default name");
+
+				Globals.adminDAOPrepared.saveAdmin(defaultAdmin);
+			}
 
 
 
@@ -434,24 +434,32 @@ public class Main implements ActionListener {
 
 			// Insert Default Service Configuration
 
-			/*
 			String insertServiceConfig = "";
 
-			if(Globals.serviceConfigDAO.readConfig(1)==null)
+			if(Globals.serviceConfigurationDAO.readServiceConfiguration()==null)
 			{
+
+				ServiceConfiguration defaultConfiguration = new ServiceConfiguration();
+
+				defaultConfiguration.setServiceLevel(GlobalConstants.SERVICE_LEVEL_CITY);
+				defaultConfiguration.setServiceType(GlobalConstants.SERVICE_TYPE_NONPROFIT);
+				defaultConfiguration.setServiceID(1);
+				defaultConfiguration.setServiceName("DEFAULT_CONFIGURATION");
+
+				Globals.serviceConfigurationDAO.saveService(defaultConfiguration);
+
+/*
 				insertServiceConfig = "INSERT INTO "
-						+ ServiceConfigurationContract.TABLE_NAME
+						+ ServiceConfiguration.TABLE_NAME
 						+ "("
-						+ ServiceConfigurationContract.CONFIGURATION_ID + ","
-						+ ServiceConfigurationContract.NAME + ") VALUES ("
+						+ ServiceConfiguration.SERVICE_CONFIGURATION_ID + ","
+						+ ServiceConfiguration.SERVICE_NAME + ") VALUES ("
 						+ "" + "1" + ","
 						+ "'" + "ROOT_CONFIGURATION" + "')";
 
 
-				stmt.executeUpdate(insertServiceConfig);
-
+				stmt.executeUpdate(insertServiceConfig);*/
 			}
-*/
 
 
 
