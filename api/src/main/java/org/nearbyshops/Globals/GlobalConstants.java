@@ -60,6 +60,13 @@ public class GlobalConstants {
 
     public static final String ROLE_ADMIN = "ADMIN";
     public static final String ROLE_STAFF = "STAFF";
+
     public static final String ROLE_DISTRIBUTOR = "DISTRIBUTOR";
+    public static final String ROLE_DISTRIBUTOR_STAFF = "DISTRIBUTOR_STAFF";
+    public static final String ROLE_VEHICLE_SELF_DRIVER = "VEHICLE_SELF_DRIVER";
+
     public static final String ROLE_END_USER = "END_USER";
+
+
+
 }

@@ -97,7 +97,9 @@ public class StaffDAOPrepared {
 				+ " SET "
 				+ Staff.STAFF_NAME + " = ?,"
 				+ Staff.USER_NAME + " = ?,"
-				+ Staff.PASSWORD + " = ?"
+				+ Staff.PASSWORD + " = ?,"
+				+ Staff.IS_ENABLED + " = ?,"
+				+ Staff.IS_WAITLISTED + " = ?"
 				+ " WHERE " + Staff.STAFF_ID + " = ?";
 
 		Connection connection = null;
@@ -112,7 +114,9 @@ public class StaffDAOPrepared {
 			statement.setString(1, staff.getStaffName());
 			statement.setString(2, staff.getUsername());
 			statement.setString(3, staff.getPassword());
-			statement.setInt(4, staff.getStaffID());
+			statement.setObject(4,staff.getEnabled());
+			statement.setObject(5,staff.getWaitlisted());
+			statement.setInt(6, staff.getStaffID());
 
 			updatedRows = statement.executeUpdate();
 
@@ -234,6 +238,8 @@ public class StaffDAOPrepared {
 				staff.setStaffName(rs.getString(Staff.STAFF_NAME));
 				staff.setUsername(rs.getString(Staff.USER_NAME));
 				staff.setPassword(rs.getString(Staff.PASSWORD));
+				staff.setEnabled(rs.getBoolean(Staff.IS_ENABLED));
+				staff.setWaitlisted(rs.getBoolean(Staff.IS_WAITLISTED));
 				staffList.add(staff);
 
 			}
@@ -309,6 +315,8 @@ public class StaffDAOPrepared {
 				staff.setStaffName(rs.getString(Staff.STAFF_NAME));
 				staff.setUsername(rs.getString(Staff.USER_NAME));
 				staff.setPassword(rs.getString(Staff.PASSWORD));
+				staff.setEnabled(rs.getBoolean(Staff.IS_ENABLED));
+				staff.setWaitlisted(rs.getBoolean(Staff.IS_WAITLISTED));
 
 			}
 
@@ -440,7 +448,8 @@ public class StaffDAOPrepared {
 				staff.setStaffName(rs.getString(Staff.STAFF_NAME));
 				staff.setUsername(rs.getString(Staff.USER_NAME));
 				staff.setPassword(rs.getString(Staff.PASSWORD));
-
+				staff.setEnabled(rs.getBoolean(Staff.IS_ENABLED));
+				staff.setWaitlisted(rs.getBoolean(Staff.IS_WAITLISTED));
 
 			}
 

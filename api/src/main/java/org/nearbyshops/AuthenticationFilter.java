@@ -3,9 +3,12 @@ package org.nearbyshops;
 import org.nearbyshops.DAOsPreparedRoles.AdminDAOPrepared;
 import org.nearbyshops.DAOsPreparedRoles.DistributorDAOPrepared;
 import org.nearbyshops.DAOsPreparedRoles.StaffDAOPrepared;
+import org.nearbyshops.Globals.APIErrors;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
+import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
 import org.nearbyshops.ModelRoles.Distributor;
+import org.nearbyshops.ModelRoles.Staff;
 
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.RolesAllowed;
@@ -14,11 +17,10 @@ import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import javax.ws.rs.ext.Provider;
 import java.lang.reflect.Method;
+import java.security.Principal;
 import java.util.*;
 
 /**
@@ -57,7 +59,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             if (method.isAnnotationPresent(DenyAll.class)) {
 //                requestContext.abortWith(ACCESS_FORBIDDEN);
 
-                throw new ForbiddenException("Access is Forbidden !");
+                throw new ForbiddenException("Access is ErrorNBSAPI !");
 //                return;
             }
 
@@ -121,9 +123,13 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 //                    requestContext.abortWith(ACCESS_DENIED);
 
 //                    throw new NotAuthorizedException("Access Denied. Username or Password is Incorrect !");
-                    throw new ForbiddenException("Username or password is Incorrect !");
-                }
+                    Response response = Response.status(403)
+                            .entity(new ErrorNBSAPI(403, "We are not able to identify you !"))
+                            .build();
 
+                    throw new ForbiddenException("Username or password is Incorrect !",response);
+
+                }
             }
         }
 
@@ -154,7 +160,9 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
             }else if(role.equals(GlobalConstants.ROLE_STAFF))
             {
-                if(staffDAOPrepared.checkStaff(null,username,password)!=null)
+                Staff staff = staffDAOPrepared.checkStaff(null,username,password);
+
+                if(staff!=null && staff.getEnabled())
                 {
                     isAllowed = true;
                     return isAllowed;
@@ -169,6 +177,11 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                         isAllowed = true;
                         return isAllowed;
                 }
+            }
+            else if(role.equals(GlobalConstants.ROLE_END_USER))
+            {
+
+
             }
 
         }

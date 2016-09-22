@@ -46,5 +46,6 @@
     <orderEntry type="library" name="Maven: com.fasterxml:classmate:1.0.0" level="project" />
     <orderEntry type="library" name="Maven: javax.el:javax.el-api:2.2.4" level="project" />
     <orderEntry type="library" name="Maven: org.glassfish.web:javax.el:2.2.4" level="project" />
+    <orderEntry type="library" name="Maven: org.glassfish.jersey.media:jersey-media-sse:2.23.2" level="project" />
   </component>
 </module>

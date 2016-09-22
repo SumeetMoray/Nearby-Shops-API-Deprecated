@@ -45,7 +45,7 @@ public class AuthenticationFilterRequirePermitAll implements ContainerRequestFil
             if (method.isAnnotationPresent(DenyAll.class)) {
 //                requestContext.abortWith(ACCESS_FORBIDDEN);
 
-                throw new ForbiddenException("Access is Forbidden !");
+                throw new ForbiddenException("Access is ErrorNBSAPI !");
 //                return;
             }
 

@@ -38,6 +38,8 @@ public class StaffResource {
 
 
 		staff.setStaffID(idOfInsertedRow);
+		staff.setEnabled(true);
+		staff.setWaitlisted(false);
 
 		if(idOfInsertedRow >=1)
 		{
@@ -67,17 +69,16 @@ public class StaffResource {
 
 	
 	@PUT
-	@RolesAllowed(GlobalConstants.ROLE_ADMIN)
-	@Path("/{ServiceProviderID}")
+	@Path("/{StaffID}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateSTAFF(@PathParam("ServiceProviderID")int serviceProviderID, Staff staff)
+	@RolesAllowed({GlobalConstants.ROLE_STAFF,GlobalConstants.ROLE_ADMIN})
+	public Response updateSTAFF(@PathParam("StaffID")int serviceProviderID, Staff staff)
 	{
 
 		staff.setStaffID(serviceProviderID);
 
 		int rowCount = daoPrepared.updateStaff(staff);
-		
-		
+
 		if(rowCount >= 1)
 		{
 			Response response = Response.status(Status.OK)
@@ -101,9 +102,9 @@ public class StaffResource {
 	}
 
 	@DELETE
-	@RolesAllowed(GlobalConstants.ROLE_ADMIN)
 	@Path("/{ServiceProviderID}")
 	//@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
 	public Response deleteStaff(@PathParam("ServiceProviderID")int staffID)
 	{
 
@@ -135,8 +136,8 @@ public class StaffResource {
 	
 	
 	@GET
-	@RolesAllowed(GlobalConstants.ROLE_ADMIN)
 	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed(GlobalConstants.ROLE_ADMIN)
 	public Response getStaff()
 	{
 
@@ -170,8 +171,8 @@ public class StaffResource {
 	
 	@GET
 	@Path("/{staffID}")
-	@RolesAllowed(GlobalConstants.ROLE_ADMIN)
 	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
 	public Response getStaff(@PathParam("staffID")int staffID)
 	{
 

@@ -1,13 +1,13 @@
-package org.nearbyshops.ModelStats;
+package org.nearbyshops.ModelDelivery;
 
 /**
  * Created by sumeet on 14/6/16.
  */
 public class DeliveryVehicleSelf {
 
-    int ID;
-    String vehicleName;
-    int shopID;
+    private int ID;
+    private String vehicleName;
+    private int shopID;
 
 
     public int getID() {

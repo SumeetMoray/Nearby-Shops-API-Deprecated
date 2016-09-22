@@ -36,8 +36,7 @@ public class DistributorDAOPrepared {
 				+ Distributor.USERNAME + ","
 				+ Distributor.PASSWORD + ","
 				+ Distributor.IS_ENABLED + ","
-				+ Distributor.IS_WAITLISTED + ","
-				+ ") VALUES(?,?,?,?)";
+				+ Distributor.IS_WAITLISTED + ") VALUES(?,?,?,?,?)";
 		
 		try {
 			
@@ -373,6 +372,7 @@ public class DistributorDAOPrepared {
 		return distributor;
 	}
 
+	/*
 	public Distributor getDistributorPassword(Integer distributorID, String username)
 	{
 
@@ -469,12 +469,12 @@ public class DistributorDAOPrepared {
 		}
 
 		return distributor;
-	}
+	}*/
 
 
 
 
-	public void logMessage(String message)
+	private void logMessage(String message)
 	{
 		System.out.println(message);
 	}
@@ -554,7 +554,7 @@ public class DistributorDAOPrepared {
 			{
 				distributor = new Distributor();
 
-				logMessage("Inside WHile check admin");
+				logMessage("Inside WHile check Distributor");
 
 				distributor.setDistributorID(rs.getInt(Distributor.DISTRIBUTOR_ID));
 				distributor.setDistributorName(rs.getString(Distributor.DISTRIBUTOR_NAME));

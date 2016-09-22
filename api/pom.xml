@@ -163,6 +163,15 @@
         </dependency>
 
 
+        <!-- Enable Server Sent Events (SSE) Support -->
+
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-sse</artifactId>
+        </dependency>
+
+        <!-- Enable Server Sent Events (SSE) Support -->
+
 </dependencies>
 
     <build>

@@ -2,7 +2,7 @@ package org.nearbyshops.DAOs;
 
 import org.nearbyshops.ContractClasses.DeliveryVehicleSelfContract;
 import org.nearbyshops.JDBCContract;
-import org.nearbyshops.ModelStats.DeliveryVehicleSelf;
+import org.nearbyshops.ModelDelivery.DeliveryVehicleSelf;
 
 import java.sql.*;
 import java.util.ArrayList;
