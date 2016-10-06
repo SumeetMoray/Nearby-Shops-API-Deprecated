@@ -1,4 +1,4 @@
-package org.nearbyshops.Model;
+package org.nearbyshops.ModelSettings;
 
 import java.sql.Timestamp;
 
@@ -127,7 +127,7 @@ public class ServiceConfiguration {
     private Double lonCenter;
 
     private Integer serviceRange;
-    private Integer shopDeliveryRangeMax;
+//    private Integer shopDeliveryRangeMax;
 
 
     private Timestamp created;
@@ -320,14 +320,6 @@ public class ServiceConfiguration {
 
     public void setServiceRange(Integer serviceRange) {
         this.serviceRange = serviceRange;
-    }
-
-    public Integer getShopDeliveryRangeMax() {
-        return shopDeliveryRangeMax;
-    }
-
-    public void setShopDeliveryRangeMax(Integer shopDeliveryRangeMax) {
-        this.shopDeliveryRangeMax = shopDeliveryRangeMax;
     }
 
     public Double getLatMax() {

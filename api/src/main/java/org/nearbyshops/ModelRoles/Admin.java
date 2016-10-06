@@ -15,6 +15,9 @@ public class Admin {
     public static final String USER_NAME = "USER_NAME";
     public static final String PASSWORD = "PASSWORD";
 
+    public static final String ABOUT = "ABOUT";
+    public static final String PROFILE_IMAGE_URL = "PROFILE_IMAGE_URL";
+
 
     // Create Table CurrentServiceConfiguration Provider
     public static final String createTableAdminPostgres =
@@ -22,7 +25,11 @@ public class Admin {
             + " " + Admin.ADMIN_ID + " SERIAL PRIMARY KEY,"
             + " " + Admin.USER_NAME + " text UNIQUE NOT NULL,"
             + " " + Admin.PASSWORD + " text NOT NULL,"
-            + " " + Admin.ADMIN_NAME + " text" + ")";
+            + " " + Admin.ADMIN_NAME + " text,"
+
+                    + " " + Admin.ABOUT + " text,"
+                    + " " + Admin.PROFILE_IMAGE_URL + " text"
+                    + ")";
 
 
 
@@ -31,6 +38,25 @@ public class Admin {
     private String administratorName;
     private String username;
     private String password;
+    private String about;
+    private String profileImageURL;
+
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
+    }
+
+    public String getProfileImageURL() {
+        return profileImageURL;
+    }
+
+    public void setProfileImageURL(String profileImageURL) {
+        this.profileImageURL = profileImageURL;
+    }
 
     public String getPassword() {
         return password;

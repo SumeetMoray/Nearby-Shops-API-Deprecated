@@ -2,6 +2,9 @@ package org.nearbyshops.DAOsPreparedRoles;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.Globals.Globals;
+import org.nearbyshops.Model.Item;
+import org.nearbyshops.ModelEndPoints.DistributorEndPoint;
+import org.nearbyshops.ModelEndPoints.ItemEndPoint;
 import org.nearbyshops.ModelRoles.Distributor;
 
 import java.sql.*;
@@ -35,8 +38,12 @@ public class DistributorDAOPrepared {
 				+ Distributor.DISTRIBUTOR_NAME + ","
 				+ Distributor.USERNAME + ","
 				+ Distributor.PASSWORD + ","
+
+				+ Distributor.ABOUT + ","
+				+ Distributor.PROFILE_IMAGE_URL + ","
+
 				+ Distributor.IS_ENABLED + ","
-				+ Distributor.IS_WAITLISTED + ") VALUES(?,?,?,?,?)";
+				+ Distributor.IS_WAITLISTED + ") VALUES(?,?,? ,?,? ,?,?)";
 		
 		try {
 			
@@ -46,8 +53,12 @@ public class DistributorDAOPrepared {
 			statement.setString(1,distributor.getDistributorName());
 			statement.setString(2,distributor.getUsername());
 			statement.setString(3,distributor.getPassword());
-			statement.setBoolean(4,distributor.getEnabled());
-			statement.setBoolean(5,distributor.getWaitlisted());
+
+			statement.setString(4,distributor.getAbout());
+			statement.setString(5,distributor.getProfileImageURL());
+
+			statement.setBoolean(6,distributor.getEnabled());
+			statement.setBoolean(7,distributor.getWaitlisted());
 
 			rowIdOfInsertedRow = statement.executeUpdate();
 			ResultSet rs = statement.getGeneratedKeys();
@@ -100,8 +111,14 @@ public class DistributorDAOPrepared {
 				+ Distributor.DISTRIBUTOR_NAME + " = ?,"
 				+ Distributor.USERNAME + " = ?,"
 				+ Distributor.PASSWORD + " = ?,"
+
+				+ Distributor.ABOUT + " = ?,"
+				+ Distributor.PROFILE_IMAGE_URL + " = ?,"
+
 				+ Distributor.IS_ENABLED + " = ?,"
-				+ Distributor.IS_WAITLISTED + " = ?"
+				+ Distributor.IS_WAITLISTED + " = ?,"
+
+				+ Distributor.UPDATED + " = ?"
 				+ " WHERE " + Distributor.DISTRIBUTOR_ID + " = ?";
 		
 		Connection connection = null;
@@ -116,9 +133,16 @@ public class DistributorDAOPrepared {
 			statement.setString(1,distributor.getDistributorName());
 			statement.setString(2,distributor.getUsername());
 			statement.setString(3,distributor.getPassword());
-			statement.setBoolean(4,distributor.getEnabled());
-			statement.setBoolean(5,distributor.getWaitlisted());
-			statement.setInt(6,distributor.getDistributorID());
+
+			statement.setString(4,distributor.getAbout());
+			statement.setString(5,distributor.getProfileImageURL());
+
+			statement.setBoolean(6,distributor.getEnabled());
+			statement.setBoolean(7,distributor.getWaitlisted());
+
+			statement.setTimestamp(8,new Timestamp(System.currentTimeMillis()));
+
+			statement.setInt(9,distributor.getDistributorID());
 
 			updatedRows = statement.executeUpdate();
 			
@@ -157,7 +181,86 @@ public class DistributorDAOPrepared {
 		return updatedRows;
 		
 	}
-	
+
+
+
+	public int updateDistributorNoPassword(Distributor distributor)
+	{
+		String updateStatement = "UPDATE " + Distributor.TABLE_NAME
+				+ " SET "
+				+ Distributor.DISTRIBUTOR_NAME + " = ?,"
+				+ Distributor.USERNAME + " = ?,"
+
+				+ Distributor.ABOUT + " = ?,"
+				+ Distributor.PROFILE_IMAGE_URL + " = ?,"
+
+				+ Distributor.IS_ENABLED + " = ?,"
+				+ Distributor.IS_WAITLISTED + " = ?,"
+
+				+ Distributor.UPDATED + " = ?"
+				+ " WHERE " + Distributor.DISTRIBUTOR_ID + " = ?";
+
+		Connection connection = null;
+		PreparedStatement statement = null;
+		int updatedRows = -1;
+
+		try {
+
+			connection = dataSource.getConnection();
+			statement = connection.prepareStatement(updateStatement);
+
+			statement.setString(1,distributor.getDistributorName());
+			statement.setString(2,distributor.getUsername());
+//			statement.setString(3,distributor.getPassword());
+
+			statement.setString(3,distributor.getAbout());
+			statement.setString(4,distributor.getProfileImageURL());
+
+			statement.setBoolean(5,distributor.getEnabled());
+			statement.setBoolean(6,distributor.getWaitlisted());
+
+			statement.setTimestamp(7,new Timestamp(System.currentTimeMillis()));
+
+			statement.setInt(8,distributor.getDistributorID());
+
+			updatedRows = statement.executeUpdate();
+
+
+			System.out.println("Total rows updated: " + updatedRows);
+
+			//conn.close();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally
+
+		{
+
+			try {
+
+				if(statement!=null)
+				{statement.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(connection!=null)
+				{connection.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return updatedRows;
+
+	}
+
 
 	public int deleteDistributor(int distributorID)
 	{
@@ -218,13 +321,117 @@ public class DistributorDAOPrepared {
 	
 	
 	
-	public ArrayList<Distributor> getDistributors()
+	public ArrayList<Distributor> getDistributors(
+			Integer distributorID,
+			Boolean isEnabled,
+			Boolean isWaitlisted,
+			String sortBy,
+			Integer limit, Integer offset)
 	{
-		String query = "SELECT * FROM " + Distributor.TABLE_NAME;
+
+		boolean isfirst = true;
+
+		String queryNormal = "SELECT * FROM " + Distributor.TABLE_NAME;
+
+
+		if(distributorID != null)
+		{
+
+			queryNormal = queryNormal + " WHERE "
+					+ Distributor.TABLE_NAME
+					+ "."
+					+ Distributor.DISTRIBUTOR_ID + " = " + distributorID;
+
+			isfirst = false;
+		}
+
+
+		if(isEnabled !=null) {
+			String queryPartEnabled = "";
+
+			queryPartEnabled = Distributor.TABLE_NAME
+					+ "."
+					+ Distributor.IS_ENABLED + " = " + isEnabled;
+
+
+			if (isfirst) {
+				queryNormal = queryNormal + " WHERE " +queryPartEnabled;
+			}
+			else
+			{
+				queryNormal = queryNormal + " AND " + queryPartEnabled;
+			}
+
+
+			isfirst = false;
+		}
+
+
+		if(isWaitlisted != null)
+		{
+
+			String queryPartWaitlisted = "";
+
+			queryPartWaitlisted = Distributor.TABLE_NAME
+					+ "."
+					+ Distributor.IS_WAITLISTED + " = " + isWaitlisted;
+
+
+			if (isfirst) {
+				queryNormal = queryNormal + " WHERE " + queryPartWaitlisted;
+			}
+			else
+			{
+				queryNormal = queryNormal + " AND " + queryPartWaitlisted;
+			}
+
+
+			isfirst = false;
+
+		}
+
+
+
+
+		if(sortBy!=null)
+		{
+			if(!sortBy.equals(""))
+			{
+				String queryPartSortBy = " ORDER BY " + sortBy;
+
+				queryNormal = queryNormal + queryPartSortBy;
+//				queryJoin = queryJoin + queryPartSortBy;
+			}
+		}
+
+
+
+		if(limit != null)
+		{
+
+			String queryPartLimitOffset = "";
+
+			if(offset>0)
+			{
+				queryPartLimitOffset = " LIMIT " + limit + " " + " OFFSET " + offset;
+
+			}else
+			{
+				queryPartLimitOffset = " LIMIT " + limit + " " + " OFFSET " + 0;
+			}
+
+
+			queryNormal = queryNormal + queryPartLimitOffset;
+//			queryJoin = queryJoin + queryPartLimitOffset;
+		}
+
+
+
+
+
+
 
 		ArrayList<Distributor> distributorList = new ArrayList<Distributor>();
-		
-		
 		Connection connection = null;
 		Statement statement = null;
 		ResultSet rs = null;
@@ -234,7 +441,7 @@ public class DistributorDAOPrepared {
 			connection = dataSource.getConnection();
 			statement = connection.createStatement();
 
-			rs = statement.executeQuery(query);
+			rs = statement.executeQuery(queryNormal);
 			
 			while(rs.next())
 			{
@@ -245,11 +452,19 @@ public class DistributorDAOPrepared {
 				distributor.setDistributorName(rs.getString(Distributor.DISTRIBUTOR_NAME));
 				distributor.setUsername(rs.getString(Distributor.USERNAME));
 				distributor.setPassword(rs.getString(Distributor.PASSWORD));
+
+				distributor.setAbout(rs.getString(Distributor.ABOUT));
+				distributor.setProfileImageURL(rs.getString(Distributor.PROFILE_IMAGE_URL));
+
 				distributor.setEnabled(rs.getBoolean(Distributor.IS_ENABLED));
 				distributor.setWaitlisted(rs.getBoolean(Distributor.IS_WAITLISTED));
 
+				distributor.setCreated(rs.getTimestamp(Distributor.CREATED));
+				distributor.setUpdated(rs.getTimestamp(Distributor.UPDATED));
+
 				distributorList.add(distributor);
 			}
+
 			
 			
 			
@@ -297,7 +512,141 @@ public class DistributorDAOPrepared {
 		return distributorList;
 	}
 
-	
+
+
+	public DistributorEndPoint getEndpointMetadata(
+			Integer distributorID,
+			Boolean isEnabled,
+			Boolean isWaitlisted)
+	{
+
+		boolean isfirst = true;
+
+		String queryNormal = "SELECT count(*) as item_count FROM " + Distributor.TABLE_NAME;
+
+
+		if(distributorID != null)
+		{
+
+			queryNormal = queryNormal + " WHERE "
+					+ Distributor.TABLE_NAME
+					+ "."
+					+ Distributor.DISTRIBUTOR_ID + " = " + distributorID;
+
+			isfirst = false;
+		}
+
+
+		if(isEnabled !=null) {
+			String queryPartEnabled = "";
+
+			queryPartEnabled = Distributor.TABLE_NAME
+					+ "."
+					+ Distributor.IS_ENABLED + " = " + isEnabled;
+
+
+			if (isfirst) {
+				queryNormal = queryNormal + " WHERE " +queryPartEnabled;
+			}
+			else
+			{
+				queryNormal = queryNormal + " AND " + queryPartEnabled;
+			}
+
+
+			isfirst = false;
+		}
+
+
+		if(isWaitlisted != null)
+		{
+
+			String queryPartWaitlisted = "";
+
+			queryPartWaitlisted = Distributor.TABLE_NAME
+					+ "."
+					+ Distributor.IS_WAITLISTED + " = " + isWaitlisted;
+
+
+			if (isfirst) {
+				queryNormal = queryNormal + " WHERE " + queryPartWaitlisted;
+			}
+			else
+			{
+				queryNormal = queryNormal + " AND " + queryPartWaitlisted;
+			}
+
+
+			isfirst = false;
+
+		}
+
+
+
+		DistributorEndPoint endPoint = new DistributorEndPoint();
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet rs = null;
+
+		try {
+
+			connection = dataSource.getConnection();
+			statement = connection.createStatement();
+
+			rs = statement.executeQuery(queryNormal);
+
+			while(rs.next())
+			{
+				endPoint.setItemCount(rs.getInt("item_count"));
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+		finally
+
+		{
+
+			try {
+				if(rs!=null)
+				{rs.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(statement!=null)
+				{statement.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(connection!=null)
+				{connection.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+
+		return endPoint;
+	}
+
+
+
+
+
+
+
 	public Distributor getDistributor(int distributorID)
 	{
 		
@@ -326,8 +675,15 @@ public class DistributorDAOPrepared {
 				distributor.setDistributorName(rs.getString(Distributor.DISTRIBUTOR_NAME));
 				distributor.setUsername(rs.getString(Distributor.USERNAME));
 				distributor.setPassword(rs.getString(Distributor.PASSWORD));
+
+				distributor.setAbout(rs.getString(Distributor.ABOUT));
+				distributor.setProfileImageURL(rs.getString(Distributor.PROFILE_IMAGE_URL));
 				distributor.setEnabled(rs.getBoolean(Distributor.IS_ENABLED));
 				distributor.setWaitlisted(rs.getBoolean(Distributor.IS_WAITLISTED));
+
+
+				distributor.setCreated(rs.getTimestamp(Distributor.CREATED));
+				distributor.setUpdated(rs.getTimestamp(Distributor.UPDATED));
 			}
 			
 			
@@ -560,8 +916,16 @@ public class DistributorDAOPrepared {
 				distributor.setDistributorName(rs.getString(Distributor.DISTRIBUTOR_NAME));
 				distributor.setUsername(rs.getString(Distributor.USERNAME));
 				distributor.setPassword(rs.getString(Distributor.PASSWORD));
+
+				distributor.setAbout(rs.getString(Distributor.ABOUT));
+				distributor.setProfileImageURL(rs.getString(Distributor.PROFILE_IMAGE_URL));
+
 				distributor.setWaitlisted(rs.getBoolean(Distributor.IS_WAITLISTED));
 				distributor.setEnabled(rs.getBoolean(Distributor.IS_ENABLED));
+
+
+				distributor.setCreated(rs.getTimestamp(Distributor.CREATED));
+				distributor.setUpdated(rs.getTimestamp(Distributor.UPDATED));
 			}
 
 

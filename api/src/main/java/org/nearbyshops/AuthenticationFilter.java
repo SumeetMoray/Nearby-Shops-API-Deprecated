@@ -2,12 +2,14 @@ package org.nearbyshops;
 
 import org.nearbyshops.DAOsPreparedRoles.AdminDAOPrepared;
 import org.nearbyshops.DAOsPreparedRoles.DistributorDAOPrepared;
+import org.nearbyshops.DAOsPreparedRoles.DistributorStaffDAOPrepared;
 import org.nearbyshops.DAOsPreparedRoles.StaffDAOPrepared;
 import org.nearbyshops.Globals.APIErrors;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
 import org.nearbyshops.ModelRoles.Distributor;
+import org.nearbyshops.ModelRoles.DistributorStaff;
 import org.nearbyshops.ModelRoles.Staff;
 
 import javax.annotation.security.DenyAll;
@@ -35,6 +37,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     private AdminDAOPrepared adminDAOPrepared = Globals.adminDAOPrepared;
     private StaffDAOPrepared staffDAOPrepared = Globals.staffDAOPrepared;
     private DistributorDAOPrepared distributorDAOPrepared = Globals.distributorDAOPrepared;
+    private DistributorStaffDAOPrepared distributorStaffDAO = Globals.distributorStaffDAOPrepared;
 
 
     @Context
@@ -140,6 +143,8 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     {
         boolean isAllowed = false;
 
+        boolean isEnabled = false;
+
         //Step 1. Fetch password from database and match with password in argument
         //If both match then get the defined role for user from database and continue; else return isAllowed [false]
         //Access the database and do this part yourself
@@ -177,11 +182,16 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                         isAllowed = true;
                         return isAllowed;
                 }
-            }
-            else if(role.equals(GlobalConstants.ROLE_END_USER))
+            }else if (role.equals(GlobalConstants.ROLE_DISTRIBUTOR_STAFF))
             {
 
-
+                DistributorStaff distributorStaff = distributorStaffDAO.checkDistributor(null,username,password);
+                // Distributor account exist and is enabled
+                if(distributorStaff!=null && distributorStaff.getEnabled())
+                {
+                    isAllowed = true;
+                    return isAllowed;
+                }
             }
 
         }

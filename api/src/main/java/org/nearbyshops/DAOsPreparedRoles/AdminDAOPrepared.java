@@ -32,8 +32,10 @@ public class AdminDAOPrepared {
 				+ "("
 				+ Admin.ADMIN_NAME + ","
 				+ Admin.USER_NAME + ","
-				+ Admin.PASSWORD
-				+ ") VALUES(?,?,?)";
+				+ Admin.PASSWORD + ","
+				+ Admin.ABOUT + ","
+				+ Admin.PROFILE_IMAGE_URL
+				+ ") VALUES(?,?,?, ?,?)";
 
 		try {
 
@@ -44,6 +46,9 @@ public class AdminDAOPrepared {
 			statement.setString(1, admin.getAdministratorName());
 			statement.setString(2, admin.getUsername());
 			statement.setString(3, admin.getPassword());
+
+			statement.setString(4,admin.getAbout());
+			statement.setString(5,admin.getProfileImageURL());
 
 			rowIdOfInsertedRow = statement.executeUpdate();
 
@@ -93,7 +98,9 @@ public class AdminDAOPrepared {
 				+ " SET "
 				+ Admin.ADMIN_NAME + " = ?,"
 				+ Admin.USER_NAME + " = ?,"
-				+ Admin.PASSWORD + " = ?"
+				+ Admin.PASSWORD + " = ?,"
+				+ Admin.ABOUT + " = ?,"
+				+ Admin.PROFILE_IMAGE_URL + " = ?"
 				+ " WHERE " + Admin.ADMIN_ID + " = ?";
 
 		Connection connection = null;
@@ -108,7 +115,12 @@ public class AdminDAOPrepared {
 			statement.setString(1, admin.getAdministratorName());
 			statement.setString(2, admin.getUsername());
 			statement.setString(3, admin.getPassword());
-			statement.setInt(4, admin.getAdminID());
+
+			statement.setString(4,admin.getAbout());
+			statement.setString(5,admin.getProfileImageURL());
+
+			statement.setObject(6, admin.getAdminID());
+
 
 			updatedRows = statement.executeUpdate();
 
@@ -230,6 +242,10 @@ public class AdminDAOPrepared {
 				admin.setAdministratorName(rs.getString(Admin.ADMIN_NAME));
 				admin.setUsername(rs.getString(Admin.USER_NAME));
 				admin.setPassword(rs.getString(Admin.PASSWORD));
+
+				admin.setAbout(rs.getString(Admin.ABOUT));
+				admin.setProfileImageURL(rs.getString(Admin.PROFILE_IMAGE_URL));
+
 				serviceProvidersList.add(admin);
 
 			}
@@ -305,6 +321,10 @@ public class AdminDAOPrepared {
 				admin.setUsername(rs.getString(Admin.USER_NAME));
 				admin.setPassword(rs.getString(Admin.PASSWORD));
 
+				admin.setAbout(rs.getString(Admin.ABOUT));
+				admin.setProfileImageURL(rs.getString(Admin.PROFILE_IMAGE_URL));
+
+
 			}
 
 
@@ -356,6 +376,7 @@ public class AdminDAOPrepared {
 	{
 		System.out.println(message);
 	}
+
 
 
 
@@ -437,6 +458,8 @@ public class AdminDAOPrepared {
 				admin.setUsername(rs.getString(Admin.USER_NAME));
 				admin.setPassword(rs.getString(Admin.PASSWORD));
 
+				admin.setAbout(rs.getString(Admin.ABOUT));
+				admin.setProfileImageURL(rs.getString(Admin.PROFILE_IMAGE_URL));
 			}
 
 

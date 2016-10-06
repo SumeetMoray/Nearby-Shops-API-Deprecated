@@ -1,4 +1,6 @@
-package org.nearbyshops.Model;
+package org.nearbyshops.ModelSettings;
+
+import org.nearbyshops.ModelSettings.ServiceConfiguration;
 
 /**
  * Created by sumeet on 21/6/16.

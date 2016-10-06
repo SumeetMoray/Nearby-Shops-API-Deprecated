@@ -1,4 +1,4 @@
-package org.nearbyshops.Model;
+package org.nearbyshops.ModelSettings;
 
 /**
  * Created by sumeet on 18/9/16.
@@ -12,7 +12,8 @@ public class Settings {
     public static final String SETTING_CONFIGURATION_ID = "SETTING_CONFIGURATION_ID";
     public static final String END_USER_ENABLED_DEFAULT = "END_USER_ENABLED_DEFAULT";
     public static final String DISTRIBUTOR_ENABLED_DEFAULT = "DISTRIBUTOR_ENABLED_DEFAULT";
-    public static final String STAFF_ACCOUNT_ENABLED_DEFAULT = "STAFF_ACCOUNT_ENABLED_DEFAULT";
+//    public static final String STAFF_ACCOUNT_ENABLED_DEFAULT = "STAFF_ACCOUNT_ENABLED_DEFAULT";
+    public static final String GOOGLE_MAPS_API_KEY = "GOOGLE_MAPS_API_KEY";
 
 
     // Create Table Statement
@@ -21,16 +22,17 @@ public class Settings {
             + " " + Settings.SETTING_CONFIGURATION_ID + " SERIAL PRIMARY KEY,"
             + " " + Settings.END_USER_ENABLED_DEFAULT + " boolean,"
             + " " + Settings.DISTRIBUTOR_ENABLED_DEFAULT + " boolean,"
-            + " " + Settings.STAFF_ACCOUNT_ENABLED_DEFAULT + " boolean"
+            + " " + Settings.GOOGLE_MAPS_API_KEY + " text"
             + ")";
 
 
 
     // Instance Variables
     private int settingsID;
-    private String endUserEnabledByDefault;
-    private String distributorEnabledByDefault;
-    private String staffEnabledByDefault;
+    private Boolean endUserEnabledByDefault;
+    private Boolean distributorEnabledByDefault;
+//    private String staffEnabledByDefault;
+    private String googleMapsAPIKey;
 
 
     public int getSettingsID() {
@@ -41,27 +43,27 @@ public class Settings {
         this.settingsID = settingsID;
     }
 
-    public String getEndUserEnabledByDefault() {
+    public Boolean getEndUserEnabledByDefault() {
         return endUserEnabledByDefault;
     }
 
-    public void setEndUserEnabledByDefault(String endUserEnabledByDefault) {
+    public void setEndUserEnabledByDefault(Boolean endUserEnabledByDefault) {
         this.endUserEnabledByDefault = endUserEnabledByDefault;
     }
 
-    public String getDistributorEnabledByDefault() {
+    public Boolean getDistributorEnabledByDefault() {
         return distributorEnabledByDefault;
     }
 
-    public void setDistributorEnabledByDefault(String distributorEnabledByDefault) {
+    public void setDistributorEnabledByDefault(Boolean distributorEnabledByDefault) {
         this.distributorEnabledByDefault = distributorEnabledByDefault;
     }
 
-    public String getStaffEnabledByDefault() {
-        return staffEnabledByDefault;
+    public String getGoogleMapsAPIKey() {
+        return googleMapsAPIKey;
     }
 
-    public void setStaffEnabledByDefault(String staffEnabledByDefault) {
-        this.staffEnabledByDefault = staffEnabledByDefault;
+    public void setGoogleMapsAPIKey(String googleMapsAPIKey) {
+        this.googleMapsAPIKey = googleMapsAPIKey;
     }
 }

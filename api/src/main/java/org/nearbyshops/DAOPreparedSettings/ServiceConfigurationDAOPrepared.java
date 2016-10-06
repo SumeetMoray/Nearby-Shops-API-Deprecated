@@ -1,10 +1,10 @@
-package org.nearbyshops.DAOsPrepared;
+package org.nearbyshops.DAOPreparedSettings;
 
 
 import com.zaxxer.hikari.HikariDataSource;
+import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.JDBCContract;
-import org.nearbyshops.Model.ServiceConfiguration;
+import org.nearbyshops.ModelSettings.ServiceConfiguration;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class ServiceConfigurationDAOPrepared {
 		super.finalize();	
 	}
 
-	
+
 	public int saveService(ServiceConfiguration serviceConfiguration)
 	{
 
@@ -58,8 +58,9 @@ public class ServiceConfigurationDAOPrepared {
 				+ ServiceConfiguration.LON_CENTER + ","
 				+ ServiceConfiguration.SERVICE_RANGE + ","
 
-				+ ServiceConfiguration.UPDATED + ""
-				+ " ) VALUES (?,?,? ,?,?,? ,?,?,? ,?,?,? ,?,?,? ,?,?,? ,?)";
+				+ ServiceConfiguration.UPDATED + ","
+				+ ServiceConfiguration.SERVICE_CONFIGURATION_ID + ""
+				+ " ) VALUES (?,?,? ,?,?,? ,?,?,? ,?,?,? ,?,?,? ,?,?,? ,?,?)";
 		
 		try {
 			
@@ -91,6 +92,7 @@ public class ServiceConfigurationDAOPrepared {
 			statement.setObject(18,serviceConfiguration.getServiceRange());
 
 			statement.setTimestamp(19,new Timestamp(System.currentTimeMillis()));
+			statement.setObject(20,1);
 
 
 
@@ -143,7 +145,14 @@ public class ServiceConfigurationDAOPrepared {
 
 
 	public int updateService(ServiceConfiguration serviceConfiguration)
-	{	
+	{
+
+		// Ensure the service configuration row exist before being updated
+		if(getServiceConfiguration()==null){
+			saveService(getDefaultConfiguration());
+		}
+
+
 		String updateStatement = "UPDATE " + ServiceConfiguration.TABLE_NAME
 
 				+ " SET "
@@ -172,15 +181,8 @@ public class ServiceConfigurationDAOPrepared {
 				+ ServiceConfiguration.LON_CENTER + " = ?,"
 				+ ServiceConfiguration.SERVICE_RANGE + " = ?,"
 
-				+ ServiceConfiguration.UPDATED + " = ?,"
-
-				+ ServiceConfiguration.LAT_MAX + " = ?,"
-				+ ServiceConfiguration.LON_MAX + " = ?,"
-				+ ServiceConfiguration.LAT_MIN + " = ?,"
-				+ ServiceConfiguration.LON_MIN + " = ?,"
-
+				+ ServiceConfiguration.UPDATED + " = ?"
 				+ " WHERE "
-
 				+ ServiceConfiguration.SERVICE_CONFIGURATION_ID + " = ?";
 
 
@@ -191,15 +193,18 @@ public class ServiceConfigurationDAOPrepared {
 		try {
 			
 			connection = dataSource.getConnection();
+			statement = connection.prepareStatement(updateStatement);
 
 			statement.setString(1,serviceConfiguration.getImagePath());
+			statement.setString(2,serviceConfiguration.getLogoImagePath());
+			statement.setString(3,serviceConfiguration.getBackdropImagePath());
 
 			statement.setString(4,serviceConfiguration.getServiceName());
 			statement.setString(5,serviceConfiguration.getHelplineNumber());
 			statement.setString(6,serviceConfiguration.getAddress());
 
 			statement.setString(7,serviceConfiguration.getCity());
-			statement.setLong(8,serviceConfiguration.getPincode());
+			statement.setObject(8,serviceConfiguration.getPincode());
 			statement.setString(9,serviceConfiguration.getLandmark());
 
 			statement.setString(10,serviceConfiguration.getState());
@@ -207,19 +212,17 @@ public class ServiceConfigurationDAOPrepared {
 			statement.setString(12,serviceConfiguration.getISOCountryCode());
 
 			statement.setString(13,serviceConfiguration.getISOLanguageCode());
-			statement.setInt(14,serviceConfiguration.getServiceType());
-			statement.setInt(15,serviceConfiguration.getServiceLevel());
+			statement.setObject(14,serviceConfiguration.getServiceType());
+			statement.setObject(15,serviceConfiguration.getServiceLevel());
 
-			statement.setDouble(16,serviceConfiguration.getLatCenter());
-			statement.setDouble(17,serviceConfiguration.getLonCenter());
-			statement.setDouble(18,serviceConfiguration.getServiceRange());
+			statement.setObject(16,serviceConfiguration.getLatCenter());
+			statement.setObject(17,serviceConfiguration.getLonCenter());
+			statement.setObject(18,serviceConfiguration.getServiceRange());
 
 			statement.setTimestamp(19,new Timestamp(System.currentTimeMillis()));
 
-			statement.setInt(24,1);
+			statement.setObject(20,1);
 
-
-			statement = connection.prepareStatement(updateStatement);
 
 			updatedRows = statement.executeUpdate();
 			
@@ -278,11 +281,9 @@ public class ServiceConfigurationDAOPrepared {
 			statement = connection.prepareStatement(deleteStatement);
 
 			statement.setInt(1,serviceID);
-			
 			rowsCountDeleted = statement.executeUpdate();
-			
-			System.out.println(" Deleted Count: " + rowsCountDeleted);	
-			
+			System.out.println(" Deleted Count: " + rowsCountDeleted);
+
 			connection.close();
 			
 		} catch (SQLException e) {
@@ -397,9 +398,6 @@ public class ServiceConfigurationDAOPrepared {
 					+ ServiceConfiguration.SERVICE_RANGE ;
 
 
-
-
-
 			if(isFirst)
 			{
 				queryNormal = queryNormal + " WHERE ";
@@ -413,15 +411,8 @@ public class ServiceConfigurationDAOPrepared {
 			}
 
 
-
 			queryNormal = queryNormal + queryPartVisibilityFilter;
-
-
 		}
-
-
-
-
 
 		if(sortBy!=null)
 		{
@@ -517,14 +508,14 @@ public class ServiceConfigurationDAOPrepared {
 			
 
 			
-		} catch (SQLException e) {
+		}
+		catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
 
+
+		}
 		finally
-		
 		{
 			
 			try {
@@ -562,7 +553,7 @@ public class ServiceConfigurationDAOPrepared {
 
 
 
-	public ServiceConfiguration readServiceConfiguration()
+	public ServiceConfiguration getServiceConfiguration()
 	{
 		
 		String query = "SELECT * FROM " + ServiceConfiguration.TABLE_NAME
@@ -572,16 +563,12 @@ public class ServiceConfigurationDAOPrepared {
 		Statement statement = null;
 		ResultSet rs = null;
 
-
 		ServiceConfiguration serviceConfiguration = null;
 
-		
 		try {
 			
 			connection = dataSource.getConnection();
-
 			statement = connection.createStatement();
-			
 			rs = statement.executeQuery(query);
 			
 			while(rs.next())
@@ -617,7 +604,6 @@ public class ServiceConfigurationDAOPrepared {
 				serviceConfiguration.setLatMax(rs.getDouble(ServiceConfiguration.LAT_MAX));
 				serviceConfiguration.setLonMax(rs.getDouble(ServiceConfiguration.LON_MAX));
 				serviceConfiguration.setLatMin(rs.getDouble(ServiceConfiguration.LAT_MIN));
-
 				serviceConfiguration.setLonMin(rs.getDouble(ServiceConfiguration.LON_MIN));
 
 				serviceConfiguration.setCreated(rs.getTimestamp(ServiceConfiguration.CREATED));
@@ -666,5 +652,22 @@ public class ServiceConfigurationDAOPrepared {
 		}
 	
 		return serviceConfiguration;
-	}	
+	}
+
+
+
+	private ServiceConfiguration getDefaultConfiguration()
+	{
+		ServiceConfiguration configuration = new ServiceConfiguration();
+
+		configuration.setAddress("Address not set");
+		configuration.setCity("City not set");
+		configuration.setCountry("Country not set");
+		configuration.setServiceLevel(GlobalConstants.SERVICE_LEVEL_CITY);
+
+		return  configuration;
+	}
+
+
+
 }

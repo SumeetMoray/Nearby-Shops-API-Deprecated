@@ -1,4 +1,4 @@
-package org.nearbyshops.RESTEndpointRoles;
+package org.nearbyshops.zExperimental;
 
 import org.glassfish.jersey.media.sse.EventOutput;
 import org.glassfish.jersey.media.sse.OutboundEvent;
@@ -8,6 +8,8 @@ import org.glassfish.jersey.media.sse.SseFeature;
 import javax.inject.Singleton;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by sumeet on 21/9/16.
@@ -18,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 public class SSEEndpoint {
 
     private SseBroadcaster broadcaster = new SseBroadcaster();
+    private Map<Integer,SseBroadcaster> broadcasterMap = new HashMap<>();
 
     @POST
     @Produces(MediaType.TEXT_PLAIN)

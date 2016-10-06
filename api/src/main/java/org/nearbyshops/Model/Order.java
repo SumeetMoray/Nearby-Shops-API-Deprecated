@@ -1,6 +1,6 @@
 package org.nearbyshops.Model;
 
-import org.nearbyshops.ModelDelivery.DeliveryAddress;
+import org.nearbyshops.ModelDeliverySelf.DeliveryAddress;
 import org.nearbyshops.ModelStats.OrderStats;
 
 import java.sql.Timestamp;

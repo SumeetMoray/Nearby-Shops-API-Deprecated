@@ -1,8 +1,8 @@
-package org.nearbyshops.RESTEndpoints;
+package org.nearbyshops.RESTEndpointSettings;
 
-import org.nearbyshops.DAOsPrepared.ServiceConfigurationDAOPrepared;
+import org.nearbyshops.DAOPreparedSettings.ServiceConfigurationDAOPrepared;
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.Model.ServiceConfiguration;
+import org.nearbyshops.ModelSettings.ServiceConfiguration;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
@@ -17,7 +17,7 @@ import java.util.List;
 public class ServiceConfigurationResource {
 
 
-	ServiceConfigurationDAOPrepared daoPrepared = Globals.serviceConfigurationDAO;
+	private ServiceConfigurationDAOPrepared daoPrepared = Globals.serviceConfigurationDAO;
 
 
 	public ServiceConfigurationResource() {
@@ -26,9 +26,9 @@ public class ServiceConfigurationResource {
 	}
 	
 	
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+//	@POST
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	@Produces(MediaType.APPLICATION_JSON)
 	public Response createService(ServiceConfiguration serviceConfiguration)
 	{
 
@@ -62,15 +62,16 @@ public class ServiceConfigurationResource {
 		
 	}
 
-	
+
+	//	@Path("/{ServiceID}")
+//@PathParam("ServiceID")int serviceID,
+
 	@PUT
-	@Path("/{ServiceID}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateService(@PathParam("ServiceID")int serviceID, ServiceConfiguration serviceConfiguration)
+	public Response updateService(ServiceConfiguration serviceConfiguration)
 	{
 
-		serviceConfiguration.setServiceID(serviceID);
-
+		serviceConfiguration.setServiceID(1);
 		int rowCount =	daoPrepared.updateService(serviceConfiguration);
 
 		if(rowCount >= 1)
@@ -95,8 +96,8 @@ public class ServiceConfigurationResource {
 	}
 
 
-	@DELETE
-	@Path("/{ServiceID}")
+//	@DELETE
+//	@Path("/{ServiceID}")
 	public Response deleteCart(@PathParam("ServiceID")int serviceID)
 	{
 
@@ -175,7 +176,7 @@ public class ServiceConfigurationResource {
 	{
 //		@PathParam("ServiceID")int service
 
-		ServiceConfiguration serviceConfiguration = daoPrepared.readServiceConfiguration();
+		ServiceConfiguration serviceConfiguration = daoPrepared.getServiceConfiguration();
 		
 		if(serviceConfiguration != null)
 		{

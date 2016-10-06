@@ -33,9 +33,13 @@ public class StaffDAOPrepared {
 				+ Staff.STAFF_NAME + ","
 				+ Staff.USER_NAME + ","
 				+ Staff.PASSWORD + ","
+
+				+ Staff.ABOUT + ","
+				+ Staff.PROFILE_IMAGE_URL + ","
+
 				+ Staff.IS_ENABLED + ","
 				+ Staff.IS_WAITLISTED + ""
-				+ ") VALUES(?,?,?,?,?)";
+				+ ") VALUES(?,?,?, ?,?, ?,?)";
 
 		try {
 
@@ -46,8 +50,12 @@ public class StaffDAOPrepared {
 			statement.setString(1, staff.getStaffName());
 			statement.setString(2, staff.getUsername());
 			statement.setString(3, staff.getPassword());
-			statement.setObject(4,staff.getEnabled());
-			statement.setObject(5,staff.getWaitlisted());
+
+			statement.setString(4,staff.getAbout());
+			statement.setString(5,staff.getProfileImageURL());
+
+			statement.setObject(6,staff.getEnabled());
+			statement.setObject(7,staff.getWaitlisted());
 
 			rowIdOfInsertedRow = statement.executeUpdate();
 
@@ -98,6 +106,10 @@ public class StaffDAOPrepared {
 				+ Staff.STAFF_NAME + " = ?,"
 				+ Staff.USER_NAME + " = ?,"
 				+ Staff.PASSWORD + " = ?,"
+
+				+ Staff.ABOUT + " = ?,"
+				+ Staff.PROFILE_IMAGE_URL + " = ?,"
+
 				+ Staff.IS_ENABLED + " = ?,"
 				+ Staff.IS_WAITLISTED + " = ?"
 				+ " WHERE " + Staff.STAFF_ID + " = ?";
@@ -114,9 +126,13 @@ public class StaffDAOPrepared {
 			statement.setString(1, staff.getStaffName());
 			statement.setString(2, staff.getUsername());
 			statement.setString(3, staff.getPassword());
-			statement.setObject(4,staff.getEnabled());
-			statement.setObject(5,staff.getWaitlisted());
-			statement.setInt(6, staff.getStaffID());
+
+			statement.setString(4,staff.getAbout());
+			statement.setString(5,staff.getProfileImageURL());
+
+			statement.setObject(6,staff.getEnabled());
+			statement.setObject(7,staff.getWaitlisted());
+			statement.setInt(8, staff.getStaffID());
 
 			updatedRows = statement.executeUpdate();
 
@@ -238,6 +254,10 @@ public class StaffDAOPrepared {
 				staff.setStaffName(rs.getString(Staff.STAFF_NAME));
 				staff.setUsername(rs.getString(Staff.USER_NAME));
 				staff.setPassword(rs.getString(Staff.PASSWORD));
+
+				staff.setAbout(rs.getString(Staff.ABOUT));
+				staff.setProfileImageURL(rs.getString(Staff.PROFILE_IMAGE_URL));
+
 				staff.setEnabled(rs.getBoolean(Staff.IS_ENABLED));
 				staff.setWaitlisted(rs.getBoolean(Staff.IS_WAITLISTED));
 				staffList.add(staff);
@@ -315,6 +335,11 @@ public class StaffDAOPrepared {
 				staff.setStaffName(rs.getString(Staff.STAFF_NAME));
 				staff.setUsername(rs.getString(Staff.USER_NAME));
 				staff.setPassword(rs.getString(Staff.PASSWORD));
+
+
+				staff.setAbout(rs.getString(Staff.ABOUT));
+				staff.setProfileImageURL(rs.getString(Staff.PROFILE_IMAGE_URL));
+
 				staff.setEnabled(rs.getBoolean(Staff.IS_ENABLED));
 				staff.setWaitlisted(rs.getBoolean(Staff.IS_WAITLISTED));
 
@@ -448,6 +473,11 @@ public class StaffDAOPrepared {
 				staff.setStaffName(rs.getString(Staff.STAFF_NAME));
 				staff.setUsername(rs.getString(Staff.USER_NAME));
 				staff.setPassword(rs.getString(Staff.PASSWORD));
+
+
+				staff.setAbout(rs.getString(Staff.ABOUT));
+				staff.setProfileImageURL(rs.getString(Staff.PROFILE_IMAGE_URL));
+
 				staff.setEnabled(rs.getBoolean(Staff.IS_ENABLED));
 				staff.setWaitlisted(rs.getBoolean(Staff.IS_WAITLISTED));
 

@@ -15,6 +15,9 @@ public class Staff {
     public static final String USER_NAME = "USER_NAME";
     public static final String PASSWORD = "PASSWORD";
 
+    public static final String ABOUT = "ABOUT";
+    public static final String PROFILE_IMAGE_URL = "PROFILE_IMAGE_URL";
+
     // to be Implemented
     public static final String IS_ENABLED = "IS_ENABLED";
     public static final String IS_WAITLISTED = "IS_WAITLISTED";
@@ -26,6 +29,10 @@ public class Staff {
             + " " + Staff.STAFF_ID + " SERIAL PRIMARY KEY,"
             + " " + Staff.USER_NAME + " text UNIQUE NOT NULL,"
             + " " + Staff.PASSWORD + " text NOT NULL,"
+
+                    + Staff.ABOUT + " text,"
+                    + Staff.PROFILE_IMAGE_URL + " text,"
+
             + " " + Staff.IS_ENABLED + " boolean,"
             + " " + Staff.IS_WAITLISTED + " boolean,"
             + " " + Staff.STAFF_NAME + " text" + ")";
@@ -37,12 +44,30 @@ public class Staff {
     private String staffName;
     private String username;
     private String password;
+    private String about;
+    private String profileImageURL;
     private Boolean isEnabled;
     private Boolean isWaitlisted;
 
 
     // Getter and Setters
 
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
+    }
+
+    public String getProfileImageURL() {
+        return profileImageURL;
+    }
+
+    public void setProfileImageURL(String profileImageURL) {
+        this.profileImageURL = profileImageURL;
+    }
 
     public Boolean getEnabled() {
         return isEnabled;

@@ -2,8 +2,11 @@ package org.nearbyshops.Globals;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.nearbyshops.DAOPreparedSettings.ServiceConfigurationDAOPrepared;
+import org.nearbyshops.DAOPreparedSettings.SettingsDAOPrepared;
 import org.nearbyshops.DAOsPreparedRoles.AdminDAOPrepared;
 import org.nearbyshops.DAOsPreparedRoles.DistributorDAOPrepared;
+import org.nearbyshops.DAOsPreparedRoles.DistributorStaffDAOPrepared;
 import org.nearbyshops.DAOsPreparedRoles.StaffDAOPrepared;
 import org.nearbyshops.DAOs.*;
 import org.nearbyshops.DAOsPrepared.*;
@@ -30,8 +33,10 @@ public class Globals {
 	public static OrderItemService orderItemService = new OrderItemService();
 	public static DeliveryVehicleSelfDAO deliveryVehicleSelfDAO = new DeliveryVehicleSelfDAO();
 	public static ServiceConfigurationDAOPrepared serviceConfigurationDAO = new ServiceConfigurationDAOPrepared();
+	public static SettingsDAOPrepared settingsDAOPrepared = new SettingsDAOPrepared();
 	public static AdminDAOPrepared adminDAOPrepared = new AdminDAOPrepared();
 	public static StaffDAOPrepared staffDAOPrepared = new StaffDAOPrepared();
+	public static DistributorStaffDAOPrepared distributorStaffDAOPrepared = new DistributorStaffDAOPrepared();
 
 
 	// Configure Connection Pooling

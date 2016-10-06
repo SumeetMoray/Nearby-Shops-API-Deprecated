@@ -1,4 +1,4 @@
-package org.nearbyshops.ModelDelivery;
+package org.nearbyshops.ModelDeliverySelf;
 
 /**
  * Created by sumeet on 10/6/16.

@@ -1,18 +1,21 @@
 package org.nearbyshops.RESTEndpointRoles;
 
+import com.sun.net.httpserver.Headers;
+import org.glassfish.jersey.internal.util.Base64;
 import org.nearbyshops.DAOsPreparedRoles.StaffDAOPrepared;
+import org.nearbyshops.Globals.APIErrors;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
+import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
 import org.nearbyshops.ModelRoles.Staff;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
-import javax.ws.rs.core.GenericEntity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
 import java.net.URI;
 import java.util.List;
+import java.util.StringTokenizer;
 
 
 @Path("/v1/Staff")
@@ -34,12 +37,12 @@ public class StaffResource {
 	public Response createstaff(Staff staff)
 	{
 
+//		staff.setEnabled(true);
+//		staff.setWaitlisted(false);
+
 		int idOfInsertedRow = daoPrepared.saveStaff(staff);
 
-
 		staff.setStaffID(idOfInsertedRow);
-		staff.setEnabled(true);
-		staff.setWaitlisted(false);
 
 		if(idOfInsertedRow >=1)
 		{
@@ -72,10 +75,23 @@ public class StaffResource {
 	@Path("/{StaffID}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@RolesAllowed({GlobalConstants.ROLE_STAFF,GlobalConstants.ROLE_ADMIN})
-	public Response updateSTAFF(@PathParam("StaffID")int serviceProviderID, Staff staff)
+	public Response updateSTAFF(@PathParam("StaffID")int staffID,
+								Staff staff,
+								@Context HttpHeaders headers)
 	{
 
-		staff.setStaffID(serviceProviderID);
+		if(!verifyStaffAccount(headers,staffID))
+		{
+
+			Response responseError = Response.status(Status.FORBIDDEN)
+					.entity(new ErrorNBSAPI(403, APIErrors.UPDATE_BY_WRONG_USER))
+					.build();
+
+			throw new ForbiddenException(APIErrors.UPDATE_BY_WRONG_USER,responseError);
+		}
+
+
+		staff.setStaffID(staffID);
 
 		int rowCount = daoPrepared.updateStaff(staff);
 
@@ -95,18 +111,28 @@ public class StaffResource {
 			
 			return response;
 		}
-		
-		
+
 		return null;
-		
 	}
 
 	@DELETE
 	@Path("/{ServiceProviderID}")
 	//@Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
-	public Response deleteStaff(@PathParam("ServiceProviderID")int staffID)
+	public Response deleteStaff(@PathParam("ServiceProviderID")int staffID,
+								@Context HttpHeaders headers)
 	{
+
+		if(!verifyStaffAccount(headers,staffID))
+		{
+
+			Response responseError = Response.status(Status.FORBIDDEN)
+					.entity(new ErrorNBSAPI(403, APIErrors.UPDATE_BY_WRONG_USER))
+					.build();
+
+			throw new ForbiddenException(APIErrors.UPDATE_BY_WRONG_USER,responseError);
+		}
+
 
 
 		int rowCount = daoPrepared.deleteStaff(staffID);
@@ -197,5 +223,129 @@ public class StaffResource {
 			
 		}
 		
-	}	
+	}
+
+
+
+	@GET
+	@Path("Login")
+	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_STAFF})
+	public Response getDistributorLogin(@Context HttpHeaders header)
+	{
+
+		//Get request headers
+		final MultivaluedMap<String, String> headers = header.getRequestHeaders();
+
+		//Fetch authorization header
+		final List<String> authorization = headers.get(AUTHORIZATION_PROPERTY);
+
+		//If no authorization information present; block access
+		if (authorization == null || authorization.isEmpty()) {
+
+			Response response = Response.status(Status.UNAUTHORIZED)
+					.entity(new ErrorNBSAPI(401, APIErrors.UPDATE_BY_WRONG_USER))
+					.build();
+
+			throw new NotAuthorizedException(response);
+		}
+
+		//Get encoded username and password
+
+		final String encodedUserPassword = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
+
+		//Decode username and password
+		String usernameAndPassword = new String(Base64.decode(encodedUserPassword.getBytes()));
+
+		System.out.println("Username:Password" + usernameAndPassword);
+
+		//Split username and password tokens
+		final StringTokenizer tokenizer = new StringTokenizer(usernameAndPassword, ":");
+		final String username = tokenizer.nextToken();
+		final String password = tokenizer.nextToken();
+
+		Staff staff = daoPrepared.checkStaff(null,username,password);
+
+		if(staff!= null)
+		{
+			staff.setPassword(null);
+
+			Response response;
+
+			response = Response.status(Status.OK)
+					.entity(staff)
+					.build();
+
+			return response;
+
+		} else
+		{
+
+			Response response = Response.status(Status.UNAUTHORIZED)
+					.entity(staff)
+					.build();
+
+			return response;
+
+		}
+
+	}
+
+
+
+	private static final String AUTHENTICATION_SCHEME = "Basic";
+	private static final String AUTHORIZATION_PROPERTY = "Authorization";
+
+	private boolean verifyStaffAccount(HttpHeaders header, int staffID)
+	{
+
+		boolean result = true;
+
+
+		//Get request headers
+		final MultivaluedMap<String, String> headers = header.getRequestHeaders();
+
+		//Fetch authorization header
+		final List<String> authorization = headers.get(AUTHORIZATION_PROPERTY);
+
+		//If no authorization information present; block access
+		if (authorization == null || authorization.isEmpty()) {
+//                requestContext.abortWith(ACCESS_DENIED);
+
+			return false;
+		}
+
+		//Get encoded username and password
+		final String encodedUserPassword = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
+
+		//Decode username and password
+		String usernameAndPassword = new String(Base64.decode(encodedUserPassword.getBytes()));
+
+		System.out.println("Username:Password" + usernameAndPassword);
+
+		//Split username and password tokens
+		final StringTokenizer tokenizer = new StringTokenizer(usernameAndPassword, ":");
+		final String username = tokenizer.nextToken();
+		final String password = tokenizer.nextToken();
+
+
+		Staff staff = daoPrepared.checkStaff(null,username,password);
+		// Distributor account exist and is enabled
+		if(staff!=null && staff.getEnabled())
+		{
+			// If code enters here implies that distributor account is used for update. So we need to check if
+			// the distributor is same as the one authorized.
+
+			if(staff.getStaffID()!=staffID)
+			{
+				// the user doing an update is not the same as the user whose profile is being updated so has to
+				// stop this operation, and should throw an unauthorized exception in this situation.
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+
 }

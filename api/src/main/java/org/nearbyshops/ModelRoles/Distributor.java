@@ -1,13 +1,14 @@
 package org.nearbyshops.ModelRoles;
 
 
+import java.sql.Timestamp;
+
 public class Distributor {
 
 	public Distributor() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
 
 	// Column Names
 
@@ -27,6 +28,10 @@ public class Distributor {
 	public static final String IS_ENABLED = "IS_ENABLED";
 	public static final String IS_WAITLISTED = "IS_WAITLISTED";
 
+	// to be implemented
+	public static final String CREATED = "CREATED";
+	public static final String UPDATED = "UPDATED";
+
 	/*
 	Enable or Disable indicates whether the account is enabled or not.
 	When the staff is approving the new accounts they might put some or few accounts on hold because they might
@@ -43,8 +48,15 @@ public class Distributor {
 			+ " " + Distributor.USERNAME + " text UNIQUE,"
 			+ " " + Distributor.PASSWORD + " text,"
 
+			+ " " + Distributor.ABOUT + " text,"
+			+ " " + Distributor.PROFILE_IMAGE_URL + " text,"
+
 			+ " " + Distributor.IS_ENABLED + " boolean,"
-			+ " " + Distributor.IS_WAITLISTED + " boolean"
+			+ " " + Distributor.IS_WAITLISTED + " boolean,"
+
+			+ " " + Distributor.CREATED + " timestamp with time zone NOT NULL DEFAULT now(),"
+			+ " " + Distributor.UPDATED + " timestamp with time zone "
+
 			+ ")";
 
 
@@ -55,9 +67,33 @@ public class Distributor {
 	private String distributorName;
 	private String username;
 	private String password;
-	private Boolean isEnabled;
-	private Boolean isWaitlisted;
 
+	private String about;
+	private String profileImageURL;
+
+	private Boolean enabled;
+	private Boolean waitlisted;
+	private Timestamp created;
+	private Timestamp updated;
+
+
+
+
+	public String getAbout() {
+		return about;
+	}
+
+	public void setAbout(String about) {
+		this.about = about;
+	}
+
+	public String getProfileImageURL() {
+		return profileImageURL;
+	}
+
+	public void setProfileImageURL(String profileImageURL) {
+		this.profileImageURL = profileImageURL;
+	}
 
 	public String getUsername() {
 		return username;
@@ -68,19 +104,19 @@ public class Distributor {
 	}
 
 	public Boolean getEnabled() {
-		return isEnabled;
+		return enabled;
 	}
 
 	public void setEnabled(Boolean enabled) {
-		isEnabled = enabled;
+		this.enabled = enabled;
 	}
 
 	public Boolean getWaitlisted() {
-		return isWaitlisted;
+		return waitlisted;
 	}
 
 	public void setWaitlisted(Boolean waitlisted) {
-		isWaitlisted = waitlisted;
+		this.waitlisted = waitlisted;
 	}
 
 	public String getPassword() {
@@ -105,5 +141,22 @@ public class Distributor {
 
 	public void setDistributorName(String distributorName) {
 		this.distributorName = distributorName;
+	}
+
+
+	public Timestamp getCreated() {
+		return created;
+	}
+
+	public void setCreated(Timestamp created) {
+		this.created = created;
+	}
+
+	public Timestamp getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Timestamp updated) {
+		this.updated = updated;
 	}
 }

@@ -14,6 +14,9 @@ import org.nearbyshops.DAOsPreparedRoles.DistributorDAOPrepared;
 import org.nearbyshops.Globals.APIErrors;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
+import org.nearbyshops.Model.Item;
+import org.nearbyshops.ModelEndPoints.DistributorEndPoint;
+import org.nearbyshops.ModelEndPoints.ItemEndPoint;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
 import org.nearbyshops.ModelRoles.Distributor;
 
@@ -75,7 +78,9 @@ public class DistributorResource {
 		
 	}
 
-	
+
+
+
 	@PUT
 	@Path("/{DistributorID}")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -85,7 +90,7 @@ public class DistributorResource {
 									  @Context HttpHeaders headers)
 	{
 
-		if(!checkDistributorAccount(headers,distributorID))
+		if(!verifyDistributorAccount(headers,distributorID))
 		{
 
 			Response responseError = Response.status(Status.FORBIDDEN)
@@ -102,7 +107,7 @@ public class DistributorResource {
 //		System.out.println("distributorID: " + distributorID + " " + distributor.getName()
 //		+ " " + distributor.getDistributorID());
 		
-		int rowCount = distributorDAOPrepared.updateDistributor(distributor);
+		int rowCount = distributorDAOPrepared.updateDistributorNoPassword(distributor);
 		
 		
 		if(rowCount >= 1)
@@ -127,6 +132,8 @@ public class DistributorResource {
 		
 	}
 
+
+
 	@DELETE
 	@Path("/{DistributorID}")
 	@RolesAllowed({GlobalConstants.ROLE_DISTRIBUTOR,GlobalConstants.ROLE_STAFF,GlobalConstants.ROLE_ADMIN})
@@ -135,7 +142,7 @@ public class DistributorResource {
 	{
 
 
-		if(!checkDistributorAccount(headers,distributorID))
+		if(!verifyDistributorAccount(headers,distributorID))
 		{
 
 			Response responseError = Response.status(Status.FORBIDDEN)
@@ -172,12 +179,20 @@ public class DistributorResource {
 		return null;
 	}
 	
-	
+
+	// Public GET List
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllDistributors()
 	{	
-		List<Distributor> list = distributorDAOPrepared.getDistributors();
+		List<Distributor> list = distributorDAOPrepared.getDistributors(null,null,null,null,null,null);
+
+		for(Distributor distributor: list)
+		{
+			distributor.setPassword(null);
+			distributor.setUsername(null);
+		}
+
 		
 		GenericEntity<List<Distributor>> listEntity = new GenericEntity<List<Distributor>>(list){
 			
@@ -202,71 +217,22 @@ public class DistributorResource {
 		}
 		
 	}
-	
-	
+
+
+	// Public GET single
 	@GET
 	@Path("/{DistributorID}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getDistributor(@PathParam("DistributorID")int distributorID,@QueryParam("Password")String password)
-	{		
-		
-		Distributor distributor = distributorDAOPrepared.getDistributor(distributorID);
-
-		distributor.setUsername(null);
-		distributor.setPassword(null);
-
-
-		if(distributor!= null)
-		{
-
-			Response response;
-
-			response = Response.status(Status.OK)
-					.entity(distributor)
-					.build();
-
-
-			return response;
-			
-		} else 
-		{
-			
-			Response response = Response.status(Status.NO_CONTENT)
-					.entity(distributor)
-					.build();
-			
-			return response;
-			
-		}
-		
-	}
-
-
-	@GET
-	@Path("Private/{DistributorID}")
-	@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_DISTRIBUTOR,GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
-	public Response getDistributorPrivate(@PathParam("DistributorID")int distributorID,
-										  @QueryParam("Password")String password,
-										  @Context HttpHeaders headers)
 	{
 
-		if(!checkDistributorAccount(headers,distributorID))
-		{
-
-			Response responseError = Response.status(Status.FORBIDDEN)
-					.entity(new ErrorNBSAPI(403, APIErrors.UPDATE_BY_WRONG_USER))
-					.build();
-
-			throw new ForbiddenException(APIErrors.UPDATE_BY_WRONG_USER,responseError);
-		}
-
-
-
-
 		Distributor distributor = distributorDAOPrepared.getDistributor(distributorID);
 
-		distributor.setPassword(null);
+		if(distributor!=null)
+		{
+			distributor.setUsername(null);
+			distributor.setPassword(null);
+		}
 
 
 		if(distributor!= null)
@@ -293,6 +259,131 @@ public class DistributorResource {
 		}
 
 	}
+
+
+
+
+
+
+
+//	@GET
+//	@Path("/Private")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	@RolesAllowed({GlobalConstants.ROLE_STAFF,GlobalConstants.ROLE_ADMIN})
+	public Response getDistributorsPrivate()
+	{
+		List<Distributor> list = distributorDAOPrepared.getDistributors(null,null,null,null,null,null);
+
+
+
+
+		for(Distributor distributor: list)
+		{
+			distributor.setPassword(null);
+		}
+
+		GenericEntity<List<Distributor>> listEntity = new GenericEntity<List<Distributor>>(list){
+
+		};
+
+
+		if(list.size()<=0)
+		{
+			Response response = Response.status(Status.NO_CONTENT)
+					.entity(listEntity)
+					.build();
+
+			return response;
+
+		}else
+		{
+			Response response = Response.status(Status.OK)
+					.entity(listEntity)
+					.build();
+
+			return response;
+		}
+
+	}
+
+
+
+	@GET
+	@Path("/Private")
+	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_STAFF,GlobalConstants.ROLE_ADMIN})
+	public Response getItems(
+			@QueryParam("DistributorID")Integer distributorID,
+			@QueryParam("IsEnabled") Boolean isEnabled,
+			@QueryParam("IsWaitlisted") Boolean isWaitlisted,
+			@QueryParam("SortBy") String sortBy,
+			@QueryParam("Limit")Integer limit, @QueryParam("Offset")Integer offset,
+			@QueryParam("metadata_only")Boolean metaonly)
+	{
+
+		int set_limit = 30;
+		int set_offset = 0;
+		final int max_limit = 100;
+
+		if(limit!= null)
+		{
+
+			if (limit >= max_limit) {
+
+				set_limit = max_limit;
+			}
+			else
+			{
+
+				set_limit = limit;
+			}
+
+		}
+
+		if(offset!=null)
+		{
+			set_offset = offset;
+		}
+
+		DistributorEndPoint endPoint = distributorDAOPrepared.getEndpointMetadata(distributorID,
+																isEnabled,isWaitlisted);
+
+		endPoint.setLimit(set_limit);
+		endPoint.setMax_limit(max_limit);
+		endPoint.setOffset(set_offset);
+
+		List<Distributor> list = null;
+
+
+		if(metaonly==null || (!metaonly)) {
+
+			list =
+					distributorDAOPrepared.getDistributors(
+							distributorID,
+							isEnabled,isWaitlisted,
+							sortBy,set_limit,set_offset
+					);
+
+
+			for(Distributor distributor: list)
+			{
+				distributor.setPassword(null);
+			}
+
+
+			endPoint.setResults(list);
+		}
+
+
+		//Marker
+
+		return Response.status(Status.OK)
+				.entity(endPoint)
+				.build();
+	}
+
+
+
 
 
 
@@ -427,14 +518,10 @@ public class DistributorResource {
 	}
 */
 
-
-
-
-
 	private static final String AUTHENTICATION_SCHEME = "Basic";
 	private static final String AUTHORIZATION_PROPERTY = "Authorization";
 
-	private boolean checkDistributorAccount(HttpHeaders header, int distributorID)
+	private boolean verifyDistributorAccount(HttpHeaders header, int distributorID)
 	{
 
 		boolean result = true;
@@ -491,6 +578,5 @@ public class DistributorResource {
 
 		return true;
 	}
-
 
 }

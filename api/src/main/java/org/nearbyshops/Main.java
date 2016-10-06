@@ -6,13 +6,13 @@ import org.nearbyshops.ContractClasses.*;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.nearbyshops.DAOPreparedSettings.SettingsDAOPrepared;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.*;
-import org.nearbyshops.ModelRoles.Admin;
-import org.nearbyshops.ModelRoles.Distributor;
-import org.nearbyshops.ModelRoles.EndUser;
-import org.nearbyshops.ModelRoles.Staff;
+import org.nearbyshops.ModelRoles.*;
+import org.nearbyshops.ModelSettings.ServiceConfiguration;
+import org.nearbyshops.ModelSettings.Settings;
 
 import java.awt.BorderLayout;
 
@@ -193,26 +193,26 @@ public class Main implements ActionListener {
 	
 	
 	
-	public void createTables()
+	private void createTables()
 	{
 		
-		Connection conn = null;
-		Statement stmt = null;
+		Connection connection = null;
+		Statement statement = null;
 		
 		try {
 			
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL
+			connection = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL
 					,JDBCContract.CURRENT_USERNAME
 					,JDBCContract.CURRENT_PASSWORD);
 
-			stmt = conn.createStatement();
+			statement = connection.createStatement();
 
 
 
-		        stmt.executeUpdate(ItemCategory.createTableItemCategoryPostgres);
-		        stmt.executeUpdate(Item.createTableItemPostgres);
-		        stmt.executeUpdate(Distributor.createTableDistributorPostgres);
-
+		        statement.executeUpdate(ItemCategory.createTableItemCategoryPostgres);
+		        statement.executeUpdate(Item.createTableItemPostgres);
+		        statement.executeUpdate(Distributor.createTableDistributorPostgres);
+				statement.executeUpdate(DistributorStaff.createTableDistributorStaffPostgres);
 
 
 		    	String createTableShopPostgres = "CREATE TABLE IF NOT EXISTS " + ShopContract.TABLE_NAME + "("
@@ -241,7 +241,7 @@ public class Main implements ActionListener {
 						+ " " + ShopContract.IS_OPEN + " boolean,"
 		        		+ " FOREIGN KEY(" + ShopContract.DISTRIBUTOR_ID +") REFERENCES DISTRIBUTOR(ID))";
 
-		        stmt.executeUpdate(createTableShopPostgres);
+		        statement.executeUpdate(createTableShopPostgres);
 
 
 
@@ -260,17 +260,17 @@ public class Main implements ActionListener {
 		        		+ ")";
 		    	
 		    	
-		        stmt.executeUpdate(createTableShopItemPostgres);
+		        statement.executeUpdate(createTableShopItemPostgres);
 
 
 
-			stmt.executeUpdate(EndUser.createTableEndUserPostgres);
+			statement.executeUpdate(EndUser.createTableEndUserPostgres);
 
 
 			// Create Table Admin
-			stmt.executeUpdate(Admin.createTableAdminPostgres);
+			statement.executeUpdate(Admin.createTableAdminPostgres);
 			// Create Table Staff
-			stmt.executeUpdate(Staff.createTableStaffPostgres);
+			statement.executeUpdate(Staff.createTableStaffPostgres);
 
 
 			// create Delivery Address
@@ -288,7 +288,7 @@ public class Main implements ActionListener {
 					+ ")";
 
 
-			stmt.executeUpdate(createTableDeliveryAddressPostgres);
+			statement.executeUpdate(createTableDeliveryAddressPostgres);
 
 
 
@@ -303,7 +303,7 @@ public class Main implements ActionListener {
 					+ ")";
 
 
-			stmt.executeUpdate(createtableDeliveryVehicleSelfPostgres);
+			statement.executeUpdate(createtableDeliveryVehicleSelfPostgres);
 
 
 
@@ -331,7 +331,7 @@ public class Main implements ActionListener {
 
 
 
-			stmt.executeUpdate(createTableOrderPostgres);
+			statement.executeUpdate(createTableOrderPostgres);
 
 
 			// Create table OrderItem in Postgres
@@ -346,7 +346,7 @@ public class Main implements ActionListener {
 					+ " UNIQUE (" + OrderItemContract.ITEM_ID + "," + OrderItemContract.ORDER_ID  + ")"
 					+ ")";
 
-			stmt.executeUpdate(createtableOrderItemPostgres);
+			statement.executeUpdate(createtableOrderItemPostgres);
 
 
 
@@ -359,7 +359,7 @@ public class Main implements ActionListener {
 					+ " UNIQUE (" + CartContract.END_USER_ID + "," + CartContract.SHOP_ID + ")"
 					+ ")";
 
-			stmt.executeUpdate(createTableCartPostgres);
+			statement.executeUpdate(createTableCartPostgres);
 
 
 
@@ -373,10 +373,11 @@ public class Main implements ActionListener {
 					+ ")";
 
 
-			stmt.executeUpdate(createtableCartItemPostgres);
+			statement.executeUpdate(createtableCartItemPostgres);
 
 
-			stmt.executeUpdate(ServiceConfiguration.createTableServiceConfigurationPostgres);
+			statement.executeUpdate(ServiceConfiguration.createTableServiceConfigurationPostgres);
+			statement.executeUpdate(Settings.createTableSettingsPostgres);
 
 			System.out.println("Tables Created ... !");
 
@@ -426,9 +427,18 @@ public class Main implements ActionListener {
 						+ "'" + "FALSE" + "'"
 						+ ")";
 
-				stmt.executeUpdate(insertItemCategory);
+				statement.executeUpdate(insertItemCategory);
 
 			}
+
+
+
+			// Insert Default Settings
+			SettingsDAOPrepared settingsDAO = Globals.settingsDAOPrepared;
+			if(settingsDAO.getServiceConfiguration()==null){
+				settingsDAO.saveSettings(settingsDAO.getDefaultConfiguration());
+			}
+
 
 
 
@@ -436,7 +446,7 @@ public class Main implements ActionListener {
 
 			String insertServiceConfig = "";
 
-			if(Globals.serviceConfigurationDAO.readServiceConfiguration()==null)
+			if(Globals.serviceConfigurationDAO.getServiceConfiguration()==null)
 			{
 
 				ServiceConfiguration defaultConfiguration = new ServiceConfiguration();
@@ -475,11 +485,11 @@ public class Main implements ActionListener {
 			
 			// close the connection and statement object
 
-			if(stmt !=null)
+			if(statement !=null)
 			{
 				
 				try {
-					stmt.close();
+					statement.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -488,10 +498,10 @@ public class Main implements ActionListener {
 			}
 			
 
-			if(conn!=null)
+			if(connection!=null)
 			{
 				try {
-					conn.close();
+					connection.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

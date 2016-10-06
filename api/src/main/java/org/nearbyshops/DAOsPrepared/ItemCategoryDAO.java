@@ -16,13 +16,13 @@ import java.util.ArrayList;
 
 public class ItemCategoryDAO {
 
-	HikariDataSource dataSource = Globals.getDataSource();
+	private HikariDataSource dataSource = Globals.getDataSource();
 
-	GeoLocation center;
+	private GeoLocation center;
 
-	GeoLocation[] minMaxArray;
-	GeoLocation pointOne;
-	GeoLocation pointTwo;
+	private GeoLocation[] minMaxArray;
+	private GeoLocation pointOne;
+	private GeoLocation pointTwo;
 
 
 	@Override

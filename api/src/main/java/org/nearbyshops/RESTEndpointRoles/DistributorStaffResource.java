@@ -1,13 +1,12 @@
 package org.nearbyshops.RESTEndpointRoles;
 
 import org.glassfish.jersey.internal.util.Base64;
-import org.nearbyshops.DAOsPreparedRoles.AdminDAOPrepared;
+import org.nearbyshops.DAOsPreparedRoles.DistributorStaffDAOPrepared;
 import org.nearbyshops.Globals.APIErrors;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
-import org.nearbyshops.ModelRoles.Admin;
-import org.nearbyshops.ModelRoles.Distributor;
+import org.nearbyshops.ModelRoles.DistributorStaff;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
@@ -18,13 +17,14 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 
-@Path("/v1/Admin")
-public class AdminResource {
+@Path("/v1/DistributorStaff")
+public class DistributorStaffResource {
 
 
-	private AdminDAOPrepared daoPrepared = Globals.adminDAOPrepared;
+	private DistributorStaffDAOPrepared daoPrepared = Globals.distributorStaffDAOPrepared;
 
-	public AdminResource() {
+
+	public DistributorStaffResource() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -33,22 +33,29 @@ public class AdminResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed(GlobalConstants.ROLE_ADMIN)
-	public Response createAdmin(Admin admin)
+	@RolesAllowed({GlobalConstants.ROLE_DISTRIBUTOR})
+	public Response createDistributorStaff(DistributorStaff distributorStaff)
 	{
 
-		int idOfInsertedRow = daoPrepared.saveAdmin(admin);
+		distributorStaff.setEnabled(false);
+		distributorStaff.setWaitlisted(false);
+//		System.out.println(distributor.getName() + " | " + distributor.getDistributorID());
+		
+		int idOfInsertedRow = daoPrepared.saveDistributorStaff(distributorStaff);
+		
+//		System.out.println(distributor.getName() + " | " + distributor.getDistributorID());
+	
+		distributorStaff.setDistributorStaffID(idOfInsertedRow);
 
-
-		admin.setAdminID(idOfInsertedRow);
-
+		distributorStaff.setPassword(null);
+		
 		if(idOfInsertedRow >=1)
 		{
 			
 			
 			Response response = Response.status(Status.CREATED)
-					.location(URI.create("/api/Admin/" + idOfInsertedRow))
-					.entity(admin)
+					.location(URI.create("/api/Distributor/" + idOfInsertedRow))
+					.entity(distributorStaff)
 					.build();
 			
 			return response;
@@ -68,18 +75,18 @@ public class AdminResource {
 		
 	}
 
-	
+
+
 	@PUT
-	@RolesAllowed(GlobalConstants.ROLE_ADMIN)
-	@Path("/{ServiceProviderID}")
+	@Path("/{DistributorID}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateAdmin(@PathParam("ServiceProviderID")int adminID,
-								Admin admin,
-								@Context HttpHeaders headers)
+	@RolesAllowed({GlobalConstants.ROLE_DISTRIBUTOR_STAFF,GlobalConstants.ROLE_DISTRIBUTOR})
+	public Response updateDistributor(@PathParam("DistributorID")int distributorID,
+									  DistributorStaff distributorStaff,
+									  @Context HttpHeaders headers)
 	{
 
-
-		if(!verifyAdminAccount(headers,adminID))
+		if(!verifyDistributorAccount(headers,distributorID))
 		{
 
 			Response responseError = Response.status(Status.FORBIDDEN)
@@ -91,9 +98,12 @@ public class AdminResource {
 
 
 
-		admin.setAdminID(adminID);
-
-		int rowCount = daoPrepared.updateAdmin(admin);
+		distributorStaff.setDistributorStaffID(distributorID);
+		
+//		System.out.println("distributorID: " + distributorID + " " + distributor.getName()
+//		+ " " + distributor.getDistributorID());
+		
+		int rowCount = daoPrepared.updateDistributor(distributorStaff);
 		
 		
 		if(rowCount >= 1)
@@ -118,16 +128,17 @@ public class AdminResource {
 		
 	}
 
+
+
 	@DELETE
-	@RolesAllowed(GlobalConstants.ROLE_ADMIN)
-	@Path("/{ServiceProviderID}")
-	//@Produces(MediaType.APPLICATION_JSON)
-	public Response deleteAdmin(@PathParam("ServiceProviderID")int adminID,
-								@Context HttpHeaders headers)
+	@Path("/{DistributorID}")
+	@RolesAllowed({GlobalConstants.ROLE_DISTRIBUTOR_STAFF,GlobalConstants.ROLE_DISTRIBUTOR_STAFF})
+	public Response deleteDistributor(@PathParam("DistributorID")int distributorID,
+									  @Context HttpHeaders headers)
 	{
 
 
-		if(!verifyAdminAccount(headers,adminID))
+		if(!verifyDistributorAccount(headers,distributorID))
 		{
 
 			Response responseError = Response.status(Status.FORBIDDEN)
@@ -138,7 +149,8 @@ public class AdminResource {
 		}
 
 
-		int rowCount = daoPrepared.deleteAdmin(adminID);
+
+		int rowCount = daoPrepared.deleteDistributorStaff(distributorID);
 		
 		
 		if(rowCount>=1)
@@ -163,17 +175,22 @@ public class AdminResource {
 		return null;
 	}
 	
-	
+
+	// Public GET List
 	@GET
-	@RolesAllowed(GlobalConstants.ROLE_ADMIN)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAdmins()
-	{
+	public Response getAllDistributors()
+	{	
+		List<DistributorStaff> list = daoPrepared.getDistributors();
 
+		for(DistributorStaff distributor: list)
+		{
+			distributor.setPassword(null);
+			distributor.setUsername(null);
+		}
 
-		List<Admin> list = daoPrepared.getAdmin();
-
-		GenericEntity<List<Admin>> listEntity = new GenericEntity<List<Admin>>(list){
+		
+		GenericEntity<List<DistributorStaff>> listEntity = new GenericEntity<List<DistributorStaff>>(list){
 			
 		};
 	
@@ -196,52 +213,104 @@ public class AdminResource {
 		}
 		
 	}
-	
-	
+
+
+	// Public GET single
 	@GET
-	@Path("/{adminID}")
-	@RolesAllowed(GlobalConstants.ROLE_ADMIN)
+	@Path("/{DistributorID}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAdmin(@PathParam("adminID")int adminID)
+	public Response getDistributor(@PathParam("DistributorID")int distributorID,@QueryParam("Password")String password)
 	{
 
-		Admin admin = daoPrepared.getAdmin(adminID);
-		
-		if(admin != null)
+		DistributorStaff distributor = daoPrepared.getDistributor(distributorID);
+
+		if(distributor!=null)
+		{
+			distributor.setUsername(null);
+			distributor.setPassword(null);
+		}
+
+
+		if(distributor!= null)
+		{
+
+			Response response;
+
+			response = Response.status(Status.OK)
+					.entity(distributor)
+					.build();
+
+
+			return response;
+
+		} else
+		{
+
+			Response response = Response.status(Status.NO_CONTENT)
+					.entity(distributor)
+					.build();
+
+			return response;
+
+		}
+
+	}
+
+
+
+
+
+
+
+	@GET
+	@Path("/Private")
+	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_STAFF,GlobalConstants.ROLE_ADMIN})
+	public Response getDistributorsPrivate()
+	{
+		List<DistributorStaff> list = daoPrepared.getDistributors();
+
+
+		for(DistributorStaff distributor: list)
+		{
+			distributor.setPassword(null);
+		}
+
+		GenericEntity<List<DistributorStaff>> listEntity = new GenericEntity<List<DistributorStaff>>(list){
+
+		};
+
+
+		if(list.size()<=0)
+		{
+			Response response = Response.status(Status.NO_CONTENT)
+					.entity(listEntity)
+					.build();
+
+			return response;
+
+		}else
 		{
 			Response response = Response.status(Status.OK)
-			.entity(admin)
-			.build();
-			
-			return response;
-			
-		} else 
-		{
-			
-			Response response = Response.status(Status.NO_CONTENT)
-					.entity(admin)
+					.entity(listEntity)
 					.build();
-			
+
 			return response;
-			
 		}
-		
+
 	}
+
+
+
 
 
 
 	@GET
 	@Path("Login")
 	@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_ADMIN})
-	public Response getAdminLogin(@Context HttpHeaders header)
+	@RolesAllowed({GlobalConstants.ROLE_DISTRIBUTOR_STAFF})
+	public Response getDistributorLogin(@Context HttpHeaders header)
 	{
-/*
-		try {
-			Thread.sleep(0);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}*/
 
 		//Get request headers
 		final MultivaluedMap<String, String> headers = header.getRequestHeaders();
@@ -253,8 +322,8 @@ public class AdminResource {
 		if (authorization == null || authorization.isEmpty()) {
 
 			Response response = Response.status(Status.UNAUTHORIZED)
-					.entity(new ErrorNBSAPI(401, APIErrors.UPDATE_BY_WRONG_USER))
-					.build();
+										.entity(new ErrorNBSAPI(401,APIErrors.UPDATE_BY_WRONG_USER))
+										.build();
 
 			throw new NotAuthorizedException(response);
 		}
@@ -281,18 +350,18 @@ public class AdminResource {
 
 
 
-		Admin admin = daoPrepared.checkAdmin(null,username,password);
+		DistributorStaff distributor = daoPrepared.checkDistributor(null,username,password);
 
 
 
-		if(admin!= null)
+		if(distributor!= null)
 		{
-			admin.setPassword(null);
+			distributor.setPassword(null);
 
 			Response response;
 
 			response = Response.status(Status.OK)
-					.entity(admin)
+					.entity(distributor)
 					.build();
 
 
@@ -302,7 +371,7 @@ public class AdminResource {
 		{
 
 			Response response = Response.status(Status.UNAUTHORIZED)
-					.entity(admin)
+					.entity(distributor)
 					.build();
 
 			return response;
@@ -314,12 +383,67 @@ public class AdminResource {
 
 
 
+	// @PathParam("DistributorID")int distributorID,
+
+//	@GET
+//	@Path("/Validate")
+	/*public Response validateDistributor(@QueryParam("Password")String password,@QueryParam("Username")String userName,@QueryParam("ID")Integer id)
+	{
+
+		boolean isValid = false;
+
+		Distributor tempDistributor = null;
+
+		if(id!=null)
+		{
+			tempDistributor = daoPrepared.getDistributorPassword(id,null);
+
+			System.out.println(id + " : " + userName);
+
+		}else if(userName !=null)
+		{
+			tempDistributor = daoPrepared.getDistributorPassword(null,userName);
+		}
+
+
+		if(tempDistributor!=null && tempDistributor.getPassword()!=null && tempDistributor.getPassword().equals(password))
+		{
+			isValid = true;
+		}
+
+		tempDistributor.setPassword(null);
+
+
+		if(isValid)
+		{
+			Response response = Response.status(Status.OK)
+					.entity(tempDistributor)
+					.build();
+
+			return response;
+
+		} else
+		{
+
+			Response response = Response.status(Status.UNAUTHORIZED)
+					.entity(null)
+					.build();
+
+			return response;
+
+		}
+
+	}
+*/
+
+
+
 
 
 	private static final String AUTHENTICATION_SCHEME = "Basic";
 	private static final String AUTHORIZATION_PROPERTY = "Authorization";
 
-	private boolean verifyAdminAccount(HttpHeaders header, int adminID)
+	private boolean verifyDistributorAccount(HttpHeaders header, int distributorID)
 	{
 
 		boolean result = true;
@@ -358,15 +482,15 @@ public class AdminResource {
 		final String username = tokenizer.nextToken();
 		final String password = tokenizer.nextToken();
 
-		Admin admin = daoPrepared.checkAdmin(null,username,password);
 
+		DistributorStaff distributor = daoPrepared.checkDistributor(null,username,password);
 		// Distributor account exist and is enabled
-		if(admin!=null)
+		if(distributor!=null && distributor.getEnabled())
 		{
 			// If code enters here implies that distributor account is used for update. So we need to check if
 			// the distributor is same as the one authorized.
 
-			if(admin.getAdminID()!=adminID)
+			if(distributor.getDistributorStaffID()!=distributorID)
 			{
 				// the user doing an update is not the same as the user whose profile is being updated so has to
 				// stop this operation, and should throw an unauthorized exception in this situation.
@@ -376,7 +500,6 @@ public class AdminResource {
 
 		return true;
 	}
-
 
 
 }

@@ -2,7 +2,7 @@ package org.nearbyshops.DAOs;
 
 
 import org.nearbyshops.JDBCContract;
-import org.nearbyshops.Model.ServiceConfiguration;
+import org.nearbyshops.ModelSettings.ServiceConfiguration;
 
 import java.sql.*;
 import java.util.ArrayList;
