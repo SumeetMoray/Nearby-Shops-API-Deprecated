@@ -17,6 +17,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.nearbyshops.DAOsPrepared.ItemDAO;
+import org.nearbyshops.DAOsPrepared.ShopDAO;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.ShopItem;
 import org.nearbyshops.ModelEndPoints.ShopItemEndPoint;
@@ -27,6 +28,7 @@ public class ShopItemResource {
 
 
 	private ItemDAO itemDAO = Globals.itemDAO;
+	private ShopDAO shopDAO = Globals.shopDAO;
 
 
 	@PUT
@@ -283,7 +285,7 @@ public class ShopItemResource {
 		{
 			if(ShopID == null)
 			{
-				shopItem.setShop(Globals.shopService.getShop(shopItem.getShopID(),latCenter,lonCenter));
+				shopItem.setShop(shopDAO.getShop(shopItem.getShopID(),latCenter,lonCenter));
 			}
 
 			if(itemID == null)
@@ -399,7 +401,7 @@ public class ShopItemResource {
 			{
 				if(ShopID == null)
 				{
-					shopItem.setShop(Globals.shopService.getShop(shopItem.getShopID(),latCenter,lonCenter));
+					shopItem.setShop(shopDAO.getShop(shopItem.getShopID(),latCenter,lonCenter));
 				}
 
 				if(itemID == null)

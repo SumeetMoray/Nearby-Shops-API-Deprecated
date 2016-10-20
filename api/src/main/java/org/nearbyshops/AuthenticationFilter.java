@@ -1,15 +1,13 @@
 package org.nearbyshops;
 
-import org.nearbyshops.DAOsPreparedRoles.AdminDAOPrepared;
-import org.nearbyshops.DAOsPreparedRoles.DistributorDAOPrepared;
-import org.nearbyshops.DAOsPreparedRoles.DistributorStaffDAOPrepared;
-import org.nearbyshops.DAOsPreparedRoles.StaffDAOPrepared;
+import org.nearbyshops.DAOsPreparedRoles.*;
 import org.nearbyshops.Globals.APIErrors;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
 import org.nearbyshops.ModelRoles.Distributor;
 import org.nearbyshops.ModelRoles.DistributorStaff;
+import org.nearbyshops.ModelRoles.EndUser;
 import org.nearbyshops.ModelRoles.Staff;
 
 import javax.annotation.security.DenyAll;
@@ -38,6 +36,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     private StaffDAOPrepared staffDAOPrepared = Globals.staffDAOPrepared;
     private DistributorDAOPrepared distributorDAOPrepared = Globals.distributorDAOPrepared;
     private DistributorStaffDAOPrepared distributorStaffDAO = Globals.distributorStaffDAOPrepared;
+    private EndUserDAOPrepared endUserDAOPrepared = Globals.endUserDAOPrepared;
 
 
     @Context
@@ -193,6 +192,18 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                     return isAllowed;
                 }
             }
+            else if(role.equals(GlobalConstants.ROLE_END_USER))
+            {
+                EndUser endUser = endUserDAOPrepared.checkEndUser(null,username,password);
+                // Distributor account exist and is enabled
+                if(endUser!=null && endUser.getEnabled())
+                {
+                    isAllowed = true;
+                    return isAllowed;
+                }
+
+            }
+
 
         }
 

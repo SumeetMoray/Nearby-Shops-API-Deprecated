@@ -1,15 +1,19 @@
 	package org.nearbyshops;
 
 
-import org.glassfish.jersey.server.ServerProperties;
-import org.nearbyshops.ContractClasses.*;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
+import org.glassfish.jersey.server.ServerProperties;
+import org.nearbyshops.ContractClasses.*;
+
+
 import org.glassfish.jersey.server.ResourceConfig;
 import org.nearbyshops.DAOPreparedSettings.SettingsDAOPrepared;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.*;
+import org.nearbyshops.ModelReview.FavouriteShop;
+import org.nearbyshops.ModelReview.ShopReview;
 import org.nearbyshops.ModelRoles.*;
 import org.nearbyshops.ModelSettings.ServiceConfiguration;
 import org.nearbyshops.ModelSettings.Settings;
@@ -39,7 +43,7 @@ public class Main implements ActionListener {
 	//"http://localhost:8080/myapp/"
     public static final String BASE_URI = "http://0.0.0.0:5000/api";
     
-    private HttpServer server;
+    private HttpServer server_;
     
     private boolean isServerStart = false;
     
@@ -118,7 +122,7 @@ public class Main implements ActionListener {
 	public void start()
 	{
 		
-		server = startServer();
+		server_ = startServer();
         System.out.println(String.format("Jersey app started with WADL available at "
                 + "\nHit enter to stop it...", BASE_URI));
         //System.in.read();
@@ -131,7 +135,7 @@ public class Main implements ActionListener {
 
 	public void stopServer()
 	{
-		server.stop();
+		server_.stop();
 		isServerStart = false;
 	}
 
@@ -214,35 +218,7 @@ public class Main implements ActionListener {
 		        statement.executeUpdate(Distributor.createTableDistributorPostgres);
 				statement.executeUpdate(DistributorStaff.createTableDistributorStaffPostgres);
 
-
-		    	String createTableShopPostgres = "CREATE TABLE IF NOT EXISTS " + ShopContract.TABLE_NAME + "("
-		        		+ " " + ShopContract.SHOP_ID + " SERIAL PRIMARY KEY,"
-		        		+ " " + ShopContract.SHOP_NAME + " VARCHAR(40),"
-		        		+ " " + ShopContract.DELIVERY_RANGE + " FLOAT,"
-		        		+ " " + ShopContract.LON_CENTER + " FLOAT,"
-		        		+ " " + ShopContract.LAT_CENTER + " FLOAT,"
-						+ " " + ShopContract.LON_MAX + " FLOAT,"
-						+ " " + ShopContract.LAT_MAX + " FLOAT,"
-						+ " " + ShopContract.LON_MIN + " FLOAT,"
-						+ " " + ShopContract.LAT_MIN + " FLOAT,"
-		        		+ " " + ShopContract.DELIVERY_CHARGES + " FLOAT,"
-		        		+ " " + ShopContract.DISTRIBUTOR_ID + " INT,"
-		        		+ " " + ShopContract.IMAGE_PATH + " VARCHAR(60),"
-						+ " " + ShopContract.SHOP_ADDRESS + " VARCHAR(100),"
-						+ " " + ShopContract.CITY + " VARCHAR(20),"
-						+ " " + ShopContract.PINCODE + " INT,"
-						+ " " + ShopContract.LANDMARK + " VARCHAR(100),"
-						+ " " + ShopContract.BILL_AMOUNT_FOR_FREE_DELIVERY + " INT,"
-						+ " " + ShopContract.CUSTOMER_HELPLINE_NUMBER + " VARCHAR(30),"
-						+ " " + ShopContract.DELIVERY_HELPLINE_NUMBER + " VARCHAR(30),"
-						+ " " + ShopContract.SHORT_DESCRIPTION + " VARCHAR(40),"
-						+ " " + ShopContract.LONG_DESCRIPTION + " VARCHAR(500),"
-						+ " " + ShopContract.DATE_TIME_STARTED + " timestamp with time zone NOT NULL DEFAULT now(),"
-						+ " " + ShopContract.IS_OPEN + " boolean,"
-		        		+ " FOREIGN KEY(" + ShopContract.DISTRIBUTOR_ID +") REFERENCES DISTRIBUTOR(ID))";
-
-		        statement.executeUpdate(createTableShopPostgres);
-
+		        statement.executeUpdate(Shop.createTableShopPostgres);
 
 
 
@@ -299,7 +275,7 @@ public class Main implements ActionListener {
 					+ " " + DeliveryVehicleSelfContract.ID + " SERIAL PRIMARY KEY,"
 					+ " " + DeliveryVehicleSelfContract.VEHICLE_NAME + " VARCHAR(30),"
 					+ " " + DeliveryVehicleSelfContract.SHOP_ID + " INT,"
-					+ " FOREIGN KEY(" + DeliveryVehicleSelfContract.SHOP_ID +") REFERENCES " + ShopContract.TABLE_NAME + "(" + ShopContract.SHOP_ID + ")"
+					+ " FOREIGN KEY(" + DeliveryVehicleSelfContract.SHOP_ID +") REFERENCES " + Shop.TABLE_NAME + "(" + Shop.SHOP_ID + ")"
 					+ ")";
 
 
@@ -324,7 +300,7 @@ public class Main implements ActionListener {
 					+ " " + OrderContract.DELIVERY_VEHICLE_SELF_ID + " INT,"
 					+ " " + OrderContract.DATE_TIME_PLACED + " timestamp with time zone NOT NULL DEFAULT now(),"
 					+ " FOREIGN KEY(" + OrderContract.END_USER_ID +") REFERENCES " + EndUser.TABLE_NAME + "(" + EndUser.END_USER_ID + "),"
-					+ " FOREIGN KEY(" + OrderContract.SHOP_ID +") REFERENCES " + ShopContract.TABLE_NAME + "(" + ShopContract.SHOP_ID + "),"
+					+ " FOREIGN KEY(" + OrderContract.SHOP_ID +") REFERENCES " + Shop.TABLE_NAME + "(" + Shop.SHOP_ID + "),"
 					+ " FOREIGN KEY(" + OrderContract.DELIVERY_ADDRESS_ID +") REFERENCES " + DeliveryAddressContract.TABLE_NAME + "(" + DeliveryAddressContract.ID + "),"
 					+ " FOREIGN KEY(" + OrderContract.DELIVERY_VEHICLE_SELF_ID +") REFERENCES " + DeliveryVehicleSelfContract.TABLE_NAME + "(" + DeliveryVehicleSelfContract.ID + ")"
 					+ ")";
@@ -355,7 +331,7 @@ public class Main implements ActionListener {
 					+ " " + CartContract.END_USER_ID + " INT,"
 					+ " " + CartContract.SHOP_ID + " INT,"
 					+ " FOREIGN KEY(" + CartContract.END_USER_ID +") REFERENCES " + EndUser.TABLE_NAME + "(" + EndUser.END_USER_ID + "),"
-					+ " FOREIGN KEY(" + CartContract.SHOP_ID +") REFERENCES " + ShopContract.TABLE_NAME + "(" + ShopContract.SHOP_ID + "),"
+					+ " FOREIGN KEY(" + CartContract.SHOP_ID +") REFERENCES " + Shop.TABLE_NAME + "(" + Shop.SHOP_ID + "),"
 					+ " UNIQUE (" + CartContract.END_USER_ID + "," + CartContract.SHOP_ID + ")"
 					+ ")";
 
@@ -379,7 +355,16 @@ public class Main implements ActionListener {
 			statement.executeUpdate(ServiceConfiguration.createTableServiceConfigurationPostgres);
 			statement.executeUpdate(Settings.createTableSettingsPostgres);
 
+
+			// tables for reviews
+
+			statement.executeUpdate(ShopReview.createTableShopReviewPostgres);
+			statement.executeUpdate(FavouriteShop.createTableFavouriteBookPostgres);
+
+
 			System.out.println("Tables Created ... !");
+
+
 
 
 			// developers Note: whenever adding a table please check that its dependencies are already created.

@@ -10,6 +10,9 @@ import java.sql.Timestamp;
  */
 public class Order {
 
+
+
+
     int orderID;
     int endUserID;
     int shopID;

@@ -1,13 +1,8 @@
-package org.nearbyshops.DAOs;
+package org.nearbyshops.DAOsPrepared;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-
-import org.nearbyshops.ContractClasses.*;
+import com.zaxxer.hikari.HikariDataSource;
+import org.nearbyshops.ContractClasses.ShopItemContract;
+import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.JDBCContract;
 import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ItemCategory;
@@ -16,14 +11,20 @@ import org.nearbyshops.ModelEndPoints.ShopEndPoint;
 import org.nearbyshops.ModelReview.ShopReview;
 import org.nearbyshops.Utility.GeoLocation;
 
-public class ShopService {
+import java.sql.*;
+import java.util.ArrayList;
+
+public class ShopDAO {
+
+
+	private HikariDataSource dataSource = Globals.getDataSource();
 	
 	
 	public int insertShop(Shop shop)
 	{
 		
-		Connection conn = null;
-		Statement stmt = null;
+		Connection connection = null;
+		PreparedStatement statement = null;
 		int rowIdOfInsertedRow = -1;
 
 		String insertShop = "INSERT INTO "
@@ -32,61 +33,72 @@ public class ShopService {
 				+ Shop.SHOP_NAME + ","
 				+ Shop.DELIVERY_CHARGES + ","
 				+ Shop.DISTRIBUTOR_ID + ","
+
 				+ Shop.LAT_CENTER + ","
 				+ Shop.LON_CENTER + ","
 				+ Shop.DELIVERY_RANGE + ","
+
 				+ Shop.LON_MAX + ","
 				+ Shop.LAT_MAX + ","
 				+ Shop.LON_MIN + ","
+
 				+ Shop.LAT_MIN + ","
 				+ Shop.IMAGE_PATH + ","
-
 				+ Shop.SHOP_ADDRESS + ","
+
 				+ Shop.CITY + ","
 				+ Shop.PINCODE + ","
 				+ Shop.LANDMARK + ","
+
 				+ Shop.BILL_AMOUNT_FOR_FREE_DELIVERY + ","
 				+ Shop.CUSTOMER_HELPLINE_NUMBER + ","
 				+ Shop.DELIVERY_HELPLINE_NUMBER + ","
+
 				+ Shop.SHORT_DESCRIPTION + ","
 				+ Shop.LONG_DESCRIPTION + ","
 				+ Shop.IS_OPEN + ""
 
-				+ " ) VALUES ("
-				+ "'" + shop.getShopName() + "',"
-				+ "" + shop.getDeliveryCharges() + ","
-				+ "" + shop.getDistributorID() + ","
-				+ "" + shop.getLatCenter() + ","
-				+ "" + shop.getLonCenter() + ","
-				+ "" + shop.getDeliveryRange() + ","
-				+ "" + shop.getLonMax() + ","
-				+ "" + shop.getLatMax() + ","
-				+ "" + shop.getLonMin() + ","
-				+ "" + shop.getLatMin() + ","
-				+ "'" + shop.getImagePath() + "',"
-
-				+ "'" + shop.getShopAddress() + "',"
-				+ "'" + shop.getCity() + "',"
-				+ "'" + shop.getPincode() + "',"
-				+ "'" + shop.getLandmark() + "',"
-				+ "" + shop.getBillAmountForFreeDelivery() + ","
-				+ "'" + shop.getCustomerHelplineNumber() + "',"
-				+ "'" + shop.getDeliveryHelplineNumber() + "',"
-				+ "'" + shop.getShortDescription() + "',"
-				+ "'" + shop.getLongDescription() + "',"
-				+ "" + shop.getisOpen() + ""
-				+ ")";
+				+ " ) VALUES (?,?,? ,?,?,?, ?,?,? ,?,?,?, ?,?,? ,?,?,? ,?,?,?)";
 		
 		try {
 			
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
-					JDBCContract.CURRENT_USERNAME,JDBCContract.CURRENT_PASSWORD);
+			connection = dataSource.getConnection();
 			
-			stmt = conn.createStatement();
+			statement = connection.prepareStatement(insertShop,PreparedStatement.RETURN_GENERATED_KEYS);
+
+			statement.setObject(1,shop.getShopName());
+			statement.setObject(2,shop.getDeliveryCharges());
+			statement.setObject(3,shop.getDistributorID());
+
+			statement.setObject(4,shop.getLatCenter());
+			statement.setObject(5,shop.getLonCenter());
+			statement.setObject(6,shop.getDeliveryRange());
+
+			statement.setObject(7,shop.getLonMax());
+			statement.setObject(8,shop.getLatMax());
+			statement.setObject(9,shop.getLonMin());
+
+			statement.setObject(10,shop.getLatMin());
+			statement.setString(11,shop.getImagePath());
+			statement.setString(12,shop.getShopAddress());
+
+			statement.setString(13,shop.getCity());
+			statement.setObject(14,shop.getPincode());
+			statement.setObject(15,shop.getLandmark());
+
+			statement.setObject(16,shop.getBillAmountForFreeDelivery());
+			statement.setObject(17,shop.getCustomerHelplineNumber());
+			statement.setObject(18,shop.getDeliveryHelplineNumber());
+
+			statement.setString(19,shop.getShortDescription());
+			statement.setString(20,shop.getLongDescription());
+			statement.setObject(21,shop.getisOpen());
+
+
+
+			rowIdOfInsertedRow = statement.executeUpdate();
 			
-			rowIdOfInsertedRow = stmt.executeUpdate(insertShop,Statement.RETURN_GENERATED_KEYS);
-			
-			ResultSet rs = stmt.getGeneratedKeys();
+			ResultSet rs = statement.getGeneratedKeys();
 			
 			if(rs.next())
 			{
@@ -107,8 +119,8 @@ public class ShopService {
 			
 			try {
 			
-				if(stmt!=null)
-				{stmt.close();}
+				if(statement!=null)
+				{statement.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -116,8 +128,8 @@ public class ShopService {
 			
 			try {
 				
-				if(conn!=null)
-				{conn.close();}
+				if(connection!=null)
+				{connection.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -137,46 +149,84 @@ public class ShopService {
 		String updateStatement = "UPDATE " + Shop.TABLE_NAME
 				+ " SET "
 
-				+ Shop.SHOP_NAME + " = " + "'" + shop.getShopName() + "',"
-				+ Shop.DELIVERY_CHARGES + " =" + "" + shop.getDeliveryCharges() + ","
-				+ Shop.DISTRIBUTOR_ID + " =" + "" + shop.getDistributorID() + ","
-				+ Shop.LAT_CENTER + " =" + "" + shop.getLatCenter() + ","
-				+ Shop.LON_CENTER + " =" + "" + shop.getLonCenter() + ","
-				+ Shop.DELIVERY_RANGE + " =" + "" + shop.getDeliveryRange() + ","
-				+ Shop.LON_MAX + " =" + "" + shop.getLonMax() + ","
-				+ Shop.LAT_MAX + " =" + "" + shop.getLatMax() + ","
-				+ Shop.LON_MIN + " =" + "" + shop.getLonMin() + ","
-				+ Shop.LAT_MIN + " =" + "" + shop.getLatMin() + ","
-				+ Shop.IMAGE_PATH + " = " + "'" + shop.getImagePath() + "',"
+				+ Shop.SHOP_NAME + " = ?,"
+				+ Shop.DELIVERY_CHARGES + " = ?,"
+				+ Shop.DISTRIBUTOR_ID + " = ?,"
 
-				+ Shop.SHOP_ADDRESS + " = " + "'" + shop.getShopAddress() + "',"
-				+ Shop.CITY + " = " + "'" + shop.getCity() + "',"
-				+ Shop.PINCODE + " = " + "" + shop.getPincode() + ","
-				+ Shop.LANDMARK + " = " + "'" + shop.getLandmark() + "',"
-				+ Shop.BILL_AMOUNT_FOR_FREE_DELIVERY + " =" + "" + shop.getBillAmountForFreeDelivery() + ","
-				+ Shop.CUSTOMER_HELPLINE_NUMBER + " =" + "'" + shop.getCustomerHelplineNumber() + "',"
-				+ Shop.DELIVERY_HELPLINE_NUMBER + " =" + "'" + shop.getDeliveryHelplineNumber() + "',"
-				+ Shop.SHORT_DESCRIPTION + " =" + "'" + shop.getShortDescription() + "',"
-				+ Shop.LONG_DESCRIPTION + " =" + "'" + shop.getLongDescription() + "',"
-				+ Shop.IS_OPEN + " = " + "" + shop.getisOpen() + ""
+				+ Shop.LAT_CENTER + " = ?,"
+				+ Shop.LON_CENTER + " = ?,"
+				+ Shop.DELIVERY_RANGE + " = ?,"
 
-				+ " WHERE " + Shop.SHOP_ID + " = "
-				+ shop.getShopID();
+				+ Shop.LON_MAX + " = ?,"
+				+ Shop.LAT_MAX + " = ?,"
+				+ Shop.LON_MIN + " = ?,"
+
+				+ Shop.LAT_MIN + " = ?,"
+				+ Shop.IMAGE_PATH + " = ?,"
+				+ Shop.SHOP_ADDRESS + " = ?,"
+
+				+ Shop.CITY + " = ?,"
+				+ Shop.PINCODE + " = ?,"
+				+ Shop.LANDMARK + " = ?,"
+
+				+ Shop.BILL_AMOUNT_FOR_FREE_DELIVERY + " = ?,"
+				+ Shop.CUSTOMER_HELPLINE_NUMBER + " = ?,"
+				+ Shop.DELIVERY_HELPLINE_NUMBER + " = ?,"
+
+				+ Shop.SHORT_DESCRIPTION + " = ?,"
+				+ Shop.LONG_DESCRIPTION + " = ?,"
+				+ Shop.IS_OPEN + " = ?"
+
+				+ " WHERE " + Shop.SHOP_ID + " = ?";
 		
 		
 		
-		Connection conn = null;
-		Statement stmt = null;
+		Connection connection = null;
+		PreparedStatement statement = null;
 		int updatedRows = -1;
 		
 		try {
 			
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
-					JDBCContract.CURRENT_USERNAME,JDBCContract.CURRENT_PASSWORD);
+			connection = dataSource.getConnection();
 			
-			stmt = conn.createStatement();
-			
-			updatedRows = stmt.executeUpdate(updateStatement);
+			statement = connection.prepareStatement(updateStatement);
+
+
+//			statement.setString(1,shop.getShopName());
+//			statement.setObject(2,shop.getDeliveryCharges());
+
+
+			statement.setObject(1,shop.getShopName());
+			statement.setObject(2,shop.getDeliveryCharges());
+			statement.setObject(3,shop.getDistributorID());
+
+			statement.setObject(4,shop.getLatCenter());
+			statement.setObject(5,shop.getLonCenter());
+			statement.setObject(6,shop.getDeliveryRange());
+
+			statement.setObject(7,shop.getLonMax());
+			statement.setObject(8,shop.getLatMax());
+			statement.setObject(9,shop.getLonMin());
+
+			statement.setObject(10,shop.getLatMin());
+			statement.setString(11,shop.getImagePath());
+			statement.setString(12,shop.getShopAddress());
+
+			statement.setString(13,shop.getCity());
+			statement.setObject(14,shop.getPincode());
+			statement.setObject(15,shop.getLandmark());
+
+			statement.setObject(16,shop.getBillAmountForFreeDelivery());
+			statement.setObject(17,shop.getCustomerHelplineNumber());
+			statement.setObject(18,shop.getDeliveryHelplineNumber());
+
+			statement.setString(19,shop.getShortDescription());
+			statement.setString(20,shop.getLongDescription());
+			statement.setObject(21,shop.getisOpen());
+
+			statement.setObject(22,shop.getShopID());
+
+			updatedRows = statement.executeUpdate();
 			
 			
 			System.out.println("Total rows updated: " + updatedRows);	
@@ -193,8 +243,8 @@ public class ShopService {
 			
 			try {
 			
-				if(stmt!=null)
-				{stmt.close();}
+				if(statement!=null)
+				{statement.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -202,8 +252,8 @@ public class ShopService {
 			
 			try {
 				
-				if(conn!=null)
-				{conn.close();}
+				if(connection!=null)
+				{connection.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -213,31 +263,31 @@ public class ShopService {
 		return updatedRows;
 
 	}
-	
+
+
+
 	
 	public int deleteShop(int shopID)
 	{
 		
 		String deleteStatement = "DELETE FROM " + Shop.TABLE_NAME
-				+ " WHERE " + Shop.SHOP_ID + "= "
-				+ shopID;
+				+ " WHERE " + Shop.SHOP_ID + "= ?";
 		
 		
-		Connection conn= null;
-		Statement stmt = null;
+		Connection connection= null;
+		PreparedStatement statement = null;
 		int rowCountDeleted = 0;
 		try {
 			
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
-					JDBCContract.CURRENT_USERNAME,JDBCContract.CURRENT_PASSWORD);
-			
-			stmt = conn.createStatement();
-			
-			rowCountDeleted = stmt.executeUpdate(deleteStatement);
-			
+			connection = dataSource.getConnection();
+			statement = connection.prepareStatement(deleteStatement);
+			statement.setObject(1,shopID);
+
+
+			rowCountDeleted = statement.executeUpdate();
 			System.out.println(" Deleted Count: " + rowCountDeleted);	
 			
-			conn.close();	
+			connection.close();
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -250,8 +300,8 @@ public class ShopService {
 			
 			try {
 			
-				if(stmt!=null)
-				{stmt.close();}
+				if(statement!=null)
+				{statement.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -259,8 +309,8 @@ public class ShopService {
 			
 			try {
 				
-				if(conn!=null)
-				{conn.close();}
+				if(connection!=null)
+				{connection.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -305,7 +355,39 @@ public class ShopService {
 				+ latCenter + ")) * cos( radians( lat_center) ) * cos(radians( lon_center ) - radians("
 				+ lonCenter + "))"
 				+ " + sin( radians(" + latCenter + ")) * sin(radians(lat_center))) as distance" + ","
-				+ " * FROM " + Shop.TABLE_NAME;
+				+  "avg(" + ShopReview.TABLE_NAME + "." + ShopReview.RATING + ") as avg_rating" + ","
+				+  "count( DISTINCT " + ShopReview.TABLE_NAME + "." + ShopReview.SHOP_ID + ") as rating_count" + ","
+				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID + ","
+				+ Shop.TABLE_NAME + "." + Shop.SHOP_NAME + ","
+				+ Shop.TABLE_NAME + "." + Shop.LON_CENTER + ","
+				+ Shop.TABLE_NAME + "." + Shop.LAT_CENTER + ","
+				+ Shop.TABLE_NAME + "." + Shop.DELIVERY_RANGE + ","
+				+ Shop.TABLE_NAME + "." + Shop.DELIVERY_CHARGES + ","
+				+ Shop.TABLE_NAME + "." + Shop.DISTRIBUTOR_ID + ","
+				+ Shop.TABLE_NAME + "." + Shop.IMAGE_PATH + ","
+				+ Shop.TABLE_NAME + "." + Shop.LAT_MAX + ","
+				+ Shop.TABLE_NAME + "." + Shop.LAT_MIN + ","
+				+ Shop.TABLE_NAME + "." + Shop.LON_MAX + ","
+				+ Shop.TABLE_NAME + "." + Shop.LON_MIN + ","
+
+				+ Shop.TABLE_NAME + "." + Shop.SHOP_ADDRESS + ","
+				+ Shop.TABLE_NAME + "." + Shop.CITY + ","
+				+ Shop.TABLE_NAME + "." + Shop.PINCODE + ","
+				+ Shop.TABLE_NAME + "." + Shop.LANDMARK + ","
+				+ Shop.TABLE_NAME + "." + Shop.BILL_AMOUNT_FOR_FREE_DELIVERY + ","
+				+ Shop.TABLE_NAME + "." + Shop.CUSTOMER_HELPLINE_NUMBER + ","
+				+ Shop.TABLE_NAME + "." + Shop.DELIVERY_HELPLINE_NUMBER + ","
+				+ Shop.TABLE_NAME + "." + Shop.SHORT_DESCRIPTION + ","
+				+ Shop.TABLE_NAME + "." + Shop.LONG_DESCRIPTION + ","
+				+ Shop.TABLE_NAME + "." + Shop.IS_OPEN + ","
+				+ Shop.TABLE_NAME + "." + Shop.DATE_TIME_STARTED + ""
+
+				+ " FROM "
+				+ ShopReview.TABLE_NAME  + " RIGHT OUTER JOIN " + Shop.TABLE_NAME
+
+				+ " ON ("
+				+ ShopReview.TABLE_NAME + "." + ShopReview.SHOP_ID
+				+ " = " + Shop.TABLE_NAME + "." + Shop.SHOP_ID + ")";
 
 
 		queryJoin = "SELECT DISTINCT "
@@ -339,7 +421,7 @@ public class ShopService {
 				+ Shop.TABLE_NAME + "." + Shop.DATE_TIME_STARTED + ","
 
 				+  "avg(" + ShopReview.TABLE_NAME + "." + ShopReview.RATING + ") as avg_rating" + ","
-				+  "count(" + Shop.TABLE_NAME + "." + Shop.SHOP_ID + ") as rating_count" + ""
+				+  "count( DISTINCT " + ShopReview.TABLE_NAME + "." + ShopReview.SHOP_ID + ") as rating_count" + ""
 
 
 				+ " FROM "
@@ -576,7 +658,9 @@ public class ShopService {
 		}
 
 
-		queryJoin = queryJoin
+		String queryGroupBy = "";
+
+		queryGroupBy = queryGroupBy
 
 				+ " group by "
 
@@ -605,6 +689,10 @@ public class ShopService {
 				+ Shop.TABLE_NAME + "." + Shop.LONG_DESCRIPTION + ","
 				+ Shop.TABLE_NAME + "." + Shop.IS_OPEN + ","
 				+ Shop.TABLE_NAME + "." + Shop.DATE_TIME_STARTED + "";
+
+
+		queryJoin = queryJoin + queryGroupBy;
+		queryNormal = queryNormal + queryGroupBy;
 
 
 
@@ -643,17 +731,17 @@ public class ShopService {
 
 
 		// use Join query only if filtering requires a join
-		/*if(itemCategoryID !=null)
+		if(itemCategoryID !=null)
 		{
 			query = queryJoin;
 
 		}else
 		{
 			query = queryNormal;
-		}*/
+		}
 
 
-		query = queryJoin;
+//		query = queryJoin;
 
 
 
@@ -662,19 +750,16 @@ public class ShopService {
 		ArrayList<Shop> shopList = new ArrayList<Shop>();
 		
 		
-		Connection conn = null;
-		Statement stmt = null;
+		Connection connection = null;
+		Statement statement = null;
 		ResultSet rs = null;
 		
 		try {
 			
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
-					JDBCContract.CURRENT_USERNAME,
-					JDBCContract.CURRENT_PASSWORD);
+			connection = dataSource.getConnection();
+			statement = connection.createStatement();
 			
-			stmt = conn.createStatement();
-			
-			rs = stmt.executeQuery(query);
+			rs = statement.executeQuery(query);
 			
 			while(rs.next())
 			{
@@ -738,8 +823,8 @@ public class ShopService {
 			
 			try {
 			
-				if(stmt!=null)
-				{stmt.close();}
+				if(statement!=null)
+				{statement.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -747,8 +832,8 @@ public class ShopService {
 			
 			try {
 				
-				if(conn!=null)
-				{conn.close();}
+				if(connection!=null)
+				{connection.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -964,19 +1049,16 @@ public class ShopService {
 		ShopEndPoint endPoint = new ShopEndPoint();
 
 
-		Connection conn = null;
-		Statement stmt = null;
+		Connection connection = null;
+		Statement statement = null;
 		ResultSet rs = null;
 
 		try {
 
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
-					JDBCContract.CURRENT_USERNAME,
-					JDBCContract.CURRENT_PASSWORD);
+			connection = dataSource.getConnection();
+			statement = connection.createStatement();
 
-			stmt = conn.createStatement();
-
-			rs = stmt.executeQuery(query);
+			rs = statement.executeQuery(query);
 
 			while(rs.next())
 			{
@@ -1010,8 +1092,8 @@ public class ShopService {
 
 			try {
 
-				if(stmt!=null)
-				{stmt.close();}
+				if(statement!=null)
+				{statement.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -1019,8 +1101,8 @@ public class ShopService {
 
 			try {
 
-				if(conn!=null)
-				{conn.close();}
+				if(connection!=null)
+				{connection.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -1124,7 +1206,7 @@ public class ShopService {
 				+ Shop.TABLE_NAME + "." + Shop.DATE_TIME_STARTED + ","
 
 				+  "avg(" + ShopReview.TABLE_NAME + "." + ShopReview.RATING + ") as avg_rating" + ","
-				+  "count( DISTINCT " + Shop.TABLE_NAME + "." + Shop.SHOP_ID + ") as rating_count" + ""
+				+  "count( DISTINCT " + ShopReview.TABLE_NAME + "." + ShopReview.SHOP_ID + ") as rating_count" + ""
 
 
 				+ " FROM "
@@ -1330,19 +1412,17 @@ public class ShopService {
 		ArrayList<Shop> shopList = new ArrayList<Shop>();
 
 
-		Connection conn = null;
-		Statement stmt = null;
+		Connection connection = null;
+		Statement statement = null;
 		ResultSet rs = null;
 
 		try {
 
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
-					JDBCContract.CURRENT_USERNAME,
-					JDBCContract.CURRENT_PASSWORD);
+			connection = dataSource.getConnection();
 
-			stmt = conn.createStatement();
+			statement = connection.createStatement();
 
-			rs = stmt.executeQuery(queryJoin);
+			rs = statement.executeQuery(queryJoin);
 
 			while(rs.next())
 			{
@@ -1405,8 +1485,8 @@ public class ShopService {
 
 				try {
 
-					if(stmt!=null)
-					{stmt.close();}
+					if(statement!=null)
+					{statement.close();}
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -1414,8 +1494,8 @@ public class ShopService {
 
 				try {
 
-					if(conn!=null)
-					{conn.close();}
+					if(connection!=null)
+					{connection.close();}
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -1700,20 +1780,18 @@ public class ShopService {
 		}
 
 		
-		Connection conn = null;
-		Statement stmt = null;
+		Connection connection = null;
+		Statement statement = null;
 		ResultSet rs = null;
 		
 		Shop shop = null;
 		try {
 			
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
-					JDBCContract.CURRENT_USERNAME,
-					JDBCContract.CURRENT_PASSWORD);
+			connection = dataSource.getConnection();
 			
-			stmt = conn.createStatement();
+			statement = connection.createStatement();
 			
-			rs = stmt.executeQuery(query);
+			rs = statement.executeQuery(query);
 			
 			
 			while(rs.next())
@@ -1774,8 +1852,8 @@ public class ShopService {
 			
 			try {
 			
-				if(stmt!=null)
-				{stmt.close();}
+				if(statement!=null)
+				{statement.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -1783,8 +1861,8 @@ public class ShopService {
 			
 			try {
 				
-				if(conn!=null)
-				{conn.close();}
+				if(connection!=null)
+				{connection.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

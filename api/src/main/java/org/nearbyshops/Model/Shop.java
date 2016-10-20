@@ -5,55 +5,147 @@ import java.sql.Timestamp;
 
 public class Shop {
 
-	// real time variables
-	double distance;
 
+	// Shop Table Name
+	public static final String TABLE_NAME = "SHOP";
+
+	// Shop columns
+
+	public static final String SHOP_ID = "SHOP_ID";
+	public static final String SHOP_NAME = "SHOP_NAME";
+	public static final String DELIVERY_RANGE = "DELIVERY_RANGE";
+	public static final String LAT_CENTER = "LAT_CENTER";
+	public static final String LON_CENTER = "LON_CENTER";
+
+	public static final String LAT_MAX = "LAT_MAX";
+	public static final String LON_MAX = "LON_MAX";
+	public static final String LAT_MIN = "LAT_MIN";
+	public static final String LON_MIN = "LON_MIN";
+
+	public static final String DELIVERY_CHARGES = "DELIVERY_CHARGES";
+	public static final String DISTRIBUTOR_ID = "Distributor";
+	public static final String IMAGE_PATH = "IMAGE_PATH";
+	public static final String BACKDROP_IMAGE_PATH = "BACKDROP_IMAGE_PATH";
+	public static final String LOGO_IMAGE_PATH = "LOGO_IMAGE_PATH";
+
+	// recently Added
+	public static final String SHOP_ADDRESS = "SHOP_ADDRESS";
+	public static final String CITY = "CITY";
+	public static final String PINCODE = "PINCODE";
+	public static final String LANDMARK = "LANDMARK";
+	public static final String BILL_AMOUNT_FOR_FREE_DELIVERY = "BILL_AMOUNT_FOR_FREE_DELIVERY";
+	public static final String CUSTOMER_HELPLINE_NUMBER = "CUSTOMER_HELPLINE_NUMBER";
+	public static final String DELIVERY_HELPLINE_NUMBER = "DELIVERY_HELPLINE_NUMBER";
+	public static final String SHORT_DESCRIPTION = "SHORT_DESCRIPTION";
+	public static final String LONG_DESCRIPTION = "LONG_DESCRIPTION";
+	public static final String DATE_TIME_STARTED = "DATE_TIME_STARTED";
+	public static final String IS_OPEN = "IS_SHOP_OPEN";
+
+	// to be added
+	public static final String PICK_FROM_SHOP_AVAILABLE = "PICK_FROM_SHOP_AVAILABLE";
+	public static final String HOME_DELIVERY_AVAILABLE = "HOME_DELIVERY_AVAILABLE";
+
+
+
+
+	// query postgres
+
+	public static final String createTableShopPostgres =  "CREATE TABLE IF NOT EXISTS " + Shop.TABLE_NAME + "("
+			+ " " + Shop.SHOP_ID + " SERIAL PRIMARY KEY,"
+			+ " " + Shop.SHOP_NAME + " VARCHAR(40),"
+			+ " " + Shop.DELIVERY_RANGE + " FLOAT,"
+			+ " " + Shop.LON_CENTER + " FLOAT,"
+			+ " " + Shop.LAT_CENTER + " FLOAT,"
+			+ " " + Shop.LON_MAX + " FLOAT,"
+			+ " " + Shop.LAT_MAX + " FLOAT,"
+			+ " " + Shop.LON_MIN + " FLOAT,"
+			+ " " + Shop.LAT_MIN + " FLOAT,"
+			+ " " + Shop.DELIVERY_CHARGES + " FLOAT,"
+			+ " " + Shop.DISTRIBUTOR_ID + " INT,"
+			+ " " + Shop.IMAGE_PATH + " VARCHAR(60),"
+			+ " " + Shop.SHOP_ADDRESS + " VARCHAR(100),"
+			+ " " + Shop.CITY + " VARCHAR(20),"
+			+ " " + Shop.PINCODE + " INT,"
+			+ " " + Shop.LANDMARK + " VARCHAR(100),"
+			+ " " + Shop.BILL_AMOUNT_FOR_FREE_DELIVERY + " INT,"
+			+ " " + Shop.CUSTOMER_HELPLINE_NUMBER + " VARCHAR(30),"
+			+ " " + Shop.DELIVERY_HELPLINE_NUMBER + " VARCHAR(30),"
+			+ " " + Shop.SHORT_DESCRIPTION + " VARCHAR(40),"
+			+ " " + Shop.LONG_DESCRIPTION + " VARCHAR(500),"
+			+ " " + Shop.DATE_TIME_STARTED + " timestamp with time zone NOT NULL DEFAULT now(),"
+			+ " " + Shop.IS_OPEN + " boolean,"
+			+ " FOREIGN KEY(" + Shop.DISTRIBUTOR_ID +") REFERENCES DISTRIBUTOR(ID))";
+
+
+
+
+
+
+	// real time variables
+	private double distance;
 
 	// normal variables
-
-	int shopID;
+	private int shopID;
 	
-	String shopName;
+	private String shopName;
 
 	// the radius of the circle considering shop location as its center.
 	//This is the distance upto which shop can deliver its items
-	double deliveryRange;
+	private double deliveryRange;
 
 	// latitude and longitude for storing the location of the shop
-	double latCenter;
-	double lonCenter;
+	private double latCenter;
+	private double lonCenter;
 
 	// bounding coordinates for the shop generated using shop center coordinates and delivery range.
-	double latMax;
-	double lonMax;
-	double latMin;
-	double lonMin;
+	private double latMax;
+	private double lonMax;
+	private double latMin;
+	private double lonMin;
 
 
 	// delivery charger per order
-	double deliveryCharges;
+	private double deliveryCharges;
 
-	int distributorID;
+	private int distributorID;
 	
-	String imagePath;
+	private String imagePath;
 
 
 	// added recently
-	String shopAddress;
-	String city;
-	long pincode;
-	String landmark;
-	int billAmountForFreeDelivery;
-	String customerHelplineNumber;
-	String deliveryHelplineNumber;
-	String shortDescription;
-	String longDescription;
-	Timestamp dateTimeStarted;
-	boolean isOpen;
+	private String shopAddress;
+	private String city;
+	private long pincode;
+	private String landmark;
+	private int billAmountForFreeDelivery;
+	private String customerHelplineNumber;
+	private String deliveryHelplineNumber;
+	private String shortDescription;
+	private String longDescription;
+	private Timestamp dateTimeStarted;
+	private boolean isOpen;
 
 
 
+	private float rt_rating_avg;
+	private float rt_rating_count;
 
+
+	public float getRt_rating_avg() {
+		return rt_rating_avg;
+	}
+
+	public void setRt_rating_avg(float rt_rating_avg) {
+		this.rt_rating_avg = rt_rating_avg;
+	}
+
+	public float getRt_rating_count() {
+		return rt_rating_count;
+	}
+
+	public void setRt_rating_count(float rt_rating_count) {
+		this.rt_rating_count = rt_rating_count;
+	}
 
 	public double getDistance() {
 		return distance;

@@ -9,10 +9,10 @@ import java.util.ArrayList;
 
 
 import org.nearbyshops.JDBCContract;
-import org.nearbyshops.ContractClasses.ShopContract;
 import org.nearbyshops.ContractClasses.ShopItemContract;
 import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ItemCategory;
+import org.nearbyshops.Model.Shop;
 import org.nearbyshops.ModelEndPoints.ItemCategoryEndPoint;
 import org.nearbyshops.Utility.GeoLocation;
 
@@ -436,10 +436,10 @@ public class ItemCategoryService {
 				
 				
 				+ " FROM " 
-				+ ShopContract.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + "," 
+				+ Shop.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
 				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
 				+ " WHERE " 
-				+ ShopContract.TABLE_NAME + "." + ShopContract.SHOP_ID 
+				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID
 				+ "="
 				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID
 				+ " AND "
@@ -456,9 +456,9 @@ public class ItemCategoryService {
 		if(shopID!=null)
 		{
 				queryJoin = queryJoin + " AND "
-						+ ShopContract.TABLE_NAME 
+						+ Shop.TABLE_NAME
 						+ "."
-						+ ShopContract.SHOP_ID + " = " + shopID; 	
+						+ Shop.SHOP_ID + " = " + shopID;
 			
 		}
 		
@@ -473,24 +473,24 @@ public class ItemCategoryService {
 
 			queryPartlatLonCenterTwo = queryPartlatLonCenterTwo
 					+ " AND "
-					+ ShopContract.TABLE_NAME
+					+ Shop.TABLE_NAME
 					+ "."
-					+ ShopContract.LAT_MAX
+					+ Shop.LAT_MAX
 					+ " >= " + latCenter
 					+ " AND "
-					+ ShopContract.TABLE_NAME
+					+ Shop.TABLE_NAME
 					+ "."
-					+ ShopContract.LAT_MIN
+					+ Shop.LAT_MIN
 					+ " <= " + latCenter
 					+ " AND "
-					+ ShopContract.TABLE_NAME
+					+ Shop.TABLE_NAME
 					+ "."
-					+ ShopContract.LON_MAX
+					+ Shop.LON_MAX
 					+ " >= " + lonCenter
 					+ " AND "
-					+ ShopContract.TABLE_NAME
+					+ Shop.TABLE_NAME
 					+ "."
-					+ ShopContract.LON_MIN
+					+ Shop.LON_MIN
 					+ " <= " + lonCenter;
 
 			//+ " BETWEEN " + latmax + " AND " + latmin;
@@ -516,9 +516,9 @@ public class ItemCategoryService {
 			// apply delivery range filter
 			queryJoin = queryJoin
 					+ " AND "
-					+ ShopContract.TABLE_NAME
+					+ Shop.TABLE_NAME
 					+ "."
-					+ ShopContract.DELIVERY_RANGE
+					+ Shop.DELIVERY_RANGE
 					+ " BETWEEN " + deliveryRangeMin + " AND " + deliveryRangeMax;
 		}
 
@@ -559,27 +559,27 @@ public class ItemCategoryService {
 			queryPartProximityBounding = queryPartProximityBounding
 
 					+ " AND "
-					+ ShopContract.TABLE_NAME
+					+ Shop.TABLE_NAME
 					+ "."
-					+ ShopContract.LAT_CENTER
+					+ Shop.LAT_CENTER
 					+ " < " + latMax
 
 					+ " AND "
-					+ ShopContract.TABLE_NAME
+					+ Shop.TABLE_NAME
 					+ "."
-					+ ShopContract.LAT_CENTER
+					+ Shop.LAT_CENTER
 					+ " > " + latMin
 
 					+ " AND "
-					+ ShopContract.TABLE_NAME
+					+ Shop.TABLE_NAME
 					+ "."
-					+ ShopContract.LON_CENTER
+					+ Shop.LON_CENTER
 					+ " < " + lonMax
 
 					+ " AND "
-					+ ShopContract.TABLE_NAME
+					+ Shop.TABLE_NAME
 					+ "."
-					+ ShopContract.LON_CENTER
+					+ Shop.LON_CENTER
 					+ " > " + lonMin;
 
 
@@ -589,16 +589,16 @@ public class ItemCategoryService {
 					+ " (6371.01 * acos(cos( radians("
 					+ latCenter
 					+ ")) * cos( radians("
-					+ ShopContract.LAT_CENTER
+					+ Shop.LAT_CENTER
 					+ " )) * cos(radians( "
-					+ ShopContract.LON_CENTER
+					+ Shop.LON_CENTER
 					+ ") - radians("
 					+ lonCenter
 					+ "))"
 					+ " + sin( radians("
 					+ latCenter
 					+ ")) * sin(radians("
-					+ ShopContract.LAT_CENTER
+					+ Shop.LAT_CENTER
 					+ ")))) <= "
 					+ proximity ;
 
@@ -859,10 +859,10 @@ public class ItemCategoryService {
 				+ ItemCategory.TABLE_NAME + "." + ItemCategory.PARENT_CATEGORY_ID
 
 				+ " FROM "
-				+ ShopContract.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
+				+ Shop.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
 				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
 				+ " WHERE "
-				+ ShopContract.TABLE_NAME + "." + ShopContract.SHOP_ID
+				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID
 				+ "="
 				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID
 				+ " AND "
@@ -879,9 +879,9 @@ public class ItemCategoryService {
 		if(shopID!=null)
 		{
 			queryJoin = queryJoin + " AND "
-					+ ShopContract.TABLE_NAME
+					+ Shop.TABLE_NAME
 					+ "."
-					+ ShopContract.SHOP_ID + " = " + shopID;
+					+ Shop.SHOP_ID + " = " + shopID;
 
 		}
 
@@ -912,9 +912,9 @@ public class ItemCategoryService {
 			// apply delivery range filter
 			queryJoin = queryJoin
 					+ " AND "
-					+ ShopContract.TABLE_NAME
+					+ Shop.TABLE_NAME
 					+ "."
-					+ ShopContract.DELIVERY_RANGE
+					+ Shop.DELIVERY_RANGE
 					+ " BETWEEN " + deliveryRangeMin + " AND " + deliveryRangeMax;
 		}
 
@@ -933,16 +933,16 @@ public class ItemCategoryService {
 					+ " (6371.01 * acos(cos( radians("
 					+ latCenter
 					+ ")) * cos( radians("
-					+ ShopContract.LAT_CENTER
+					+ Shop.LAT_CENTER
 					+ " )) * cos(radians( "
-					+ ShopContract.LON_CENTER
+					+ Shop.LON_CENTER
 					+ ") - radians("
 					+ lonCenter
 					+ "))"
 					+ " + sin( radians("
 					+ latCenter
 					+ ")) * sin(radians("
-					+ ShopContract.LAT_CENTER
+					+ Shop.LAT_CENTER
 					+ ")))) <= "
 					+ proximity ;
 

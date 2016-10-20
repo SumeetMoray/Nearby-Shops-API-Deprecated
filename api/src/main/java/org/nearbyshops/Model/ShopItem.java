@@ -17,17 +17,17 @@ public class ShopItem{
 
 
 
-	Shop shop;
-	Item item;
+	private Shop shop;
+	private Item item;
 	
 
 
 	// variables
 
-	int shopID;
-	int itemID;
-	int availableItemQuantity;
-	double itemPrice;
+	private int shopID;
+	private int itemID;
+	private int availableItemQuantity;
+	private double itemPrice;
 	
 		
 	// put this into item
@@ -56,9 +56,9 @@ public class ShopItem{
 
 
 	// recently added variables
-	int extraDeliveryCharge;
-	Timestamp dateTimeAdded;
-	Timestamp lastUpdateDateTime;
+	private int extraDeliveryCharge;
+	private Timestamp dateTimeAdded;
+	private Timestamp lastUpdateDateTime;
 		
 
 	

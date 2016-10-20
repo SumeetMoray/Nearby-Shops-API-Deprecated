@@ -11,6 +11,7 @@ import org.nearbyshops.ContractClasses.*;
 import org.nearbyshops.JDBCContract;
 import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ItemCategory;
+import org.nearbyshops.Model.Shop;
 import org.nearbyshops.Model.ShopItem;
 import org.nearbyshops.ModelEndPoints.ShopItemEndPoint;
 import org.nearbyshops.Utility.GeoLocation;
@@ -339,10 +340,10 @@ public ArrayList<ShopItem> getShopItems(
 				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.LAST_UPDATE_DATE_TIME + ""
 
 				+ " FROM "
-				+ ShopContract.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
+				+ Shop.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
 				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
 				+ " WHERE "
-				+ ShopContract.TABLE_NAME + "." + ShopContract.SHOP_ID
+				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID
 				+ "="
 				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID
 				+ " AND "
@@ -535,24 +536,24 @@ public ArrayList<ShopItem> getShopItems(
 
 		queryPartLatLonCenterTwo = queryPartLatLonCenterTwo
 				+ " AND "
-				+ ShopContract.TABLE_NAME
+				+ Shop.TABLE_NAME
 				+ "."
-				+ ShopContract.LAT_MAX
+				+ Shop.LAT_MAX
 				+ " >= " + latCenter
 				+ " AND "
-				+ ShopContract.TABLE_NAME
+				+ Shop.TABLE_NAME
 				+ "."
-				+ ShopContract.LAT_MIN
+				+ Shop.LAT_MIN
 				+ " <= " + latCenter
 				+ " AND "
-				+ ShopContract.TABLE_NAME
+				+ Shop.TABLE_NAME
 				+ "."
-				+ ShopContract.LON_MAX
+				+ Shop.LON_MAX
 				+ " >= " + lonCenter
 				+ " AND "
-				+ ShopContract.TABLE_NAME
+				+ Shop.TABLE_NAME
 				+ "."
-				+ ShopContract.LON_MIN
+				+ Shop.LON_MIN
 				+ " <= " + lonCenter;
 
 		//+ " BETWEEN " + latmax + " AND " + latmin;
@@ -594,9 +595,9 @@ public ArrayList<ShopItem> getShopItems(
 		String queryPartDeliveryRange = "";
 
 		queryPartDeliveryRange = queryPartDeliveryRange
-				+ ShopContract.TABLE_NAME
+				+ Shop.TABLE_NAME
 				+ "."
-				+ ShopContract.DELIVERY_RANGE
+				+ Shop.DELIVERY_RANGE
 				+ " BETWEEN " + deliveryRangeMin + " AND " + deliveryRangeMax;
 				//+ " <= " + deliveryRange;
 
@@ -651,27 +652,27 @@ public ArrayList<ShopItem> getShopItems(
 		queryPartProximityTwo = queryPartProximityTwo
 
 				+ " AND "
-				+ ShopContract.TABLE_NAME
+				+ Shop.TABLE_NAME
 				+ "."
-				+ ShopContract.LAT_CENTER
+				+ Shop.LAT_CENTER
 				+ " < " + latMax
 
 				+ " AND "
-				+ ShopContract.TABLE_NAME
+				+ Shop.TABLE_NAME
 				+ "."
-				+ ShopContract.LAT_CENTER
+				+ Shop.LAT_CENTER
 				+ " > " + latMin
 
 				+ " AND "
-				+ ShopContract.TABLE_NAME
+				+ Shop.TABLE_NAME
 				+ "."
-				+ ShopContract.LON_CENTER
+				+ Shop.LON_CENTER
 				+ " < " + lonMax
 
 				+ " AND "
-				+ ShopContract.TABLE_NAME
+				+ Shop.TABLE_NAME
 				+ "."
-				+ ShopContract.LON_CENTER
+				+ Shop.LON_CENTER
 				+ " > " + lonMin;
 
 
@@ -680,16 +681,16 @@ public ArrayList<ShopItem> getShopItems(
 				+ " (6371.01 * acos(cos( radians("
 				+ latCenter
 				+ ")) * cos( radians("
-				+ ShopContract.LAT_CENTER
+				+ Shop.LAT_CENTER
 				+ " )) * cos(radians( "
-				+ ShopContract.LON_CENTER
+				+ Shop.LON_CENTER
 				+ ") - radians("
 				+ lonCenter
 				+ "))"
 				+ " + sin( radians("
 				+ latCenter
 				+ ")) * sin(radians("
-				+ ShopContract.LAT_CENTER
+				+ Shop.LAT_CENTER
 				+ ")))) <= "
 				+ proximity ;
 
@@ -888,11 +889,11 @@ public ArrayList<ShopItem> getShopItems(
 				+ "count(*) as item_count"
 
 				+ " FROM "
-				+ ShopContract.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
+				+ Shop.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
 				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
 
 				+ " WHERE "
-				+ ShopContract.TABLE_NAME + "." + ShopContract.SHOP_ID
+				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID
 				+ "="
 				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID
 				+ " AND "
@@ -1119,9 +1120,9 @@ public ArrayList<ShopItem> getShopItems(
 			String queryPartDeliveryRange = "";
 
 			queryPartDeliveryRange = queryPartDeliveryRange
-					+ ShopContract.TABLE_NAME
+					+ Shop.TABLE_NAME
 					+ "."
-					+ ShopContract.DELIVERY_RANGE
+					+ Shop.DELIVERY_RANGE
 					+ " BETWEEN " + deliveryRangeMin + " AND " + deliveryRangeMax;
 			//+ " <= " + deliveryRange;
 
@@ -1165,16 +1166,16 @@ public ArrayList<ShopItem> getShopItems(
 					+ " (6371.01 * acos(cos( radians("
 					+ latCenter
 					+ ")) * cos( radians("
-					+ ShopContract.LAT_CENTER
+					+ Shop.LAT_CENTER
 					+ " )) * cos(radians( "
-					+ ShopContract.LON_CENTER
+					+ Shop.LON_CENTER
 					+ ") - radians("
 					+ lonCenter
 					+ "))"
 					+ " + sin( radians("
 					+ latCenter
 					+ ")) * sin(radians("
-					+ ShopContract.LAT_CENTER
+					+ Shop.LAT_CENTER
 					+ ")))) <= "
 					+ proximity ;
 

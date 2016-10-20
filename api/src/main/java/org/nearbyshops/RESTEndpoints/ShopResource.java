@@ -18,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.nearbyshops.DAOsPrepared.ShopDAO;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Shop;
 import org.nearbyshops.ModelEndPoints.ShopEndPoint;
@@ -27,10 +28,15 @@ import org.nearbyshops.Utility.GeoLocation;
 @Produces(MediaType.APPLICATION_JSON)
 public class ShopResource {
 
-	GeoLocation center;
-	GeoLocation[] minMaxArray;
-	GeoLocation pointOne;
-	GeoLocation pointTwo;
+	private GeoLocation center;
+	private GeoLocation[] minMaxArray;
+	private GeoLocation pointOne;
+	private GeoLocation pointTwo;
+
+
+	private ShopDAO shopDAO = Globals.shopDAO;
+
+
 	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -50,7 +56,7 @@ public class ShopResource {
 		shop.setLatMax(pointTwo.getLatitudeInDegrees());
 		shop.setLonMax(pointTwo.getLongitudeInDegrees());
 
-		int idOfInsertedRow = Globals.shopService.insertShop(shop);
+		int idOfInsertedRow = shopDAO.insertShop(shop);
 
 		shop.setShopID(idOfInsertedRow);
 		
@@ -102,7 +108,7 @@ public class ShopResource {
 
 		shop.setShopID(ShopID);
 		
-		int rowCount = Globals.shopService.updateShop(shop);
+		int rowCount = shopDAO.updateShop(shop);
 		
 		if(rowCount >= 1)
 		{
@@ -130,7 +136,7 @@ public class ShopResource {
 	public Response deleteShop(@PathParam("ShopID")int shopID)
 	{
 		
-		int rowCount = Globals.shopService.deleteShop(shopID);
+		int rowCount = shopDAO.deleteShop(shopID);
 	
 		
 		if(rowCount>=1)
@@ -170,7 +176,7 @@ public class ShopResource {
 							 @QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset)
 	{
 		
-		List<Shop> list = Globals.shopService.getShops(
+		List<Shop> list = shopDAO.getShops(
 				distributorID,itemCategoryID,
 				latCenter, lonCenter,
 				deliveryRangeMin,deliveryRangeMax,
@@ -246,7 +252,7 @@ public class ShopResource {
 		}
 
 
-		ShopEndPoint endPoint = Globals.shopService.getEndPointMetadata(distributorID,
+		ShopEndPoint endPoint = shopDAO.getEndPointMetadata(distributorID,
 				itemCategoryID, latCenter,lonCenter,deliveryRangeMin,deliveryRangeMax,proximity);
 
 
@@ -261,7 +267,7 @@ public class ShopResource {
 		if(metaonly==null || (!metaonly)) {
 
 
-			shopsList = Globals.shopService.getShops(distributorID,itemCategoryID,
+			shopsList = shopDAO.getShops(distributorID,itemCategoryID,
 					latCenter,lonCenter,deliveryRangeMin,deliveryRangeMax,proximity,sortBy,
 					limit,offset);
 
@@ -319,7 +325,7 @@ public class ShopResource {
 		}
 
 
-		ShopEndPoint endPoint = Globals.shopService.endPointMetadataFilterShops(itemCategoryID,distributorID,
+		ShopEndPoint endPoint = shopDAO.endPointMetadataFilterShops(itemCategoryID,distributorID,
 				 latCenter,lonCenter,deliveryRangeMin,deliveryRangeMax,proximity);
 
 
@@ -334,7 +340,7 @@ public class ShopResource {
 		if(metaonly==null || (!metaonly)) {
 
 
-			shopsList = Globals.shopService.filterShopsByItemCategory(
+			shopsList = shopDAO.filterShopsByItemCategory(
 					itemCategoryID, distributorID,
 					latCenter,lonCenter,
 					deliveryRangeMin,deliveryRangeMax,
@@ -363,7 +369,7 @@ public class ShopResource {
 	public Response getShop(@PathParam("ShopID")int shopID,
 							@QueryParam("latCenter")double latCenter, @QueryParam("lonCenter")double lonCenter)
 	{
-		Shop shop = Globals.shopService.getShop(shopID,latCenter,lonCenter);
+		Shop shop = shopDAO.getShop(shopID,latCenter,lonCenter);
 		
 		if(shop!= null)
 		{

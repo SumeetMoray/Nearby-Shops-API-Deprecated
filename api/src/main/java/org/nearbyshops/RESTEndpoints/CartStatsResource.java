@@ -1,5 +1,6 @@
 package org.nearbyshops.RESTEndpoints;
 
+import org.nearbyshops.DAOsPrepared.ShopDAO;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.ModelStats.CartStats;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @Path("/CartStats")
 public class CartStatsResource {
 
+	ShopDAO shopDAO = Globals.shopDAO;
 
 	public CartStatsResource() {
 		super();
@@ -33,7 +35,7 @@ public class CartStatsResource {
 
 		for(CartStats cartStatsItem: cartStats)
 		{
-			cartStatsItem.setShop(Globals.shopService.getShop(cartStatsItem.getShopID(),latCenter,lonCenter));
+			cartStatsItem.setShop(shopDAO.getShop(cartStatsItem.getShopID(),latCenter,lonCenter));
 		}
 
 

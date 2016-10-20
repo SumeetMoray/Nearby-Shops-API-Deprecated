@@ -1,5 +1,6 @@
 package org.nearbyshops.DAOs;
 
+import org.nearbyshops.DAOsPrepared.ShopDAO;
 import org.nearbyshops.JDBCContract;
 import org.nearbyshops.ContractClasses.OrderContract;
 import org.nearbyshops.Globals.Globals;
@@ -13,6 +14,8 @@ import java.util.ArrayList;
  */
 public class OrderService {
 
+
+    ShopDAO shopDAO = Globals.shopDAO;
 
     public Order placeOrder(Order order, int cartID)
     {
@@ -69,7 +72,7 @@ public class OrderService {
 
             }else
             {
-                order.setDeliveryCharges((int)Globals.shopService.getShop(tempOrder.getShopID(),null,null).getDeliveryCharges());
+                order.setDeliveryCharges((int)shopDAO.getShop(tempOrder.getShopID(),null,null).getDeliveryCharges());
                 order.setStatusHomeDelivery(1);
             }
 

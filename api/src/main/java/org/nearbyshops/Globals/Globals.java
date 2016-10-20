@@ -2,12 +2,11 @@ package org.nearbyshops.Globals;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.nearbyshops.DAOPreparedReview.FavoriteBookDAOPrepared;
+import org.nearbyshops.DAOPreparedReview.ShopReviewDAOPrepared;
 import org.nearbyshops.DAOPreparedSettings.ServiceConfigurationDAOPrepared;
 import org.nearbyshops.DAOPreparedSettings.SettingsDAOPrepared;
-import org.nearbyshops.DAOsPreparedRoles.AdminDAOPrepared;
-import org.nearbyshops.DAOsPreparedRoles.DistributorDAOPrepared;
-import org.nearbyshops.DAOsPreparedRoles.DistributorStaffDAOPrepared;
-import org.nearbyshops.DAOsPreparedRoles.StaffDAOPrepared;
+import org.nearbyshops.DAOsPreparedRoles.*;
 import org.nearbyshops.DAOs.*;
 import org.nearbyshops.DAOsPrepared.*;
 import org.nearbyshops.JDBCContract;
@@ -22,7 +21,7 @@ public class Globals {
 	public static ItemDAO itemDAO = new ItemDAO();
 	public static ItemDAOJoinOuter itemDAOJoinOuter = new ItemDAOJoinOuter();
 	public static DistributorDAOPrepared distributorDAOPrepared = new DistributorDAOPrepared();
-	public static ShopService shopService = new ShopService();
+	public static ShopDAO shopDAO = new ShopDAO();
 	public static ShopItemService shopItemService = new ShopItemService();
 	public static EndUserService endUserService = new EndUserService();
 	public static CartService cartService = new CartService();
@@ -37,6 +36,11 @@ public class Globals {
 	public static AdminDAOPrepared adminDAOPrepared = new AdminDAOPrepared();
 	public static StaffDAOPrepared staffDAOPrepared = new StaffDAOPrepared();
 	public static DistributorStaffDAOPrepared distributorStaffDAOPrepared = new DistributorStaffDAOPrepared();
+	public static EndUserDAOPrepared endUserDAOPrepared = new EndUserDAOPrepared();
+
+
+	public static ShopReviewDAOPrepared shopReviewDAOPrepared = new ShopReviewDAOPrepared();
+	public static FavoriteBookDAOPrepared favoriteBookDAOPrepared = new FavoriteBookDAOPrepared();
 
 
 	// Configure Connection Pooling

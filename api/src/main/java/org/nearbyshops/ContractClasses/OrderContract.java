@@ -28,4 +28,13 @@ public class OrderContract {
 
     public static final String DELIVERY_VEHICLE_SELF_ID = "DELIVERY_VEHICLE_SELF_ID";
 
+
+    public static final String ORDER_TOTAL = "ORDER_TOTAL";
+    public static final String TAX_AMOUNT = "TAX_AMOUNT";
+    public static final String ITEMS_TOTAL = "ITEMS_TOTAL";
+
+    public static final String REASON_FOR_CANCELLED_BY_USER = "REASON_FOR_CANCELLED_BY_USER";
+    public static final String REASON_FOR_CANCELLED_BY_SHOP = "REASON_FOR_CANCELLED_BY_SHOP";
+    public static final String REASON_FOR_ORDER_RETURNED = "REASON_FOR_ORDER_RETURNED";
+
 }

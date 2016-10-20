@@ -1,12 +1,12 @@
 package org.nearbyshops.DAOsPrepared;
 
 import com.zaxxer.hikari.HikariDataSource;
-import org.nearbyshops.ContractClasses.ShopContract;
 import org.nearbyshops.ContractClasses.ShopItemContract;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.JDBCContract;
 import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ItemCategory;
+import org.nearbyshops.Model.Shop;
 import org.nearbyshops.ModelEndPoints.ItemCategoryEndPoint;
 import org.nearbyshops.Utility.GeoLocation;
 
@@ -364,10 +364,10 @@ public class ItemCategoryDAO {
 				
 				
 				+ " FROM " 
-				+ ShopContract.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + "," 
+				+ Shop.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
 				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
 				+ " WHERE " 
-				+ ShopContract.TABLE_NAME + "." + ShopContract.SHOP_ID 
+				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID
 				+ "="
 				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID
 				+ " AND "
@@ -384,9 +384,9 @@ public class ItemCategoryDAO {
 		if(shopID!=null)
 		{
 				queryJoin = queryJoin + " AND "
-						+ ShopContract.TABLE_NAME 
+						+ Shop.TABLE_NAME
 						+ "."
-						+ ShopContract.SHOP_ID + " = " + shopID; 	
+						+ Shop.SHOP_ID + " = " + shopID;
 			
 		}
 		
@@ -401,24 +401,24 @@ public class ItemCategoryDAO {
 
 			queryPartlatLonCenterTwo = queryPartlatLonCenterTwo
 					+ " AND "
-					+ ShopContract.TABLE_NAME
+					+ Shop.TABLE_NAME
 					+ "."
-					+ ShopContract.LAT_MAX
+					+ Shop.LAT_MAX
 					+ " >= " + latCenter
 					+ " AND "
-					+ ShopContract.TABLE_NAME
+					+ Shop.TABLE_NAME
 					+ "."
-					+ ShopContract.LAT_MIN
+					+ Shop.LAT_MIN
 					+ " <= " + latCenter
 					+ " AND "
-					+ ShopContract.TABLE_NAME
+					+ Shop.TABLE_NAME
 					+ "."
-					+ ShopContract.LON_MAX
+					+ Shop.LON_MAX
 					+ " >= " + lonCenter
 					+ " AND "
-					+ ShopContract.TABLE_NAME
+					+ Shop.TABLE_NAME
 					+ "."
-					+ ShopContract.LON_MIN
+					+ Shop.LON_MIN
 					+ " <= " + lonCenter;
 
 			//+ " BETWEEN " + latmax + " AND " + latmin;
@@ -444,9 +444,9 @@ public class ItemCategoryDAO {
 			// apply delivery range filter
 			queryJoin = queryJoin
 					+ " AND "
-					+ ShopContract.TABLE_NAME
+					+ Shop.TABLE_NAME
 					+ "."
-					+ ShopContract.DELIVERY_RANGE
+					+ Shop.DELIVERY_RANGE
 					+ " BETWEEN " + deliveryRangeMin + " AND " + deliveryRangeMax;
 		}
 
@@ -487,27 +487,27 @@ public class ItemCategoryDAO {
 			queryPartProximityBounding = queryPartProximityBounding
 
 					+ " AND "
-					+ ShopContract.TABLE_NAME
+					+ Shop.TABLE_NAME
 					+ "."
-					+ ShopContract.LAT_CENTER
+					+ Shop.LAT_CENTER
 					+ " < " + latMax
 
 					+ " AND "
-					+ ShopContract.TABLE_NAME
+					+ Shop.TABLE_NAME
 					+ "."
-					+ ShopContract.LAT_CENTER
+					+ Shop.LAT_CENTER
 					+ " > " + latMin
 
 					+ " AND "
-					+ ShopContract.TABLE_NAME
+					+ Shop.TABLE_NAME
 					+ "."
-					+ ShopContract.LON_CENTER
+					+ Shop.LON_CENTER
 					+ " < " + lonMax
 
 					+ " AND "
-					+ ShopContract.TABLE_NAME
+					+ Shop.TABLE_NAME
 					+ "."
-					+ ShopContract.LON_CENTER
+					+ Shop.LON_CENTER
 					+ " > " + lonMin;
 
 
@@ -517,16 +517,16 @@ public class ItemCategoryDAO {
 					+ " (6371.01 * acos(cos( radians("
 					+ latCenter
 					+ ")) * cos( radians("
-					+ ShopContract.LAT_CENTER
+					+ Shop.LAT_CENTER
 					+ " )) * cos(radians( "
-					+ ShopContract.LON_CENTER
+					+ Shop.LON_CENTER
 					+ ") - radians("
 					+ lonCenter
 					+ "))"
 					+ " + sin( radians("
 					+ latCenter
 					+ ")) * sin(radians("
-					+ ShopContract.LAT_CENTER
+					+ Shop.LAT_CENTER
 					+ ")))) <= "
 					+ proximity ;
 
@@ -785,10 +785,10 @@ public class ItemCategoryDAO {
 				+ ItemCategory.TABLE_NAME + "." + ItemCategory.PARENT_CATEGORY_ID
 
 				+ " FROM "
-				+ ShopContract.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
+				+ Shop.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
 				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
 				+ " WHERE "
-				+ ShopContract.TABLE_NAME + "." + ShopContract.SHOP_ID
+				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID
 				+ "="
 				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID
 				+ " AND "
@@ -805,9 +805,9 @@ public class ItemCategoryDAO {
 		if(shopID!=null)
 		{
 			queryJoin = queryJoin + " AND "
-					+ ShopContract.TABLE_NAME
+					+ Shop.TABLE_NAME
 					+ "."
-					+ ShopContract.SHOP_ID + " = " + shopID;
+					+ Shop.SHOP_ID + " = " + shopID;
 
 		}
 
@@ -838,9 +838,9 @@ public class ItemCategoryDAO {
 			// apply delivery range filter
 			queryJoin = queryJoin
 					+ " AND "
-					+ ShopContract.TABLE_NAME
+					+ Shop.TABLE_NAME
 					+ "."
-					+ ShopContract.DELIVERY_RANGE
+					+ Shop.DELIVERY_RANGE
 					+ " BETWEEN " + deliveryRangeMin + " AND " + deliveryRangeMax;
 		}
 
@@ -859,16 +859,16 @@ public class ItemCategoryDAO {
 					+ " (6371.01 * acos(cos( radians("
 					+ latCenter
 					+ ")) * cos( radians("
-					+ ShopContract.LAT_CENTER
+					+ Shop.LAT_CENTER
 					+ " )) * cos(radians( "
-					+ ShopContract.LON_CENTER
+					+ Shop.LON_CENTER
 					+ ") - radians("
 					+ lonCenter
 					+ "))"
 					+ " + sin( radians("
 					+ latCenter
 					+ ")) * sin(radians("
-					+ ShopContract.LAT_CENTER
+					+ Shop.LAT_CENTER
 					+ ")))) <= "
 					+ proximity ;
 
@@ -1017,7 +1017,9 @@ public class ItemCategoryDAO {
 
 		String query = "";
 
-		String queryNormal = "SELECT count(*) as item_count FROM " + ItemCategory.TABLE_NAME;
+		String queryNormal = "SELECT count(" + ItemCategory.TABLE_NAME +"." + ItemCategory.ITEM_CATEGORY_ID+ ") as item_count "
+										+ " FROM " + ItemCategory.TABLE_NAME;
+
 
 
 		boolean queryNormalFirst = true;
@@ -1030,6 +1032,31 @@ public class ItemCategoryDAO {
 
 			queryNormalFirst = false;
 		}
+
+
+/*
+		if(shopID!=null)
+		{
+
+			String queryPartShopID = "";
+
+			queryPartShopID = queryPartShopID + ShopContract.TABLE_NAME + "."
+					+ ShopContract.SHOP_ID + " = " + shopID;
+
+			if(queryNormalFirst)
+			{
+				queryNormal = queryNormal + " WHERE " + queryPartShopID;
+			}
+			else
+			{
+				queryNormal = queryNormal + " AND " + queryPartShopID;
+			}
+
+
+			queryNormalFirst = false;
+		}
+*/
+
 
 
 		if(parentIsNull!=null&& parentIsNull)
