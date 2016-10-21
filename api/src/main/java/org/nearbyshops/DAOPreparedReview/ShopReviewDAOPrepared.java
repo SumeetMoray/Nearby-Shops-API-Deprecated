@@ -2,9 +2,11 @@ package org.nearbyshops.DAOPreparedReview;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.Globals.Globals;
+import org.nearbyshops.Model.Item;
 import org.nearbyshops.ModelEndPoints.ShopReviewEndPoint;
 import org.nearbyshops.ModelReview.ShopReview;
 import org.nearbyshops.ModelReview.ShopReviewStatRow;
+import org.nearbyshops.ModelReview.ShopReviewThanks;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -267,10 +269,12 @@ public class ShopReviewDAOPrepared {
                     + ShopReview.TABLE_NAME + "." + ShopReview.RATING + ","
                     + ShopReview.TABLE_NAME + "." + ShopReview.REVIEW_TEXT + ","
                     + ShopReview.TABLE_NAME + "." + ShopReview.REVIEW_DATE + ","
-                    + ShopReview.TABLE_NAME + "." + ShopReview.REVIEW_TITLE + ""
+                    + ShopReview.TABLE_NAME + "." + ShopReview.REVIEW_TITLE + ","
+                    + " count(" + ShopReviewThanks.TABLE_NAME + "." + ShopReviewThanks.SHOP_REVIEW_ID + ") as thanks_count "
 
-
-                    + " FROM " + ShopReview.TABLE_NAME;
+                    + " FROM " + ShopReview.TABLE_NAME + " LEFT OUTER JOIN " + ShopReviewThanks.TABLE_NAME
+                    + " ON (" + ShopReview.TABLE_NAME + "." + ShopReview.SHOP_REVIEW_ID
+                    + " = " + ShopReviewThanks.TABLE_NAME + "." + ShopReviewThanks.SHOP_REVIEW_ID + ") ";
 
 
             if(shopID != null)
@@ -313,6 +317,19 @@ public class ShopReviewDAOPrepared {
                 isFirst = false;
 
             }
+
+
+            queryJoin = queryJoin
+
+                    + " group by "
+
+                    + ShopReview.TABLE_NAME + "." + ShopReview.SHOP_REVIEW_ID + ","
+                    + ShopReview.TABLE_NAME + "." + ShopReview.SHOP_ID + ","
+                    + ShopReview.TABLE_NAME + "." + ShopReview.END_USER_ID + ","
+                    + ShopReview.TABLE_NAME + "." + ShopReview.RATING + ","
+                    + ShopReview.TABLE_NAME + "." + ShopReview.REVIEW_TEXT + ","
+                    + ShopReview.TABLE_NAME + "." + ShopReview.REVIEW_DATE + ","
+                    + ShopReview.TABLE_NAME + "." + ShopReview.REVIEW_TITLE ;
 
 
 
@@ -382,7 +399,7 @@ public class ShopReviewDAOPrepared {
 
 
 
-            ArrayList<ShopReview> bookReviewsList = new ArrayList<ShopReview>();
+            ArrayList<ShopReview> shopReviewsList = new ArrayList<ShopReview>();
 
 
             Connection conn = null;
@@ -408,12 +425,13 @@ public class ShopReviewDAOPrepared {
                     shopReview.setReviewTitle(rs.getString(ShopReview.REVIEW_TITLE));
                     shopReview.setReviewDate(rs.getTimestamp(ShopReview.REVIEW_DATE));
 
-                    bookReviewsList.add(shopReview);
+                    shopReview.setRt_thanks_count(rs.getInt("thanks_count"));
+                    shopReviewsList.add(shopReview);
                 }
 
 
 
-                System.out.println("books By CategoryID " + bookReviewsList.size());
+                System.out.println("books By CategoryID " + shopReviewsList.size());
 
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
@@ -452,7 +470,7 @@ public class ShopReviewDAOPrepared {
                 }
             }
 
-            return bookReviewsList;
+            return shopReviewsList;
         }
 
 

@@ -4,12 +4,14 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.DAOPreparedReview.FavoriteBookDAOPrepared;
 import org.nearbyshops.DAOPreparedReview.ShopReviewDAOPrepared;
+import org.nearbyshops.DAOPreparedReview.ShopReviewThanksDAOPrepared;
 import org.nearbyshops.DAOPreparedSettings.ServiceConfigurationDAOPrepared;
 import org.nearbyshops.DAOPreparedSettings.SettingsDAOPrepared;
 import org.nearbyshops.DAOsPreparedRoles.*;
 import org.nearbyshops.DAOs.*;
 import org.nearbyshops.DAOsPrepared.*;
 import org.nearbyshops.JDBCContract;
+import org.nearbyshops.ModelReview.ShopReviewThanks;
 
 
 public class Globals {
@@ -41,6 +43,8 @@ public class Globals {
 
 	public static ShopReviewDAOPrepared shopReviewDAOPrepared = new ShopReviewDAOPrepared();
 	public static FavoriteBookDAOPrepared favoriteBookDAOPrepared = new FavoriteBookDAOPrepared();
+
+	public static ShopReviewThanksDAOPrepared shopReviewThanksDAO = new ShopReviewThanksDAOPrepared();
 
 
 	// Configure Connection Pooling

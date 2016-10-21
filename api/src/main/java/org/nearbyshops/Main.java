@@ -14,6 +14,7 @@ import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.*;
 import org.nearbyshops.ModelReview.FavouriteShop;
 import org.nearbyshops.ModelReview.ShopReview;
+import org.nearbyshops.ModelReview.ShopReviewThanks;
 import org.nearbyshops.ModelRoles.*;
 import org.nearbyshops.ModelSettings.ServiceConfiguration;
 import org.nearbyshops.ModelSettings.Settings;
@@ -356,10 +357,11 @@ public class Main implements ActionListener {
 			statement.executeUpdate(Settings.createTableSettingsPostgres);
 
 
-			// tables for reviews
+			// tables for shop reviews
 
 			statement.executeUpdate(ShopReview.createTableShopReviewPostgres);
 			statement.executeUpdate(FavouriteShop.createTableFavouriteBookPostgres);
+			statement.executeUpdate(ShopReviewThanks.createTableShopReviewThanksPostgres);
 
 
 			System.out.println("Tables Created ... !");

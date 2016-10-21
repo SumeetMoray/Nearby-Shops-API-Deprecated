@@ -56,10 +56,19 @@ public class ShopReview {
     private Timestamp reviewDate;
 
     private EndUser rt_end_user_profile;
+    private Integer rt_thanks_count;
 
 
     // getter and Setter Methods
 
+
+    public Integer getRt_thanks_count() {
+        return rt_thanks_count;
+    }
+
+    public void setRt_thanks_count(Integer rt_thanks_count) {
+        this.rt_thanks_count = rt_thanks_count;
+    }
 
     public Integer getShopReviewID() {
         return shopReviewID;
