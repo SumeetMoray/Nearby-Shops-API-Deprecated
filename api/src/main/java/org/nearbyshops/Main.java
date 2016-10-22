@@ -214,33 +214,13 @@ public class Main implements ActionListener {
 
 
 
-		        statement.executeUpdate(ItemCategory.createTableItemCategoryPostgres);
-		        statement.executeUpdate(Item.createTableItemPostgres);
-		        statement.executeUpdate(Distributor.createTableDistributorPostgres);
-				statement.executeUpdate(DistributorStaff.createTableDistributorStaffPostgres);
+			statement.executeUpdate(ItemCategory.createTableItemCategoryPostgres);
+			statement.executeUpdate(Item.createTableItemPostgres);
+			statement.executeUpdate(Distributor.createTableDistributorPostgres);
+			statement.executeUpdate(DistributorStaff.createTableDistributorStaffPostgres);
 
-		        statement.executeUpdate(Shop.createTableShopPostgres);
-
-
-
-		    	String createTableShopItemPostgres = "CREATE TABLE IF NOT EXISTS " + ShopItemContract.TABLE_NAME + "("
-		        		+ " " + ShopItemContract.ITEM_ID + " INT,"
-		        		+ " " + ShopItemContract.SHOP_ID + " INT,"
-		        		+ " " + ShopItemContract.AVAILABLE_ITEM_QUANTITY + " INT,"
-		        		+ " " + ShopItemContract.ITEM_PRICE + " FLOAT,"
-						+ " " + ShopItemContract.LAST_UPDATE_DATE_TIME + " timestamp with time zone,"
-						+ " " + ShopItemContract.EXTRA_DELIVERY_CHARGE + " FLOAT,"
-						+ " " + ShopItemContract.DATE_TIME_ADDED + " timestamp with time zone NOT NULL DEFAULT now(),"
-		        		+ " FOREIGN KEY(" + ShopItemContract.SHOP_ID +") REFERENCES SHOP(SHOP_ID),"
-		        		+ " FOREIGN KEY(" + ShopItemContract.ITEM_ID +") REFERENCES ITEM(ITEM_ID)," 
-		        		+ " PRIMARY KEY (" + ShopItemContract.SHOP_ID + ", " + ShopItemContract.ITEM_ID + ")"
-		        		+ ")";
-		    	
-		    	
-		        statement.executeUpdate(createTableShopItemPostgres);
-
-
-
+			statement.executeUpdate(Shop.createTableShopPostgres);
+			statement.executeUpdate(ShopItem.createTableShopItemPostgres);
 			statement.executeUpdate(EndUser.createTableEndUserPostgres);
 
 

@@ -1,11 +1,11 @@
 package org.nearbyshops.DAOsPrepared;
 
 import com.zaxxer.hikari.HikariDataSource;
-import org.nearbyshops.ContractClasses.ShopItemContract;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ItemCategory;
 import org.nearbyshops.Model.Shop;
+import org.nearbyshops.Model.ShopItem;
 import org.nearbyshops.ModelEndPoints.ItemEndPoint;
 import org.nearbyshops.ModelStats.ItemStats;
 import org.nearbyshops.Utility.GeoLocation;
@@ -334,19 +334,19 @@ public class ItemDAO {
 
 
 		String queryJoin = "SELECT DISTINCT "
-				+ "min(" + ShopItemContract.ITEM_PRICE + ") as min_price" + ","
-				+ "max(" + ShopItemContract.ITEM_PRICE + ") as max_price" + ","
-				+ "count(" + ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID + ") as shop_count" + ","
+				+ "min(" + ShopItem.ITEM_PRICE + ") as min_price" + ","
+				+ "max(" + ShopItem.ITEM_PRICE + ") as max_price" + ","
+				+ "count(" + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + ") as shop_count" + ","
 				+ Item.TABLE_NAME + "." + Item.ITEM_ID
 				+ " FROM "
-				+ Shop.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
+				+ Shop.TABLE_NAME  + "," + ShopItem.TABLE_NAME + ","
 				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
 				+ " WHERE "
 				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID
 				+ "="
-				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID
+				+ ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
 				+ " AND "
-				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID
+				+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID
 				+ "="
 				+ Item.TABLE_NAME + "." + Item.ITEM_ID
 				+ " AND "
@@ -476,7 +476,7 @@ public class ItemDAO {
 		}
 
 
-		queryJoin = queryJoin + " group by " + ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID;
+		queryJoin = queryJoin + " group by " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID;
 
 
 		//
@@ -577,9 +577,9 @@ public class ItemDAO {
 		
 		
 		String queryJoin = "SELECT "
-				+ "min(" + ShopItemContract.ITEM_PRICE + ") as min_price" + ","
-				+ "max(" + ShopItemContract.ITEM_PRICE + ") as max_price" + ","
-				+ "count(" + ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID + ") as shop_count" + ","
+				+ "min(" + ShopItem.ITEM_PRICE + ") as min_price" + ","
+				+ "max(" + ShopItem.ITEM_PRICE + ") as max_price" + ","
+				+ "count(" + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + ") as shop_count" + ","
 				+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + ","
 				+ Item.TABLE_NAME + "." + Item.ITEM_ID + ","
 				+ Item.TABLE_NAME + "." + Item.ITEM_IMAGE_URL + ","
@@ -591,14 +591,14 @@ public class ItemDAO {
 				+ Item.TABLE_NAME + "." + Item.ITEM_DESCRIPTION_LONG + ""
 
 				+ " FROM " 
-				+ Shop.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
+				+ Shop.TABLE_NAME  + "," + ShopItem.TABLE_NAME + ","
 				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
 				+ " WHERE " 
 				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID
 				+ "="
-				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID
+				+ ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
 				+ " AND "
-				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID
+				+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID
 				+ "="
 				+ Item.TABLE_NAME + "." + Item.ITEM_ID
 				+ " AND "
@@ -974,14 +974,14 @@ public class ItemDAO {
 				+ "count( DISTINCT " + Item.TABLE_NAME + "." + Item.ITEM_ID + ") as item_count" + ""
 
 				+ " FROM "
-				+ Shop.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
+				+ Shop.TABLE_NAME  + "," + ShopItem.TABLE_NAME + ","
 				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
 				+ " WHERE "
 				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID
 				+ "="
-				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID
+				+ ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
 				+ " AND "
-				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID
+				+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID
 				+ "="
 				+ Item.TABLE_NAME + "." + Item.ITEM_ID
 				+ " AND "

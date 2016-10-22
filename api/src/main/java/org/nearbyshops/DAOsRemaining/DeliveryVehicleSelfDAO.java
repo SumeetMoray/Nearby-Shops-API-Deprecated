@@ -1,4 +1,4 @@
-package org.nearbyshops.DAOs;
+package org.nearbyshops.DAOsRemaining;
 
 import org.nearbyshops.ContractClasses.DeliveryVehicleSelfContract;
 import org.nearbyshops.JDBCContract;

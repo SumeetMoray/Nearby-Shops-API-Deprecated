@@ -1,6 +1,7 @@
-package org.nearbyshops.DAOs;
+package org.nearbyshops.DAOsRemaining;
 
 import org.nearbyshops.DAOsPrepared.ShopDAO;
+import org.nearbyshops.DAOsPrepared.ShopItemDAO;
 import org.nearbyshops.JDBCContract;
 import org.nearbyshops.ContractClasses.OrderContract;
 import org.nearbyshops.Globals.Globals;
@@ -15,7 +16,8 @@ import java.util.ArrayList;
 public class OrderService {
 
 
-    ShopDAO shopDAO = Globals.shopDAO;
+    private ShopDAO shopDAO = Globals.shopDAO;
+    private ShopItemDAO shopItemDAO = Globals.shopItemDAO;
 
     public Order placeOrder(Order order, int cartID)
     {
@@ -47,7 +49,7 @@ public class OrderService {
         if(rowCount > 0)
         {
             status = 2;
-            rowCountAvailableItemQuantity = Globals.shopItemService.updateAvailableItemQuantity(orderID);
+            rowCountAvailableItemQuantity = shopItemDAO.updateAvailableItemQuantity(orderID);
 
             // delete cart_item here
             Globals.cartItemService.deleteCartItem(0,cartID);

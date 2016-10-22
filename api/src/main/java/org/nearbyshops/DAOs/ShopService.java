@@ -7,11 +7,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import org.nearbyshops.ContractClasses.*;
 import org.nearbyshops.JDBCContract;
 import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ItemCategory;
 import org.nearbyshops.Model.Shop;
+import org.nearbyshops.Model.ShopItem;
 import org.nearbyshops.ModelEndPoints.ShopEndPoint;
 import org.nearbyshops.ModelReview.ShopReview;
 import org.nearbyshops.Utility.GeoLocation;
@@ -349,15 +349,15 @@ public class ShopService {
 				+ " ON (" + ShopReview.TABLE_NAME + "." + ShopReview.SHOP_ID
 				+ " = " + Shop.TABLE_NAME + "." + Shop.SHOP_ID + ")"
 
-				+ "," + ShopItemContract.TABLE_NAME + ","
+				+ "," + ShopItem.TABLE_NAME + ","
 				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
 
 				+ " WHERE "
 				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID + "="
-				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID
+				+ ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
 
 				+ " AND "
-				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID + "="
+				+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "="
 				+ Item.TABLE_NAME + "." + Item.ITEM_ID
 
 				+ " AND "
@@ -785,15 +785,15 @@ public class ShopService {
 		queryJoin = "SELECT DISTINCT "
 				+ " count(*) as item_count "
 				+ " FROM "
-				+ Shop.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
+				+ Shop.TABLE_NAME  + "," + ShopItem.TABLE_NAME + ","
 				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
 
 				+ " WHERE "
 				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID + "="
-				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID
+				+ ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
 
 				+ " AND "
-				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID + "="
+				+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "="
 				+ Item.TABLE_NAME + "." + Item.ITEM_ID
 
 				+ " AND "
@@ -1135,14 +1135,14 @@ public class ShopService {
 				+ " = " + Shop.TABLE_NAME + "." + Shop.SHOP_ID + ")"
 
 				+ " INNER JOIN "
-				+ ShopItemContract.TABLE_NAME
+				+ ShopItem.TABLE_NAME
 				+ " ON (" + Shop.TABLE_NAME + "." + Shop.SHOP_ID + "="
-				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID + ")"
+				+ ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID + ")"
 
 				+ " INNER JOIN "
 				+ Item.TABLE_NAME
 				+ " ON ("
-				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID + "="
+				+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "="
 				+ Item.TABLE_NAME + "." + Item.ITEM_ID + ")"
 
 				+ " INNER JOIN "
@@ -1492,15 +1492,15 @@ public class ShopService {
 				+ "count(DISTINCT(" + Shop.TABLE_NAME + "." + Shop.SHOP_ID + ")) as item_count"
 
 				+ " FROM "
-				+ Shop.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
+				+ Shop.TABLE_NAME  + "," + ShopItem.TABLE_NAME + ","
 				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
 
 				+ " WHERE "
 				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID + "="
-				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID
+				+ ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
 
 				+ " AND "
-				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID + "="
+				+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "="
 				+ Item.TABLE_NAME + "." + Item.ITEM_ID
 
 				+ " AND "

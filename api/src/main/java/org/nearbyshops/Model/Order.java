@@ -13,28 +13,28 @@ public class Order {
 
 
 
-    int orderID;
-    int endUserID;
-    int shopID;
+    private int orderID;
+    private int endUserID;
+    private int shopID;
     //int orderStatus;
 
-    int statusHomeDelivery;
-    int statusPickFromShop;
-    boolean deliveryReceived;
-    boolean paymentReceived;
+    private int statusHomeDelivery;
+    private int statusPickFromShop;
+    private boolean deliveryReceived;
+    private boolean paymentReceived;
 
-    int deliveryCharges;
-    int deliveryAddressID;
-    boolean pickFromShop;
+    private int deliveryCharges;
+    private int deliveryAddressID;
+    private boolean pickFromShop;
 
-    int deliveryVehicleSelfID;
+    private int deliveryVehicleSelfID;
 
-    Timestamp dateTimePlaced;
+    private Timestamp dateTimePlaced;
 
 
-    DeliveryAddress deliveryAddress;
+    private DeliveryAddress deliveryAddress;
 
-    OrderStats orderStats;
+    private OrderStats orderStats;
 
     public int getDeliveryVehicleSelfID() {
         return deliveryVehicleSelfID;

@@ -1,7 +1,8 @@
-package org.nearbyshops.DAOs;
+package org.nearbyshops.DAOsRemaining;
 
 import org.nearbyshops.ContractClasses.*;
 import org.nearbyshops.JDBCContract;
+import org.nearbyshops.Model.ShopItem;
 import org.nearbyshops.ModelStats.CartStats;
 
 import java.sql.*;
@@ -32,7 +33,7 @@ public class CartStatsDAO {
                 CartItemContract.ITEM_QUANTITY +
 
                 "*" +
-                ShopItemContract.ITEM_PRICE +
+                ShopItem.ITEM_PRICE +
 
                 ") as Cart_Total,count(" +
 
@@ -46,7 +47,7 @@ public class CartStatsDAO {
 
                 " from " +
 
-                ShopItemContract.TABLE_NAME +
+                ShopItem.TABLE_NAME +
                 ", " +
                 CartContract.TABLE_NAME +
                 ", " +

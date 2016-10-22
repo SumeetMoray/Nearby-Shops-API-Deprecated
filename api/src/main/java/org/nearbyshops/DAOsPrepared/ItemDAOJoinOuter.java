@@ -1,9 +1,9 @@
 package org.nearbyshops.DAOsPrepared;
 
 import com.zaxxer.hikari.HikariDataSource;
-import org.nearbyshops.ContractClasses.ShopItemContract;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Item;
+import org.nearbyshops.Model.ShopItem;
 import org.nearbyshops.ModelEndPoints.ItemEndPoint;
 import org.nearbyshops.ModelStats.ItemStats;
 import org.nearbyshops.Utility.GeoLocation;
@@ -50,10 +50,10 @@ public class ItemDAOJoinOuter {
 		
 		
 		String queryJoin = "SELECT "
-				+ "min(" + ShopItemContract.ITEM_PRICE + ") as min_price" + ","
-				+ "max(" + ShopItemContract.ITEM_PRICE + ") as max_price" + ","
-				+ "avg(" + ShopItemContract.ITEM_PRICE + ") as avg_price" + ","
-				+ "count(" + ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID + ") as shop_count" + ","
+				+ "min(" + ShopItem.ITEM_PRICE + ") as min_price" + ","
+				+ "max(" + ShopItem.ITEM_PRICE + ") as max_price" + ","
+				+ "avg(" + ShopItem.ITEM_PRICE + ") as avg_price" + ","
+				+ "count(" + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + ") as shop_count" + ","
 				+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + ","
 				+ Item.TABLE_NAME + "." + Item.ITEM_ID + ","
 				+ Item.TABLE_NAME + "." + Item.ITEM_IMAGE_URL + ","
@@ -64,8 +64,8 @@ public class ItemDAOJoinOuter {
 				+ Item.TABLE_NAME + "." + Item.DATE_TIME_CREATED + ","
 				+ Item.TABLE_NAME + "." + Item.ITEM_DESCRIPTION_LONG + ""
 
-				+ " FROM " + ShopItemContract.TABLE_NAME + " RIGHT OUTER JOIN " + Item.TABLE_NAME
-				+ " ON (" + ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID
+				+ " FROM " + ShopItem.TABLE_NAME + " RIGHT OUTER JOIN " + Item.TABLE_NAME
+				+ " ON (" + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID
 				+ "=" + Item.TABLE_NAME + "." + Item.ITEM_ID + ")";
 
 
@@ -257,8 +257,8 @@ public class ItemDAOJoinOuter {
 		String queryJoin = "SELECT "
 
 				+ "count( DISTINCT " + Item.TABLE_NAME + "." + Item.ITEM_ID + ") as item_count" + ""
-				+ " FROM " + ShopItemContract.TABLE_NAME + " RIGHT OUTER JOIN " + Item.TABLE_NAME
-				+ " ON (" + ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID + "=" + Item.TABLE_NAME + "." + Item.ITEM_ID + ")";
+				+ " FROM " + ShopItem.TABLE_NAME + " RIGHT OUTER JOIN " + Item.TABLE_NAME
+				+ " ON (" + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "=" + Item.TABLE_NAME + "." + Item.ITEM_ID + ")";
 
 
 		if(itemCategoryID != null)

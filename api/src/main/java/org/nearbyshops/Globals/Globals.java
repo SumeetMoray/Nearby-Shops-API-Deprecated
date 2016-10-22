@@ -7,11 +7,11 @@ import org.nearbyshops.DAOPreparedReview.ShopReviewDAOPrepared;
 import org.nearbyshops.DAOPreparedReview.ShopReviewThanksDAOPrepared;
 import org.nearbyshops.DAOPreparedSettings.ServiceConfigurationDAOPrepared;
 import org.nearbyshops.DAOPreparedSettings.SettingsDAOPrepared;
+import org.nearbyshops.DAOs.EndUserService;
 import org.nearbyshops.DAOsPreparedRoles.*;
-import org.nearbyshops.DAOs.*;
+import org.nearbyshops.DAOsRemaining.*;
 import org.nearbyshops.DAOsPrepared.*;
 import org.nearbyshops.JDBCContract;
-import org.nearbyshops.ModelReview.ShopReviewThanks;
 
 
 public class Globals {
@@ -24,7 +24,7 @@ public class Globals {
 	public static ItemDAOJoinOuter itemDAOJoinOuter = new ItemDAOJoinOuter();
 	public static DistributorDAOPrepared distributorDAOPrepared = new DistributorDAOPrepared();
 	public static ShopDAO shopDAO = new ShopDAO();
-	public static ShopItemService shopItemService = new ShopItemService();
+//	public static ShopItemService shopItemService = new ShopItemService();
 	public static EndUserService endUserService = new EndUserService();
 	public static CartService cartService = new CartService();
 	public static CartItemService cartItemService = new CartItemService();
@@ -46,6 +46,10 @@ public class Globals {
 
 	public static ShopReviewThanksDAOPrepared shopReviewThanksDAO = new ShopReviewThanksDAOPrepared();
 
+
+	public static ShopItemByShopDAO shopItemByShopDAO = new ShopItemByShopDAO();
+	public static ShopItemDAO shopItemDAO = new ShopItemDAO();
+	public static ShopItemByItemDAO shopItemByItemDAO = new ShopItemByItemDAO();
 
 	// Configure Connection Pooling
 

@@ -16,9 +16,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.nearbyshops.DAOsPrepared.ItemDAO;
-import org.nearbyshops.DAOsPrepared.ShopDAO;
+import org.nearbyshops.DAOsPrepared.*;
 import org.nearbyshops.Globals.Globals;
+import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ShopItem;
 import org.nearbyshops.ModelEndPoints.ShopItemEndPoint;
 
@@ -31,6 +31,12 @@ public class ShopItemResource {
 	private ShopDAO shopDAO = Globals.shopDAO;
 
 
+	private ShopItemByShopDAO shopItemByShopDAO = Globals.shopItemByShopDAO;
+	private ShopItemByItemDAO shopItemByItemDAO = Globals.shopItemByItemDAO;
+	private ShopItemDAO shopItemDAO = Globals.shopItemDAO;
+
+
+
 	@PUT
 	@Path("/UpdateBulk")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -40,7 +46,7 @@ public class ShopItemResource {
 
 		for(ShopItem shopItem : itemList)
 		{
-			rowCountSum = rowCountSum + Globals.shopItemService.updateShopItem(shopItem);
+			rowCountSum = rowCountSum + shopItemDAO.updateShopItem(shopItem);
 		}
 
 
@@ -82,7 +88,7 @@ public class ShopItemResource {
 
 		for(ShopItem shopItem : itemList)
 		{
-			rowCountSum = rowCountSum + Globals.shopItemService.insertShopItem(shopItem);
+			rowCountSum = rowCountSum + shopItemDAO.insertShopItem(shopItem);
 		}
 
 
@@ -121,7 +127,7 @@ public class ShopItemResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response saveShopItem(ShopItem shopItem)
 	{
-		int rowCount = Globals.shopItemService.insertShopItem(shopItem);
+		int rowCount = shopItemDAO.insertShopItem(shopItem);
 		
 		if(rowCount == 1)
 		{
@@ -155,7 +161,7 @@ public class ShopItemResource {
 		//shopItem.setShopID(ShopID);
 		//shopItem.setItemID(itemID);
 		
-		int rowCount = Globals.shopItemService.updateShopItem(shopItem);
+		int rowCount = shopItemDAO.updateShopItem(shopItem);
 		
 		if(rowCount == 1)
 		{
@@ -183,7 +189,7 @@ public class ShopItemResource {
 	@DELETE
 	public Response deleteShopItem(@QueryParam("ShopID")int ShopID, @QueryParam("ItemID") int itemID)
 	{		
-	    int rowCount =	Globals.shopItemService.deleteShopItem(ShopID, itemID);
+	    int rowCount =	shopItemDAO.deleteShopItem(ShopID, itemID);
 		
 		if(rowCount == 1)
 		{
@@ -216,7 +222,7 @@ public class ShopItemResource {
 
 		for(ShopItem shopItem : itemList)
 		{
-			rowCountSum = rowCountSum + Globals.shopItemService
+			rowCountSum = rowCountSum + shopItemDAO
 					.deleteShopItem(shopItem.getShopID(),shopItem.getItemID());
 		}
 
@@ -268,7 +274,7 @@ public class ShopItemResource {
 			@QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset
 	)
 	{
-		List<ShopItem> shopItemsList = Globals.shopItemService.getShopItems(
+		List<ShopItem> shopItemsList = shopItemDAO.getShopItems(
 				ItemCategoryID,
 				ShopID, itemID,
 				latCenter, lonCenter,
@@ -366,13 +372,61 @@ public class ShopItemResource {
 			set_offset = offset;
 		}
 
-		ShopItemEndPoint endPoint = Globals.shopItemService.getEndpointMetadata(
-				ItemCategoryID,
-				ShopID,itemID,
-				latCenter,lonCenter,
-				deliveryRangeMin,deliveryRangeMax,
-				proximity,endUserID,
-				isFilledCart,isOutOfStock,priceEqualsZero);
+		ShopItemEndPoint endPoint;
+
+
+		if(ShopID!=null && itemID == null)
+		{
+			endPoint = shopItemByShopDAO.getEndpointMetadata(
+					ItemCategoryID,
+					ShopID,
+					latCenter,lonCenter,
+					deliveryRangeMin,deliveryRangeMax,
+					proximity,endUserID,
+					isFilledCart,isOutOfStock,priceEqualsZero
+			);
+		}
+		else if(itemID !=null && ShopID==null)
+		{
+			endPoint = shopItemByItemDAO.getEndpointMetadata(
+					ItemCategoryID,
+					itemID,
+					latCenter,lonCenter,
+					deliveryRangeMin,deliveryRangeMax,
+					proximity,endUserID,
+					isFilledCart,isOutOfStock,priceEqualsZero
+			);
+
+		}
+		else
+		{
+			endPoint = shopItemDAO.getEndpointMetadata(
+					ItemCategoryID,
+					ShopID,itemID,
+					latCenter,lonCenter,
+					deliveryRangeMin,deliveryRangeMax,
+					proximity,endUserID,
+					isFilledCart,isOutOfStock,priceEqualsZero);
+		}
+
+
+
+		/*if(itemID!=null && ShopID==null)
+		{
+
+		}
+
+		if(itemID==null && ShopID == null)
+		{
+
+		}
+
+		if(ShopID!=null && itemID !=null)
+		{
+
+		}
+*/
+
 
 		endPoint.setLimit(set_limit);
 		endPoint.setMax_limit(max_limit);
@@ -384,19 +438,60 @@ public class ShopItemResource {
 
 		if(metaonly==null || (!metaonly)) {
 
-			shopItemsList = Globals.shopItemService.getShopItems(
-					ItemCategoryID,
-					ShopID, itemID,
-					latCenter, lonCenter,
-					deliveryRangeMin,deliveryRangeMax,
-					proximity, endUserID,
-					isFilledCart,
-					isOutOfStock,
-					priceEqualsZero,
-					sortBy,
-					limit,offset);
+
+			if(ShopID!=null && itemID == null)
+			{
+
+				shopItemsList = shopItemByShopDAO.getShopItems(
+						ItemCategoryID,
+						ShopID,
+						latCenter, lonCenter,
+						deliveryRangeMin,deliveryRangeMax,
+						proximity, endUserID,
+						isFilledCart,
+						isOutOfStock,
+						priceEqualsZero,
+						sortBy,
+						limit,offset
+				);
+			}
+			else if(itemID !=null && ShopID==null)
+			{
+
+				shopItemsList = shopItemByItemDAO.getShopItems(
+						ItemCategoryID,
+						itemID,
+						latCenter, lonCenter,
+						deliveryRangeMin,deliveryRangeMax,
+						proximity, endUserID,
+						isFilledCart,
+						isOutOfStock,
+						priceEqualsZero,
+						sortBy,
+						limit,offset
+				);
+
+			}
+			else
+			{
+
+				shopItemsList = shopItemDAO.getShopItems(
+						ItemCategoryID,
+						ShopID, itemID,
+						latCenter, lonCenter,
+						deliveryRangeMin,deliveryRangeMax,
+						proximity, endUserID,
+						isFilledCart,
+						isOutOfStock,
+						priceEqualsZero,
+						sortBy,
+						limit,offset);
+
+			}
 
 
+
+/*
 			for(ShopItem shopItem: shopItemsList)
 			{
 				if(ShopID == null)
@@ -410,6 +505,8 @@ public class ShopItemResource {
 				}
 
 			}
+*/
+
 
 			endPoint.setResults(shopItemsList);
 		}

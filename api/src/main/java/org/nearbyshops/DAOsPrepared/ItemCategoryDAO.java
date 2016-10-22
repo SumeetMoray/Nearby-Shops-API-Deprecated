@@ -1,12 +1,12 @@
 package org.nearbyshops.DAOsPrepared;
 
 import com.zaxxer.hikari.HikariDataSource;
-import org.nearbyshops.ContractClasses.ShopItemContract;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.JDBCContract;
 import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ItemCategory;
 import org.nearbyshops.Model.Shop;
+import org.nearbyshops.Model.ShopItem;
 import org.nearbyshops.ModelEndPoints.ItemCategoryEndPoint;
 import org.nearbyshops.Utility.GeoLocation;
 
@@ -364,14 +364,14 @@ public class ItemCategoryDAO {
 				
 				
 				+ " FROM " 
-				+ Shop.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
+				+ Shop.TABLE_NAME  + "," + ShopItem.TABLE_NAME + ","
 				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
 				+ " WHERE " 
 				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID
 				+ "="
-				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID
+				+ ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
 				+ " AND "
-				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID
+				+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID
 				+ "="
 				+ Item.TABLE_NAME + "." + Item.ITEM_ID
 				+ " AND "
@@ -785,14 +785,14 @@ public class ItemCategoryDAO {
 				+ ItemCategory.TABLE_NAME + "." + ItemCategory.PARENT_CATEGORY_ID
 
 				+ " FROM "
-				+ Shop.TABLE_NAME  + "," + ShopItemContract.TABLE_NAME + ","
+				+ Shop.TABLE_NAME  + "," + ShopItem.TABLE_NAME + ","
 				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
 				+ " WHERE "
 				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID
 				+ "="
-				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID
+				+ ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
 				+ " AND "
-				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID
+				+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID
 				+ "="
 				+ Item.TABLE_NAME + "." + Item.ITEM_ID
 				+ " AND "

@@ -1,14 +1,14 @@
-package org.nearbyshops.DAOs;
+package org.nearbyshops.DAOsRemaining;
 
-import org.nearbyshops.ContractClasses.DeliveryAddressContract;
+import org.nearbyshops.ContractClasses.CartContract;
 import org.nearbyshops.JDBCContract;
-import org.nearbyshops.ModelDeliverySelf.DeliveryAddress;
+import org.nearbyshops.Model.Cart;
 
 import java.sql.*;
 import java.util.ArrayList;
 
 
-public class DeliveryAddressService {
+public class CartService {
 
 	
 	@Override
@@ -17,9 +17,11 @@ public class DeliveryAddressService {
 		super.finalize();	
 	}
 	
+
+
+
 	
-	
-	public int saveAddress(DeliveryAddress deliveryAddress)
+	public int saveCart(Cart cart)
 	{
 
 		Connection conn = null;
@@ -27,23 +29,13 @@ public class DeliveryAddressService {
 		int rowIdOfInsertedRow = -1;
 
 		String insertItemCategory = "INSERT INTO "
-				+ DeliveryAddressContract.TABLE_NAME
+				+ CartContract.TABLE_NAME
 				+ "("  
-				+ DeliveryAddressContract.END_USER_ID + ","
-				+ DeliveryAddressContract.PINCODE + ","
-				+ DeliveryAddressContract.PHONE_NUMBER + ","
-				+ DeliveryAddressContract.NAME + ","
-				+ DeliveryAddressContract.CITY + ","
-				+ DeliveryAddressContract.DELIVERY_ADDRESS + ","
-				+ DeliveryAddressContract.LANDMARK + ""
+				+ CartContract.SHOP_ID + ","
+				+ CartContract.END_USER_ID + ""
 				+ " ) VALUES ( "
-				+ "" + deliveryAddress.getEndUserID()	+ ","
-				+ "" + deliveryAddress.getPincode() + ","
-				+ "" + deliveryAddress.getPhoneNumber() + ","
-				+ "'" + deliveryAddress.getName() + "',"
-				+ "'" + deliveryAddress.getCity() + "',"
-				+ "'" + deliveryAddress.getDeliveryAddress() + "',"
-				+ "'" + deliveryAddress.getLandmark() + "'"
+				+ "" + cart.getShopID()	+ ","
+				+ "" + cart.getEndUserID() + ""
 				+ ")";
 		
 		try {
@@ -98,33 +90,17 @@ public class DeliveryAddressService {
 	}
 	
 
-	public int updateAddress(DeliveryAddress address)
+	public int updateCart(Cart cart)
 	{	
-		String updateStatement = "UPDATE " + DeliveryAddressContract.TABLE_NAME
+		String updateStatement = "UPDATE " + CartContract.TABLE_NAME
 				+ " SET "
-				+ DeliveryAddressContract.END_USER_ID + " = "
-				+ "" + address.getEndUserID() + ""
+				+ CartContract.END_USER_ID + " = "
+				+ "" + cart.getEndUserID() + ""
 				+ ","
-				+ DeliveryAddressContract.LANDMARK + " = "
-				+ "'" + address.getLandmark() + "'"
-				+ ","
-				+ DeliveryAddressContract.DELIVERY_ADDRESS + " = "
-				+ "'" + address.getDeliveryAddress() + "'"
-				+ ","
-				+ DeliveryAddressContract.CITY + " = "
-				+ "'" + address.getCity() + "'"
-				+ ","
-				+ DeliveryAddressContract.PHONE_NUMBER + " = "
-				+ "" + address.getPhoneNumber() + ""
-				+ ","
-				+ DeliveryAddressContract.PINCODE + " = "
-				+ "" + address.getPincode() + ""
-				+ ","
-				+ DeliveryAddressContract.NAME + " = "
-				+ "'" + address.getName() + "'"
-
-				+ " WHERE " + DeliveryAddressContract.ID + " = "
-				+ address.getId();
+				+ "" + CartContract.SHOP_ID + " = "
+				+ "" + cart.getShopID() + ""
+				+ " WHERE " + CartContract.CART_ID + " = "
+				+ cart.getCartID();
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -176,11 +152,11 @@ public class DeliveryAddressService {
 	}
 	
 
-	public int deleteAddress(int deliveryAddressID)
+	public int deleteCart(int cartID)
 	{
 		
-		String deleteStatement = "DELETE FROM " + DeliveryAddressContract.TABLE_NAME + " WHERE " + DeliveryAddressContract.ID + " = "
-				+ deliveryAddressID;
+		String deleteStatement = "DELETE FROM " + CartContract.TABLE_NAME + " WHERE " + CartContract.CART_ID + " = "
+				+ cartID;
 		
 		
 		Connection conn= null;
@@ -235,20 +211,18 @@ public class DeliveryAddressService {
 	
 	
 	
-	public ArrayList<DeliveryAddress> readAddresses(int endUserID)
+	public ArrayList<Cart> readCarts(int endUserID,int shopID)
 	{
-		String query = "SELECT * FROM " + DeliveryAddressContract.TABLE_NAME;
+		String query = "SELECT * FROM " + CartContract.TABLE_NAME;
 
 		boolean isFirst = true;
 
 		if(endUserID > 0)
 		{
-			query = query + " WHERE " + DeliveryAddressContract.END_USER_ID + " = " + endUserID;
+			query = query + " WHERE " + CartContract.END_USER_ID + " = " + endUserID;
 
 			isFirst = false;
 		}
-
-		/*
 
 		if(shopID > 0 )
 		{
@@ -264,10 +238,9 @@ public class DeliveryAddressService {
 
 		}
 
-		*/
 
 
-		ArrayList<DeliveryAddress> addressesList = new ArrayList<>();
+		ArrayList<Cart> cartsList = new ArrayList<Cart>();
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -286,18 +259,14 @@ public class DeliveryAddressService {
 			while(rs.next())
 			{
 
-				DeliveryAddress address = new DeliveryAddress();
+				Cart cart = new Cart();
 
-				address.setEndUserID(rs.getInt(DeliveryAddressContract.END_USER_ID));
-				address.setCity(rs.getString(DeliveryAddressContract.CITY));
-				address.setDeliveryAddress(rs.getString(DeliveryAddressContract.DELIVERY_ADDRESS));
-				address.setId(rs.getInt(DeliveryAddressContract.ID));
-				address.setLandmark(rs.getString(DeliveryAddressContract.LANDMARK));
-				address.setName(rs.getString(DeliveryAddressContract.NAME));
-				address.setPhoneNumber(rs.getLong(DeliveryAddressContract.PHONE_NUMBER));
-				address.setPincode(rs.getLong(DeliveryAddressContract.PINCODE));
+				cart.setCartID(rs.getInt(CartContract.CART_ID));
+				cart.setEndUserID(rs.getInt(CartContract.END_USER_ID));
+				cart.setShopID(rs.getInt(CartContract.SHOP_ID));
 
-				addressesList.add(address);
+				cartsList.add(cart);
+				
 			}
 			
 
@@ -340,23 +309,21 @@ public class DeliveryAddressService {
 		}
 		
 								
-		return addressesList;
+		return cartsList;
 	}
 
 	
-	public DeliveryAddress readAddress(int addressID)
+	public Cart readCart(int cartID)
 	{
 		
-		String query = "SELECT * FROM " + DeliveryAddressContract.TABLE_NAME
-						+ " WHERE " + DeliveryAddressContract.ID + " = " + addressID;
+		String query = "SELECT * FROM " + CartContract.TABLE_NAME
+						+ " WHERE " + CartContract.CART_ID + " = " + cartID;
 		
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
 
-
-//		DeliveryAddress deliveryAddress = null;
-		DeliveryAddress address = null;
+		Cart cart = null;
 		
 		try {
 			
@@ -369,18 +336,10 @@ public class DeliveryAddressService {
 			
 			while(rs.next())
 			{
-
-				address = new DeliveryAddress();
-
-				address.setEndUserID(rs.getInt(DeliveryAddressContract.END_USER_ID));
-				address.setCity(rs.getString(DeliveryAddressContract.CITY));
-				address.setDeliveryAddress(rs.getString(DeliveryAddressContract.DELIVERY_ADDRESS));
-				address.setId(rs.getInt(DeliveryAddressContract.ID));
-				address.setLandmark(rs.getString(DeliveryAddressContract.LANDMARK));
-				address.setName(rs.getString(DeliveryAddressContract.NAME));
-				address.setPhoneNumber(rs.getLong(DeliveryAddressContract.PHONE_NUMBER));
-				address.setPincode(rs.getLong(DeliveryAddressContract.PINCODE));
-
+				cart = new Cart();
+				cart.setCartID(rs.getInt(CartContract.CART_ID));
+				cart.setShopID(rs.getInt(CartContract.SHOP_ID));
+				cart.setEndUserID(rs.getInt(CartContract.END_USER_ID));
 			}
 			
 			
@@ -422,6 +381,6 @@ public class DeliveryAddressService {
 			}
 		}
 	
-		return address;
+		return cart;
 	}	
 }

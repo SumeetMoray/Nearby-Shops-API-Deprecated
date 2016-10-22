@@ -1,14 +1,15 @@
-package org.nearbyshops.DAOs;
+package org.nearbyshops.DAOsRemaining;
 
-import org.nearbyshops.ContractClasses.*;
 import org.nearbyshops.JDBCContract;
-import org.nearbyshops.Model.CartItem;
+import org.nearbyshops.ContractClasses.OrderItemContract;
+import org.nearbyshops.Model.OrderItem;
+import org.nearbyshops.ModelStats.OrderStats;
 
 import java.sql.*;
 import java.util.ArrayList;
 
 
-public class CartItemService {
+public class OrderItemService {
 
 	
 	@Override
@@ -19,25 +20,30 @@ public class CartItemService {
 	
 	
 	
-	public int saveCartItem(CartItem cartItem)
+	public int saveOrderItem(OrderItem orderItem)
 	{	
 		
 		Connection conn = null;
 		Statement stmt = null;
 		int rowCount = -1;
 
-		String insertEndUser = "INSERT INTO "
-				+ CartItemContract.TABLE_NAME
-				+ "("  
-				+ CartItemContract.CART_ID + ","
-				+ CartItemContract.ITEM_ID + ","
-				+ CartItemContract.ITEM_QUANTITY + ""
+
+
+		String insertOrderItem = "INSERT INTO "
+				+ OrderItemContract.TABLE_NAME
+				+ "("
+				+ OrderItemContract.ORDER_ID + ","
+				+ OrderItemContract.ITEM_ID + ","
+				+ OrderItemContract.ITEM_QUANTITY + ","
+				+ OrderItemContract.ITEM_PRICE_AT_ORDER + ""
 				+ ") VALUES("
-				+ "" + cartItem.getCartID() + ","
-				+ "" + cartItem.getItemID() + ","
-				+ "" + cartItem.getItemQuantity()
-				+ ")";
-		
+				+ "" + orderItem.getOrderID() + ","
+				+ "" + orderItem.getItemID() + ","
+				+ "" + orderItem.getItemQuantity() + ","
+				+ "" + orderItem.getItemPriceAtOrder() + ")";
+
+
+
 		try {
 			
 			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
@@ -45,7 +51,7 @@ public class CartItemService {
 			
 			stmt = conn.createStatement();
 			
-			rowCount = stmt.executeUpdate(insertEndUser,Statement.RETURN_GENERATED_KEYS);
+			rowCount = stmt.executeUpdate(insertOrderItem,Statement.RETURN_GENERATED_KEYS);
 			
 			ResultSet rs = stmt.getGeneratedKeys();
 
@@ -88,18 +94,22 @@ public class CartItemService {
 	}
 	
 
-	public int updateCartItem(CartItem cartItem)
-	{	
+	public int updateOrderItem(OrderItem orderItem)
+	{
+
 		String updateStatement = "UPDATE "
-				+ CartItemContract.TABLE_NAME
+				+ OrderItemContract.TABLE_NAME
 				+ " SET "
-				+ CartItemContract.ITEM_ID + " = " + cartItem.getItemID() + ","
-				+ CartItemContract.CART_ID + " = " + cartItem.getCartID() + ","
-				+ CartItemContract.ITEM_QUANTITY + " = " + cartItem.getItemQuantity()
-				+ " WHERE " + CartItemContract.CART_ID + " = "
-				+ cartItem.getCartID() + " AND "
-				+ CartItemContract.ITEM_ID + " = "
-				+ cartItem.getItemID();
+				+ OrderItemContract.ITEM_ID + " = " + orderItem.getItemID() + ","
+				+ OrderItemContract.ORDER_ID + " = " + orderItem.getOrderID() + ","
+				+ OrderItemContract.ITEM_QUANTITY + " = " + orderItem.getItemQuantity() + ","
+				+ OrderItemContract.ITEM_PRICE_AT_ORDER + " = " + orderItem.getItemPriceAtOrder()
+
+				+ " WHERE "
+				+ OrderItemContract.ORDER_ID + " = " + orderItem.getOrderID()
+				+ " AND "
+				+ OrderItemContract.ITEM_ID + " = " + orderItem.getItemID();
+
 
 
 		Connection conn = null;
@@ -152,28 +162,28 @@ public class CartItemService {
 	}
 	
 
-	public int deleteCartItem(int itemID,int cartID)
+	public int deleteOrderItem(int itemID,int orderID)
 	{
 
-		String deleteStatement = "DELETE FROM " + CartItemContract.TABLE_NAME;
+		String deleteStatement = "DELETE FROM " + OrderItemContract.TABLE_NAME;
 
 
 		boolean isFirst = true;
 
 		if(itemID > 0)
 		{
-			deleteStatement = deleteStatement + " WHERE " + CartItemContract.ITEM_ID + " = " + itemID;
+			deleteStatement = deleteStatement + " WHERE " + OrderItemContract.ITEM_ID + " = " + itemID;
 			isFirst = false;
 		}
 
-		if(cartID > 0)
+		if(orderID > 0)
 		{
 			if(isFirst)
 			{
-				deleteStatement = deleteStatement + " WHERE " + CartItemContract.CART_ID + " = " + cartID;
+				deleteStatement = deleteStatement + " WHERE " + OrderItemContract.ORDER_ID + " = " + orderID;
 			}else
 			{
-				deleteStatement = deleteStatement + " AND " + CartItemContract.CART_ID + " = " + cartID;
+				deleteStatement = deleteStatement + " AND " + OrderItemContract.ORDER_ID + " = " + orderID;
 			}
 
 		}
@@ -233,51 +243,41 @@ public class CartItemService {
 	
 	
 	
-	public ArrayList<CartItem> getCartItem(int cartID, int itemID, int endUserID)
+	public ArrayList<OrderItem> getOrderItem(int orderID, int itemID)
 	{
-		String query = "SELECT * FROM " + CartItemContract.TABLE_NAME + "," + CartContract.TABLE_NAME
-				+ " WHERE " + CartItemContract.TABLE_NAME + "."+ CartItemContract.CART_ID  + " = "
-				+ CartContract.TABLE_NAME + "." + CartContract.CART_ID ;
 
 
-		if(endUserID > 0)
+
+		String query = "SELECT * FROM " + OrderItemContract.TABLE_NAME;
+
+
+		boolean isFirst = true;
+
+		if(orderID > 0)
 		{
-			query = query + " AND " + CartContract.END_USER_ID + " = " + endUserID;
+			query = query + " WHERE " + OrderItemContract.ORDER_ID + " = " + orderID;
+
+			isFirst = false;
 		}
-
-
-
-
-		ArrayList<CartItem> cartItemList = new ArrayList<CartItem>();
-
-		//boolean isFirst = true;
-
-		if(cartID > 0)
-		{
-			query = query + " AND " + CartContract.TABLE_NAME + "." + CartItemContract.CART_ID + " = " + cartID;
-
-		//	isFirst = false;
-		}
-
 
 		if(itemID > 0)
 		{
-
-			query = query + " AND " + CartItemContract.ITEM_ID + " = " + itemID;
-
-			/*
 			if(isFirst)
 			{
-				query = query + " AND " + CartItemContract.ITEM_ID + " = " + itemID;
-
-				isFirst = false;
-
-			}else
+				query = query + " WHERE " + OrderItemContract.ITEM_ID + " = " + itemID;
+			}
+			else
 			{
-
-			}*/
+				query = query + " AND " + OrderItemContract.ITEM_ID + " = " + itemID;
+			}
 
 		}
+
+
+
+
+		ArrayList<OrderItem> orderItemList = new ArrayList<OrderItem>();
+
 
 		
 		Connection conn = null;
@@ -296,13 +296,16 @@ public class CartItemService {
 			
 			while(rs.next())
 			{
-				CartItem cartItem = new CartItem();
 
-				cartItem.setCartID(rs.getInt(CartItemContract.CART_ID));
-				cartItem.setItemID(rs.getInt(CartItemContract.ITEM_ID));
-				cartItem.setItemQuantity(rs.getInt(CartItemContract.ITEM_QUANTITY));
+				OrderItem orderItem = new OrderItem();
 
-				cartItemList.add(cartItem);
+				orderItem.setOrderID(rs.getInt(OrderItemContract.ORDER_ID));
+				orderItem.setItemID(rs.getInt(OrderItemContract.ITEM_ID));
+				orderItem.setItemPriceAtOrder(rs.getInt(OrderItemContract.ITEM_PRICE_AT_ORDER));
+				orderItem.setItemQuantity(rs.getInt(OrderItemContract.ITEM_QUANTITY));
+
+				orderItemList.add(orderItem);
+
 			}
 			
 
@@ -343,37 +346,28 @@ public class CartItemService {
 			}
 		}
 
-		return cartItemList;
+		return orderItemList;
 	}
 
 
 
-	public ArrayList<CartItem> getCartItem(int endUserID,int shopID)
+
+	public OrderStats getOrderStats(int orderID)
 	{
-
-
-		String query = "SELECT cart.cart_id,cart_item.item_id," +
-						" available_item_quantity, item_price, item_quantity, " +
-						" (item_quantity * item_price) as Item_total" +
-						" FROM " +
-						" shop_item, cart_item, cart " +
-						" Where " +
-						"shop_item.shop_id = cart.shop_id " +
-						" and " +
-						" shop_item.item_id = cart_item.item_id " +
-						" and " +
-						" cart.cart_id = cart_item.cart_id " +
-						" and end_user_id = " +
-
-								endUserID +
-
-						"and cart.shop_id = " +
-
-								shopID;
+		String query = "select " +
+				"count(item_id) as item_count, " +
+				"sum(item_price_at_order * item_quantity) as item_total," +
+				" order_id " +
+				"from order_item " +
+				"where " + "order_id=" +
+				orderID +
+				" group by order_id";
 
 
 
-		ArrayList<CartItem> cartItemList = new ArrayList<CartItem>();
+
+
+		OrderStats orderStats = null;
 
 		Connection conn = null;
 		Statement stmt = null;
@@ -391,18 +385,13 @@ public class CartItemService {
 
 			while(rs.next())
 			{
-				CartItem cartItem = new CartItem();
 
-				cartItem.setCartID(rs.getInt(CartItemContract.CART_ID));
-				cartItem.setItemID(rs.getInt(CartItemContract.ITEM_ID));
-				cartItem.setItemQuantity(rs.getInt(CartItemContract.ITEM_QUANTITY));
-				cartItem.setRt_availableItemQuantity(rs.getInt("available_item_quantity"));
-				cartItem.setRt_itemPrice(rs.getDouble("item_price"));
+				orderStats = new OrderStats();
 
+				orderStats.setOrderID(rs.getInt("order_id"));
+				orderStats.setItemCount(rs.getInt("item_count"));
+				orderStats.setItemTotal(rs.getInt("item_total"));
 
-				//cartItem.setItem(Globals.itemService.getItem(cartItem.getItemID()));
-
-				cartItemList.add(cartItem);
 			}
 
 
@@ -444,7 +433,10 @@ public class CartItemService {
 		}
 
 
-		return cartItemList;
+
+		return orderStats;
 	}
+
+
 
 }
