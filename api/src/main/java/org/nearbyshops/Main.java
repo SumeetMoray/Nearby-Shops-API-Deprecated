@@ -12,9 +12,12 @@ import org.nearbyshops.DAOPreparedSettings.SettingsDAOPrepared;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.*;
-import org.nearbyshops.ModelReview.FavouriteShop;
-import org.nearbyshops.ModelReview.ShopReview;
-import org.nearbyshops.ModelReview.ShopReviewThanks;
+import org.nearbyshops.ModelReviewItem.FavouriteItem;
+import org.nearbyshops.ModelReviewItem.ItemReview;
+import org.nearbyshops.ModelReviewItem.ItemReviewThanks;
+import org.nearbyshops.ModelReviewShop.FavouriteShop;
+import org.nearbyshops.ModelReviewShop.ShopReview;
+import org.nearbyshops.ModelReviewShop.ShopReviewThanks;
 import org.nearbyshops.ModelRoles.*;
 import org.nearbyshops.ModelSettings.ServiceConfiguration;
 import org.nearbyshops.ModelSettings.Settings;
@@ -342,6 +345,13 @@ public class Main implements ActionListener {
 			statement.executeUpdate(ShopReview.createTableShopReviewPostgres);
 			statement.executeUpdate(FavouriteShop.createTableFavouriteBookPostgres);
 			statement.executeUpdate(ShopReviewThanks.createTableShopReviewThanksPostgres);
+
+
+			// tables for Item reviews
+
+			statement.executeUpdate(ItemReview.createTableItemReviewPostgres);
+			statement.executeUpdate(FavouriteItem.createTableFavouriteItemPostgres);
+			statement.executeUpdate(ItemReviewThanks.createTableItemReviewThanksPostgres);
 
 
 			System.out.println("Tables Created ... !");

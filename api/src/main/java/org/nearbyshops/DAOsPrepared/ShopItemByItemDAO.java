@@ -3,14 +3,12 @@ package org.nearbyshops.DAOsPrepared;
 import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.ContractClasses.CartContract;
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.JDBCContract;
 import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ItemCategory;
 import org.nearbyshops.Model.Shop;
 import org.nearbyshops.Model.ShopItem;
 import org.nearbyshops.ModelEndPoints.ShopItemEndPoint;
-import org.nearbyshops.ModelReview.ShopReview;
-import org.nearbyshops.Utility.GeoLocation;
+import org.nearbyshops.ModelReviewShop.ShopReview;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -65,6 +63,7 @@ public class ShopItemByItemDAO {
 
 					+  "avg(" + ShopReview.TABLE_NAME + "." + ShopReview.RATING + ") as avg_rating" + ","
 					+  "count( DISTINCT " + ShopReview.TABLE_NAME + "." + ShopReview.END_USER_ID + ") as rating_count" + ","
+					+  "(avg(" + ShopReview.TABLE_NAME + "." + ShopReview.RATING + ")* count( DISTINCT " + ShopReview.TABLE_NAME + "." + ShopReview.END_USER_ID + ") ) as popularity" + ","
 					+ Shop.TABLE_NAME + "." + Shop.SHOP_ID + ","
 					+ Shop.TABLE_NAME + "." + Shop.SHOP_NAME + ","
 					+ Shop.TABLE_NAME + "." + Shop.LON_CENTER + ","

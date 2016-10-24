@@ -1,10 +1,10 @@
-package org.nearbyshops.DAOPreparedReview;
+package org.nearbyshops.DAOPreparedReviewShop;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.ModelEndPoints.FavouriteShopEndpoint;
-import org.nearbyshops.ModelReview.FavouriteShop;
-import org.nearbyshops.ModelReview.ShopReview;
+import org.nearbyshops.ModelEndPoints.ShopReviewThanksEndpoint;
+import org.nearbyshops.ModelReviewShop.ShopReview;
+import org.nearbyshops.ModelReviewShop.ShopReviewThanks;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by sumeet on 8/8/16.
  */
-public class FavoriteBookDAOPrepared {
+public class ShopReviewThanksDAOPrepared {
 
     private HikariDataSource dataSource = Globals.getDataSource();
 
@@ -25,7 +25,7 @@ public class FavoriteBookDAOPrepared {
         }
 
 
-        public int saveBook(FavouriteShop favouriteShop)
+        public int saveShopReviewThanks(ShopReviewThanks shopReviewThanks)
         {
 
 
@@ -35,10 +35,10 @@ public class FavoriteBookDAOPrepared {
 
 
             String insertStatement = "INSERT INTO "
-                    + FavouriteShop.TABLE_NAME
+                    + ShopReviewThanks.TABLE_NAME
                     + "("
-                    + FavouriteShop.SHOP_ID + ","
-                    + FavouriteShop.END_USER_ID
+                    + ShopReviewThanks.SHOP_REVIEW_ID + ","
+                    + ShopReviewThanks.END_USER_ID
                     + ") VALUES(?,?)";
 
             try {
@@ -46,8 +46,9 @@ public class FavoriteBookDAOPrepared {
                 conn = dataSource.getConnection();
                 statement = conn.prepareStatement(insertStatement,PreparedStatement.RETURN_GENERATED_KEYS);
 
-                statement.setInt(1,favouriteShop.getShopID());
-                statement.setInt(2,favouriteShop.getEndUserID());
+
+                statement.setInt(1,shopReviewThanks.getShopReviewID());
+                statement.setInt(2,shopReviewThanks.getEndUserID());
 
                 idOfInsertedRow = statement.executeUpdate();
 
@@ -94,12 +95,12 @@ public class FavoriteBookDAOPrepared {
 
 
 
-        public int deleteFavouriteBook(int bookID, int memberID)
+        public int deleteShopReviewThanks(int shopReviewID, int endUserID)
         {
 
-            String deleteStatement = "DELETE FROM " + FavouriteShop.TABLE_NAME
-                    + " WHERE " + FavouriteShop.SHOP_ID + " = ?"
-                    + " AND " + FavouriteShop.END_USER_ID + " = ?";
+            String deleteStatement = "DELETE FROM " + ShopReviewThanks.TABLE_NAME
+                    + " WHERE " + ShopReviewThanks.SHOP_REVIEW_ID + " = ?"
+                    + " AND " + ShopReviewThanks.END_USER_ID + " = ?";
 
             Connection conn= null;
             PreparedStatement statement = null;
@@ -110,8 +111,8 @@ public class FavoriteBookDAOPrepared {
                 conn = dataSource.getConnection();
                 statement = conn.prepareStatement(deleteStatement);
 
-                statement.setInt(1,bookID);
-                statement.setInt(2,memberID);
+                statement.setInt(1,shopReviewID);
+                statement.setInt(2,endUserID);
 
                 rowCountDeleted = statement.executeUpdate();
                 System.out.println("Rows Deleted: " + rowCountDeleted);
@@ -150,11 +151,12 @@ public class FavoriteBookDAOPrepared {
 
 
 
+        
 
-
-        public List<FavouriteShop> getFavouriteBook(
-                Integer bookID,
-                Integer memberID,
+        public List<ShopReviewThanks> getShopReviewThanks(
+                Integer shopReviewID,
+                Integer shopID,
+                Integer endUserID,
                 String sortBy,
                 Integer limit, Integer offset
         ) {
@@ -165,51 +167,88 @@ public class FavoriteBookDAOPrepared {
 
             String query = "";
 
-            String queryNormal = "SELECT * FROM " + FavouriteShop.TABLE_NAME;
+            String queryNormal = "SELECT * FROM " + ShopReviewThanks.TABLE_NAME;
 
 
             String queryJoin = "SELECT "
 
-                    + FavouriteShop.TABLE_NAME + "." + FavouriteShop.SHOP_ID + ","
-                    + FavouriteShop.TABLE_NAME + "." + FavouriteShop.END_USER_ID + ""
+                    + ShopReviewThanks.TABLE_NAME + "." + ShopReviewThanks.SHOP_REVIEW_ID + ","
+                    + ShopReviewThanks.TABLE_NAME + "." + ShopReviewThanks.END_USER_ID + ""
 
                     + " FROM "
-                    + FavouriteShop.TABLE_NAME;
+                    + ShopReviewThanks.TABLE_NAME;
 
 
-            if(bookID != null)
+            if(shopID !=null)
             {
-                queryJoin = queryJoin + " WHERE "
-                        + FavouriteShop.TABLE_NAME
-                        + "."
-                        + FavouriteShop.SHOP_ID + " = " + bookID;
+                queryJoin = queryJoin + " INNER JOIN " + ShopReview.TABLE_NAME
+                            + " ON( " + ShopReviewThanks.TABLE_NAME + "." + ShopReviewThanks.SHOP_REVIEW_ID
+                            + " = " + ShopReview.TABLE_NAME + "." + ShopReview.SHOP_REVIEW_ID + ") ";
+
+            }
 
 
+            if(shopID!=null)
+            {
 
-                //" WHERE ITEM_CATEGORY_ID = " + itemCategoryID
+                String queryPartShopID = "";
+                queryPartShopID = ShopReview.TABLE_NAME + "." + ShopReview.SHOP_ID + " = " + shopID;
 
-                queryNormal = queryNormal + " WHERE "
-                        + FavouriteShop.TABLE_NAME
-                        + "."
-                        + FavouriteShop.SHOP_ID + " = " + bookID;
-
-                isFirst = false;
+                if(isFirst)
+                {
+                    queryJoin = queryJoin + " WHERE " + queryPartShopID;
+                    isFirst = false;
+                }
+                else
+                {
+                    queryJoin = queryJoin + " AND " + queryPartShopID;
+                }
             }
 
 
 
-            if(memberID!=null){
+
+            if(shopReviewID != null)
+            {
+
+                String queryPartShopReview;
+
+                queryPartShopReview = ShopReviewThanks.TABLE_NAME
+                                        + "."
+                                        + ShopReviewThanks.SHOP_REVIEW_ID + " = " + shopReviewID;
+
+
+                if(isFirst)
+                {
+                    queryJoin = queryJoin + " WHERE " + queryPartShopReview;
+                    queryNormal = queryNormal + " WHERE " + queryPartShopReview;
+
+                    isFirst = false;
+                }
+                else
+                {
+                    queryJoin = queryJoin + " AND " + queryPartShopReview;
+                    queryNormal = queryNormal + " AND " + queryPartShopReview;
+
+                }
+            }
+
+
+
+            if(endUserID!=null){
 
                 String queryPartMemberID;
 
-                queryPartMemberID = FavouriteShop.TABLE_NAME
+                queryPartMemberID = ShopReviewThanks.TABLE_NAME
                                     + "."
-                                    + FavouriteShop.END_USER_ID + " = " + memberID;
+                                    + ShopReviewThanks.END_USER_ID + " = " + endUserID;
 
                 if(isFirst)
                 {
                     queryJoin = queryJoin + " WHERE " + queryPartMemberID;
                     queryNormal = queryNormal + " WHERE " + queryPartMemberID;
+
+                    isFirst = false;
 
                 }else
                 {
@@ -270,7 +309,7 @@ public class FavoriteBookDAOPrepared {
 
 
 
-            query = queryNormal;
+            query = queryJoin;
 
             /*
 
@@ -288,7 +327,7 @@ public class FavoriteBookDAOPrepared {
 
 
 
-            ArrayList<FavouriteShop> bookList = new ArrayList<FavouriteShop>();
+            ArrayList<ShopReviewThanks> thanksList = new ArrayList<ShopReviewThanks>();
 
 
             Connection conn = null;
@@ -308,17 +347,17 @@ public class FavoriteBookDAOPrepared {
 
                 while(rs.next())
                 {
-                    FavouriteShop book = new FavouriteShop();
+                    ShopReviewThanks reviewThanks = new ShopReviewThanks();
 
-                    book.setEndUserID(rs.getInt(FavouriteShop.END_USER_ID));
-                    book.setShopID(rs.getInt(FavouriteShop.SHOP_ID));
+                    reviewThanks.setEndUserID(rs.getInt(ShopReviewThanks.END_USER_ID));
+                    reviewThanks.setShopReviewID(rs.getInt(ShopReviewThanks.SHOP_REVIEW_ID));
 
-                    bookList.add(book);
+                    thanksList.add(reviewThanks);
                 }
 
 
 
-                System.out.println("Favourite Books " + bookList.size());
+                System.out.println("ShopReview Thanks List Size : " + thanksList.size());
 
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
@@ -357,30 +396,29 @@ public class FavoriteBookDAOPrepared {
                 }
             }
 
-            return bookList;
+            return thanksList;
         }
 
 
 
-        public FavouriteShopEndpoint getEndPointMetadata(
-                Integer shopID,
-                Integer memberID)
+        public ShopReviewThanksEndpoint getEndPointMetadata(
+                Integer shopReviewID,
+                Integer endUserID)
         {
 
 
             boolean isFirst = true;
 
-
             String query = "";
 
             String queryNormal = "SELECT "
                     + "count(*) as item_count" + ""
-                    + " FROM " + FavouriteShop.TABLE_NAME;
+                    + " FROM " + ShopReviewThanks.TABLE_NAME;
 
 
 
 
-            if(shopID != null)
+            if(shopReviewID != null)
             {
             /*    queryJoin = queryJoin + " WHERE "
                         + FavouriteBook.TABLE_NAME
@@ -392,22 +430,22 @@ public class FavoriteBookDAOPrepared {
             */
 
                 queryNormal = queryNormal + " WHERE "
-                        + FavouriteShop.TABLE_NAME
+                        + ShopReviewThanks.TABLE_NAME
                         + "."
-                        + FavouriteShop.SHOP_ID + " = " + shopID;
+                        + ShopReviewThanks.SHOP_REVIEW_ID + " = " + shopReviewID;
 
                 isFirst = false;
             }
 
 
 
-            if(memberID!=null){
+            if(endUserID != null){
 
                 String queryPartMemberID;
 
-                queryPartMemberID = FavouriteShop.TABLE_NAME
+                queryPartMemberID = ShopReviewThanks.TABLE_NAME
                         + "."
-                        + FavouriteShop.END_USER_ID + " = " + memberID;
+                        + ShopReviewThanks.END_USER_ID + " = " + endUserID;
 
                 if(isFirst)
                 {
@@ -440,7 +478,7 @@ public class FavoriteBookDAOPrepared {
             query = queryNormal;
 
 
-            FavouriteShopEndpoint endPoint = new FavouriteShopEndpoint();
+            ShopReviewThanksEndpoint endPoint = new ShopReviewThanksEndpoint();
 
 
             Connection conn = null;

@@ -2,9 +2,12 @@ package org.nearbyshops.Globals;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.nearbyshops.DAOPreparedReview.FavoriteBookDAOPrepared;
-import org.nearbyshops.DAOPreparedReview.ShopReviewDAOPrepared;
-import org.nearbyshops.DAOPreparedReview.ShopReviewThanksDAOPrepared;
+import org.nearbyshops.DAOPreparedReviewItem.FavoriteItemDAOPrepared;
+import org.nearbyshops.DAOPreparedReviewItem.ItemReviewDAOPrepared;
+import org.nearbyshops.DAOPreparedReviewItem.ItemReviewThanksDAOPrepared;
+import org.nearbyshops.DAOPreparedReviewShop.FavoriteBookDAOPrepared;
+import org.nearbyshops.DAOPreparedReviewShop.ShopReviewDAOPrepared;
+import org.nearbyshops.DAOPreparedReviewShop.ShopReviewThanksDAOPrepared;
 import org.nearbyshops.DAOPreparedSettings.ServiceConfigurationDAOPrepared;
 import org.nearbyshops.DAOPreparedSettings.SettingsDAOPrepared;
 import org.nearbyshops.DAOs.EndUserService;
@@ -43,13 +46,16 @@ public class Globals {
 
 	public static ShopReviewDAOPrepared shopReviewDAOPrepared = new ShopReviewDAOPrepared();
 	public static FavoriteBookDAOPrepared favoriteBookDAOPrepared = new FavoriteBookDAOPrepared();
-
 	public static ShopReviewThanksDAOPrepared shopReviewThanksDAO = new ShopReviewThanksDAOPrepared();
 
+	public static ItemReviewDAOPrepared itemReviewDAOPrepared = new ItemReviewDAOPrepared();
+	public static FavoriteItemDAOPrepared favoriteItemDAOPrepared = new FavoriteItemDAOPrepared();
+	public static ItemReviewThanksDAOPrepared itemReviewThanksDAOPrepared = new ItemReviewThanksDAOPrepared();
 
 	public static ShopItemByShopDAO shopItemByShopDAO = new ShopItemByShopDAO();
 	public static ShopItemDAO shopItemDAO = new ShopItemDAO();
 	public static ShopItemByItemDAO shopItemByItemDAO = new ShopItemByItemDAO();
+
 
 	// Configure Connection Pooling
 

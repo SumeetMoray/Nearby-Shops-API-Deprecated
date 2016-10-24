@@ -1,4 +1,4 @@
-package org.nearbyshops.ModelReview;
+package org.nearbyshops.ModelReviewShop;
 
 import org.nearbyshops.Model.Shop;
 import org.nearbyshops.ModelRoles.EndUser;

@@ -182,8 +182,13 @@ public class CartItemResource {
 
 			// if the cart item is the last item then delete the cart also.
 
-			if (Globals.cartItemService.getCartItem(cartID,0,0).size()==0);
+
+			System.out.println("Cart Items : " + cartID + " : " + Globals.cartItemService.getCartItem(cartID,0,0).size());
+
+			if(Globals.cartItemService.getCartItem(cartID,0,0).size() == 0)
 			{
+				System.out.println("Inside Cart Item Delete " + Globals.cartItemService.getCartItem(cartID,0,0).size());
+
 				Globals.cartService.deleteCart(cartID);
 			}
 

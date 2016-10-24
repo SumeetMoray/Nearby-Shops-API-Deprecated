@@ -1,11 +1,14 @@
-package org.nearbyshops.DAOPreparedReview;
+package org.nearbyshops.DAOPreparedReviewItem;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.ModelEndPoints.FavouriteShopEndpoint;
+import org.nearbyshops.Model.Item;
+import org.nearbyshops.ModelEndPoints.ItemReviewThanksEndpoint;
 import org.nearbyshops.ModelEndPoints.ShopReviewThanksEndpoint;
-import org.nearbyshops.ModelReview.ShopReview;
-import org.nearbyshops.ModelReview.ShopReviewThanks;
+import org.nearbyshops.ModelReviewItem.ItemReview;
+import org.nearbyshops.ModelReviewItem.ItemReviewThanks;
+import org.nearbyshops.ModelReviewShop.ShopReview;
+import org.nearbyshops.ModelReviewShop.ShopReviewThanks;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,7 +18,7 @@ import java.util.List;
 /**
  * Created by sumeet on 8/8/16.
  */
-public class ShopReviewThanksDAOPrepared {
+public class ItemReviewThanksDAOPrepared {
 
     private HikariDataSource dataSource = Globals.getDataSource();
 
@@ -26,30 +29,30 @@ public class ShopReviewThanksDAOPrepared {
         }
 
 
-        public int saveShopReviewThanks(ShopReviewThanks shopReviewThanks)
+        public int saveItemReviewThanks(ItemReviewThanks itemReviewThanks)
         {
 
 
-            Connection conn = null;
+            Connection connection = null;
             PreparedStatement statement = null;
             int idOfInsertedRow = 0;
 
 
             String insertStatement = "INSERT INTO "
-                    + ShopReviewThanks.TABLE_NAME
+                    + ItemReviewThanks.TABLE_NAME
                     + "("
-                    + ShopReviewThanks.SHOP_REVIEW_ID + ","
-                    + ShopReviewThanks.END_USER_ID
+                    + ItemReviewThanks.ITEM_REVIEW_ID + ","
+                    + ItemReviewThanks.END_USER_ID
                     + ") VALUES(?,?)";
 
             try {
 
-                conn = dataSource.getConnection();
-                statement = conn.prepareStatement(insertStatement,PreparedStatement.RETURN_GENERATED_KEYS);
+                connection = dataSource.getConnection();
+                statement = connection.prepareStatement(insertStatement,PreparedStatement.RETURN_GENERATED_KEYS);
 
 
-                statement.setInt(1,shopReviewThanks.getShopReviewID());
-                statement.setInt(2,shopReviewThanks.getEndUserID());
+                statement.setInt(1,itemReviewThanks.getItemReviewID());
+                statement.setInt(2,itemReviewThanks.getEndUserID());
 
                 idOfInsertedRow = statement.executeUpdate();
 
@@ -82,8 +85,8 @@ public class ShopReviewThanksDAOPrepared {
 
                 try {
 
-                    if(conn!=null)
-                    {conn.close();}
+                    if(connection!=null)
+                    {connection.close();}
                 } catch (SQLException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -96,23 +99,23 @@ public class ShopReviewThanksDAOPrepared {
 
 
 
-        public int deleteShopReviewThanks(int shopReviewID, int endUserID)
+        public int deleteItemReviewThanks(int itemReviewID, int endUserID)
         {
 
-            String deleteStatement = "DELETE FROM " + ShopReviewThanks.TABLE_NAME
-                    + " WHERE " + ShopReviewThanks.SHOP_REVIEW_ID + " = ?"
-                    + " AND " + ShopReviewThanks.END_USER_ID + " = ?";
+            String deleteStatement = "DELETE FROM " + ItemReviewThanks.TABLE_NAME
+                    + " WHERE " + ItemReviewThanks.ITEM_REVIEW_ID + " = ?"
+                    + " AND " + ItemReviewThanks.END_USER_ID + " = ?";
 
-            Connection conn= null;
+            Connection connection= null;
             PreparedStatement statement = null;
             int rowCountDeleted = 0;
             try {
 
 
-                conn = dataSource.getConnection();
-                statement = conn.prepareStatement(deleteStatement);
+                connection = dataSource.getConnection();
+                statement = connection.prepareStatement(deleteStatement);
 
-                statement.setInt(1,shopReviewID);
+                statement.setInt(1,itemReviewID);
                 statement.setInt(2,endUserID);
 
                 rowCountDeleted = statement.executeUpdate();
@@ -139,8 +142,8 @@ public class ShopReviewThanksDAOPrepared {
 
                 try {
 
-                    if(conn!=null)
-                    {conn.close();}
+                    if(connection!=null)
+                    {connection.close();}
                 } catch (SQLException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -154,9 +157,9 @@ public class ShopReviewThanksDAOPrepared {
 
         
 
-        public List<ShopReviewThanks> getShopReviewThanks(
-                Integer shopReviewID,
-                Integer shopID,
+        public List<ItemReviewThanks> getItemReviewThanks(
+                Integer itemReviewID,
+                Integer itemID,
                 Integer endUserID,
                 String sortBy,
                 Integer limit, Integer offset
@@ -168,68 +171,68 @@ public class ShopReviewThanksDAOPrepared {
 
             String query = "";
 
-            String queryNormal = "SELECT * FROM " + ShopReviewThanks.TABLE_NAME;
+            String queryNormal = "SELECT * FROM " + ItemReviewThanks.TABLE_NAME;
 
 
             String queryJoin = "SELECT "
 
-                    + ShopReviewThanks.TABLE_NAME + "." + ShopReviewThanks.SHOP_REVIEW_ID + ","
-                    + ShopReviewThanks.TABLE_NAME + "." + ShopReviewThanks.END_USER_ID + ""
+                    + ItemReviewThanks.TABLE_NAME + "." + ItemReviewThanks.ITEM_REVIEW_ID + ","
+                    + ItemReviewThanks.TABLE_NAME + "." + ItemReviewThanks.END_USER_ID + ""
 
                     + " FROM "
-                    + ShopReviewThanks.TABLE_NAME;
+                    + ItemReviewThanks.TABLE_NAME;
 
 
-            if(shopID !=null)
+            if(itemID !=null)
             {
-                queryJoin = queryJoin + " INNER JOIN " + ShopReview.TABLE_NAME
-                            + " ON( " + ShopReviewThanks.TABLE_NAME + "." + ShopReviewThanks.SHOP_REVIEW_ID
-                            + " = " + ShopReview.TABLE_NAME + "." + ShopReview.SHOP_REVIEW_ID + ") ";
+                queryJoin = queryJoin + " INNER JOIN " + ItemReview.TABLE_NAME
+                            + " ON( " + ItemReviewThanks.TABLE_NAME + "." + ItemReviewThanks.ITEM_REVIEW_ID
+                            + " = " + ItemReview.TABLE_NAME + "." + ItemReview.ITEM_REVIEW_ID + ") ";
 
             }
 
 
-            if(shopID!=null)
+            if(itemID!=null)
             {
 
-                String queryPartShopID = "";
-                queryPartShopID = ShopReview.TABLE_NAME + "." + ShopReview.SHOP_ID + " = " + shopID;
+                String queryPartItemID = "";
+                queryPartItemID = ItemReview.TABLE_NAME + "." + ItemReview.ITEM_ID + " = " + itemID;
 
                 if(isFirst)
                 {
-                    queryJoin = queryJoin + " WHERE " + queryPartShopID;
+                    queryJoin = queryJoin + " WHERE " + queryPartItemID;
                     isFirst = false;
                 }
                 else
                 {
-                    queryJoin = queryJoin + " AND " + queryPartShopID;
+                    queryJoin = queryJoin + " AND " + queryPartItemID;
                 }
             }
 
 
 
 
-            if(shopReviewID != null)
+            if(itemReviewID != null)
             {
 
-                String queryPartShopReview;
+                String queryPartItemReview;
 
-                queryPartShopReview = ShopReviewThanks.TABLE_NAME
+                queryPartItemReview = ItemReviewThanks.TABLE_NAME
                                         + "."
-                                        + ShopReviewThanks.SHOP_REVIEW_ID + " = " + shopReviewID;
+                                        + ItemReviewThanks.ITEM_REVIEW_ID + " = " + itemReviewID;
 
 
                 if(isFirst)
                 {
-                    queryJoin = queryJoin + " WHERE " + queryPartShopReview;
-                    queryNormal = queryNormal + " WHERE " + queryPartShopReview;
+                    queryJoin = queryJoin + " WHERE " + queryPartItemReview;
+                    queryNormal = queryNormal + " WHERE " + queryPartItemReview;
 
                     isFirst = false;
                 }
                 else
                 {
-                    queryJoin = queryJoin + " AND " + queryPartShopReview;
-                    queryNormal = queryNormal + " AND " + queryPartShopReview;
+                    queryJoin = queryJoin + " AND " + queryPartItemReview;
+                    queryNormal = queryNormal + " AND " + queryPartItemReview;
 
                 }
             }
@@ -238,23 +241,23 @@ public class ShopReviewThanksDAOPrepared {
 
             if(endUserID!=null){
 
-                String queryPartMemberID;
+                String queryPartEndUserID;
 
-                queryPartMemberID = ShopReviewThanks.TABLE_NAME
+                queryPartEndUserID = ItemReviewThanks.TABLE_NAME
                                     + "."
-                                    + ShopReviewThanks.END_USER_ID + " = " + endUserID;
+                                    + ItemReviewThanks.END_USER_ID + " = " + endUserID;
 
                 if(isFirst)
                 {
-                    queryJoin = queryJoin + " WHERE " + queryPartMemberID;
-                    queryNormal = queryNormal + " WHERE " + queryPartMemberID;
+                    queryJoin = queryJoin + " WHERE " + queryPartEndUserID;
+                    queryNormal = queryNormal + " WHERE " + queryPartEndUserID;
 
                     isFirst = false;
 
                 }else
                 {
-                    queryJoin = queryJoin + " AND " + queryPartMemberID;
-                    queryNormal = queryNormal + " AND " + queryPartMemberID;
+                    queryJoin = queryJoin + " AND " + queryPartEndUserID;
+                    queryNormal = queryNormal + " AND " + queryPartEndUserID;
                 }
 
             }
@@ -328,37 +331,37 @@ public class ShopReviewThanksDAOPrepared {
 
 
 
-            ArrayList<ShopReviewThanks> thanksList = new ArrayList<ShopReviewThanks>();
+            ArrayList<ItemReviewThanks> thanksList = new ArrayList<ItemReviewThanks>();
 
 
-            Connection conn = null;
-            Statement stmt = null;
+            Connection connection = null;
+            Statement statement = null;
             ResultSet rs = null;
 
             try {
 
 
-                conn = dataSource.getConnection();
-                stmt = conn.createStatement();
+                connection = dataSource.getConnection();
+                statement = connection.createStatement();
 
 
 //                System.out.println("Favourite Books " + query);
 
-                rs = stmt.executeQuery(query);
+                rs = statement.executeQuery(query);
 
                 while(rs.next())
                 {
-                    ShopReviewThanks reviewThanks = new ShopReviewThanks();
+                    ItemReviewThanks reviewThanks = new ItemReviewThanks();
 
-                    reviewThanks.setEndUserID(rs.getInt(ShopReviewThanks.END_USER_ID));
-                    reviewThanks.setShopReviewID(rs.getInt(ShopReviewThanks.SHOP_REVIEW_ID));
+                    reviewThanks.setEndUserID(rs.getInt(ItemReviewThanks.END_USER_ID));
+                    reviewThanks.setItemReviewID(rs.getInt(ItemReviewThanks.ITEM_REVIEW_ID));
 
                     thanksList.add(reviewThanks);
                 }
 
 
 
-                System.out.println("ShopReview Thanks List Size : " + thanksList.size());
+                System.out.println("Item Review Thanks List Size : " + thanksList.size());
 
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
@@ -380,8 +383,8 @@ public class ShopReviewThanksDAOPrepared {
 
                 try {
 
-                    if(stmt!=null)
-                    {stmt.close();}
+                    if(statement!=null)
+                    {statement.close();}
                 } catch (SQLException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -389,8 +392,8 @@ public class ShopReviewThanksDAOPrepared {
 
                 try {
 
-                    if(conn!=null)
-                    {conn.close();}
+                    if(connection!=null)
+                    {connection.close();}
                 } catch (SQLException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -402,8 +405,8 @@ public class ShopReviewThanksDAOPrepared {
 
 
 
-        public ShopReviewThanksEndpoint getEndPointMetadata(
-                Integer shopReviewID,
+        public ItemReviewThanksEndpoint getEndPointMetadata(
+                Integer itemReviewID,
                 Integer endUserID)
         {
 
@@ -414,12 +417,12 @@ public class ShopReviewThanksDAOPrepared {
 
             String queryNormal = "SELECT "
                     + "count(*) as item_count" + ""
-                    + " FROM " + ShopReviewThanks.TABLE_NAME;
+                    + " FROM " + ItemReviewThanks.TABLE_NAME;
 
 
 
 
-            if(shopReviewID != null)
+            if(itemReviewID != null)
             {
             /*    queryJoin = queryJoin + " WHERE "
                         + FavouriteBook.TABLE_NAME
@@ -431,9 +434,9 @@ public class ShopReviewThanksDAOPrepared {
             */
 
                 queryNormal = queryNormal + " WHERE "
-                        + ShopReviewThanks.TABLE_NAME
+                        + ItemReviewThanks.TABLE_NAME
                         + "."
-                        + ShopReviewThanks.SHOP_REVIEW_ID + " = " + shopReviewID;
+                        + ItemReviewThanks.ITEM_REVIEW_ID + " = " + itemReviewID;
 
                 isFirst = false;
             }
@@ -442,21 +445,21 @@ public class ShopReviewThanksDAOPrepared {
 
             if(endUserID != null){
 
-                String queryPartMemberID;
+                String queryPartEndUserID;
 
-                queryPartMemberID = ShopReviewThanks.TABLE_NAME
+                queryPartEndUserID = ItemReviewThanks.TABLE_NAME
                         + "."
-                        + ShopReviewThanks.END_USER_ID + " = " + endUserID;
+                        + ItemReviewThanks.END_USER_ID + " = " + endUserID;
 
                 if(isFirst)
                 {
 //                    queryJoin = queryJoin + " WHERE " + queryPartMemberID;
-                    queryNormal = queryNormal + " WHERE " + queryPartMemberID;
+                    queryNormal = queryNormal + " WHERE " + queryPartEndUserID;
 
                 }else
                 {
 //                    queryJoin = queryJoin + " AND " + queryPartMemberID;
-                    queryNormal = queryNormal + " AND " + queryPartMemberID;
+                    queryNormal = queryNormal + " AND " + queryPartEndUserID;
                 }
 
             }
@@ -479,19 +482,19 @@ public class ShopReviewThanksDAOPrepared {
             query = queryNormal;
 
 
-            ShopReviewThanksEndpoint endPoint = new ShopReviewThanksEndpoint();
+            ItemReviewThanksEndpoint endPoint = new ItemReviewThanksEndpoint();
 
 
-            Connection conn = null;
-            Statement stmt = null;
+            Connection connection = null;
+            Statement statement = null;
             ResultSet rs = null;
 
             try {
 
-                conn = dataSource.getConnection();
-                stmt = conn.createStatement();
+                connection = dataSource.getConnection();
+                statement = connection.createStatement();
 
-                rs = stmt.executeQuery(query);
+                rs = statement.executeQuery(query);
 
                 while(rs.next())
                 {
@@ -525,8 +528,8 @@ public class ShopReviewThanksDAOPrepared {
 
                 try {
 
-                    if(stmt!=null)
-                    {stmt.close();}
+                    if(statement!=null)
+                    {statement.close();}
                 } catch (SQLException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -534,8 +537,8 @@ public class ShopReviewThanksDAOPrepared {
 
                 try {
 
-                    if(conn!=null)
-                    {conn.close();}
+                    if(connection!=null)
+                    {connection.close();}
                 } catch (SQLException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();

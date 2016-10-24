@@ -32,7 +32,6 @@ public class CartStatsResource {
 
 		List<CartStats> cartStats = Globals.cartStatsDAO.getCartStats(endUserID,cartID);
 
-
 		for(CartStats cartStatsItem: cartStats)
 		{
 			cartStatsItem.setShop(shopDAO.getShop(cartStatsItem.getShopID(),latCenter,lonCenter));

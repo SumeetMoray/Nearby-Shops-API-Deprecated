@@ -1,12 +1,16 @@
-package org.nearbyshops.DAOPreparedReview;
+package org.nearbyshops.DAOPreparedReviewItem;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Item;
+import org.nearbyshops.ModelEndPoints.ItemReviewEndPoint;
 import org.nearbyshops.ModelEndPoints.ShopReviewEndPoint;
-import org.nearbyshops.ModelReview.ShopReview;
-import org.nearbyshops.ModelReview.ShopReviewStatRow;
-import org.nearbyshops.ModelReview.ShopReviewThanks;
+import org.nearbyshops.ModelReviewItem.ItemReview;
+import org.nearbyshops.ModelReviewItem.ItemReviewStatRow;
+import org.nearbyshops.ModelReviewItem.ItemReviewThanks;
+import org.nearbyshops.ModelReviewShop.ShopReview;
+import org.nearbyshops.ModelReviewShop.ShopReviewStatRow;
+import org.nearbyshops.ModelReviewShop.ShopReviewThanks;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,7 +20,7 @@ import java.util.List;
 /**
  * Created by sumeet on 8/8/16.
  */
-public class ShopReviewDAOPrepared {
+public class ItemReviewDAOPrepared {
 
 
         private HikariDataSource dataSource = Globals.getDataSource();
@@ -29,40 +33,40 @@ public class ShopReviewDAOPrepared {
         }
 
 
-        public int saveShopReview(ShopReview shopReview)
+        public int saveItemReview(ItemReview itemReview)
         {
 
 
-            Connection conn = null;
+            Connection connection = null;
             PreparedStatement statement = null;
             int idOfInsertedRow = 0;
 
 
 
             String insertStatement = "INSERT INTO "
-                    + ShopReview.TABLE_NAME
+                    + ItemReview.TABLE_NAME
                     + "("
-                    + ShopReview.SHOP_ID + ","
-                    + ShopReview.END_USER_ID + ","
-                    + ShopReview.RATING + ","
+                    + ItemReview.ITEM_ID + ","
+                    + ItemReview.END_USER_ID + ","
+                    + ItemReview.RATING + ","
 
-                    + ShopReview.REVIEW_TEXT + ","
-                    + ShopReview.REVIEW_TITLE + ""
+                    + ItemReview.REVIEW_TEXT + ","
+                    + ItemReview.REVIEW_TITLE + ""
 
                     + ") VALUES(?,?,?,?,?)";
 
             try {
 
-                conn = dataSource.getConnection();
+                connection = dataSource.getConnection();
 
-                statement = conn.prepareStatement(insertStatement,PreparedStatement.RETURN_GENERATED_KEYS);
+                statement = connection.prepareStatement(insertStatement,PreparedStatement.RETURN_GENERATED_KEYS);
 
-                statement.setObject(1,shopReview.getShopID());
-                statement.setObject(2,shopReview.getEndUserID());
-                statement.setObject(3,shopReview.getRating());
+                statement.setObject(1,itemReview.getItemID());
+                statement.setObject(2,itemReview.getEndUserID());
+                statement.setObject(3,itemReview.getRating());
 
-                statement.setString(4,shopReview.getReviewText());
-                statement.setString(5,shopReview.getReviewTitle());
+                statement.setString(4,itemReview.getReviewText());
+                statement.setString(5,itemReview.getReviewTitle());
 
                 idOfInsertedRow = statement.executeUpdate();
 
@@ -95,8 +99,8 @@ public class ShopReviewDAOPrepared {
 
                 try {
 
-                    if(conn!=null)
-                    {conn.close();}
+                    if(connection!=null)
+                    {connection.close();}
                 } catch (SQLException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -112,26 +116,26 @@ public class ShopReviewDAOPrepared {
 
 
 
-        public int updateShopReview(ShopReview shopReview)
+        public int updateItemReview(ItemReview itemReview)
         {
 
 
-            String updateStatement = "UPDATE " + ShopReview.TABLE_NAME
+            String updateStatement = "UPDATE " + ItemReview.TABLE_NAME
 
                     + " SET "
-                    + ShopReview.SHOP_ID + " = ?,"
-                    + ShopReview.END_USER_ID + " = ?,"
-                    + ShopReview.RATING + " = ?,"
+                    + ItemReview.ITEM_ID + " = ?,"
+                    + ItemReview.END_USER_ID + " = ?,"
+                    + ItemReview.RATING + " = ?,"
 
-                    + ShopReview.REVIEW_TEXT + " = ?,"
-                    + ShopReview.REVIEW_TITLE + " = ?"
+                    + ItemReview.REVIEW_TEXT + " = ?,"
+                    + ItemReview.REVIEW_TITLE + " = ?"
 
 
                     + " WHERE "
-                    + ShopReview.SHOP_REVIEW_ID + " = ?";
+                    + ItemReview.ITEM_REVIEW_ID + " = ?";
 
 
-            Connection conn = null;
+            Connection connection = null;
             PreparedStatement statement = null;
 
             int rowCountUpdated = 0;
@@ -139,17 +143,17 @@ public class ShopReviewDAOPrepared {
             try {
 
 
-                conn = dataSource.getConnection();
-                statement = conn.prepareStatement(updateStatement);
+                connection = dataSource.getConnection();
+                statement = connection.prepareStatement(updateStatement);
 
-                statement.setInt(1,shopReview.getShopID());
-                statement.setInt(2,shopReview.getEndUserID());
-                statement.setInt(3,shopReview.getRating());
+                statement.setInt(1,itemReview.getItemID());
+                statement.setInt(2,itemReview.getEndUserID());
+                statement.setInt(3,itemReview.getRating());
 
-                statement.setString(4,shopReview.getReviewText());
-                statement.setString(5,shopReview.getReviewTitle());
+                statement.setString(4,itemReview.getReviewText());
+                statement.setString(5,itemReview.getReviewTitle());
 
-                statement.setInt(6,shopReview.getShopReviewID());
+                statement.setInt(6,itemReview.getItemReviewID());
 
 
                 rowCountUpdated = statement.executeUpdate();
@@ -175,8 +179,8 @@ public class ShopReviewDAOPrepared {
 
                 try {
 
-                    if(conn!=null)
-                    {conn.close();}
+                    if(connection!=null)
+                    {connection.close();}
                 } catch (SQLException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -188,22 +192,22 @@ public class ShopReviewDAOPrepared {
 
 
 
-        public int deleteShopReview(int bookReviewID)
+        public int deleteItemReview(int itemReviewID)
         {
 
-            String deleteStatement = "DELETE FROM " + ShopReview.TABLE_NAME
-                    + " WHERE " + ShopReview.SHOP_REVIEW_ID + " = ?";
+            String deleteStatement = "DELETE FROM " + ItemReview.TABLE_NAME
+                    + " WHERE " + ItemReview.ITEM_REVIEW_ID + " = ?";
 
-            Connection conn= null;
+            Connection connection= null;
             PreparedStatement statement = null;
             int rowCountDeleted = 0;
             try {
 
 
-                conn = dataSource.getConnection();
-                statement = conn.prepareStatement(deleteStatement);
+                connection = dataSource.getConnection();
+                statement = connection.prepareStatement(deleteStatement);
 
-                statement.setInt(1,bookReviewID);
+                statement.setInt(1,itemReviewID);
 
                 rowCountDeleted = statement.executeUpdate();
 
@@ -230,8 +234,8 @@ public class ShopReviewDAOPrepared {
 
                 try {
 
-                    if(conn!=null)
-                    {conn.close();}
+                    if(connection!=null)
+                    {connection.close();}
                 } catch (SQLException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -245,8 +249,8 @@ public class ShopReviewDAOPrepared {
 
 
 
-        public List<ShopReview> getShopReviews(
-                Integer shopID,
+        public List<ItemReview> getItemReviews(
+                Integer itemID,
                 Integer endUserID,
                 String sortBy,
                 Integer limit, Integer offset
@@ -258,37 +262,37 @@ public class ShopReviewDAOPrepared {
 
             String query = "";
 
-            String queryNormal = "SELECT * FROM " + ShopReview.TABLE_NAME;
+            String queryNormal = "SELECT * FROM " + ItemReview.TABLE_NAME;
 
 
             String queryJoin = "SELECT "
 
-                    + ShopReview.TABLE_NAME + "." + ShopReview.SHOP_REVIEW_ID + ","
-                    + ShopReview.TABLE_NAME + "." + ShopReview.SHOP_ID + ","
-                    + ShopReview.TABLE_NAME + "." + ShopReview.END_USER_ID + ","
-                    + ShopReview.TABLE_NAME + "." + ShopReview.RATING + ","
-                    + ShopReview.TABLE_NAME + "." + ShopReview.REVIEW_TEXT + ","
-                    + ShopReview.TABLE_NAME + "." + ShopReview.REVIEW_DATE + ","
-                    + ShopReview.TABLE_NAME + "." + ShopReview.REVIEW_TITLE + ","
-                    + " count(" + ShopReviewThanks.TABLE_NAME + "." + ShopReviewThanks.SHOP_REVIEW_ID + ") as thanks_count "
+                    + ItemReview.TABLE_NAME + "." + ItemReview.ITEM_REVIEW_ID + ","
+                    + ItemReview.TABLE_NAME + "." + ItemReview.ITEM_ID + ","
+                    + ItemReview.TABLE_NAME + "." + ItemReview.END_USER_ID + ","
+                    + ItemReview.TABLE_NAME + "." + ItemReview.RATING + ","
+                    + ItemReview.TABLE_NAME + "." + ItemReview.REVIEW_TEXT + ","
+                    + ItemReview.TABLE_NAME + "." + ItemReview.REVIEW_DATE + ","
+                    + ItemReview.TABLE_NAME + "." + ItemReview.REVIEW_TITLE + ","
+                    + " count(" + ItemReviewThanks.TABLE_NAME + "." + ItemReviewThanks.ITEM_REVIEW_ID + ") as thanks_count "
 
-                    + " FROM " + ShopReview.TABLE_NAME + " LEFT OUTER JOIN " + ShopReviewThanks.TABLE_NAME
-                    + " ON (" + ShopReview.TABLE_NAME + "." + ShopReview.SHOP_REVIEW_ID
-                    + " = " + ShopReviewThanks.TABLE_NAME + "." + ShopReviewThanks.SHOP_REVIEW_ID + ") ";
+                    + " FROM " + ItemReview.TABLE_NAME + " LEFT OUTER JOIN " + ItemReviewThanks.TABLE_NAME
+                    + " ON (" + ItemReview.TABLE_NAME + "." + ItemReview.ITEM_REVIEW_ID
+                    + " = " + ItemReviewThanks.TABLE_NAME + "." + ItemReviewThanks.ITEM_REVIEW_ID + ") ";
 
 
-            if(shopID != null)
+            if(itemID != null)
             {
                 queryJoin = queryJoin + " WHERE "
-                        + ShopReview.TABLE_NAME
+                        + ItemReview.TABLE_NAME
                         + "."
-                        + ShopReview.SHOP_ID + " = " + shopID;
+                        + ItemReview.ITEM_ID + " = " + itemID;
 
 
                 queryNormal = queryNormal + " WHERE "
-                        + ShopReview.TABLE_NAME
+                        + ItemReview.TABLE_NAME
                         + "."
-                        + ShopReview.SHOP_ID + " = " + shopID;
+                        + ItemReview.ITEM_ID + " = " + itemID;
 
                 isFirst = false;
             }
@@ -298,9 +302,9 @@ public class ShopReviewDAOPrepared {
             {
 
                 String queryPartMember =
-                        ShopReview.TABLE_NAME
+                        ItemReview.TABLE_NAME
                                 + "."
-                        + ShopReview.END_USER_ID + " = " + endUserID;
+                        + ItemReview.END_USER_ID + " = " + endUserID;
 
                 if(isFirst)
                 {
@@ -323,13 +327,13 @@ public class ShopReviewDAOPrepared {
 
                     + " group by "
 
-                    + ShopReview.TABLE_NAME + "." + ShopReview.SHOP_REVIEW_ID + ","
-                    + ShopReview.TABLE_NAME + "." + ShopReview.SHOP_ID + ","
-                    + ShopReview.TABLE_NAME + "." + ShopReview.END_USER_ID + ","
-                    + ShopReview.TABLE_NAME + "." + ShopReview.RATING + ","
-                    + ShopReview.TABLE_NAME + "." + ShopReview.REVIEW_TEXT + ","
-                    + ShopReview.TABLE_NAME + "." + ShopReview.REVIEW_DATE + ","
-                    + ShopReview.TABLE_NAME + "." + ShopReview.REVIEW_TITLE ;
+                    + ItemReview.TABLE_NAME + "." + ItemReview.ITEM_REVIEW_ID + ","
+                    + ItemReview.TABLE_NAME + "." + ItemReview.ITEM_ID + ","
+                    + ItemReview.TABLE_NAME + "." + ItemReview.END_USER_ID + ","
+                    + ItemReview.TABLE_NAME + "." + ItemReview.RATING + ","
+                    + ItemReview.TABLE_NAME + "." + ItemReview.REVIEW_TEXT + ","
+                    + ItemReview.TABLE_NAME + "." + ItemReview.REVIEW_DATE + ","
+                    + ItemReview.TABLE_NAME + "." + ItemReview.REVIEW_TITLE ;
 
 
 
@@ -399,39 +403,39 @@ public class ShopReviewDAOPrepared {
 
 
 
-            ArrayList<ShopReview> shopReviewsList = new ArrayList<ShopReview>();
+            ArrayList<ItemReview> itemReviewsList = new ArrayList<ItemReview>();
 
 
-            Connection conn = null;
-            Statement stmt = null;
+            Connection connection = null;
+            Statement statement = null;
             ResultSet rs = null;
 
             try {
 
-                conn = dataSource.getConnection();
-                stmt = conn.createStatement();
-                rs = stmt.executeQuery(query);
+                connection = dataSource.getConnection();
+                statement = connection.createStatement();
+                rs = statement.executeQuery(query);
 
                 while(rs.next())
                 {
-                    ShopReview shopReview = new ShopReview();
+                    ItemReview itemReview = new ItemReview();
 
-                    shopReview.setShopReviewID(rs.getInt(ShopReview.SHOP_REVIEW_ID));
-                    shopReview.setShopID(rs.getInt(ShopReview.SHOP_ID));
-                    shopReview.setEndUserID(rs.getInt(ShopReview.END_USER_ID));
-                    shopReview.setRating(rs.getInt(ShopReview.RATING));
-                    shopReview.setReviewText(rs.getString(ShopReview.REVIEW_TEXT));
+                    itemReview.setItemReviewID(rs.getInt(ItemReview.ITEM_REVIEW_ID));
+                    itemReview.setItemID(rs.getInt(ItemReview.ITEM_ID));
+                    itemReview.setEndUserID(rs.getInt(ItemReview.END_USER_ID));
+                    itemReview.setRating(rs.getInt(ItemReview.RATING));
+                    itemReview.setReviewText(rs.getString(ItemReview.REVIEW_TEXT));
 
-                    shopReview.setReviewTitle(rs.getString(ShopReview.REVIEW_TITLE));
-                    shopReview.setReviewDate(rs.getTimestamp(ShopReview.REVIEW_DATE));
+                    itemReview.setReviewTitle(rs.getString(ItemReview.REVIEW_TITLE));
+                    itemReview.setReviewDate(rs.getTimestamp(ItemReview.REVIEW_DATE));
 
-                    shopReview.setRt_thanks_count(rs.getInt("thanks_count"));
-                    shopReviewsList.add(shopReview);
+                    itemReview.setRt_thanks_count(rs.getInt("thanks_count"));
+                    itemReviewsList.add(itemReview);
                 }
 
 
 
-                System.out.println("books By CategoryID " + shopReviewsList.size());
+                System.out.println("books By CategoryID " + itemReviewsList.size());
 
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
@@ -453,8 +457,8 @@ public class ShopReviewDAOPrepared {
 
                 try {
 
-                    if(stmt!=null)
-                    {stmt.close();}
+                    if(statement!=null)
+                    {statement.close();}
                 } catch (SQLException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -462,21 +466,21 @@ public class ShopReviewDAOPrepared {
 
                 try {
 
-                    if(conn!=null)
-                    {conn.close();}
+                    if(connection!=null)
+                    {connection.close();}
                 } catch (SQLException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
 
-            return shopReviewsList;
+            return itemReviewsList;
         }
 
 
 
-        public ShopReviewEndPoint getEndPointMetadata(
-                Integer shopID,
+        public ItemReviewEndPoint getEndPointMetadata(
+                Integer itemID,
                 Integer endUserID)
         {
 
@@ -486,19 +490,19 @@ public class ShopReviewDAOPrepared {
             String query = "";
 
             String queryNormal = "SELECT "
-                    + "count( DISTINCT " + ShopReview.SHOP_REVIEW_ID + ") as item_count" + ""
-                    + " FROM " + ShopReview.TABLE_NAME;
+                    + "count( DISTINCT " + ItemReview.ITEM_REVIEW_ID + ") as item_count" + ""
+                    + " FROM " + ItemReview.TABLE_NAME;
 
 
 
 
-            if(shopID != null)
+            if(itemID != null)
             {
 
                 queryNormal = queryNormal + " WHERE "
-                        + ShopReview.TABLE_NAME
+                        + ItemReview.TABLE_NAME
                         + "."
-                        + ShopReview.SHOP_ID + " = " + shopID;
+                        + ItemReview.ITEM_ID + " = " + itemID;
 
                 isFirst = false;
             }
@@ -508,9 +512,9 @@ public class ShopReviewDAOPrepared {
             {
 
                 String queryPartMember =
-                        ShopReview.TABLE_NAME
+                        ItemReview.TABLE_NAME
                                 + "."
-                                + ShopReview.END_USER_ID + " = " + endUserID;
+                                + ItemReview.END_USER_ID + " = " + endUserID;
 
                 if(isFirst)
                 {
@@ -587,19 +591,19 @@ public class ShopReviewDAOPrepared {
             query = queryNormal;
 
 
-            ShopReviewEndPoint endPoint = new ShopReviewEndPoint();
+            ItemReviewEndPoint endPoint = new ItemReviewEndPoint();
 
 
-            Connection conn = null;
-            Statement stmt = null;
+            Connection connection = null;
+            Statement statement = null;
             ResultSet rs = null;
 
             try {
 
 
-                conn = dataSource.getConnection();
-                stmt = conn.createStatement();
-                rs = stmt.executeQuery(query);
+                connection = dataSource.getConnection();
+                statement = connection.createStatement();
+                rs = statement.executeQuery(query);
 
                 while(rs.next())
                 {
@@ -633,8 +637,8 @@ public class ShopReviewDAOPrepared {
 
                 try {
 
-                    if(stmt!=null)
-                    {stmt.close();}
+                    if(statement!=null)
+                    {statement.close();}
                 } catch (SQLException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -642,8 +646,8 @@ public class ShopReviewDAOPrepared {
 
                 try {
 
-                    if(conn!=null)
-                    {conn.close();}
+                    if(connection!=null)
+                    {connection.close();}
                 } catch (SQLException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -657,11 +661,11 @@ public class ShopReviewDAOPrepared {
 
 
 
-        public ShopReview getBookReview(int shopReviewID)
+        public ItemReview getItemReview(int itemReviewID)
         {
 
-            String query = "SELECT * FROM " +  ShopReview.TABLE_NAME
-                        + " WHERE " + ShopReview.SHOP_REVIEW_ID + " = " + shopReviewID;
+            String query = "SELECT * FROM " +  ItemReview.TABLE_NAME
+                        + " WHERE " + ItemReview.ITEM_REVIEW_ID + " = " + itemReviewID;
 
 
             Connection connection = null;
@@ -670,7 +674,7 @@ public class ShopReviewDAOPrepared {
 
 
             //ItemCategory itemCategory = new ItemCategory();
-            ShopReview shopReview = null;
+            ItemReview itemReview = null;
 
             try {
 
@@ -682,18 +686,18 @@ public class ShopReviewDAOPrepared {
 
                 while(rs.next())
                 {
-                    shopReview = new ShopReview();
+                    itemReview = new ItemReview();
 
-                    shopReview.setShopReviewID(rs.getInt(ShopReview.SHOP_REVIEW_ID));
-                    shopReview.setShopID(rs.getInt(ShopReview.SHOP_ID));
-                    shopReview.setEndUserID(rs.getInt(ShopReview.END_USER_ID));
-                    shopReview.setRating(rs.getInt(ShopReview.RATING));
-                    shopReview.setReviewText(rs.getString(ShopReview.REVIEW_TEXT));
+                    itemReview.setItemReviewID(rs.getInt(ItemReview.ITEM_REVIEW_ID));
+                    itemReview.setItemID(rs.getInt(ItemReview.ITEM_ID));
+                    itemReview.setEndUserID(rs.getInt(ItemReview.END_USER_ID));
+                    itemReview.setRating(rs.getInt(ItemReview.RATING));
+                    itemReview.setReviewText(rs.getString(ItemReview.REVIEW_TEXT));
 
-                    shopReview.setReviewTitle(rs.getString(ShopReview.REVIEW_TITLE));
-                    shopReview.setReviewDate(rs.getTimestamp(ShopReview.REVIEW_DATE));
+                    itemReview.setReviewTitle(rs.getString(ItemReview.REVIEW_TITLE));
+                    itemReview.setReviewDate(rs.getTimestamp(ItemReview.REVIEW_DATE));
 
-                    System.out.println("Get BookReview by ID : " + shopReview.getShopID());
+                    System.out.println("Get BookReview by ID : " + itemReview.getItemID());
                 }
 
                 //System.out.println("Total itemCategories queried " + itemCategoryList.size());
@@ -734,26 +738,26 @@ public class ShopReviewDAOPrepared {
                 }
             }
 
-            return shopReview;
+            return itemReview;
         }
 
 
 
 
-        public List<ShopReviewStatRow> getStats(Integer shopID)
+        public List<ItemReviewStatRow> getStats(Integer itemID)
         {
             //select rating, count(book_review_id) as reviews_count from book_review group by rating
 
-            String query = "SELECT " + ShopReview.RATING + ", count(" + ShopReview.SHOP_REVIEW_ID + ") as reviews_count "
-                        + " FROM " +  ShopReview.TABLE_NAME;
+            String query = "SELECT " + ItemReview.RATING + ", count(" + ItemReview.ITEM_REVIEW_ID + ") as reviews_count "
+                        + " FROM " +  ItemReview.TABLE_NAME;
 
 
-            if(shopID!=null)
+            if(itemID!=null)
             {
-                query = query + " WHERE " + ShopReview.SHOP_ID + " = " + shopID;
+                query = query + " WHERE " + ItemReview.ITEM_ID + " = " + itemID;
             }
 
-            query = query + " GROUP BY " + ShopReview.RATING;
+            query = query + " GROUP BY " + ItemReview.RATING;
 
             Connection connection = null;
             Statement statement = null;
@@ -764,7 +768,7 @@ public class ShopReviewDAOPrepared {
 
 //            ShopReviewStats shopReviewStats = new ShopReviewStats();
 
-            ArrayList<ShopReviewStatRow> rowList = new ArrayList<>();
+            ArrayList<ItemReviewStatRow> rowList = new ArrayList<>();
 
             try {
 
@@ -777,14 +781,14 @@ public class ShopReviewDAOPrepared {
                 while(rs.next())
                 {
 
-                    ShopReviewStatRow row = new ShopReviewStatRow();
+                    ItemReviewStatRow row = new ItemReviewStatRow();
 
-                    row.setRating(rs.getInt(ShopReview.RATING));
+                    row.setRating(rs.getInt(ItemReview.RATING));
                     row.setReviews_count(rs.getInt("reviews_count"));
 
                     rowList.add(row);
 
-//                    System.out.println("Get BookReview by ID : " + shopReview.getShopID());
+//                    System.out.println("Get BookReview by ID : " + shopReview.getItemID());
                 }
 
                 //System.out.println("Total itemCategories queried " + itemCategoryList.size());

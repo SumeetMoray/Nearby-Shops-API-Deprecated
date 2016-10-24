@@ -1,12 +1,13 @@
-package org.nearbyshops.RESTEndpointReview;
+package org.nearbyshops.RESTEndpointReviewItem;
 
 
 
-import org.nearbyshops.DAOPreparedReview.ShopReviewDAOPrepared;
+import org.nearbyshops.DAOPreparedReviewItem.ItemReviewDAOPrepared;
+import org.nearbyshops.DAOsPreparedRoles.EndUserDAOPrepared;
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.ModelEndPoints.ShopReviewEndPoint;
-import org.nearbyshops.ModelReview.ShopReview;
-import org.nearbyshops.ModelReview.ShopReviewStatRow;
+import org.nearbyshops.ModelEndPoints.ItemReviewEndPoint;
+import org.nearbyshops.ModelReviewItem.ItemReview;
+import org.nearbyshops.ModelReviewItem.ItemReviewStatRow;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -18,34 +19,36 @@ import java.util.List;
  * Created by sumeet on 9/8/16.
  */
 
-@Path("/v1/ShopReview")
-public class ShopReviewRESTEndpoint {
+@Path("/v1/ItemReview")
+public class ItemReviewRESTEndpoint {
 
 
-    private ShopReviewDAOPrepared shopReviewDAOPrepared = Globals.shopReviewDAOPrepared;
+    private ItemReviewDAOPrepared itemReviewDAOPrepared = Globals.itemReviewDAOPrepared;
+
+    private EndUserDAOPrepared endUserDAOPrepared = Globals.endUserDAOPrepared;
 
 //    BookReviewDAO bookReviewDAO;
 
-    public ShopReviewRESTEndpoint() {
+    public ItemReviewRESTEndpoint() {
 
     }
 
         @POST
         @Produces(MediaType.APPLICATION_JSON)
         @Consumes(MediaType.APPLICATION_JSON)
-        public Response saveBookReview(ShopReview shopReview)
+        public Response saveItemReview(ItemReview itemReview)
         {
 //            int idOfInsertedRow = Globals.bookDAO.saveBook(book);
 
-            int idOfInsertedRow = shopReviewDAOPrepared.saveShopReview(shopReview);
+            int idOfInsertedRow = itemReviewDAOPrepared.saveItemReview(itemReview);
 
-            shopReview.setShopReviewID(idOfInsertedRow);
+            itemReview.setItemReviewID(idOfInsertedRow);
 
             if(idOfInsertedRow >=1)
             {
                 Response response = Response.status(Response.Status.CREATED)
-                        .location(URI.create("/api/BookReview/" + idOfInsertedRow))
-                        .entity(shopReview)
+                        .location(URI.create("/api/v1/ItemReview/" + idOfInsertedRow))
+                        .entity(itemReview)
                         .build();
 
                 return response;
@@ -65,17 +68,17 @@ public class ShopReviewRESTEndpoint {
 
 
         @PUT
-        @Path("/{ShopReviewID}")
+        @Path("/{ItemReviewID}")
         @Produces(MediaType.APPLICATION_JSON)
         @Consumes(MediaType.APPLICATION_JSON)
-        public Response updateItem(ShopReview shopReview, @PathParam("ShopReviewID")int shopReviewID)
+        public Response updateItem(ItemReview itemReview, @PathParam("ItemReviewID")int itemReviewID)
         {
 
-            shopReview.setShopReviewID(shopReviewID);
+            itemReview.setItemReviewID(itemReviewID);
 
 //            int rowCount = Globals.bookDAO.updateBook(book);
 
-            int rowCount = shopReviewDAOPrepared.updateShopReview(shopReview);
+            int rowCount = itemReviewDAOPrepared.updateItemReview(itemReview);
 
 
             if(rowCount >= 1)
@@ -103,16 +106,16 @@ public class ShopReviewRESTEndpoint {
 
         @PUT
         @Consumes(MediaType.APPLICATION_JSON)
-        public Response updateReviewsBulk(List<ShopReview> bookReviewsList)
+        public Response updateReviewsBulk(List<ItemReview> itemReviewsList)
         {
             int rowCountSum = 0;
 
-            for(ShopReview item : bookReviewsList)
+            for(ItemReview item : itemReviewsList)
             {
-                rowCountSum = rowCountSum + shopReviewDAOPrepared.updateShopReview(item);
+                rowCountSum = rowCountSum + itemReviewDAOPrepared.updateItemReview(item);
             }
 
-            if(rowCountSum ==  bookReviewsList.size())
+            if(rowCountSum ==  itemReviewsList.size())
             {
                 Response response = Response.status(Response.Status.OK)
                         .entity(null)
@@ -120,7 +123,7 @@ public class ShopReviewRESTEndpoint {
 
                 return response;
             }
-            else if( rowCountSum < bookReviewsList.size() && rowCountSum > 0)
+            else if( rowCountSum < itemReviewsList.size() && rowCountSum > 0)
             {
                 Response response = Response.status(Response.Status.PARTIAL_CONTENT)
                         .entity(null)
@@ -142,12 +145,12 @@ public class ShopReviewRESTEndpoint {
 
 
         @DELETE
-        @Path("/{ShopReviewID}")
+        @Path("/{ItemReviewID}")
         @Produces(MediaType.APPLICATION_JSON)
-        public Response deleteItem(@PathParam("ShopReviewID")int shopReviewID)
+        public Response deleteItem(@PathParam("ItemReviewID")int itemReviewID)
         {
 
-            int rowCount = shopReviewDAOPrepared.deleteShopReview(shopReviewID);
+            int rowCount = itemReviewDAOPrepared.deleteItemReview(itemReviewID);
 
             if(rowCount>=1)
             {
@@ -174,8 +177,8 @@ public class ShopReviewRESTEndpoint {
 
         @GET
         @Produces(MediaType.APPLICATION_JSON)
-        public Response getBookReviews(
-                @QueryParam("ShopID")Integer shopID,
+        public Response getItemReviews(
+                @QueryParam("ItemID")Integer itemID,
                 @QueryParam("EndUserID")Integer endUserID,
                 @QueryParam("GetEndUser")Boolean getEndUser,
                 @QueryParam("SortBy") String sortBy,
@@ -207,29 +210,29 @@ public class ShopReviewRESTEndpoint {
                 set_offset = offset;
             }
 
-            ShopReviewEndPoint endPoint = shopReviewDAOPrepared.getEndPointMetadata(shopID,endUserID);
+            ItemReviewEndPoint endPoint = itemReviewDAOPrepared.getEndPointMetadata(itemID,endUserID);
 
             endPoint.setLimit(set_limit);
             endPoint.setMax_limit(max_limit);
             endPoint.setOffset(set_offset);
 
-            List<ShopReview> list = null;
+            List<ItemReview> list = null;
 
 
             if(metaonly==null || (!metaonly)) {
 
                 list =
-                        shopReviewDAOPrepared.getShopReviews(
-                                shopID,endUserID,
+                        itemReviewDAOPrepared.getItemReviews(
+                                itemID,endUserID,
                                 sortBy,set_limit,set_offset
                         );
 
 
                 if(getEndUser!=null && getEndUser)
                 {
-                    for(ShopReview shopReview: list)
+                    for(ItemReview itemReview: list)
                     {
-                        shopReview.setRt_end_user_profile(Globals.endUserDAOPrepared.getEndUser(shopReview.getEndUserID()));
+                        itemReview.setRt_end_user_profile(endUserDAOPrepared.getEndUser(itemReview.getEndUserID()));
                     }
                 }
 
@@ -250,16 +253,16 @@ public class ShopReviewRESTEndpoint {
 
 
         @GET
-        @Path("/{ShopReviewID}")
+        @Path("/{ItemReviewID}")
         @Produces(MediaType.APPLICATION_JSON)
-        public Response getItem(@PathParam("ShopReviewID")int shopReviewID)
+        public Response getItem(@PathParam("ItemReviewID")int itemReviewID)
         {
-            System.out.println("BookReviewID=" + shopReviewID);
+            System.out.println("ItemReviewID=" + itemReviewID);
 
 
             //marker
 
-            ShopReview item = shopReviewDAOPrepared.getBookReview(shopReviewID);
+            ItemReview item = itemReviewDAOPrepared.getItemReview(itemReviewID);
 
             if(item!= null)
             {
@@ -284,12 +287,12 @@ public class ShopReviewRESTEndpoint {
 
 
     @GET
-    @Path("/Stats/{ShopID}")
+    @Path("/Stats/{ItemID}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getStats(@PathParam("ShopID")int shopID)
+    public Response getStats(@PathParam("ItemID")int itemID)
     {
 
-        List<ShopReviewStatRow> rowList = shopReviewDAOPrepared.getStats(shopID);
+        List<ItemReviewStatRow> rowList = itemReviewDAOPrepared.getStats(itemID);
 
 
         if(rowList.size()>0)

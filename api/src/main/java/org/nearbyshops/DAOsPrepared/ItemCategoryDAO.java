@@ -1041,7 +1041,7 @@ public class ItemCategoryDAO {
 			String queryPartShopID = "";
 
 			queryPartShopID = queryPartShopID + ShopContract.TABLE_NAME + "."
-					+ ShopContract.SHOP_ID + " = " + shopID;
+					+ ShopContract.ITEM_ID + " = " + shopID;
 
 			if(queryNormalFirst)
 			{

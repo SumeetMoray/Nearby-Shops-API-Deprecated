@@ -13,7 +13,7 @@ import org.nearbyshops.Model.ItemCategory;
 import org.nearbyshops.Model.Shop;
 import org.nearbyshops.Model.ShopItem;
 import org.nearbyshops.ModelEndPoints.ShopEndPoint;
-import org.nearbyshops.ModelReview.ShopReview;
+import org.nearbyshops.ModelReviewShop.ShopReview;
 import org.nearbyshops.Utility.GeoLocation;
 
 public class ShopService {
@@ -1160,8 +1160,8 @@ public class ShopService {
 				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
 
 				+ " WHERE "
-				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID + "="
-				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID
+				+ Shop.TABLE_NAME + "." + Shop.ITEM_ID + "="
+				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID
 
 				+ " AND "
 				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID + "="
@@ -1485,7 +1485,7 @@ public class ShopService {
 
 //		System.out.println(query);
 
-		// + ShopContract.TABLE_NAME + "." + ShopContract.SHOP_ID +
+		// + ShopContract.TABLE_NAME + "." + ShopContract.ITEM_ID +
 
 		queryJoin = "SELECT DISTINCT "
 

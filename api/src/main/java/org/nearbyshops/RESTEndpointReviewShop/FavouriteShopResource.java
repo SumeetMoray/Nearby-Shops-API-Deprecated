@@ -1,12 +1,9 @@
-package org.nearbyshops.RESTEndpointReview;
+package org.nearbyshops.RESTEndpointReviewShop;
 
-import org.nearbyshops.DAOPreparedReview.FavoriteBookDAOPrepared;
-import org.nearbyshops.DAOPreparedReview.ShopReviewThanksDAOPrepared;
+import org.nearbyshops.DAOPreparedReviewShop.FavoriteBookDAOPrepared;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.ModelEndPoints.FavouriteShopEndpoint;
-import org.nearbyshops.ModelEndPoints.ShopReviewThanksEndpoint;
-import org.nearbyshops.ModelReview.FavouriteShop;
-import org.nearbyshops.ModelReview.ShopReviewThanks;
+import org.nearbyshops.ModelReviewShop.FavouriteShop;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -18,28 +15,28 @@ import java.util.List;
  * Created by sumeet on 9/8/16.
  */
 
-@Path("/v1/ShopReviewThanks")
-public class ShopReviewThanksResource {
+@Path("/v1/FavouriteShop")
+public class FavouriteShopResource {
 
 
-    private ShopReviewThanksDAOPrepared thanksDAOPrepared = Globals.shopReviewThanksDAO;
+    private FavoriteBookDAOPrepared favoriteBookDAOPrepared = Globals.favoriteBookDAOPrepared;
 
 
 
         @POST
         @Produces(MediaType.APPLICATION_JSON)
         @Consumes(MediaType.APPLICATION_JSON)
-        public Response saveShopReviewThanks(ShopReviewThanks shopReviewThanks)
+        public Response saveFavouriteBook(FavouriteShop shop)
         {
-            int idOfInsertedRow = thanksDAOPrepared.saveShopReviewThanks(shopReviewThanks);
+            int idOfInsertedRow = favoriteBookDAOPrepared.saveBook(shop);
 
-//            shopReviewThanks.setShopID(idOfInsertedRow);
+            shop.setShopID(idOfInsertedRow);
 
             if(idOfInsertedRow >=1)
             {
                 Response response = Response.status(Response.Status.CREATED)
-                        .location(URI.create("/api/ShopReviewThanks/" + idOfInsertedRow))
-                        .entity(shopReviewThanks)
+                        .location(URI.create("/api/FavouriteShop/" + idOfInsertedRow))
+                        .entity(shop)
                         .build();
 
                 return response;
@@ -61,11 +58,11 @@ public class ShopReviewThanksResource {
 
         @DELETE
         @Produces(MediaType.APPLICATION_JSON)
-        public Response deleteItem(@QueryParam("ShopReviewID")Integer shopReviewID,
+        public Response deleteItem(@QueryParam("ShopID")Integer shopID,
                                    @QueryParam("EndUserID")Integer endUserID)
         {
 
-            int rowCount = thanksDAOPrepared.deleteShopReviewThanks(shopReviewID,endUserID);
+            int rowCount = favoriteBookDAOPrepared.deleteFavouriteBook(shopID,endUserID);
 
 
             if(rowCount>=1)
@@ -93,10 +90,9 @@ public class ShopReviewThanksResource {
 
         @GET
         @Produces(MediaType.APPLICATION_JSON)
-        public Response getShopReviewThanks(
-                @QueryParam("ShopReviewID")Integer shopReviewID,
-                @QueryParam("EndUserID")Integer endUserID,
+        public Response getBooks(
                 @QueryParam("ShopID")Integer shopID,
+                @QueryParam("EndUserID")Integer endUserID,
                 @QueryParam("SortBy") String sortBy,
                 @QueryParam("Limit")Integer limit, @QueryParam("Offset")Integer offset,
                 @QueryParam("metadata_only")Boolean metaonly)
@@ -126,20 +122,20 @@ public class ShopReviewThanksResource {
                 set_offset = offset;
             }
 
-            ShopReviewThanksEndpoint endPoint = thanksDAOPrepared.getEndPointMetadata(shopReviewID,endUserID);
+            FavouriteShopEndpoint endPoint = favoriteBookDAOPrepared.getEndPointMetadata(shopID,endUserID);
 
             endPoint.setLimit(set_limit);
             endPoint.setMax_limit(max_limit);
             endPoint.setOffset(set_offset);
 
-            List<ShopReviewThanks> list = null;
+            List<FavouriteShop> list = null;
 
 
             if(metaonly==null || (!metaonly)) {
 
                 list =
-                        thanksDAOPrepared.getShopReviewThanks(
-                                shopReviewID,shopID,endUserID,
+                        favoriteBookDAOPrepared.getFavouriteBook(
+                                shopID,endUserID,
                                 sortBy,set_limit,set_offset
                         );
 

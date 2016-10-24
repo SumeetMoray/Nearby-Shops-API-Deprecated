@@ -42,7 +42,7 @@ public class ShopItemDAO {
 				+ ShopItem.LAST_UPDATE_DATE_TIME
 				+ " ) VALUES (?,?,? ,?,?,?)";
 
-		/*+ "" + shopItem.getShopID() + ","
+		/*+ "" + shopItem.getItemID() + ","
 				+ "" + shopItem.getItemPrice() + ","
 				+ "" + shopItem.getItemID() + ","*/
 
@@ -105,6 +105,7 @@ public class ShopItemDAO {
 	{
 
 
+		System.out.println(" inside update available item quantity ");
 
 		String updateQuantity =
 
@@ -122,13 +123,16 @@ public class ShopItemDAO {
 
 		try {
 
-			conn = dataSource.getConnection();
+			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
+					JDBCContract.CURRENT_USERNAME,JDBCContract.CURRENT_PASSWORD);
+
+
 			stmt = conn.createStatement();
 
 			updatedRows = stmt.executeUpdate(updateQuantity);
 
 
-			System.out.println("Total rows updated: " + updatedRows);
+			System.out.println("Total rows updated: Update Available Item Quantity " + updatedRows);
 
 			//conn.close();
 

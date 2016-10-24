@@ -1,6 +1,6 @@
 package org.nearbyshops.ModelEndPoints;
 
-import org.nearbyshops.ModelReview.ShopReview;
+import org.nearbyshops.ModelReviewShop.ShopReview;
 
 import java.util.List;
 

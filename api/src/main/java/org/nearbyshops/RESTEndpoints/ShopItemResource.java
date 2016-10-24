@@ -158,7 +158,7 @@ public class ShopItemResource {
 	{
 		//, @QueryParam("ShopID")int ShopID, @QueryParam("ItemID") int itemID
 		
-		//shopItem.setShopID(ShopID);
+		//shopItem.setItemID(ShopID);
 		//shopItem.setItemID(itemID);
 		
 		int rowCount = shopItemDAO.updateShopItem(shopItem);
@@ -496,7 +496,7 @@ public class ShopItemResource {
 			{
 				if(ShopID == null)
 				{
-					shopItem.setShop(shopDAO.getShop(shopItem.getShopID(),latCenter,lonCenter));
+					shopItem.setShop(shopDAO.getShop(shopItem.getItemID(),latCenter,lonCenter));
 				}
 
 				if(itemID == null)
@@ -510,6 +510,15 @@ public class ShopItemResource {
 
 			endPoint.setResults(shopItemsList);
 		}
+
+/*
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}*/
+
+
 
 		//Marker
 		return Response.status(Status.OK)

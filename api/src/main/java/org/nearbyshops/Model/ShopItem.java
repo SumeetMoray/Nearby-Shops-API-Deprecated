@@ -47,12 +47,15 @@ public class ShopItem{
 			+ " " + ShopItem.LAST_UPDATE_DATE_TIME + " timestamp with time zone,"
 			+ " " + ShopItem.EXTRA_DELIVERY_CHARGE + " FLOAT,"
 			+ " " + ShopItem.DATE_TIME_ADDED + " timestamp with time zone NOT NULL DEFAULT now(),"
-			+ " FOREIGN KEY(" + ShopItem.SHOP_ID +") REFERENCES SHOP(SHOP_ID),"
-			+ " FOREIGN KEY(" + ShopItem.ITEM_ID +") REFERENCES ITEM(ITEM_ID),"
+			+ " FOREIGN KEY(" + ShopItem.SHOP_ID +") REFERENCES " + Shop.TABLE_NAME + "(" + Shop.SHOP_ID + "),"
+			+ " FOREIGN KEY(" + ShopItem.ITEM_ID +") REFERENCES " + Item.TABLE_NAME + "(" + Item.ITEM_ID + "),"
 			+ " PRIMARY KEY (" + ShopItem.SHOP_ID + ", " + ShopItem.ITEM_ID + ")"
 			+ ")";
 
 
+
+
+	// Instance Variables
 
 
 	private Shop shop;

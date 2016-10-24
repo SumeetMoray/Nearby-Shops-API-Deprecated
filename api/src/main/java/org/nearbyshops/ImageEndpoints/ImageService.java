@@ -88,7 +88,9 @@ public class ImageService {
 
     @POST
     @Consumes(MediaType.APPLICATION_OCTET_STREAM) 
-    public Response uploadImage(InputStream in, @HeaderParam("Content-Length") long fileSize) throws IOException {
+    public Response uploadImage(InputStream in, @HeaderParam("Content-Length") long fileSize,
+                                @QueryParam("ImageIDPrevious") int imageID
+    ) throws IOException {
 
         File theDir = new File("./images");
 

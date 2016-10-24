@@ -2,13 +2,12 @@ package org.nearbyshops.DAOsPrepared;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.JDBCContract;
 import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ItemCategory;
 import org.nearbyshops.Model.Shop;
 import org.nearbyshops.Model.ShopItem;
 import org.nearbyshops.ModelEndPoints.ShopEndPoint;
-import org.nearbyshops.ModelReview.ShopReview;
+import org.nearbyshops.ModelReviewShop.ShopReview;
 import org.nearbyshops.Utility.GeoLocation;
 
 import java.sql.*;
@@ -380,7 +379,11 @@ public class ShopDAO {
 				+ Shop.TABLE_NAME + "." + Shop.SHORT_DESCRIPTION + ","
 				+ Shop.TABLE_NAME + "." + Shop.LONG_DESCRIPTION + ","
 				+ Shop.TABLE_NAME + "." + Shop.IS_OPEN + ","
-				+ Shop.TABLE_NAME + "." + Shop.DATE_TIME_STARTED + ""
+				+ Shop.TABLE_NAME + "." + Shop.DATE_TIME_STARTED + ","
+
+				+  "avg(" + ShopReview.TABLE_NAME + "." + ShopReview.RATING + ") as avg_rating" + ","
+				+  "count( DISTINCT " + ShopReview.TABLE_NAME + "." + ShopReview.END_USER_ID + ") as rating_count" + ""
+
 
 				+ " FROM "
 				+ ShopReview.TABLE_NAME  + " RIGHT OUTER JOIN " + Shop.TABLE_NAME
@@ -1242,8 +1245,8 @@ public class ShopDAO {
 				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
 
 				+ " WHERE "
-				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID + "="
-				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.SHOP_ID
+				+ Shop.TABLE_NAME + "." + Shop.ITEM_ID + "="
+				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID
 
 				+ " AND "
 				+ ShopItemContract.TABLE_NAME + "." + ShopItemContract.ITEM_ID + "="
@@ -1565,7 +1568,7 @@ public class ShopDAO {
 
 //		System.out.println(query);
 
-		// + ShopContract.TABLE_NAME + "." + ShopContract.SHOP_ID +
+		// + ShopContract.TABLE_NAME + "." + ShopContract.ITEM_ID +
 
 		queryJoin = "SELECT DISTINCT "
 
@@ -1748,8 +1751,8 @@ public class ShopDAO {
 
 		boolean distancePreset = false;
 
-		if(latCenter!=null & lonCenter!=null)
-		{
+//		if(latCenter!=null & lonCenter!=null)
+//		{
 			query = "SELECT "
 					+ " (6371.01 * acos(cos( radians("
 					+ latCenter
@@ -1765,17 +1768,91 @@ public class ShopDAO {
 					+ ")) * sin(radians("
 					+ Shop.LAT_CENTER
 					+ "))))"
-					+ " as distance , * FROM " + Shop.TABLE_NAME
-					+ " WHERE "	+  Shop.SHOP_ID + "= " + ShopID;
+					+ " as distance ,"
+
+					+ Shop.TABLE_NAME + "." + Shop.SHOP_ID + ","
+					+ Shop.TABLE_NAME + "." + Shop.SHOP_NAME + ","
+					+ Shop.TABLE_NAME + "." + Shop.LON_CENTER + ","
+					+ Shop.TABLE_NAME + "." + Shop.LAT_CENTER + ","
+					+ Shop.TABLE_NAME + "." + Shop.DELIVERY_RANGE + ","
+					+ Shop.TABLE_NAME + "." + Shop.DELIVERY_CHARGES + ","
+					+ Shop.TABLE_NAME + "." + Shop.DISTRIBUTOR_ID + ","
+					+ Shop.TABLE_NAME + "." + Shop.IMAGE_PATH + ","
+					+ Shop.TABLE_NAME + "." + Shop.LAT_MAX + ","
+					+ Shop.TABLE_NAME + "." + Shop.LAT_MIN + ","
+					+ Shop.TABLE_NAME + "." + Shop.LON_MAX + ","
+					+ Shop.TABLE_NAME + "." + Shop.LON_MIN + ","
+
+					+ Shop.TABLE_NAME + "." + Shop.SHOP_ADDRESS + ","
+					+ Shop.TABLE_NAME + "." + Shop.CITY + ","
+					+ Shop.TABLE_NAME + "." + Shop.PINCODE + ","
+					+ Shop.TABLE_NAME + "." + Shop.LANDMARK + ","
+					+ Shop.TABLE_NAME + "." + Shop.BILL_AMOUNT_FOR_FREE_DELIVERY + ","
+					+ Shop.TABLE_NAME + "." + Shop.CUSTOMER_HELPLINE_NUMBER + ","
+					+ Shop.TABLE_NAME + "." + Shop.DELIVERY_HELPLINE_NUMBER + ","
+					+ Shop.TABLE_NAME + "." + Shop.SHORT_DESCRIPTION + ","
+					+ Shop.TABLE_NAME + "." + Shop.LONG_DESCRIPTION + ","
+					+ Shop.TABLE_NAME + "." + Shop.IS_OPEN + ","
+					+ Shop.TABLE_NAME + "." + Shop.DATE_TIME_STARTED + ","
+
+					+  "avg(" + ShopReview.TABLE_NAME + "." + ShopReview.RATING + ") as avg_rating" + ","
+					+  "count( DISTINCT " + ShopReview.TABLE_NAME + "." + ShopReview.END_USER_ID + ") as rating_count" + ""
+
+					+ " FROM "
+					+ ShopReview.TABLE_NAME  + " RIGHT OUTER JOIN " + Shop.TABLE_NAME
+
+					+ " ON (" + ShopReview.TABLE_NAME + "." + ShopReview.SHOP_ID
+					+ " = " + Shop.TABLE_NAME + "." + Shop.SHOP_ID + ")"
+
+					+ " WHERE "	+ Shop.TABLE_NAME + "." + Shop.SHOP_ID + "= " + ShopID;
+
+
+
+
+			query = query
+
+					+ " group by "
+
+					+ "distance,"
+					+ Shop.TABLE_NAME + "." + Shop.SHOP_ID + ","
+					+ Shop.TABLE_NAME + "." + Shop.SHOP_NAME + ","
+					+ Shop.TABLE_NAME + "." + Shop.LON_CENTER + ","
+					+ Shop.TABLE_NAME + "." + Shop.LAT_CENTER + ","
+					+ Shop.TABLE_NAME + "." + Shop.DELIVERY_RANGE + ","
+					+ Shop.TABLE_NAME + "." + Shop.DELIVERY_CHARGES + ","
+					+ Shop.TABLE_NAME + "." + Shop.DISTRIBUTOR_ID + ","
+					+ Shop.TABLE_NAME + "." + Shop.IMAGE_PATH + ","
+					+ Shop.TABLE_NAME + "." + Shop.LAT_MAX + ","
+					+ Shop.TABLE_NAME + "." + Shop.LAT_MIN + ","
+					+ Shop.TABLE_NAME + "." + Shop.LON_MAX + ","
+					+ Shop.TABLE_NAME + "." + Shop.LON_MIN + ","
+
+					+ Shop.TABLE_NAME + "." + Shop.SHOP_ADDRESS + ","
+					+ Shop.TABLE_NAME + "." + Shop.CITY + ","
+					+ Shop.TABLE_NAME + "." + Shop.PINCODE + ","
+					+ Shop.TABLE_NAME + "." + Shop.LANDMARK + ","
+					+ Shop.TABLE_NAME + "." + Shop.BILL_AMOUNT_FOR_FREE_DELIVERY + ","
+					+ Shop.TABLE_NAME + "." + Shop.CUSTOMER_HELPLINE_NUMBER + ","
+					+ Shop.TABLE_NAME + "." + Shop.DELIVERY_HELPLINE_NUMBER + ","
+					+ Shop.TABLE_NAME + "." + Shop.SHORT_DESCRIPTION + ","
+					+ Shop.TABLE_NAME + "." + Shop.LONG_DESCRIPTION + ","
+					+ Shop.TABLE_NAME + "." + Shop.IS_OPEN + ","
+					+ Shop.TABLE_NAME + "." + Shop.DATE_TIME_STARTED + "";
+
+
+
+
 
 			distancePreset = true;
 
-		}else
+//		}
+
+		/*else
 		{
 			query = "SELECT * FROM " + Shop.TABLE_NAME
-					+ " WHERE "	+  Shop.SHOP_ID + "= " + ShopID;
+					+ " WHERE "	+  Shop.ITEM_ID + "= " + ShopID;
 
-		}
+		}*/
 
 		
 		Connection connection = null;

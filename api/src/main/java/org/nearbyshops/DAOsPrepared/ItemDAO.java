@@ -7,6 +7,8 @@ import org.nearbyshops.Model.ItemCategory;
 import org.nearbyshops.Model.Shop;
 import org.nearbyshops.Model.ShopItem;
 import org.nearbyshops.ModelEndPoints.ItemEndPoint;
+import org.nearbyshops.ModelReviewItem.ItemReview;
+import org.nearbyshops.ModelReviewShop.ShopReview;
 import org.nearbyshops.ModelStats.ItemStats;
 import org.nearbyshops.Utility.GeoLocation;
 
@@ -323,7 +325,7 @@ public class ItemDAO {
 
 
 
-
+/*
 	public List<ItemStats> getStats(
 			Integer itemCategoryID, Integer shopID,
 			Double latCenter, Double lonCenter,
@@ -480,11 +482,11 @@ public class ItemDAO {
 
 
 		//
-		/*
+		*//*
 
 		Applying filters Ends
 
-		 */
+		 *//*
 
 
 
@@ -559,7 +561,7 @@ public class ItemDAO {
 		return itemStatsList;
 
 	}
-	
+	*/
 	
 
 	
@@ -579,7 +581,8 @@ public class ItemDAO {
 		String queryJoin = "SELECT "
 				+ "min(" + ShopItem.ITEM_PRICE + ") as min_price" + ","
 				+ "max(" + ShopItem.ITEM_PRICE + ") as max_price" + ","
-				+ "count(" + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + ") as shop_count" + ","
+				+ "avg(" + ShopItem.ITEM_PRICE + ") as avg_price" + ","
+				+ "count( DISTINCT " + ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID + ") as shop_count" + ","
 				+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + ","
 				+ Item.TABLE_NAME + "." + Item.ITEM_ID + ","
 				+ Item.TABLE_NAME + "." + Item.ITEM_IMAGE_URL + ","
@@ -588,11 +591,22 @@ public class ItemDAO {
 
 				+ Item.TABLE_NAME + "." + Item.QUANTITY_UNIT + ","
 				+ Item.TABLE_NAME + "." + Item.DATE_TIME_CREATED + ","
-				+ Item.TABLE_NAME + "." + Item.ITEM_DESCRIPTION_LONG + ""
+				+ Item.TABLE_NAME + "." + Item.ITEM_DESCRIPTION_LONG + ","
 
-				+ " FROM " 
+				+  "avg(" + ItemReview.TABLE_NAME + "." + ItemReview.RATING + ") as avg_rating" + ","
+				+  "count( DISTINCT " + ItemReview.TABLE_NAME + "." + ItemReview.END_USER_ID + ") as rating_count" + ""
+
+				+ " FROM "
+
 				+ Shop.TABLE_NAME  + "," + ShopItem.TABLE_NAME + ","
-				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
+
+				+ ItemReview.TABLE_NAME  + " RIGHT OUTER JOIN " + Item.TABLE_NAME
+
+				+ " ON (" + ItemReview.TABLE_NAME + "." + ItemReview.ITEM_ID
+				+ " = " + Item.TABLE_NAME + "." + Item.ITEM_ID + ")" + ","
+
+				+ ItemCategory.TABLE_NAME
+
 				+ " WHERE " 
 				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID
 				+ "="
@@ -896,13 +910,19 @@ public class ItemDAO {
 				item.setQuantityUnit(rs.getString(Item.QUANTITY_UNIT));
 
 
+
 				if(isJoinQuery)
 				{
 					ItemStats itemStats = new ItemStats();
 					itemStats.setMax_price(rs.getDouble("max_price"));
 					itemStats.setMin_price(rs.getDouble("min_price"));
+					itemStats.setAvg_price(rs.getDouble("avg_price"));
 					itemStats.setShopCount(rs.getInt("shop_count"));
 					item.setItemStats(itemStats);
+
+					item.setRt_rating_avg(rs.getFloat("avg_rating"));
+					item.setRt_rating_count(rs.getFloat("rating_count"));
+
 				}
 
 				itemList.add(item);
@@ -951,6 +971,7 @@ public class ItemDAO {
 
 		return itemList;
 	}
+
 
 
 

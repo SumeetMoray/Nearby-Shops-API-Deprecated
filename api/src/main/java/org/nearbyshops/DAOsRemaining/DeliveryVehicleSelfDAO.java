@@ -224,11 +224,11 @@ public class DeliveryVehicleSelfDAO {
 		{
 			if(isFirst)
 			{
-				query = query + " WHERE " + CartContract.SHOP_ID + " = " + shopID;
+				query = query + " WHERE " + CartContract.ITEM_ID + " = " + shopID;
 
 			}else
 			{
-				query = query + " AND " + CartContract.SHOP_ID + " = " + shopID;
+				query = query + " AND " + CartContract.ITEM_ID + " = " + shopID;
 
 			}
 

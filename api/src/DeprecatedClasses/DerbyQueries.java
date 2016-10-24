@@ -127,7 +127,7 @@ public class DerbyQueries {
                 + " " + ShopItemContract.SHOP_ID + " INT,"
                 + " " + ShopItemContract.AVAILABLE_ITEM_QUANTITY + " INT,"
                 + " " + ShopItemContract.ITEM_PRICE + " FLOAT,"
-                + " FOREIGN KEY(" + ShopItemContract.SHOP_ID +") REFERENCES SHOP(SHOP_ID),"
+                + " FOREIGN KEY(" + ShopItemContract.SHOP_ID +") REFERENCES SHOP(ITEM_ID),"
                 + " FOREIGN KEY(" + ShopItemContract.ITEM_ID +") REFERENCES ITEM(ITEM_ID),"
                 + " PRIMARY KEY (" + ShopItemContract.SHOP_ID + ", " + ShopItemContract.ITEM_ID + ")"
                 + ")";

@@ -240,11 +240,11 @@ public class CartItemService {
 				+ CartContract.TABLE_NAME + "." + CartContract.CART_ID ;
 
 
+
 		if(endUserID > 0)
 		{
 			query = query + " AND " + CartContract.END_USER_ID + " = " + endUserID;
 		}
-
 
 
 
@@ -254,7 +254,7 @@ public class CartItemService {
 
 		if(cartID > 0)
 		{
-			query = query + " AND " + CartContract.TABLE_NAME + "." + CartItemContract.CART_ID + " = " + cartID;
+			query = query + " AND " + CartItemContract.TABLE_NAME + "." + CartItemContract.CART_ID + " = " + cartID;
 
 		//	isFirst = false;
 		}
@@ -280,19 +280,19 @@ public class CartItemService {
 		}
 
 		
-		Connection conn = null;
-		Statement stmt = null;
+		Connection connection = null;
+		Statement statement = null;
 		ResultSet rs = null;
 		
 		try {
 			
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL
+			connection = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL
 					,JDBCContract.CURRENT_USERNAME
 					, JDBCContract.CURRENT_PASSWORD);
 			
-			stmt = conn.createStatement();
+			statement = connection.createStatement();
 			
-			rs = stmt.executeQuery(query);
+			rs = statement.executeQuery(query);
 			
 			while(rs.next())
 			{
@@ -326,8 +326,8 @@ public class CartItemService {
 			
 			try {
 			
-				if(stmt!=null)
-				{stmt.close();}
+				if(statement!=null)
+				{statement.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -335,8 +335,8 @@ public class CartItemService {
 			
 			try {
 				
-				if(conn!=null)
-				{conn.close();}
+				if(connection!=null)
+				{connection.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

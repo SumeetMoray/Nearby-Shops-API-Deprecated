@@ -1,4 +1,4 @@
-package org.nearbyshops.ModelReview;
+package org.nearbyshops.ModelReviewShop;
 
 /**
  * Created by sumeet on 17/10/16.
