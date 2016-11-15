@@ -101,20 +101,20 @@ public class FavoriteItemDAOPrepared {
                     + " WHERE " + FavouriteItem.ITEM_ID + " = ?"
                     + " AND " + FavouriteItem.END_USER_ID + " = ?";
 
-            Connection conn= null;
+            Connection connection= null;
             PreparedStatement statement = null;
             int rowCountDeleted = 0;
             try {
 
 
-                conn = dataSource.getConnection();
-                statement = conn.prepareStatement(deleteStatement);
+                connection = dataSource.getConnection();
+                statement = connection.prepareStatement(deleteStatement);
 
                 statement.setInt(1,itemID);
                 statement.setInt(2,endUserID);
 
                 rowCountDeleted = statement.executeUpdate();
-                System.out.println("Rows Deleted: " + rowCountDeleted);
+                System.out.println("Rows Deleted Favourite Item: " + rowCountDeleted);
 
 
             } catch (SQLException e) {
@@ -137,8 +137,8 @@ public class FavoriteItemDAOPrepared {
 
                 try {
 
-                    if(conn!=null)
-                    {conn.close();}
+                    if(connection!=null)
+                    {connection.close();}
                 } catch (SQLException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -291,20 +291,20 @@ public class FavoriteItemDAOPrepared {
             ArrayList<FavouriteItem> itemsList = new ArrayList<FavouriteItem>();
 
 
-            Connection conn = null;
-            Statement stmt = null;
+            Connection connection = null;
+            Statement statement = null;
             ResultSet rs = null;
 
             try {
 
 
-                conn = dataSource.getConnection();
-                stmt = conn.createStatement();
+                connection = dataSource.getConnection();
+                statement = connection.createStatement();
 
 
 //                System.out.println("Favourite Books " + query);
 
-                rs = stmt.executeQuery(query);
+                rs = statement.executeQuery(query);
 
                 while(rs.next())
                 {
@@ -318,7 +318,7 @@ public class FavoriteItemDAOPrepared {
 
 
 
-                System.out.println("Favourite Books " + itemsList.size());
+                System.out.println("Favourite Items List Size " + itemsList.size());
 
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
@@ -340,8 +340,8 @@ public class FavoriteItemDAOPrepared {
 
                 try {
 
-                    if(stmt!=null)
-                    {stmt.close();}
+                    if(statement!=null)
+                    {statement.close();}
                 } catch (SQLException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -349,8 +349,8 @@ public class FavoriteItemDAOPrepared {
 
                 try {
 
-                    if(conn!=null)
-                    {conn.close();}
+                    if(connection!=null)
+                    {connection.close();}
                 } catch (SQLException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -464,7 +464,7 @@ public class FavoriteItemDAOPrepared {
 
 
 
-                System.out.println("Item Count : " + endPoint.getItemCount());
+                System.out.println("Item Count Favourite Item : " + endPoint.getItemCount());
 
 
             } catch (SQLException e) {
@@ -506,5 +506,7 @@ public class FavoriteItemDAOPrepared {
 
             return endPoint;
         }
+
+
 
 }

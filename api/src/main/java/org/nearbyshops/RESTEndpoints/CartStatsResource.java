@@ -15,7 +15,7 @@ import java.util.List;
 @Path("/CartStats")
 public class CartStatsResource {
 
-	ShopDAO shopDAO = Globals.shopDAO;
+	private ShopDAO shopDAO = Globals.shopDAO;
 
 	public CartStatsResource() {
 		super();
@@ -26,16 +26,23 @@ public class CartStatsResource {
 	@GET
 	@Path("/{EndUserID}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getCartStats(@PathParam("EndUserID")int endUserID,@QueryParam("CartID") int cartID,
-									   @QueryParam("latCenter")double latCenter, @QueryParam("lonCenter")double lonCenter)
+	public Response getCartStats(@PathParam("EndUserID")int endUserID,@QueryParam("CartID") Integer cartID,
+								 @QueryParam("ShopID") Integer shopID,
+								 @QueryParam("GetShopDetails") Boolean getShopDetails,
+								 @QueryParam("latCenter")double latCenter, @QueryParam("lonCenter")double lonCenter)
 	{
 
-		List<CartStats> cartStats = Globals.cartStatsDAO.getCartStats(endUserID,cartID);
+		List<CartStats> cartStats = Globals.cartStatsDAO.getCartStats(endUserID,cartID, shopID);
 
-		for(CartStats cartStatsItem: cartStats)
+		if(getShopDetails!=null && getShopDetails)
 		{
-			cartStatsItem.setShop(shopDAO.getShop(cartStatsItem.getShopID(),latCenter,lonCenter));
+			for(CartStats cartStatsItem: cartStats)
+			{
+				cartStatsItem.setShop(shopDAO.getShop(cartStatsItem.getShopID(),latCenter,lonCenter));
+			}
+
 		}
+
 
 
 		GenericEntity<List<CartStats>> listEntity = new GenericEntity<List<CartStats>>(cartStats){

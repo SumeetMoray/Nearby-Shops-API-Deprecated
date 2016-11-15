@@ -1,6 +1,5 @@
 package org.nearbyshops.DAOsRemaining;
 
-import org.nearbyshops.ContractClasses.DeliveryAddressContract;
 import org.nearbyshops.JDBCContract;
 import org.nearbyshops.ModelDeliverySelf.DeliveryAddress;
 
@@ -27,15 +26,15 @@ public class DeliveryAddressService {
 		int rowIdOfInsertedRow = -1;
 
 		String insertItemCategory = "INSERT INTO "
-				+ DeliveryAddressContract.TABLE_NAME
+				+ DeliveryAddress.TABLE_NAME
 				+ "("  
-				+ DeliveryAddressContract.END_USER_ID + ","
-				+ DeliveryAddressContract.PINCODE + ","
-				+ DeliveryAddressContract.PHONE_NUMBER + ","
-				+ DeliveryAddressContract.NAME + ","
-				+ DeliveryAddressContract.CITY + ","
-				+ DeliveryAddressContract.DELIVERY_ADDRESS + ","
-				+ DeliveryAddressContract.LANDMARK + ""
+				+ DeliveryAddress.END_USER_ID + ","
+				+ DeliveryAddress.PINCODE + ","
+				+ DeliveryAddress.PHONE_NUMBER + ","
+				+ DeliveryAddress.NAME + ","
+				+ DeliveryAddress.CITY + ","
+				+ DeliveryAddress.DELIVERY_ADDRESS + ","
+				+ DeliveryAddress.LANDMARK + ""
 				+ " ) VALUES ( "
 				+ "" + deliveryAddress.getEndUserID()	+ ","
 				+ "" + deliveryAddress.getPincode() + ","
@@ -100,30 +99,30 @@ public class DeliveryAddressService {
 
 	public int updateAddress(DeliveryAddress address)
 	{	
-		String updateStatement = "UPDATE " + DeliveryAddressContract.TABLE_NAME
+		String updateStatement = "UPDATE " + DeliveryAddress.TABLE_NAME
 				+ " SET "
-				+ DeliveryAddressContract.END_USER_ID + " = "
+				+ DeliveryAddress.END_USER_ID + " = "
 				+ "" + address.getEndUserID() + ""
 				+ ","
-				+ DeliveryAddressContract.LANDMARK + " = "
+				+ DeliveryAddress.LANDMARK + " = "
 				+ "'" + address.getLandmark() + "'"
 				+ ","
-				+ DeliveryAddressContract.DELIVERY_ADDRESS + " = "
+				+ DeliveryAddress.DELIVERY_ADDRESS + " = "
 				+ "'" + address.getDeliveryAddress() + "'"
 				+ ","
-				+ DeliveryAddressContract.CITY + " = "
+				+ DeliveryAddress.CITY + " = "
 				+ "'" + address.getCity() + "'"
 				+ ","
-				+ DeliveryAddressContract.PHONE_NUMBER + " = "
+				+ DeliveryAddress.PHONE_NUMBER + " = "
 				+ "" + address.getPhoneNumber() + ""
 				+ ","
-				+ DeliveryAddressContract.PINCODE + " = "
+				+ DeliveryAddress.PINCODE + " = "
 				+ "" + address.getPincode() + ""
 				+ ","
-				+ DeliveryAddressContract.NAME + " = "
+				+ DeliveryAddress.NAME + " = "
 				+ "'" + address.getName() + "'"
 
-				+ " WHERE " + DeliveryAddressContract.ID + " = "
+				+ " WHERE " + DeliveryAddress.ID + " = "
 				+ address.getId();
 		
 		Connection conn = null;
@@ -179,7 +178,7 @@ public class DeliveryAddressService {
 	public int deleteAddress(int deliveryAddressID)
 	{
 		
-		String deleteStatement = "DELETE FROM " + DeliveryAddressContract.TABLE_NAME + " WHERE " + DeliveryAddressContract.ID + " = "
+		String deleteStatement = "DELETE FROM " + DeliveryAddress.TABLE_NAME + " WHERE " + DeliveryAddress.ID + " = "
 				+ deliveryAddressID;
 		
 		
@@ -237,13 +236,13 @@ public class DeliveryAddressService {
 	
 	public ArrayList<DeliveryAddress> readAddresses(int endUserID)
 	{
-		String query = "SELECT * FROM " + DeliveryAddressContract.TABLE_NAME;
+		String query = "SELECT * FROM " + DeliveryAddress.TABLE_NAME;
 
 		boolean isFirst = true;
 
 		if(endUserID > 0)
 		{
-			query = query + " WHERE " + DeliveryAddressContract.END_USER_ID + " = " + endUserID;
+			query = query + " WHERE " + DeliveryAddress.END_USER_ID + " = " + endUserID;
 
 			isFirst = false;
 		}
@@ -288,14 +287,14 @@ public class DeliveryAddressService {
 
 				DeliveryAddress address = new DeliveryAddress();
 
-				address.setEndUserID(rs.getInt(DeliveryAddressContract.END_USER_ID));
-				address.setCity(rs.getString(DeliveryAddressContract.CITY));
-				address.setDeliveryAddress(rs.getString(DeliveryAddressContract.DELIVERY_ADDRESS));
-				address.setId(rs.getInt(DeliveryAddressContract.ID));
-				address.setLandmark(rs.getString(DeliveryAddressContract.LANDMARK));
-				address.setName(rs.getString(DeliveryAddressContract.NAME));
-				address.setPhoneNumber(rs.getLong(DeliveryAddressContract.PHONE_NUMBER));
-				address.setPincode(rs.getLong(DeliveryAddressContract.PINCODE));
+				address.setEndUserID(rs.getInt(DeliveryAddress.END_USER_ID));
+				address.setCity(rs.getString(DeliveryAddress.CITY));
+				address.setDeliveryAddress(rs.getString(DeliveryAddress.DELIVERY_ADDRESS));
+				address.setId(rs.getInt(DeliveryAddress.ID));
+				address.setLandmark(rs.getString(DeliveryAddress.LANDMARK));
+				address.setName(rs.getString(DeliveryAddress.NAME));
+				address.setPhoneNumber(rs.getLong(DeliveryAddress.PHONE_NUMBER));
+				address.setPincode(rs.getLong(DeliveryAddress.PINCODE));
 
 				addressesList.add(address);
 			}
@@ -347,8 +346,8 @@ public class DeliveryAddressService {
 	public DeliveryAddress readAddress(int addressID)
 	{
 		
-		String query = "SELECT * FROM " + DeliveryAddressContract.TABLE_NAME
-						+ " WHERE " + DeliveryAddressContract.ID + " = " + addressID;
+		String query = "SELECT * FROM " + DeliveryAddress.TABLE_NAME
+						+ " WHERE " + DeliveryAddress.ID + " = " + addressID;
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -372,14 +371,14 @@ public class DeliveryAddressService {
 
 				address = new DeliveryAddress();
 
-				address.setEndUserID(rs.getInt(DeliveryAddressContract.END_USER_ID));
-				address.setCity(rs.getString(DeliveryAddressContract.CITY));
-				address.setDeliveryAddress(rs.getString(DeliveryAddressContract.DELIVERY_ADDRESS));
-				address.setId(rs.getInt(DeliveryAddressContract.ID));
-				address.setLandmark(rs.getString(DeliveryAddressContract.LANDMARK));
-				address.setName(rs.getString(DeliveryAddressContract.NAME));
-				address.setPhoneNumber(rs.getLong(DeliveryAddressContract.PHONE_NUMBER));
-				address.setPincode(rs.getLong(DeliveryAddressContract.PINCODE));
+				address.setEndUserID(rs.getInt(DeliveryAddress.END_USER_ID));
+				address.setCity(rs.getString(DeliveryAddress.CITY));
+				address.setDeliveryAddress(rs.getString(DeliveryAddress.DELIVERY_ADDRESS));
+				address.setId(rs.getInt(DeliveryAddress.ID));
+				address.setLandmark(rs.getString(DeliveryAddress.LANDMARK));
+				address.setName(rs.getString(DeliveryAddress.NAME));
+				address.setPhoneNumber(rs.getLong(DeliveryAddress.PHONE_NUMBER));
+				address.setPincode(rs.getLong(DeliveryAddress.PINCODE));
 
 			}
 			

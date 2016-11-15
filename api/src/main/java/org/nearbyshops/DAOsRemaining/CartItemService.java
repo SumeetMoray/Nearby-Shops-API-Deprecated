@@ -116,7 +116,7 @@ public class CartItemService {
 			updatedRows = stmt.executeUpdate(updateStatement);
 			
 			
-			System.out.println("Total rows updated: " + updatedRows);	
+			System.out.println("Total rows updated CartItem : " + updatedRows);
 			
 			//conn.close();
 			
@@ -193,7 +193,7 @@ public class CartItemService {
 			
 			rowsCountDeleted = stmt.executeUpdate(deleteStatement);
 			
-			System.out.println(" Deleted Count: " + rowsCountDeleted);	
+			System.out.println(" Deleted Count CartItem : " + rowsCountDeleted);
 			
 			conn.close();	
 			
@@ -233,7 +233,7 @@ public class CartItemService {
 	
 	
 	
-	public ArrayList<CartItem> getCartItem(int cartID, int itemID, int endUserID)
+	public ArrayList<CartItem> getCartItem(Integer cartID, Integer itemID, Integer endUserID)
 	{
 		String query = "SELECT * FROM " + CartItemContract.TABLE_NAME + "," + CartContract.TABLE_NAME
 				+ " WHERE " + CartItemContract.TABLE_NAME + "."+ CartItemContract.CART_ID  + " = "
@@ -241,7 +241,7 @@ public class CartItemService {
 
 
 
-		if(endUserID > 0)
+		if(endUserID != null)
 		{
 			query = query + " AND " + CartContract.END_USER_ID + " = " + endUserID;
 		}
@@ -252,7 +252,7 @@ public class CartItemService {
 
 		//boolean isFirst = true;
 
-		if(cartID > 0)
+		if(cartID != null)
 		{
 			query = query + " AND " + CartItemContract.TABLE_NAME + "." + CartItemContract.CART_ID + " = " + cartID;
 
@@ -260,7 +260,7 @@ public class CartItemService {
 		}
 
 
-		if(itemID > 0)
+		if(itemID != null)
 		{
 
 			query = query + " AND " + CartItemContract.ITEM_ID + " = " + itemID;
@@ -348,7 +348,7 @@ public class CartItemService {
 
 
 
-	public ArrayList<CartItem> getCartItem(int endUserID,int shopID)
+	public ArrayList<CartItem> getCartItem(Integer endUserID,Integer shopID)
 	{
 
 
@@ -362,14 +362,20 @@ public class CartItemService {
 						" and " +
 						" shop_item.item_id = cart_item.item_id " +
 						" and " +
-						" cart.cart_id = cart_item.cart_id " +
-						" and end_user_id = " +
+						" cart.cart_id = cart_item.cart_id " ;
 
-								endUserID +
 
-						"and cart.shop_id = " +
 
-								shopID;
+		if(endUserID!=null)
+		{
+			query = query + " and end_user_id = " + endUserID;
+		}
+
+
+		if(shopID !=null)
+		{
+			query = query + " and cart.shop_id = " + shopID;
+		}
 
 
 

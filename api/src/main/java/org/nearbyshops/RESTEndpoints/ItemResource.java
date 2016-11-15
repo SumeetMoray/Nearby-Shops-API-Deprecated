@@ -176,9 +176,9 @@ public class ItemResource {
 	
 	
 	
-	@GET
-	@Path("/Deprecated")
-	@Produces(MediaType.APPLICATION_JSON)
+
+//	@Path("/Deprecated")
+//	@Produces(MediaType.APPLICATION_JSON)
 	public Response getItems(
 			@QueryParam("ItemCategoryID")Integer itemCategoryID,
 			@QueryParam("ShopID")Integer shopID,
@@ -200,7 +200,7 @@ public class ItemResource {
 						latCenter, lonCenter,
 						deliveryRangeMin,
 						deliveryRangeMax,
-						proximity,
+						proximity,null,
 						sortBy,limit,offset
 				);
 		
@@ -238,6 +238,7 @@ public class ItemResource {
 			@QueryParam("deliveryRangeMax")Double deliveryRangeMax,
 			@QueryParam("deliveryRangeMin")Double deliveryRangeMin,
 			@QueryParam("proximity")Double proximity,
+			@QueryParam("SearchString")String searchString,
 			@QueryParam("SortBy") String sortBy,
 			@QueryParam("Limit")Integer limit, @QueryParam("Offset")Integer offset,
 			@QueryParam("metadata_only")Boolean metaonly)
@@ -268,7 +269,7 @@ public class ItemResource {
 		}
 
 		ItemEndPoint endPoint = itemDAO.getEndPointMetadata(itemCategoryID,
-				shopID,latCenter,lonCenter,deliveryRangeMin,deliveryRangeMax,proximity);
+				shopID,latCenter,lonCenter,deliveryRangeMin,deliveryRangeMax,proximity,searchString);
 
 		endPoint.setLimit(set_limit);
 		endPoint.setMax_limit(max_limit);
@@ -286,13 +287,19 @@ public class ItemResource {
 							latCenter, lonCenter,
 							deliveryRangeMin,
 							deliveryRangeMax,
-							proximity,
+							proximity,searchString,
 							sortBy,set_limit,set_offset
 					);
 
 			endPoint.setResults(list);
 		}
 
+
+		/*try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}*/
 
 		//Marker
 

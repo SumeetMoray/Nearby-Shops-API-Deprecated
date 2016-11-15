@@ -1,6 +1,8 @@
 package org.nearbyshops.Model;
 
+import org.nearbyshops.ContractClasses.DeliveryGuySelfContract;
 import org.nearbyshops.ModelDeliverySelf.DeliveryAddress;
+import org.nearbyshops.ModelRoles.EndUser;
 import org.nearbyshops.ModelStats.OrderStats;
 
 import java.sql.Timestamp;
@@ -11,45 +13,188 @@ import java.sql.Timestamp;
 public class Order {
 
 
+    // Table Name for Distributor
+    public static final String TABLE_NAME = "CUSTOMER_ORDER";
+
+    // Column names for Distributor
+
+    public static final String ORDER_ID = "ORDER_ID";
+    public static final String END_USER_ID = "END_USER_ID"; // foreign Key
+    public static final String SHOP_ID = "SHOP_ID"; // foreign Key
+    public static final String DELIVERY_CHARGES = "DELIVERY_CHARGES";
+    public static final String DELIVERY_ADDRESS_ID = "DELIVERY_ADDRESS_ID";
+    public static final String PICK_FROM_SHOP = "PICK_FROM_SHOP";
 
 
-    private int orderID;
-    private int endUserID;
-    private int shopID;
+    public static final String STATUS_HOME_DELIVERY = "STATUS_HOME_DELIVERY";
+    public static final String STATUS_PICK_FROM_SHOP = "STATUS_PICK_FROM_SHOP";
+    public static final String DELIVERY_RECEIVED = "DELIVERY_RECEIVED";
+    public static final String PAYMENT_RECEIVED = "PAYMENT_RECEIVED";
+
+    public static final String DELIVERY_VEHICLE_SELF_ID = "DELIVERY_VEHICLE_SELF_ID";
+
+//    public static final String ORDER_TOTAL = "ORDER_TOTAL";
+//    public static final String TAX_AMOUNT = "TAX_AMOUNT";
+//    public static final String ITEM_COUNT = "ITEM_COUNT";
+//    public static final String APP_SERVICE_CHARGE = "APP_SERVICE_CHARGE";
+
+//    public static final String REASON_FOR_CANCELLED_BY_USER = "REASON_FOR_CANCELLED_BY_USER";
+//    public static final String REASON_FOR_CANCELLED_BY_SHOP = "REASON_FOR_CANCELLED_BY_SHOP";
+//    public static final String REASON_FOR_ORDER_RETURNED = "REASON_FOR_ORDER_RETURNED";
+
+
+    public static final String DATE_TIME_PLACED = "DATE_TIME_PLACED";
+
+//    public static final String TIMESTAMP_HD_CONFIRMED = "TIMESTAMP_HD_CONFIRMED";
+//    public static final String TIMESTAMP_HD_PACKED = "TIMESTAMP_HD_PACKED";
+//    public static final String TIMESTAMP_HD_OUT_FOR_DELIVERY = "TIMESTAMP_HD_OUT_FOR_DELIVERY";
+//    public static final String TIMESTAMP_HD_DELIVERED = "TIMESTAMP_HD_DELIVERED";
+
+
+
+
+    // Create Table Order In postgres
+
+    public static final String createTableOrderPostgres = "CREATE TABLE IF NOT EXISTS " + Order.TABLE_NAME + "("
+            + " " + Order.ORDER_ID + " SERIAL PRIMARY KEY,"
+            + " " + Order.END_USER_ID + " INT,"
+            + " " + Order.SHOP_ID + " INT,"
+            + " " + Order.STATUS_HOME_DELIVERY + " INT,"
+            + " " + Order.STATUS_PICK_FROM_SHOP + " INT,"
+            + " " + Order.DELIVERY_RECEIVED + " boolean,"
+            + " " + Order.PAYMENT_RECEIVED + " boolean,"
+            + " " + Order.DELIVERY_CHARGES + " INT,"
+            + " " + Order.DELIVERY_ADDRESS_ID + " INT,"
+            + " " + Order.PICK_FROM_SHOP + " boolean,"
+            + " " + Order.DELIVERY_VEHICLE_SELF_ID + " INT,"
+            + " " + Order.DATE_TIME_PLACED + " timestamp with time zone NOT NULL DEFAULT now(),"
+            + " FOREIGN KEY(" + Order.END_USER_ID +") REFERENCES " + EndUser.TABLE_NAME + "(" + EndUser.END_USER_ID + "),"
+            + " FOREIGN KEY(" + Order.SHOP_ID +") REFERENCES " + Shop.TABLE_NAME + "(" + Shop.SHOP_ID + "),"
+            + " FOREIGN KEY(" + Order.DELIVERY_ADDRESS_ID +") REFERENCES " + DeliveryAddress.TABLE_NAME + "(" + DeliveryAddress.ID + "),"
+            + " FOREIGN KEY(" + Order.DELIVERY_VEHICLE_SELF_ID +") REFERENCES " + DeliveryGuySelfContract.TABLE_NAME + "(" + DeliveryGuySelfContract.ID + ")"
+            + ")";
+
+
+
+
+    // Instance Variables
+
+    private Integer orderID;
+    private Integer endUserID;
+    private Integer shopID;
     //int orderStatus;
 
-    private int statusHomeDelivery;
-    private int statusPickFromShop;
-    private boolean deliveryReceived;
-    private boolean paymentReceived;
+    private Integer statusHomeDelivery;
+    private Integer statusPickFromShop;
+    private Boolean deliveryReceived;
+    private Boolean paymentReceived;
 
-    private int deliveryCharges;
-    private int deliveryAddressID;
-    private boolean pickFromShop;
+    private Integer deliveryCharges;
+    private Integer deliveryAddressID;
+    private Boolean pickFromShop;
 
-    private int deliveryVehicleSelfID;
-
+    private Integer deliveryVehicleSelfID;
     private Timestamp dateTimePlaced;
 
-
     private DeliveryAddress deliveryAddress;
-
     private OrderStats orderStats;
 
-    public int getDeliveryVehicleSelfID() {
+
+
+    public Integer getOrderID() {
+        return orderID;
+    }
+
+    public void setOrderID(Integer orderID) {
+        this.orderID = orderID;
+    }
+
+    public Integer getEndUserID() {
+        return endUserID;
+    }
+
+    public void setEndUserID(Integer endUserID) {
+        this.endUserID = endUserID;
+    }
+
+    public Integer getShopID() {
+        return shopID;
+    }
+
+    public void setShopID(Integer shopID) {
+        this.shopID = shopID;
+    }
+
+    public Integer getStatusHomeDelivery() {
+        return statusHomeDelivery;
+    }
+
+    public void setStatusHomeDelivery(Integer statusHomeDelivery) {
+        this.statusHomeDelivery = statusHomeDelivery;
+    }
+
+    public Integer getStatusPickFromShop() {
+        return statusPickFromShop;
+    }
+
+    public void setStatusPickFromShop(Integer statusPickFromShop) {
+        this.statusPickFromShop = statusPickFromShop;
+    }
+
+    public Boolean getDeliveryReceived() {
+        return deliveryReceived;
+    }
+
+    public void setDeliveryReceived(Boolean deliveryReceived) {
+        this.deliveryReceived = deliveryReceived;
+    }
+
+    public Boolean getPaymentReceived() {
+        return paymentReceived;
+    }
+
+    public void setPaymentReceived(Boolean paymentReceived) {
+        this.paymentReceived = paymentReceived;
+    }
+
+    public Integer getDeliveryCharges() {
+        return deliveryCharges;
+    }
+
+    public void setDeliveryCharges(Integer deliveryCharges) {
+        this.deliveryCharges = deliveryCharges;
+    }
+
+    public Integer getDeliveryAddressID() {
+        return deliveryAddressID;
+    }
+
+    public void setDeliveryAddressID(Integer deliveryAddressID) {
+        this.deliveryAddressID = deliveryAddressID;
+    }
+
+    public Boolean getPickFromShop() {
+        return pickFromShop;
+    }
+
+    public void setPickFromShop(Boolean pickFromShop) {
+        this.pickFromShop = pickFromShop;
+    }
+
+    public Integer getDeliveryVehicleSelfID() {
         return deliveryVehicleSelfID;
     }
 
-    public void setDeliveryVehicleSelfID(int deliveryVehicleSelfID) {
+    public void setDeliveryVehicleSelfID(Integer deliveryVehicleSelfID) {
         this.deliveryVehicleSelfID = deliveryVehicleSelfID;
     }
 
-    public OrderStats getOrderStats() {
-        return orderStats;
+    public Timestamp getDateTimePlaced() {
+        return dateTimePlaced;
     }
 
-    public void setOrderStats(OrderStats orderStats) {
-        this.orderStats = orderStats;
+    public void setDateTimePlaced(Timestamp dateTimePlaced) {
+        this.dateTimePlaced = dateTimePlaced;
     }
 
     public DeliveryAddress getDeliveryAddress() {
@@ -60,96 +205,11 @@ public class Order {
         this.deliveryAddress = deliveryAddress;
     }
 
-    public boolean isDeliveryReceived() {
-        return deliveryReceived;
+    public OrderStats getOrderStats() {
+        return orderStats;
     }
 
-    public void setDeliveryReceived(boolean deliveryReceived) {
-        this.deliveryReceived = deliveryReceived;
+    public void setOrderStats(OrderStats orderStats) {
+        this.orderStats = orderStats;
     }
-
-    public boolean isPaymentReceived() {
-        return paymentReceived;
-    }
-
-    public void setPaymentReceived(boolean paymentReceived) {
-        this.paymentReceived = paymentReceived;
-    }
-
-    public int getStatusHomeDelivery() {
-        return statusHomeDelivery;
-    }
-
-    public void setStatusHomeDelivery(int statusHomeDelivery) {
-        this.statusHomeDelivery = statusHomeDelivery;
-    }
-
-    public int getStatusPickFromShop() {
-        return statusPickFromShop;
-    }
-
-    public void setStatusPickFromShop(int statusPickFromShop) {
-        this.statusPickFromShop = statusPickFromShop;
-    }
-
-
-    public int getDeliveryAddressID() {
-        return deliveryAddressID;
-    }
-
-    public void setDeliveryAddressID(int deliveryAddressID) {
-        this.deliveryAddressID = deliveryAddressID;
-    }
-
-    public int getOrderID() {
-        return orderID;
-    }
-
-    public void setOrderID(int orderID) {
-        this.orderID = orderID;
-    }
-
-    public int getEndUserID() {
-        return endUserID;
-    }
-
-    public void setEndUserID(int endUserID) {
-        this.endUserID = endUserID;
-    }
-
-    public int getShopID() {
-        return shopID;
-    }
-
-    public void setShopID(int shopID) {
-        this.shopID = shopID;
-    }
-
-
-    public int getDeliveryCharges() {
-        return deliveryCharges;
-    }
-
-    public void setDeliveryCharges(int deliveryCharges) {
-        this.deliveryCharges = deliveryCharges;
-    }
-
-
-    public boolean getPickFromShop() {
-        return pickFromShop;
-    }
-
-    public void setPickFromShop(boolean pickFromShop) {
-        this.pickFromShop = pickFromShop;
-    }
-
-
-    public Timestamp getDateTimePlaced() {
-        return dateTimePlaced;
-    }
-
-    public void setDateTimePlaced(Timestamp dateTimePlaced) {
-        this.dateTimePlaced = dateTimePlaced;
-    }
-
 }

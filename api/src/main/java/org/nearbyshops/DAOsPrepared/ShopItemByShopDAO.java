@@ -8,6 +8,7 @@ import org.nearbyshops.Model.ItemCategory;
 import org.nearbyshops.Model.Shop;
 import org.nearbyshops.Model.ShopItem;
 import org.nearbyshops.ModelEndPoints.ShopItemEndPoint;
+import org.nearbyshops.ModelReviewItem.ItemReview;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -43,12 +44,17 @@ public class ShopItemByShopDAO {
 
 
 
+		/*
 
-			String queryJoin = "SELECT DISTINCT "
-					+ "6371 * acos(cos( radians("
+		+ "6371 * acos(cos( radians("
 					+ latCenter + ")) * cos( radians( lat_center) ) * cos(radians( lon_center ) - radians("
 					+ lonCenter + "))"
 					+ " + sin( radians(" + latCenter + ")) * sin(radians(lat_center))) as distance" + ","
+
+		*/
+
+
+			String queryJoin = "SELECT DISTINCT "
 					+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + ","
 					+ ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID + ","
 					+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_PRICE + ","
@@ -59,17 +65,27 @@ public class ShopItemByShopDAO {
 
 					+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + ","
 					+ Item.TABLE_NAME + "." + Item.ITEM_IMAGE_URL + ","
-
 					+ Item.TABLE_NAME + "." + Item.ITEM_NAME + ","
 					+ Item.TABLE_NAME + "." + Item.ITEM_DESC + ","
 
 					+ Item.TABLE_NAME + "." + Item.QUANTITY_UNIT + ","
 					+ Item.TABLE_NAME + "." + Item.DATE_TIME_CREATED + ","
-					+ Item.TABLE_NAME + "." + Item.ITEM_DESCRIPTION_LONG + ""
+					+ Item.TABLE_NAME + "." + Item.ITEM_DESCRIPTION_LONG + ","
+
+					+  "avg(" + ItemReview.TABLE_NAME + "." + ItemReview.RATING + ") as avg_rating" + ","
+					+  "count( DISTINCT " + ItemReview.TABLE_NAME + "." + ItemReview.END_USER_ID + ") as rating_count" + ","
+					+  "(avg(" + ItemReview.TABLE_NAME + "." + ItemReview.RATING + ")* count( DISTINCT " + ItemReview.TABLE_NAME + "." + ItemReview.END_USER_ID + ") ) as popularity" + ""
 
 					+ " FROM "
 					+ Shop.TABLE_NAME  + "," + ShopItem.TABLE_NAME + ","
-					+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
+
+					+ ItemReview.TABLE_NAME  + " RIGHT OUTER JOIN " + Item.TABLE_NAME
+
+					+ " ON (" + ItemReview.TABLE_NAME + "." + ItemReview.ITEM_ID
+					+ " = " + Item.TABLE_NAME + "." + Item.ITEM_ID + ")" + ","
+
+					+ ItemCategory.TABLE_NAME
+
 					+ " WHERE "
 					+ Shop.TABLE_NAME + "." + Shop.SHOP_ID
 					+ "="
@@ -360,6 +376,29 @@ public class ShopItemByShopDAO {
 		}
 
 
+		queryJoin = queryJoin
+
+				+ " group by "
+
+				+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + ","
+				+ ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID + ","
+				+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_PRICE + ","
+				+ ShopItem.TABLE_NAME + "." + ShopItem.AVAILABLE_ITEM_QUANTITY + ","
+				+ ShopItem.TABLE_NAME + "." + ShopItem.EXTRA_DELIVERY_CHARGE + ","
+				+ ShopItem.TABLE_NAME + "." + ShopItem.DATE_TIME_ADDED + ","
+				+ ShopItem.TABLE_NAME + "." + ShopItem.LAST_UPDATE_DATE_TIME + ","
+
+				+ Shop.TABLE_NAME + "." + Shop.LAT_CENTER + ","
+				+ Shop.TABLE_NAME + "." + Shop.LON_CENTER + ","
+
+				+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + ","
+				+ Item.TABLE_NAME + "." + Item.ITEM_IMAGE_URL + ","
+				+ Item.TABLE_NAME + "." + Item.ITEM_NAME + ","
+				+ Item.TABLE_NAME + "." + Item.ITEM_DESC + ","
+				+ Item.TABLE_NAME + "." + Item.QUANTITY_UNIT + ","
+				+ Item.TABLE_NAME + "." + Item.DATE_TIME_CREATED + ","
+				+ Item.TABLE_NAME + "." + Item.ITEM_DESCRIPTION_LONG ;
+
 
 
 		if(sortBy!=null)
@@ -399,7 +438,7 @@ public class ShopItemByShopDAO {
 				Applying Filters Ends
 		 */
 
-
+/*
 		if(shopID!=null || itemCategoryID!=null || (latCenter!=null && lonCenter!=null))
 		{
 
@@ -411,7 +450,11 @@ public class ShopItemByShopDAO {
 		{
 
 			query = queryNormal;
-		}
+		}*/
+
+
+		query = queryJoin;
+
 
 
 
@@ -457,6 +500,10 @@ public class ShopItemByShopDAO {
 					item.setItemDescriptionLong(rs.getString(Item.ITEM_DESCRIPTION_LONG));
 					item.setDateTimeCreated(rs.getTimestamp(Item.DATE_TIME_CREATED));
 					item.setQuantityUnit(rs.getString(Item.QUANTITY_UNIT));
+
+
+					item.setRt_rating_avg(rs.getFloat("avg_rating"));
+					item.setRt_rating_count(rs.getFloat("rating_count"));
 
 
 					shopItem.setItem(item);

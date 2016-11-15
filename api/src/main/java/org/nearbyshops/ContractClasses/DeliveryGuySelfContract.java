@@ -3,7 +3,7 @@ package org.nearbyshops.ContractClasses;
 /**
  * Created by sumeet on 13/6/16.
  */
-public class DeliveryVehicleSelfContract {
+public class DeliveryGuySelfContract {
 
 
     // Table Name

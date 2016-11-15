@@ -1,14 +1,14 @@
 package org.nearbyshops.DAOsRemaining;
 
-import org.nearbyshops.ContractClasses.CartContract;
+import org.nearbyshops.ContractClasses.DeliveryGuySelfContract;
 import org.nearbyshops.JDBCContract;
-import org.nearbyshops.Model.Cart;
+import org.nearbyshops.ModelDeliverySelf.DeliveryGuySelf;
 
 import java.sql.*;
 import java.util.ArrayList;
 
 
-public class CartService {
+public class DeliveryGuySelfDAO {
 
 	
 	@Override
@@ -17,11 +17,9 @@ public class CartService {
 		super.finalize();	
 	}
 	
-
-
-
 	
-	public int saveCart(Cart cart)
+	
+	public int saveDeliveryVehicleSelf(DeliveryGuySelf deliveryGuySelf)
 	{
 
 		Connection conn = null;
@@ -29,13 +27,13 @@ public class CartService {
 		int rowIdOfInsertedRow = -1;
 
 		String insertItemCategory = "INSERT INTO "
-				+ CartContract.TABLE_NAME
-				+ "("  
-				+ CartContract.SHOP_ID + ","
-				+ CartContract.END_USER_ID + ""
+				+ DeliveryGuySelfContract.TABLE_NAME
+				+ "("
+				+ DeliveryGuySelfContract.VEHICLE_NAME + ","
+				+ DeliveryGuySelfContract.SHOP_ID + ""
 				+ " ) VALUES ( "
-				+ "" + cart.getShopID()	+ ","
-				+ "" + cart.getEndUserID() + ""
+				+ "'" + deliveryGuySelf.getVehicleName()	+ "',"
+				+ "" + deliveryGuySelf.getShopID() + ""
 				+ ")";
 		
 		try {
@@ -90,17 +88,13 @@ public class CartService {
 	}
 	
 
-	public int updateCart(Cart cart)
+	public int updateDeliveryVehicleSelf(DeliveryGuySelf deliveryGuySelf)
 	{	
-		String updateStatement = "UPDATE " + CartContract.TABLE_NAME
+		String updateStatement = "UPDATE " + DeliveryGuySelfContract.TABLE_NAME
 				+ " SET "
-				+ CartContract.END_USER_ID + " = "
-				+ "" + cart.getEndUserID() + ""
-				+ ","
-				+ "" + CartContract.SHOP_ID + " = "
-				+ "" + cart.getShopID() + ""
-				+ " WHERE " + CartContract.CART_ID + " = "
-				+ cart.getCartID();
+				+ DeliveryGuySelfContract.VEHICLE_NAME + " = "  + "'" + deliveryGuySelf.getVehicleName() + "'"  + ","
+				+ DeliveryGuySelfContract.SHOP_ID + " = "  + " " + deliveryGuySelf.getShopID() + " "  + ""
+				+ " WHERE " + DeliveryGuySelfContract.ID + " = " + deliveryGuySelf.getID();
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -152,11 +146,11 @@ public class CartService {
 	}
 	
 
-	public int deleteCart(int cartID)
+	public int deleteDeliveryVehicleSelf(int vehicleID)
 	{
 		
-		String deleteStatement = "DELETE FROM " + CartContract.TABLE_NAME + " WHERE " + CartContract.CART_ID + " = "
-				+ cartID;
+		String deleteStatement = "DELETE FROM " + DeliveryGuySelfContract.TABLE_NAME
+				+ " WHERE " + DeliveryGuySelfContract.ID + " = " + vehicleID;
 		
 		
 		Connection conn= null;
@@ -211,36 +205,40 @@ public class CartService {
 	
 	
 	
-	public ArrayList<Cart> readCarts(int endUserID,int shopID)
+	public ArrayList<DeliveryGuySelf> readDeliveryVehicleSelf(int shopID)
 	{
-		String query = "SELECT * FROM " + CartContract.TABLE_NAME;
+		String query = "SELECT * FROM " + DeliveryGuySelfContract.TABLE_NAME;
 
-		boolean isFirst = true;
+		//boolean isFirst = true;
 
-		if(endUserID > 0)
+		if(shopID > 0)
 		{
-			query = query + " WHERE " + CartContract.END_USER_ID + " = " + endUserID;
+			query = query + " WHERE " + DeliveryGuySelfContract.SHOP_ID + " = " + shopID;
 
-			isFirst = false;
+				//isFirst = false;
 		}
+
+		/*
 
 		if(shopID > 0 )
 		{
 			if(isFirst)
 			{
-				query = query + " WHERE " + CartContract.SHOP_ID + " = " + shopID;
+				query = query + " WHERE " + CartContract.ITEM_ID + " = " + shopID;
 
 			}else
 			{
-				query = query + " AND " + CartContract.SHOP_ID + " = " + shopID;
+				query = query + " AND " + CartContract.ITEM_ID + " = " + shopID;
 
 			}
 
 		}
 
+		*/
 
 
-		ArrayList<Cart> cartsList = new ArrayList<Cart>();
+
+		ArrayList<DeliveryGuySelf> vehiclesList = new ArrayList<DeliveryGuySelf>();
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -259,13 +257,13 @@ public class CartService {
 			while(rs.next())
 			{
 
-				Cart cart = new Cart();
+				DeliveryGuySelf deliveryGuySelf = new DeliveryGuySelf();
 
-				cart.setCartID(rs.getInt(CartContract.CART_ID));
-				cart.setEndUserID(rs.getInt(CartContract.END_USER_ID));
-				cart.setShopID(rs.getInt(CartContract.SHOP_ID));
+				deliveryGuySelf.setID(rs.getInt(DeliveryGuySelfContract.ID));
+				deliveryGuySelf.setShopID(rs.getInt(DeliveryGuySelfContract.SHOP_ID));
+				deliveryGuySelf.setVehicleName(rs.getString(DeliveryGuySelfContract.VEHICLE_NAME));
 
-				cartsList.add(cart);
+				vehiclesList.add(deliveryGuySelf);
 				
 			}
 			
@@ -309,21 +307,22 @@ public class CartService {
 		}
 		
 								
-		return cartsList;
+		return vehiclesList;
 	}
 
 	
-	public Cart readCart(int cartID)
+	public DeliveryGuySelf readVehicle(int vehicleID)
 	{
 		
-		String query = "SELECT * FROM " + CartContract.TABLE_NAME
-						+ " WHERE " + CartContract.CART_ID + " = " + cartID;
+		String query = "SELECT * FROM " + DeliveryGuySelfContract.TABLE_NAME
+						+ " WHERE " + DeliveryGuySelfContract.ID + " = " + vehicleID;
 		
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
 
-		Cart cart = null;
+
+		DeliveryGuySelf deliveryGuySelf = null;
 		
 		try {
 			
@@ -336,10 +335,12 @@ public class CartService {
 			
 			while(rs.next())
 			{
-				cart = new Cart();
-				cart.setCartID(rs.getInt(CartContract.CART_ID));
-				cart.setShopID(rs.getInt(CartContract.SHOP_ID));
-				cart.setEndUserID(rs.getInt(CartContract.END_USER_ID));
+				deliveryGuySelf = new DeliveryGuySelf();
+
+				deliveryGuySelf.setVehicleName(rs.getString(DeliveryGuySelfContract.VEHICLE_NAME));
+				deliveryGuySelf.setShopID(rs.getInt(DeliveryGuySelfContract.SHOP_ID));
+				deliveryGuySelf.setID(rs.getInt(DeliveryGuySelfContract.ID));
+
 			}
 			
 			
@@ -381,6 +382,6 @@ public class CartService {
 			}
 		}
 	
-		return cart;
+		return deliveryGuySelf;
 	}	
 }

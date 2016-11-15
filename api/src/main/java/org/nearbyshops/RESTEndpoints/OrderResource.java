@@ -1,7 +1,10 @@
 package org.nearbyshops.RESTEndpoints;
 
 import org.nearbyshops.Globals.Globals;
+import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.Order;
+import org.nearbyshops.ModelEndPoints.ItemEndPoint;
+import org.nearbyshops.ModelEndPoints.OrderEndPoint;
 import org.nearbyshops.ModelStats.OrderStats;
 
 import javax.ws.rs.*;
@@ -75,7 +78,7 @@ public class OrderResource {
 
 			return response;
 		}
-		if(rowCount == 0)
+		if(rowCount <= 0)
 		{
 			Response response = Response.status(Status.NOT_MODIFIED)
 					.entity(null)
@@ -104,7 +107,7 @@ public class OrderResource {
 
 
 
-		if(rowCount == 0)
+		if(rowCount <= 0)
 		{
 			Response response = Response.status(Status.NOT_MODIFIED)
 					.entity(null)
@@ -127,75 +130,186 @@ public class OrderResource {
 
 
 
+	// requires authentication by the Distributor
+	@PUT
+	@Path("/ReturnOrder/{OrderID}")
+	public Response returnOrder(@PathParam("OrderID")int orderID)
+	{
+
+		int rowCount = Globals.orderService.returnOrderByDeliveryGuy(orderID);
+
+		if(rowCount >= 1)
+		{
+			Response response = Response.status(Status.OK)
+					.entity(null)
+					.build();
+
+			return response;
+		}
+		if(rowCount <= 0)
+		{
+			Response response = Response.status(Status.NOT_MODIFIED)
+					.entity(null)
+					.build();
+
+			return response;
+		}
+
+		return null;
+	}
+
+
+	// requires authentication by the Distributor
+	@PUT
+	@Path("/CancelByShop/{OrderID}")
+	public Response cancelledByShop(@PathParam("OrderID")int orderID)
+	{
+
+		int rowCount = Globals.orderService.orderCancelledByShop(orderID);
+
+		if(rowCount >= 1)
+		{
+			Response response = Response.status(Status.OK)
+					.entity(null)
+					.build();
+
+			return response;
+		}
+		if(rowCount <= 0)
+		{
+			Response response = Response.status(Status.NOT_MODIFIED)
+					.entity(null)
+					.build();
+
+			return response;
+		}
+
+		return null;
+	}
+
+
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getOrders(@QueryParam("EndUserID")int endUserID,
-							  @QueryParam("ShopID")int shopID,
+	public Response getOrders(@QueryParam("OrderID")Integer orderID,
+							  @QueryParam("EndUserID")Integer endUserID,
+							  @QueryParam("ShopID")Integer shopID,
 							  @QueryParam("PickFromShop") Boolean pickFromShop,
-							  @QueryParam("StatusHomeDelivery")int homeDeliveryStatus,
-							  @QueryParam("StatusPickFromShopStatus")int pickFromShopStatus,
-							  @QueryParam("VehicleSelfID")int vehicleSelfID,
+							  @QueryParam("StatusHomeDelivery")Integer homeDeliveryStatus,
+							  @QueryParam("StatusPickFromShopStatus")Integer pickFromShopStatus,
+							  @QueryParam("DeliveryGuyID")Integer deliveryGuyID,
 							  @QueryParam("PaymentsReceived") Boolean paymentsReceived,
 							  @QueryParam("DeliveryReceived") Boolean deliveryReceived,
-							  @QueryParam("GetDeliveryAddress")boolean getDeliveryAddress,
-							  @QueryParam("GetStats")boolean getStats)
+							  @QueryParam("GetDeliveryAddress")Boolean getDeliveryAddress,
+							  @QueryParam("GetStats")Boolean getStats,
+							  @QueryParam("SortBy") String sortBy,
+							  @QueryParam("Limit")Integer limit, @QueryParam("Offset")Integer offset,
+							  @QueryParam("metadata_only")Boolean metaonly)
 
 	{
 
-		List<Order> ordersList = Globals.orderService.readOrders(endUserID,shopID,
-				pickFromShop,homeDeliveryStatus,pickFromShopStatus,vehicleSelfID,
-				paymentsReceived,deliveryReceived);
+		// *********************** second Implementation
 
+		int set_limit = 30;
+		int set_offset = 0;
+		final int max_limit = 100;
 
-		if(getDeliveryAddress)
+		if(limit!= null)
 		{
-			for(Order order: ordersList)
+
+			if (limit >= max_limit) {
+
+				set_limit = max_limit;
+			}
+			else
 			{
 
-				order.setDeliveryAddress(
-						Globals.deliveryAddressService
-								.readAddress(order.getDeliveryAddressID())
+				set_limit = limit;
+			}
+
+		}
+
+		if(offset!=null)
+		{
+			set_offset = offset;
+		}
+
+		OrderEndPoint endPoint = Globals.orderService.endPointMetaDataOrders(orderID,
+				endUserID,shopID, pickFromShop,
+				homeDeliveryStatus,pickFromShopStatus,
+				deliveryGuyID,
+				paymentsReceived,deliveryReceived,getDeliveryAddress
 				);
 
+		endPoint.setLimit(set_limit);
+		endPoint.setMax_limit(max_limit);
+		endPoint.setOffset(set_offset);
+
+		List<Order> list = null;
+
+
+		if(metaonly==null || (!metaonly)) {
+
+			list =
+					Globals.orderService.readOrders(orderID,
+							endUserID,shopID, pickFromShop,
+							homeDeliveryStatus,pickFromShopStatus,
+							deliveryGuyID,
+							paymentsReceived,deliveryReceived,
+							sortBy,limit,offset,getDeliveryAddress,getStats);
+
+
+			/*
+
+			if(getDeliveryAddress!=null && getDeliveryAddress)
+			{
+				for(Order order: list)
+				{
+					order.setDeliveryAddress(
+							Globals.deliveryAddressService
+									.readAddress(order.getDeliveryAddressID())
+					);
+				}
+
 			}
+*/
 
-		}
+/*
 
+			if(getStats!=null && getStats) {
 
-		if(getStats) {
+				for (Order order : list) {
 
-			for (Order order : ordersList) {
+					order.setOrderStats(Globals.orderItemService.getOrderStats(order.getOrderID()));
+				}
 
-				order.setOrderStats(Globals.orderItemService.getOrderStats(order.getOrderID()));
 			}
+*/
 
+
+			endPoint.setResults(list);
 		}
 
 
-
-		GenericEntity<List<Order>> listEntity = new GenericEntity<List<Order>>(ordersList){
-
-		};
-
-
-		if(ordersList.size()<=0)
-		{
-			Response response = Response.status(Status.NO_CONTENT)
-					.entity(listEntity)
-					.build();
-
-			return response;
-
-		}else
-		{
-			Response response = Response.status(Status.OK)
-					.entity(listEntity)
-					.build();
-
-			return response;
+/*
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
+*/
+
+		//Marker
+
+		return Response.status(Status.OK)
+				.entity(endPoint)
+				.build();
+
 
 	}
+
+
+
 
 
 	@GET
@@ -229,6 +343,8 @@ public class OrderResource {
 
 
 
+
+/*
 	@GET
 	@Path("/Stats/{OrderID}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -256,6 +372,6 @@ public class OrderResource {
 
 		}
 
-	}
+	}*/
 
 }

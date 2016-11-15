@@ -337,6 +337,7 @@ public class ShopDAO {
 			Double latCenter, Double lonCenter,
 			Double deliveryRangeMin,Double deliveryRangeMax,
 			Double proximity,
+			String searchString,
 			String sortBy,
 			Integer limit, Integer offset
 	)
@@ -644,11 +645,36 @@ public class ShopDAO {
 
 
 			queryNormal = queryNormal + queryPartProximity;
-
 			queryJoin = queryJoin + " AND " + queryPartProximity;
 
 
 		}
+
+		if(searchString !=null)
+		{
+			String queryPartSearch = Shop.TABLE_NAME + "." + Shop.SHOP_NAME +" ilike '%" + searchString + "%'"
+					+ " or " + Shop.TABLE_NAME + "." + Shop.LONG_DESCRIPTION + " ilike '%" + searchString + "%'"
+					+ " or " + Shop.TABLE_NAME + "." + Shop.SHOP_ADDRESS + " ilike '%" + searchString + "%'";
+
+
+
+			if(isFirst)
+			{
+//				queryJoin = queryJoin + " WHERE " + queryPartSearch;
+
+				queryNormal = queryNormal + " WHERE " + queryPartSearch;
+
+				isFirst = false;
+			}
+			else
+			{
+				queryNormal = queryNormal + " AND " + queryPartSearch;
+			}
+
+			queryJoin = queryJoin + " AND " + queryPartSearch;
+		}
+
+
 
 
 		if(itemCategoryID != null)
@@ -660,6 +686,11 @@ public class ShopDAO {
 					+ itemCategoryID;
 		}
 
+
+		/*
+
+
+		*/
 
 		String queryGroupBy = "";
 
@@ -676,6 +707,7 @@ public class ShopDAO {
 				+ Shop.TABLE_NAME + "." + Shop.DELIVERY_CHARGES + ","
 				+ Shop.TABLE_NAME + "." + Shop.DISTRIBUTOR_ID + ","
 				+ Shop.TABLE_NAME + "." + Shop.IMAGE_PATH + ","
+
 				+ Shop.TABLE_NAME + "." + Shop.LAT_MAX + ","
 				+ Shop.TABLE_NAME + "." + Shop.LAT_MIN + ","
 				+ Shop.TABLE_NAME + "." + Shop.LON_MAX + ","
@@ -696,6 +728,11 @@ public class ShopDAO {
 
 		queryJoin = queryJoin + queryGroupBy;
 		queryNormal = queryNormal + queryGroupBy;
+
+
+
+
+		// Applying Filters
 
 
 
@@ -734,6 +771,7 @@ public class ShopDAO {
 
 
 		// use Join query only if filtering requires a join
+
 		if(itemCategoryID !=null)
 		{
 			query = queryJoin;
@@ -854,7 +892,9 @@ public class ShopDAO {
 			Integer itemCategoryID,
 			Double latCenter, Double lonCenter,
 			Double deliveryRangeMin,Double deliveryRangeMax,
-			Double proximity)
+			Double proximity,String searchString
+	)
+
 	{
 
 
@@ -866,12 +906,13 @@ public class ShopDAO {
 
 
 		String queryNormal = "SELECT DISTINCT "
-				+ " count(*) as item_count "
-				+ " FROM " + Shop.TABLE_NAME;
+						+ Shop.TABLE_NAME + "." + Shop.SHOP_ID
+						+ " FROM " + Shop.TABLE_NAME;
 
+		//+ " count(*) as item_count "
 
 		queryJoin = "SELECT DISTINCT "
-				+ " count(*) as item_count "
+				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID
 				+ " FROM "
 				+ Shop.TABLE_NAME  + "," + ShopItem.TABLE_NAME + ","
 				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
@@ -1022,9 +1063,33 @@ public class ShopDAO {
 			queryNormal = queryNormal + queryPartProximity;
 
 			queryJoin = queryJoin + " AND " + queryPartProximity;
-
-
 		}
+
+		if(searchString !=null)
+		{
+			String queryPartSearch = Shop.TABLE_NAME + "." + Shop.SHOP_NAME +" ilike '%" + searchString + "%'"
+					+ " or " + Shop.TABLE_NAME + "." + Shop.LONG_DESCRIPTION + " ilike '%" + searchString + "%'"
+					+ " or " + Shop.TABLE_NAME + "." + Shop.SHOP_ADDRESS + " ilike '%" + searchString + "%'";
+
+
+
+			if(isFirst)
+			{
+//				queryJoin = queryJoin + " WHERE " + queryPartSearch;
+
+				queryNormal = queryNormal + " WHERE " + queryPartSearch;
+
+				isFirst = false;
+			}
+			else
+			{
+				queryNormal = queryNormal + " AND " + queryPartSearch;
+			}
+
+			queryJoin = queryJoin + " AND " + queryPartSearch;
+		}
+
+
 
 
 		if(itemCategoryID != null)
@@ -1047,6 +1112,12 @@ public class ShopDAO {
 		{
 			query = queryNormal;
 		}
+
+//		query = queryJoin;
+
+
+
+		query = "SELECT COUNT(*) as item_count FROM (" + query + ") AS temp";
 
 
 		ShopEndPoint endPoint = new ShopEndPoint();

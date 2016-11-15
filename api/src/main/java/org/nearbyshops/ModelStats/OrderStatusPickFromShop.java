@@ -13,6 +13,9 @@ public class OrderStatusPickFromShop {
     public static final int DELIVERY_COMPLETE = 5;
 
 
-    public static final int STATUS_CANCELLED = 11;
+//    public static final int STATUS_CANCELLED = 11;
+
+    public static final int CANCELLED_BY_SHOP = 16;
+    public static final int CANCELLED_BY_USER = 18;
 
 }

@@ -2,6 +2,9 @@ package org.nearbyshops.Globals;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.nearbyshops.DAOPreparedCartOrder.CartService;
+import org.nearbyshops.DAOPreparedCartOrder.OrderItemService;
+import org.nearbyshops.DAOPreparedCartOrder.OrderService;
 import org.nearbyshops.DAOPreparedReviewItem.FavoriteItemDAOPrepared;
 import org.nearbyshops.DAOPreparedReviewItem.ItemReviewDAOPrepared;
 import org.nearbyshops.DAOPreparedReviewItem.ItemReviewThanksDAOPrepared;
@@ -35,7 +38,7 @@ public class Globals {
 	public static OrderService orderService = new OrderService();
 	public static DeliveryAddressService deliveryAddressService = new DeliveryAddressService();
 	public static OrderItemService orderItemService = new OrderItemService();
-	public static DeliveryVehicleSelfDAO deliveryVehicleSelfDAO = new DeliveryVehicleSelfDAO();
+	public static DeliveryGuySelfDAO deliveryGuySelfDAO = new DeliveryGuySelfDAO();
 	public static ServiceConfigurationDAOPrepared serviceConfigurationDAO = new ServiceConfigurationDAOPrepared();
 	public static SettingsDAOPrepared settingsDAOPrepared = new SettingsDAOPrepared();
 	public static AdminDAOPrepared adminDAOPrepared = new AdminDAOPrepared();

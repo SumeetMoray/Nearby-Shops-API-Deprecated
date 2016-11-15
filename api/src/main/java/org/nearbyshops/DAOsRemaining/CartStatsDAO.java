@@ -15,7 +15,7 @@ import java.util.List;
 public class CartStatsDAO {
 
 
-    public List<CartStats> getCartStats(int endUserID, int cartID)
+    public List<CartStats> getCartStats(int endUserID, Integer cartID, Integer shopID)
     {
 
 
@@ -81,10 +81,20 @@ public class CartStatsDAO {
 
 
 
-        if(cartID > 0)
+        if(cartID != null)
         {
             query = query + "and " + CartContract.TABLE_NAME + "." + CartContract.CART_ID + " = " + cartID;
         }
+
+
+
+        if(shopID != null)
+        {
+            query = query + " and " + CartContract.TABLE_NAME + "." + CartContract.SHOP_ID + " = " + shopID;
+        }
+
+
+
 
 
 

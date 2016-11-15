@@ -172,6 +172,7 @@ public class ShopResource {
 							 @QueryParam("deliveryRangeMax")Double deliveryRangeMax,
 							 @QueryParam("deliveryRangeMin")Double deliveryRangeMin,
 							 @QueryParam("proximity")Double proximity,
+							 @QueryParam("SearchString") String searchString,
 							 @QueryParam("SortBy") String sortBy,
 							 @QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset)
 	{
@@ -180,7 +181,7 @@ public class ShopResource {
 				distributorID,itemCategoryID,
 				latCenter, lonCenter,
 				deliveryRangeMin,deliveryRangeMax,
-				proximity,sortBy,limit,offset
+				proximity,searchString,sortBy,limit,offset
 		);
 				
 		
@@ -221,6 +222,7 @@ public class ShopResource {
 			@QueryParam("deliveryRangeMax")Double deliveryRangeMax,
 			@QueryParam("deliveryRangeMin")Double deliveryRangeMin,
 			@QueryParam("proximity")Double proximity,
+			@QueryParam("SearchString") String searchString,
 			@QueryParam("SortBy") String sortBy,
 			@QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset,
 			@QueryParam("metadata_only")Boolean metaonly
@@ -253,7 +255,7 @@ public class ShopResource {
 
 
 		ShopEndPoint endPoint = shopDAO.getEndPointMetadata(distributorID,
-				itemCategoryID, latCenter,lonCenter,deliveryRangeMin,deliveryRangeMax,proximity);
+				itemCategoryID, latCenter,lonCenter,deliveryRangeMin,deliveryRangeMax,proximity,searchString);
 
 
 		endPoint.setLimit(set_limit);
@@ -264,15 +266,23 @@ public class ShopResource {
 		ArrayList<Shop> shopsList = null;
 
 
+		/*try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}*/
+
+
 		if(metaonly==null || (!metaonly)) {
 
 
 			shopsList = shopDAO.getShops(distributorID,itemCategoryID,
-					latCenter,lonCenter,deliveryRangeMin,deliveryRangeMax,proximity,sortBy,
+					latCenter,lonCenter,deliveryRangeMin,deliveryRangeMax,proximity,searchString,sortBy,
 					limit,offset);
 
 			endPoint.setResults(shopsList);
 		}
+
 
 		//Marker
 		return Response.status(Status.OK)
@@ -351,6 +361,11 @@ public class ShopResource {
 		}
 
 
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 
 		//Marker

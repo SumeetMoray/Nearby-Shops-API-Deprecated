@@ -3,7 +3,7 @@ package org.nearbyshops.ModelDeliverySelf;
 /**
  * Created by sumeet on 14/6/16.
  */
-public class DeliveryVehicleSelf {
+public class DeliveryGuySelf {
 
     private int ID;
     private String vehicleName;

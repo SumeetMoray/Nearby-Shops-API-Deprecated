@@ -570,9 +570,11 @@ public class ItemDAO {
 					Double latCenter, Double lonCenter,
 					Double deliveryRangeMin,Double deliveryRangeMax,
 					Double proximity,
+					String searchString,
 					String sortBy,
 					Integer limit, Integer offset
-	) {
+	)
+	{
 		String query = "";
 		
 		String queryNormal = "SELECT * FROM " + Item.TABLE_NAME;
@@ -583,6 +585,7 @@ public class ItemDAO {
 				+ "max(" + ShopItem.ITEM_PRICE + ") as max_price" + ","
 				+ "avg(" + ShopItem.ITEM_PRICE + ") as avg_price" + ","
 				+ "count( DISTINCT " + ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID + ") as shop_count" + ","
+
 				+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + ","
 				+ Item.TABLE_NAME + "." + Item.ITEM_ID + ","
 				+ Item.TABLE_NAME + "." + Item.ITEM_IMAGE_URL + ","
@@ -594,7 +597,8 @@ public class ItemDAO {
 				+ Item.TABLE_NAME + "." + Item.ITEM_DESCRIPTION_LONG + ","
 
 				+  "avg(" + ItemReview.TABLE_NAME + "." + ItemReview.RATING + ") as avg_rating" + ","
-				+  "count( DISTINCT " + ItemReview.TABLE_NAME + "." + ItemReview.END_USER_ID + ") as rating_count" + ""
+				+  "count( DISTINCT " + ItemReview.TABLE_NAME + "." + ItemReview.END_USER_ID + ") as rating_count" + ","
+				+  "(avg(" + ItemReview.TABLE_NAME + "." + ItemReview.RATING + ")* count( DISTINCT " + ItemReview.TABLE_NAME + "." + ItemReview.END_USER_ID + ") ) as popularity"
 
 				+ " FROM "
 
@@ -801,6 +805,15 @@ public class ItemDAO {
 		}
 
 
+		if(searchString !=null)
+		{
+			String queryPartSearch = Item.TABLE_NAME + "." + Item.ITEM_NAME +" ilike '%" + searchString + "%'";
+
+			queryJoin = queryJoin + " AND " + queryPartSearch;
+		}
+
+
+
 		// all the non-aggregate columns which are present in select must be present in group by also.
 		queryJoin = queryJoin
 
@@ -979,7 +992,7 @@ public class ItemDAO {
 			Integer itemCategoryID, Integer shopID,
 			Double latCenter, Double lonCenter,
 			Double deliveryRangeMin,Double deliveryRangeMax,
-			Double proximity)
+			Double proximity, String searchString)
 	{
 
 
@@ -1198,6 +1211,30 @@ public class ItemDAO {
 
 
 
+		if(searchString !=null)
+		{
+			String queryPartSearch = Item.TABLE_NAME + "." + Item.ITEM_NAME +" ilike '%" + searchString + "%'";
+
+
+
+			/*if(isFirst)
+			{
+//				queryJoin = queryJoin + " WHERE " + queryPartSearch;
+
+				queryNormal = queryNormal + " WHERE " + queryPartSearch;
+
+				isFirst = false;
+			}
+			else
+			{
+				queryNormal = queryNormal + " AND " + queryPartSearch;
+			}*/
+
+			queryJoin = queryJoin + " AND " + queryPartSearch;
+		}
+
+
+
 		/*
 
 		Applying filters Ends
@@ -1228,15 +1265,15 @@ public class ItemDAO {
 		ItemEndPoint endPoint = new ItemEndPoint();
 
 
-		Connection conn = null;
-		Statement stmt = null;
+		Connection connection = null;
+		Statement statement = null;
 		ResultSet rs = null;
 
 		try {
 
-			conn = dataSource.getConnection();
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(query);
+			connection = dataSource.getConnection();
+			statement = connection.createStatement();
+			rs = statement.executeQuery(query);
 
 			while(rs.next())
 			{
@@ -1265,8 +1302,8 @@ public class ItemDAO {
 
 			try {
 
-				if(stmt!=null)
-				{stmt.close();}
+				if(statement!=null)
+				{statement.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -1274,8 +1311,8 @@ public class ItemDAO {
 
 			try {
 
-				if(conn!=null)
-				{conn.close();}
+				if(connection!=null)
+				{connection.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

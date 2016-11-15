@@ -12,6 +12,7 @@ import org.nearbyshops.DAOPreparedSettings.SettingsDAOPrepared;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.*;
+import org.nearbyshops.ModelDeliverySelf.DeliveryAddress;
 import org.nearbyshops.ModelReviewItem.FavouriteItem;
 import org.nearbyshops.ModelReviewItem.ItemReview;
 import org.nearbyshops.ModelReviewItem.ItemReviewThanks;
@@ -216,7 +217,6 @@ public class Main implements ActionListener {
 			statement = connection.createStatement();
 
 
-
 			statement.executeUpdate(ItemCategory.createTableItemCategoryPostgres);
 			statement.executeUpdate(Item.createTableItemPostgres);
 			statement.executeUpdate(Distributor.createTableDistributorPostgres);
@@ -232,82 +232,25 @@ public class Main implements ActionListener {
 			// Create Table Staff
 			statement.executeUpdate(Staff.createTableStaffPostgres);
 
-
-			// create Delivery Address
-
-			String createTableDeliveryAddressPostgres = "CREATE TABLE IF NOT EXISTS " + DeliveryAddressContract.TABLE_NAME + "("
-					+ " " + DeliveryAddressContract.ID + " SERIAL PRIMARY KEY,"
-					+ " " + DeliveryAddressContract.END_USER_ID + " INT,"
-					+ " " + DeliveryAddressContract.CITY + " VARCHAR(40),"
-					+ " " + DeliveryAddressContract.DELIVERY_ADDRESS + " VARCHAR(100),"
-					+ " " + DeliveryAddressContract.LANDMARK + " VARCHAR(100),"
-					+ " " + DeliveryAddressContract.NAME + " VARCHAR(100),"
-					+ " " + DeliveryAddressContract.PHONE_NUMBER + " BIGINT,"
-					+ " " + DeliveryAddressContract.PINCODE + " BIGINT,"
-					+ " FOREIGN KEY(" + DeliveryAddressContract.END_USER_ID +") REFERENCES " + EndUser.TABLE_NAME + "(" + EndUser.END_USER_ID + ")"
-					+ ")";
-
-
-			statement.executeUpdate(createTableDeliveryAddressPostgres);
+			statement.executeUpdate(DeliveryAddress.createTableDeliveryAddressPostgres);
 
 
 
 			// Create table Delivery Vehicle Self
 
 
-			String createtableDeliveryVehicleSelfPostgres = "CREATE TABLE IF NOT EXISTS " + DeliveryVehicleSelfContract.TABLE_NAME + "("
-					+ " " + DeliveryVehicleSelfContract.ID + " SERIAL PRIMARY KEY,"
-					+ " " + DeliveryVehicleSelfContract.VEHICLE_NAME + " VARCHAR(30),"
-					+ " " + DeliveryVehicleSelfContract.SHOP_ID + " INT,"
-					+ " FOREIGN KEY(" + DeliveryVehicleSelfContract.SHOP_ID +") REFERENCES " + Shop.TABLE_NAME + "(" + Shop.SHOP_ID + ")"
+			String createtableDeliveryGuySelfPostgres = "CREATE TABLE IF NOT EXISTS " + DeliveryGuySelfContract.TABLE_NAME + "("
+					+ " " + DeliveryGuySelfContract.ID + " SERIAL PRIMARY KEY,"
+					+ " " + DeliveryGuySelfContract.VEHICLE_NAME + " VARCHAR(30),"
+					+ " " + DeliveryGuySelfContract.SHOP_ID + " INT,"
+					+ " FOREIGN KEY(" + DeliveryGuySelfContract.SHOP_ID +") REFERENCES " + Shop.TABLE_NAME + "(" + Shop.SHOP_ID + ")"
 					+ ")";
 
 
-			statement.executeUpdate(createtableDeliveryVehicleSelfPostgres);
+			statement.executeUpdate(createtableDeliveryGuySelfPostgres);
 
-
-
-
-			// Create Table Order In postgres
-
-			String createTableOrderPostgres = "CREATE TABLE IF NOT EXISTS " + OrderContract.TABLE_NAME + "("
-					+ " " + OrderContract.ORDER_ID + " SERIAL PRIMARY KEY,"
-					+ " " + OrderContract.END_USER_ID + " INT,"
-					+ " " + OrderContract.SHOP_ID + " INT,"
-					+ " " + OrderContract.STATUS_HOME_DELIVERY + " INT,"
-					+ " " + OrderContract.STATUS_PICK_FROM_SHOP + " INT,"
-					+ " " + OrderContract.DELIVERY_RECEIVED + " boolean,"
-					+ " " + OrderContract.PAYMENT_RECEIVED + " boolean,"
-					+ " " + OrderContract.DELIVERY_CHARGES + " INT,"
-					+ " " + OrderContract.DELIVERY_ADDRESS_ID + " INT,"
-					+ " " + OrderContract.PICK_FROM_SHOP + " boolean,"
-					+ " " + OrderContract.DELIVERY_VEHICLE_SELF_ID + " INT,"
-					+ " " + OrderContract.DATE_TIME_PLACED + " timestamp with time zone NOT NULL DEFAULT now(),"
-					+ " FOREIGN KEY(" + OrderContract.END_USER_ID +") REFERENCES " + EndUser.TABLE_NAME + "(" + EndUser.END_USER_ID + "),"
-					+ " FOREIGN KEY(" + OrderContract.SHOP_ID +") REFERENCES " + Shop.TABLE_NAME + "(" + Shop.SHOP_ID + "),"
-					+ " FOREIGN KEY(" + OrderContract.DELIVERY_ADDRESS_ID +") REFERENCES " + DeliveryAddressContract.TABLE_NAME + "(" + DeliveryAddressContract.ID + "),"
-					+ " FOREIGN KEY(" + OrderContract.DELIVERY_VEHICLE_SELF_ID +") REFERENCES " + DeliveryVehicleSelfContract.TABLE_NAME + "(" + DeliveryVehicleSelfContract.ID + ")"
-					+ ")";
-
-
-
-			statement.executeUpdate(createTableOrderPostgres);
-
-
-			// Create table OrderItem in Postgres
-			String createtableOrderItemPostgres = "CREATE TABLE IF NOT EXISTS " + OrderItemContract.TABLE_NAME + "("
-					+ " " + OrderItemContract.ITEM_ID + " INT,"
-					+ " " + OrderItemContract.ORDER_ID + " INT,"
-					+ " " + OrderItemContract.ITEM_PRICE_AT_ORDER + " FLOAT,"
-					+ " " + OrderItemContract.ITEM_QUANTITY + " INT,"
-					+ " FOREIGN KEY(" + OrderItemContract.ITEM_ID +") REFERENCES " + Item.TABLE_NAME + "(" + Item.ITEM_ID + "),"
-					+ " FOREIGN KEY(" + OrderItemContract.ORDER_ID +") REFERENCES " + OrderContract.TABLE_NAME + "(" + OrderContract.ORDER_ID + "),"
-					+ " PRIMARY KEY (" + OrderItemContract.ITEM_ID + ", " + OrderItemContract.ORDER_ID + "),"
-					+ " UNIQUE (" + OrderItemContract.ITEM_ID + "," + OrderItemContract.ORDER_ID  + ")"
-					+ ")";
-
-			statement.executeUpdate(createtableOrderItemPostgres);
-
+			statement.executeUpdate(Order.createTableOrderPostgres);
+			statement.executeUpdate(OrderItem.createtableOrderItemPostgres);
 
 
 			String createTableCartPostgres = "CREATE TABLE IF NOT EXISTS " + CartContract.TABLE_NAME + "("

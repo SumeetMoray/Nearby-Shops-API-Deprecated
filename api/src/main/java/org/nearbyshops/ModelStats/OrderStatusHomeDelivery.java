@@ -5,7 +5,6 @@ package org.nearbyshops.ModelStats;
  */
 public class OrderStatusHomeDelivery {
 
-
     public static final int ORDER_PLACED = 1;
     public static final int ORDER_CONFIRMED = 2;
     public static final int ORDER_PACKED = 3;
@@ -13,10 +12,10 @@ public class OrderStatusHomeDelivery {
     public static final int PENDING_HANDOVER = 4;
     public static final int HANDOVER_ACCEPTED = 5;
 //    public static final int PENDING_DELIVERY = 6;
-    public static final int PENDING_DELIVERY_ACCEPT_PENDING_PAYMENT = 6;
-    public static final int DELIVERY_ACCEPTED_PAYMENT_PENDING = 7;
-    public static final int PAYMENT_ACCEPTED_DELIVERY_PENDING = 8;
-    public static final int DELIVERY_COMPLETE = 9;
+    public static final int PENDING_DELIVERY = 6;// PENDING DELIVERY | PENDING_DELIVERY_ACCEPT_PENDING_PAYMENT
+//    public static final int DELIVERY_ACCEPTED_PAYMENT_PENDING = 7;
+//    public static final int PAYMENT_ACCEPTED_DELIVERY_PENDING = 8;
+    public static final int DELIVERY_COMPLETE = 7;
 
 
     public static final int CANCELLED_BY_SHOP_RETURN_PENDING = 15;

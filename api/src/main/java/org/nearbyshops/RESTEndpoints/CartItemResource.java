@@ -17,7 +17,7 @@ import java.util.List;
 public class CartItemResource {
 
 
-	ItemDAO itemDAO = Globals.itemDAO;
+	private ItemDAO itemDAO = Globals.itemDAO;
 
 
 	public CartItemResource() {
@@ -185,9 +185,9 @@ public class CartItemResource {
 
 			System.out.println("Cart Items : " + cartID + " : " + Globals.cartItemService.getCartItem(cartID,0,0).size());
 
-			if(Globals.cartItemService.getCartItem(cartID,0,0).size() == 0)
+			if(Globals.cartItemService.getCartItem(cartID,null,null).size() == 0)
 			{
-				System.out.println("Inside Cart Item Delete " + Globals.cartItemService.getCartItem(cartID,0,0).size());
+				System.out.println("Inside Cart Item Delete " + Globals.cartItemService.getCartItem(cartID,null,null).size());
 
 				Globals.cartService.deleteCart(cartID);
 			}
@@ -217,16 +217,18 @@ public class CartItemResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getCartItem(@QueryParam("CartID")int cartID, @QueryParam("ItemID")int itemID,
-								@QueryParam("EndUserID") int endUserID,
-								@QueryParam("ShopID") int shopID)
+	public Response getCartItem(@QueryParam("CartID")Integer cartID,
+								@QueryParam("ItemID")Integer itemID,
+								@QueryParam("EndUserID") Integer endUserID,
+								@QueryParam("ShopID") Integer shopID,
+								@QueryParam("GetItems") Boolean getItems)
 	{
 
 
 		List<CartItem> cartList;
 
 
-		if(shopID>0)
+		if(shopID != null)
 		{
 
 			cartList = Globals.cartItemService.getCartItem(endUserID, shopID);
@@ -235,8 +237,13 @@ public class CartItemResource {
 			for(CartItem cartItem: cartList)
 			{
 
-				cartItem.setItem(itemDAO.getItem(cartItem.getItemID()));
 
+				if(itemID == null && getItems!=null && getItems)
+				{
+					cartItem.setItem(itemDAO.getItem(cartItem.getItemID()));
+				}
+
+//				cartItem.setItem(itemDAO.getItem(cartItem.getItemID()));
 			}
 
 
@@ -247,12 +254,12 @@ public class CartItemResource {
 
 			for(CartItem cartItem: cartList)
 			{
-				if(cartID == 0)
+				if(cartID == null)
 				{
 					cartItem.setCart(Globals.cartService.readCart(cartItem.getCartID()));
 				}
 
-				if(itemID == 0)
+				if(itemID == null && getItems!=null && getItems)
 				{
 					cartItem.setItem(itemDAO.getItem(cartItem.getItemID()));
 				}

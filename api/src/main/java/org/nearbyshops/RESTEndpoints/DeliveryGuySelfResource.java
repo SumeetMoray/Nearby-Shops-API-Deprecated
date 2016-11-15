@@ -1,7 +1,7 @@
 package org.nearbyshops.RESTEndpoints;
 
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.ModelDeliverySelf.DeliveryVehicleSelf;
+import org.nearbyshops.ModelDeliverySelf.DeliveryGuySelf;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
@@ -12,11 +12,11 @@ import java.net.URI;
 import java.util.List;
 
 
-@Path("/DeliveryVehicleSelf")
-public class DeliveryVehicleSelfResource {
+@Path("/DeliveryGuySelf")
+public class DeliveryGuySelfResource {
 
 
-	public DeliveryVehicleSelfResource() {
+	public DeliveryGuySelfResource() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -25,10 +25,10 @@ public class DeliveryVehicleSelfResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response createVehicle(DeliveryVehicleSelf vehicleSelf)
+	public Response createVehicle(DeliveryGuySelf vehicleSelf)
 	{
 
-		int idOfInsertedRow = Globals.deliveryVehicleSelfDAO.saveDeliveryVehicleSelf(vehicleSelf);
+		int idOfInsertedRow = Globals.deliveryGuySelfDAO.saveDeliveryVehicleSelf(vehicleSelf);
 
 		vehicleSelf.setID(idOfInsertedRow);
 
@@ -38,7 +38,7 @@ public class DeliveryVehicleSelfResource {
 			
 			
 			Response response = Response.status(Status.CREATED)
-					.location(URI.create("/api/DeliveryVehicleSelf/" + idOfInsertedRow))
+					.location(URI.create("/api/DeliveryGuySelf/" + idOfInsertedRow))
 					.entity(vehicleSelf)
 					.build();
 			
@@ -63,12 +63,12 @@ public class DeliveryVehicleSelfResource {
 	@PUT
 	@Path("/{VehicleID}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateCart(@PathParam("VehicleID")int vehicleID, DeliveryVehicleSelf vehicleSelf)
+	public Response updateCart(@PathParam("VehicleID")int vehicleID, DeliveryGuySelf vehicleSelf)
 	{
 
 		vehicleSelf.setID(vehicleID);
 
-		int rowCount = Globals.deliveryVehicleSelfDAO.updateDeliveryVehicleSelf(vehicleSelf);
+		int rowCount = Globals.deliveryGuySelfDAO.updateDeliveryVehicleSelf(vehicleSelf);
 
 
 		if(rowCount >= 1)
@@ -98,7 +98,7 @@ public class DeliveryVehicleSelfResource {
 	public Response deleteVehicle(@PathParam("VehicleID")int vehicleID)
 	{
 
-		int rowCount = Globals.deliveryVehicleSelfDAO.deleteDeliveryVehicleSelf(vehicleID);
+		int rowCount = Globals.deliveryGuySelfDAO.deleteDeliveryVehicleSelf(vehicleID);
 		
 		
 		if(rowCount>=1)
@@ -131,9 +131,9 @@ public class DeliveryVehicleSelfResource {
 	{
 
 
-		List<DeliveryVehicleSelf> vehicleSelfList = Globals.deliveryVehicleSelfDAO.readDeliveryVehicleSelf(shopID);
+		List<DeliveryGuySelf> vehicleSelfList = Globals.deliveryGuySelfDAO.readDeliveryVehicleSelf(shopID);
 
-		GenericEntity<List<DeliveryVehicleSelf>> listEntity = new GenericEntity<List<DeliveryVehicleSelf>>(vehicleSelfList){
+		GenericEntity<List<DeliveryGuySelf>> listEntity = new GenericEntity<List<DeliveryGuySelf>>(vehicleSelfList){
 			
 		};
 	
@@ -165,7 +165,7 @@ public class DeliveryVehicleSelfResource {
 	{
 
 
-		DeliveryVehicleSelf vehicleSelf = Globals.deliveryVehicleSelfDAO.readVehicle(vehicleID);
+		DeliveryGuySelf vehicleSelf = Globals.deliveryGuySelfDAO.readVehicle(vehicleID);
 		
 		if(vehicleSelf != null)
 		{

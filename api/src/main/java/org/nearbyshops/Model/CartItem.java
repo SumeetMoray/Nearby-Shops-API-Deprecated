@@ -5,15 +5,13 @@ package org.nearbyshops.Model;
  */
 public class CartItem {
 
-    int cartID;
+    private int cartID;
+    private int itemID;
 
-    int itemID;
+    private Cart cart;
+    private Item item;
 
-    Cart cart;
-
-    Item item;
-
-    int itemQuantity;
+    private int itemQuantity;
 
 
     // rt stands for real time.
@@ -21,11 +19,9 @@ public class CartItem {
     // when the api call is made.
 
 
-    int rt_availableItemQuantity;
-
-    double rt_itemPrice;
-
-    String rt_quantityUnit;
+    private int rt_availableItemQuantity;
+    private double rt_itemPrice;
+    private String rt_quantityUnit;
 
 
 

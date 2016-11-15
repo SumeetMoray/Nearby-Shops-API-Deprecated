@@ -45,7 +45,7 @@ public class GSONJersey implements MessageBodyWriter<Object>,
 //                    .setDateFormat(DateFormat.FULL,DateFormat.FULL)
 
 
-            System.out.println("GSON COnverter");
+//            System.out.println("GSON COnverter");
 
 /*
             .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
@@ -60,7 +60,7 @@ public class GSONJersey implements MessageBodyWriter<Object>,
     @Override
     public boolean isReadable(Class<?> type, Type genericType,
                               Annotation[] annotations, MediaType mediaType) {
-        System.out.println("GSON COnverter");
+//        System.out.println("GSON COnverter");
         return true;
     }
 
@@ -69,7 +69,7 @@ public class GSONJersey implements MessageBodyWriter<Object>,
                            Annotation[] annotations, MediaType mediaType,
                            MultivaluedMap<String, String> httpHeaders, InputStream entityStream) {
 
-        System.out.println("GSON COnverter");
+//        System.out.println("GSON COnverter");
 
         InputStreamReader streamReader = null;
         try {
@@ -98,7 +98,7 @@ public class GSONJersey implements MessageBodyWriter<Object>,
     public boolean isWriteable(Class<?> type, Type genericType,
                                Annotation[] annotations, MediaType mediaType) {
 
-        System.out.println("GSON COnverter");
+//        System.out.println("GSON COnverter");
 
         return true;
     }
@@ -116,7 +116,7 @@ public class GSONJersey implements MessageBodyWriter<Object>,
                         OutputStream entityStream) throws IOException,
             WebApplicationException {
 
-        System.out.println("GSON COnverter");
+//        System.out.println("GSON COnverter");
 
         OutputStreamWriter writer = new OutputStreamWriter(entityStream, UTF_8);
         try {
