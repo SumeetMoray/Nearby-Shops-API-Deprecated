@@ -221,18 +221,22 @@ public class CartItemResource {
 								@QueryParam("ItemID")Integer itemID,
 								@QueryParam("EndUserID") Integer endUserID,
 								@QueryParam("ShopID") Integer shopID,
-								@QueryParam("GetItems") Boolean getItems)
+								@QueryParam("GetItems") Boolean getItems,
+								@QueryParam("SortBy") String sortBy,
+								@QueryParam("Limit")Integer limit, @QueryParam("Offset")Integer offset,
+								@QueryParam("metadata_only")Boolean metaonly)
 	{
 
 
 		List<CartItem> cartList;
 
-
 		if(shopID != null)
 		{
 
-			cartList = Globals.cartItemService.getCartItem(endUserID, shopID);
+			cartList = Globals.cartItemService
+					.getCartItemRefined(endUserID, shopID, sortBy,limit,offset);
 
+/*
 
 			for(CartItem cartItem: cartList)
 			{
@@ -245,6 +249,7 @@ public class CartItemResource {
 
 //				cartItem.setItem(itemDAO.getItem(cartItem.getItemID()));
 			}
+*/
 
 
 		}else
@@ -259,10 +264,11 @@ public class CartItemResource {
 					cartItem.setCart(Globals.cartService.readCart(cartItem.getCartID()));
 				}
 
+				/*
 				if(itemID == null && getItems!=null && getItems)
 				{
 					cartItem.setItem(itemDAO.getItem(cartItem.getItemID()));
-				}
+				}*/
 
 			}
 

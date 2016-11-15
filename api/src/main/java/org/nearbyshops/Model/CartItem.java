@@ -5,6 +5,32 @@ package org.nearbyshops.Model;
  */
 public class CartItem {
 
+
+    // Table Name
+    public static final String TABLE_NAME = "CART_ITEM";
+
+    // column Names
+    public static final String CART_ID = "CART_ID";
+    public static final String ITEM_ID = "ITEM_ID";
+    public static final String ITEM_QUANTITY = "ITEM_QUANTITY";
+
+
+    // create table statement
+
+
+    public static final String createtableCartItemPostgres = "CREATE TABLE IF NOT EXISTS " + CartItem.TABLE_NAME + "("
+            + " " + CartItem.ITEM_ID + " INT,"
+            + " " + CartItem.CART_ID + " INT,"
+            + " " + CartItem.ITEM_QUANTITY + " INT,"
+            + " FOREIGN KEY(" + CartItem.ITEM_ID +") REFERENCES " + Item.TABLE_NAME + "(" + Item.ITEM_ID + "),"
+            + " FOREIGN KEY(" + CartItem.CART_ID +") REFERENCES " + Cart.TABLE_NAME + "(" + Cart.CART_ID + "),"
+            + " PRIMARY KEY (" + CartItem.ITEM_ID + ", " + CartItem.CART_ID + ")"
+            + ")";
+
+
+
+
+    // instance variables
     private int cartID;
     private int itemID;
 

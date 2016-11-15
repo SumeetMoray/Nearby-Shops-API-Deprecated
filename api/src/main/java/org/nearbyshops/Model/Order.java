@@ -1,7 +1,7 @@
 package org.nearbyshops.Model;
 
-import org.nearbyshops.ContractClasses.DeliveryGuySelfContract;
 import org.nearbyshops.ModelDeliverySelf.DeliveryAddress;
+import org.nearbyshops.ModelDeliverySelf.DeliveryGuySelf;
 import org.nearbyshops.ModelRoles.EndUser;
 import org.nearbyshops.ModelStats.OrderStats;
 
@@ -71,7 +71,7 @@ public class Order {
             + " FOREIGN KEY(" + Order.END_USER_ID +") REFERENCES " + EndUser.TABLE_NAME + "(" + EndUser.END_USER_ID + "),"
             + " FOREIGN KEY(" + Order.SHOP_ID +") REFERENCES " + Shop.TABLE_NAME + "(" + Shop.SHOP_ID + "),"
             + " FOREIGN KEY(" + Order.DELIVERY_ADDRESS_ID +") REFERENCES " + DeliveryAddress.TABLE_NAME + "(" + DeliveryAddress.ID + "),"
-            + " FOREIGN KEY(" + Order.DELIVERY_VEHICLE_SELF_ID +") REFERENCES " + DeliveryGuySelfContract.TABLE_NAME + "(" + DeliveryGuySelfContract.ID + ")"
+            + " FOREIGN KEY(" + Order.DELIVERY_VEHICLE_SELF_ID +") REFERENCES " + DeliveryGuySelf.TABLE_NAME + "(" + DeliveryGuySelf.ID + ")"
             + ")";
 
 

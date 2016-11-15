@@ -1,13 +1,13 @@
 package org.nearbyshops.ModelDeliverySelf;
 
 
+import org.nearbyshops.Model.Shop;
 import org.nearbyshops.ModelRoles.EndUser;
 
 /**
  * Created by sumeet on 10/6/16.
  */
 public class DeliveryAddress {
-
 
 
     // Table Name
@@ -36,10 +36,12 @@ public class DeliveryAddress {
     public static final String createTableDeliveryAddressPostgres = "CREATE TABLE IF NOT EXISTS " + DeliveryAddress.TABLE_NAME + "("
             + " " + DeliveryAddress.ID + " SERIAL PRIMARY KEY,"
             + " " + DeliveryAddress.END_USER_ID + " INT,"
-            + " " + DeliveryAddress.CITY + " VARCHAR(40),"
-            + " " + DeliveryAddress.DELIVERY_ADDRESS + " VARCHAR(100),"
-            + " " + DeliveryAddress.LANDMARK + " VARCHAR(100),"
-            + " " + DeliveryAddress.NAME + " VARCHAR(100),"
+            + " " + DeliveryAddress.CITY + " text,"
+            + " " + DeliveryAddress.DELIVERY_ADDRESS + " text,"
+            + " " + DeliveryAddress.LANDMARK + " text,"
+            + " " + DeliveryAddress.NAME + " text,"
+            + " " + DeliveryAddress.LATITUDE + " FLOAT,"
+            + " " + DeliveryAddress.LONGITUDE + " FLOAT,"
             + " " + DeliveryAddress.PHONE_NUMBER + " BIGINT,"
             + " " + DeliveryAddress.PINCODE + " BIGINT,"
             + " FOREIGN KEY(" + DeliveryAddress.END_USER_ID +") REFERENCES " + EndUser.TABLE_NAME + "(" + EndUser.END_USER_ID + ")"
@@ -57,7 +59,26 @@ public class DeliveryAddress {
     private String city;
     private long pincode;
     private String landmark;
+    private Double latitude;
+    private Double longitude;
     private int endUserID;
+
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
 
     public int getEndUserID() {
         return endUserID;

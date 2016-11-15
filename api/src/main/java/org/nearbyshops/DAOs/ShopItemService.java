@@ -7,12 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import org.nearbyshops.ContractClasses.*;
 import org.nearbyshops.JDBCContract;
-import org.nearbyshops.Model.Item;
-import org.nearbyshops.Model.ItemCategory;
-import org.nearbyshops.Model.Shop;
-import org.nearbyshops.Model.ShopItem;
+import org.nearbyshops.Model.*;
 import org.nearbyshops.ModelEndPoints.ShopItemEndPoint;
 import org.nearbyshops.Utility.GeoLocation;
 
@@ -368,16 +364,16 @@ public ArrayList<ShopItem> getShopItems(
 						+ ShopItem.TABLE_NAME
 						+ "."
 						+ ShopItem.SHOP_ID + " IN "
-						+ " (SELECT " + CartContract.SHOP_ID + " FROM " + CartContract.TABLE_NAME + " WHERE "
-						+ CartContract.END_USER_ID + " = " + endUserID + ")";
+						+ " (SELECT " + Cart.SHOP_ID + " FROM " + Cart.TABLE_NAME + " WHERE "
+						+ Cart.END_USER_ID + " = " + endUserID + ")";
 			}else
 			{
 				queryJoin = queryJoin + " AND "
 						+ ShopItem.TABLE_NAME
 						+ "."
 						+ ShopItem.SHOP_ID + " NOT IN "
-						+ " (SELECT " + CartContract.SHOP_ID + " FROM " + CartContract.TABLE_NAME + " WHERE "
-						+ CartContract.END_USER_ID + " = " + endUserID + ")";
+						+ " (SELECT " + Cart.SHOP_ID + " FROM " + Cart.TABLE_NAME + " WHERE "
+						+ Cart.END_USER_ID + " = " + endUserID + ")";
 
 			}
 
@@ -918,16 +914,16 @@ public ArrayList<ShopItem> getShopItems(
 							+ ShopItem.TABLE_NAME
 							+ "."
 							+ ShopItem.SHOP_ID + " IN "
-							+ " (SELECT " + CartContract.SHOP_ID + " FROM " + CartContract.TABLE_NAME + " WHERE "
-							+ CartContract.END_USER_ID + " = " + endUserID + ")";
+							+ " (SELECT " + Cart.SHOP_ID + " FROM " + Cart.TABLE_NAME + " WHERE "
+							+ Cart.END_USER_ID + " = " + endUserID + ")";
 				}else
 				{
 					queryJoin = queryJoin + " AND "
 							+ ShopItem.TABLE_NAME
 							+ "."
 							+ ShopItem.SHOP_ID + " NOT IN "
-							+ " (SELECT " + CartContract.SHOP_ID + " FROM " + CartContract.TABLE_NAME + " WHERE "
-							+ CartContract.END_USER_ID + " = " + endUserID + ")";
+							+ " (SELECT " + Cart.SHOP_ID + " FROM " + Cart.TABLE_NAME + " WHERE "
+							+ Cart.END_USER_ID + " = " + endUserID + ")";
 
 				}
 

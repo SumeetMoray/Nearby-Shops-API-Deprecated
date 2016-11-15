@@ -18,7 +18,6 @@ import javax.ws.rs.core.Response.Status;
 
 import org.nearbyshops.DAOsPrepared.*;
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ShopItem;
 import org.nearbyshops.ModelEndPoints.ShopItemEndPoint;
 
@@ -94,27 +93,23 @@ public class ShopItemResource {
 
 		if(rowCountSum ==  itemList.size())
 		{
-			Response response = Response.status(Status.OK)
+
+			return Response.status(Status.OK)
 					.entity(null)
 					.build();
-
-			return response;
 		}
 		else if( rowCountSum < itemList.size() && rowCountSum > 0)
 		{
-			Response response = Response.status(Status.PARTIAL_CONTENT)
+
+			return Response.status(Status.PARTIAL_CONTENT)
 					.entity(null)
 					.build();
-
-			return response;
 		}
 		else if(rowCountSum == 0 ) {
 
-			Response response = Response.status(Status.NOT_MODIFIED)
+			return Response.status(Status.NOT_MODIFIED)
 					.entity(null)
 					.build();
-
-			return response;
 		}
 
 		return null;
@@ -131,20 +126,17 @@ public class ShopItemResource {
 		
 		if(rowCount == 1)
 		{
-			
-			Response response = Response.status(Status.CREATED)
+
+			return Response.status(Status.CREATED)
 								.entity(null)
 								.build();
 			
-			return response;
-			
 		}else if(rowCount <= 0)
 		{
-			Response response = Response.status(Status.NOT_MODIFIED)
+
+			return Response.status(Status.NOT_MODIFIED)
 					.entity(null)
-					.build();			
-			
-			return response;
+					.build();
 		}
 
 		
@@ -165,20 +157,17 @@ public class ShopItemResource {
 		
 		if(rowCount == 1)
 		{
-			
-			Response response = Response.status(Status.OK)
+
+			return Response.status(Status.OK)
 								.entity(null)
 								.build();
 			
-			return response;
-			
 		}else if(rowCount <= 0)
 		{
-			Response response = Response.status(Status.NOT_MODIFIED)
+
+			return Response.status(Status.NOT_MODIFIED)
 					.entity(null)
-					.build();			
-			
-			return response;
+					.build();
 		}
 	
 		
@@ -193,20 +182,17 @@ public class ShopItemResource {
 		
 		if(rowCount == 1)
 		{
-			
-			Response response = Response.status(Status.OK)
+
+			return Response.status(Status.OK)
 								.entity(null)
 								.build();
 			
-			return response;
-			
 		}else if(rowCount <= 0)
 		{
-			Response response = Response.status(Status.NOT_MODIFIED)
+
+			return Response.status(Status.NOT_MODIFIED)
 					.entity(null)
-					.build();			
-			
-			return response;
+					.build();
 		}
 	
 		return null;
@@ -229,37 +215,33 @@ public class ShopItemResource {
 
 		if(rowCountSum ==  itemList.size())
 		{
-			Response response = Response.status(Status.OK)
+
+			return Response.status(Status.OK)
 					.entity(null)
 					.build();
-
-			return response;
 		}
 		else if( rowCountSum < itemList.size() && rowCountSum > 0)
 		{
-			Response response = Response.status(Status.PARTIAL_CONTENT)
+
+			return Response.status(Status.PARTIAL_CONTENT)
 					.entity(null)
 					.build();
-
-			return response;
 		}
 		else if(rowCountSum == 0 ) {
 
-			Response response = Response.status(Status.NOT_MODIFIED)
+			return Response.status(Status.NOT_MODIFIED)
 					.entity(null)
 					.build();
-
-			return response;
 		}
 
 		return null;
 	}
 	
 	
-
+/*
 	@GET
 	@Path("/Deprecated")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)*/
 	public Response getShopItems(
 			@QueryParam("ItemCategoryID")Integer ItemCategoryID,
 			@QueryParam("ShopID")Integer ShopID, @QueryParam("ItemID") Integer itemID,
@@ -311,8 +293,8 @@ public class ShopItemResource {
 		{
 			return Response.status(Status.NO_CONTENT)
 					.type(MediaType.APPLICATION_JSON)
-			.entity(list)
-			.build(); 
+					.entity(list)
+					.build();
 			
 		
 		
@@ -511,11 +493,13 @@ public class ShopItemResource {
 			endPoint.setResults(shopItemsList);
 		}
 
+/*
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+*/
 
 
 

@@ -30,7 +30,7 @@ public class DeliveryGuySelfResource {
 
 		int idOfInsertedRow = Globals.deliveryGuySelfDAO.saveDeliveryVehicleSelf(vehicleSelf);
 
-		vehicleSelf.setID(idOfInsertedRow);
+		vehicleSelf.setDeliveryGuyID(idOfInsertedRow);
 
 
 		if(idOfInsertedRow >=1)
@@ -66,7 +66,7 @@ public class DeliveryGuySelfResource {
 	public Response updateCart(@PathParam("VehicleID")int vehicleID, DeliveryGuySelf vehicleSelf)
 	{
 
-		vehicleSelf.setID(vehicleID);
+		vehicleSelf.setDeliveryGuyID(vehicleID);
 
 		int rowCount = Globals.deliveryGuySelfDAO.updateDeliveryVehicleSelf(vehicleSelf);
 

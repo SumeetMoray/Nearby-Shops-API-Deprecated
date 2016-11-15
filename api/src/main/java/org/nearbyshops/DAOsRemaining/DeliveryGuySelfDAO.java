@@ -1,6 +1,6 @@
 package org.nearbyshops.DAOsRemaining;
 
-import org.nearbyshops.ContractClasses.DeliveryGuySelfContract;
+
 import org.nearbyshops.JDBCContract;
 import org.nearbyshops.ModelDeliverySelf.DeliveryGuySelf;
 
@@ -27,10 +27,10 @@ public class DeliveryGuySelfDAO {
 		int rowIdOfInsertedRow = -1;
 
 		String insertItemCategory = "INSERT INTO "
-				+ DeliveryGuySelfContract.TABLE_NAME
+				+ DeliveryGuySelf.TABLE_NAME
 				+ "("
-				+ DeliveryGuySelfContract.VEHICLE_NAME + ","
-				+ DeliveryGuySelfContract.SHOP_ID + ""
+				+ DeliveryGuySelf.VEHICLE_NAME + ","
+				+ DeliveryGuySelf.SHOP_ID + ""
 				+ " ) VALUES ( "
 				+ "'" + deliveryGuySelf.getVehicleName()	+ "',"
 				+ "" + deliveryGuySelf.getShopID() + ""
@@ -90,11 +90,11 @@ public class DeliveryGuySelfDAO {
 
 	public int updateDeliveryVehicleSelf(DeliveryGuySelf deliveryGuySelf)
 	{	
-		String updateStatement = "UPDATE " + DeliveryGuySelfContract.TABLE_NAME
+		String updateStatement = "UPDATE " + DeliveryGuySelf.TABLE_NAME
 				+ " SET "
-				+ DeliveryGuySelfContract.VEHICLE_NAME + " = "  + "'" + deliveryGuySelf.getVehicleName() + "'"  + ","
-				+ DeliveryGuySelfContract.SHOP_ID + " = "  + " " + deliveryGuySelf.getShopID() + " "  + ""
-				+ " WHERE " + DeliveryGuySelfContract.ID + " = " + deliveryGuySelf.getID();
+				+ DeliveryGuySelf.VEHICLE_NAME + " = "  + "'" + deliveryGuySelf.getVehicleName() + "'"  + ","
+				+ DeliveryGuySelf.SHOP_ID + " = "  + " " + deliveryGuySelf.getShopID() + " "  + ""
+				+ " WHERE " + DeliveryGuySelf.ID + " = " + deliveryGuySelf.getDeliveryGuyID();
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -149,8 +149,8 @@ public class DeliveryGuySelfDAO {
 	public int deleteDeliveryVehicleSelf(int vehicleID)
 	{
 		
-		String deleteStatement = "DELETE FROM " + DeliveryGuySelfContract.TABLE_NAME
-				+ " WHERE " + DeliveryGuySelfContract.ID + " = " + vehicleID;
+		String deleteStatement = "DELETE FROM " + DeliveryGuySelf.TABLE_NAME
+				+ " WHERE " + DeliveryGuySelf.ID + " = " + vehicleID;
 		
 		
 		Connection conn= null;
@@ -207,13 +207,13 @@ public class DeliveryGuySelfDAO {
 	
 	public ArrayList<DeliveryGuySelf> readDeliveryVehicleSelf(int shopID)
 	{
-		String query = "SELECT * FROM " + DeliveryGuySelfContract.TABLE_NAME;
+		String query = "SELECT * FROM " + DeliveryGuySelf.TABLE_NAME;
 
 		//boolean isFirst = true;
 
 		if(shopID > 0)
 		{
-			query = query + " WHERE " + DeliveryGuySelfContract.SHOP_ID + " = " + shopID;
+			query = query + " WHERE " + DeliveryGuySelf.SHOP_ID + " = " + shopID;
 
 				//isFirst = false;
 		}
@@ -259,9 +259,9 @@ public class DeliveryGuySelfDAO {
 
 				DeliveryGuySelf deliveryGuySelf = new DeliveryGuySelf();
 
-				deliveryGuySelf.setID(rs.getInt(DeliveryGuySelfContract.ID));
-				deliveryGuySelf.setShopID(rs.getInt(DeliveryGuySelfContract.SHOP_ID));
-				deliveryGuySelf.setVehicleName(rs.getString(DeliveryGuySelfContract.VEHICLE_NAME));
+				deliveryGuySelf.setDeliveryGuyID(rs.getInt(DeliveryGuySelf.ID));
+				deliveryGuySelf.setShopID(rs.getInt(DeliveryGuySelf.SHOP_ID));
+				deliveryGuySelf.setVehicleName(rs.getString(DeliveryGuySelf.VEHICLE_NAME));
 
 				vehiclesList.add(deliveryGuySelf);
 				
@@ -314,8 +314,8 @@ public class DeliveryGuySelfDAO {
 	public DeliveryGuySelf readVehicle(int vehicleID)
 	{
 		
-		String query = "SELECT * FROM " + DeliveryGuySelfContract.TABLE_NAME
-						+ " WHERE " + DeliveryGuySelfContract.ID + " = " + vehicleID;
+		String query = "SELECT * FROM " + DeliveryGuySelf.TABLE_NAME
+						+ " WHERE " + DeliveryGuySelf.ID + " = " + vehicleID;
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -337,9 +337,9 @@ public class DeliveryGuySelfDAO {
 			{
 				deliveryGuySelf = new DeliveryGuySelf();
 
-				deliveryGuySelf.setVehicleName(rs.getString(DeliveryGuySelfContract.VEHICLE_NAME));
-				deliveryGuySelf.setShopID(rs.getInt(DeliveryGuySelfContract.SHOP_ID));
-				deliveryGuySelf.setID(rs.getInt(DeliveryGuySelfContract.ID));
+				deliveryGuySelf.setVehicleName(rs.getString(DeliveryGuySelf.VEHICLE_NAME));
+				deliveryGuySelf.setShopID(rs.getInt(DeliveryGuySelf.SHOP_ID));
+				deliveryGuySelf.setDeliveryGuyID(rs.getInt(DeliveryGuySelf.ID));
 
 			}
 			

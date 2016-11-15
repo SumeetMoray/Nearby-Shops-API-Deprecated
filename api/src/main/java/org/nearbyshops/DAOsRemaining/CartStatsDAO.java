@@ -1,7 +1,8 @@
 package org.nearbyshops.DAOsRemaining;
 
-import org.nearbyshops.ContractClasses.*;
 import org.nearbyshops.JDBCContract;
+import org.nearbyshops.Model.Cart;
+import org.nearbyshops.Model.CartItem;
 import org.nearbyshops.Model.ShopItem;
 import org.nearbyshops.ModelStats.CartStats;
 
@@ -30,33 +31,33 @@ public class CartStatsDAO {
 
 
         String query = "select sum(" +
-                CartItemContract.ITEM_QUANTITY +
+                CartItem.ITEM_QUANTITY +
 
                 "*" +
                 ShopItem.ITEM_PRICE +
 
                 ") as Cart_Total,count(" +
 
-                CartItemContract.TABLE_NAME + "." + CartItemContract.ITEM_ID +
+                CartItem.TABLE_NAME + "." + CartItem.ITEM_ID +
 
                 ") as Items_In_Cart," +
 
-                CartContract.TABLE_NAME + "." +CartContract.SHOP_ID + ","
+                Cart.TABLE_NAME + "." +Cart.SHOP_ID + ","
 
-                + CartContract.TABLE_NAME + "." + CartContract.CART_ID  +
+                + Cart.TABLE_NAME + "." + Cart.CART_ID  +
 
                 " from " +
 
                 ShopItem.TABLE_NAME +
                 ", " +
-                CartContract.TABLE_NAME +
+                Cart.TABLE_NAME +
                 ", " +
-                CartItemContract.TABLE_NAME +
+                CartItem.TABLE_NAME +
                 " " +
                 "where " +
-                CartContract.TABLE_NAME + "." + CartContract.CART_ID +
+                Cart.TABLE_NAME + "." + Cart.CART_ID +
                 " = " +
-                CartItemContract.TABLE_NAME + "." + CartItemContract.CART_ID +
+                CartItem.TABLE_NAME + "." + CartItem.CART_ID +
 
                 " and " +
 
@@ -83,14 +84,14 @@ public class CartStatsDAO {
 
         if(cartID != null)
         {
-            query = query + "and " + CartContract.TABLE_NAME + "." + CartContract.CART_ID + " = " + cartID;
+            query = query + "and " + Cart.TABLE_NAME + "." + Cart.CART_ID + " = " + cartID;
         }
 
 
 
         if(shopID != null)
         {
-            query = query + " and " + CartContract.TABLE_NAME + "." + CartContract.SHOP_ID + " = " + shopID;
+            query = query + " and " + Cart.TABLE_NAME + "." + Cart.SHOP_ID + " = " + shopID;
         }
 
 
@@ -102,7 +103,7 @@ public class CartStatsDAO {
 
         String groupByQueryPart =  " group by " +
 
-                                    " cart.shop_id," + CartContract.TABLE_NAME + "." + CartContract.CART_ID;
+                                    " cart.shop_id," + Cart.TABLE_NAME + "." + Cart.CART_ID;
 
 
 
@@ -129,7 +130,7 @@ public class CartStatsDAO {
             {
                 CartStats cartStats = new CartStats();
 
-                cartStats.setCartID(rs.getInt(CartContract.CART_ID));
+                cartStats.setCartID(rs.getInt(Cart.CART_ID));
                 cartStats.setShopID(rs.getInt("shop_id"));
                 cartStats.setItemsInCart(rs.getInt("items_in_cart"));
                 cartStats.setCart_Total(rs.getDouble("cart_total"));

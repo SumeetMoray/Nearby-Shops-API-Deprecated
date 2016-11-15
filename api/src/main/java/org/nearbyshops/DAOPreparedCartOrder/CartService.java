@@ -1,9 +1,7 @@
 package org.nearbyshops.DAOPreparedCartOrder;
 
 import com.zaxxer.hikari.HikariDataSource;
-import org.nearbyshops.ContractClasses.CartContract;
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.JDBCContract;
 import org.nearbyshops.Model.Cart;
 
 import java.sql.*;
@@ -34,10 +32,10 @@ public class CartService {
 		int rowIdOfInsertedRow = -1;
 
 		String insertItemCategory = "INSERT INTO "
-				+ CartContract.TABLE_NAME
+				+ Cart.TABLE_NAME
 				+ "("  
-				+ CartContract.SHOP_ID + ","
-				+ CartContract.END_USER_ID + ""
+				+ Cart.SHOP_ID + ","
+				+ Cart.END_USER_ID + ""
 				+ " ) VALUES ( ?,?)";
 
 //		+ "" + cart.getShopID()	+ ","
@@ -100,11 +98,11 @@ public class CartService {
 
 	public int updateCart(Cart cart)
 	{	
-		String updateStatement = "UPDATE " + CartContract.TABLE_NAME
+		String updateStatement = "UPDATE " + Cart.TABLE_NAME
 				+ " SET "
-				+ CartContract.END_USER_ID + " = ?,"
-				+ CartContract.SHOP_ID + " = ?"
-				+ " WHERE " + CartContract.CART_ID + " = ?";
+				+ Cart.END_USER_ID + " = ?,"
+				+ Cart.SHOP_ID + " = ?"
+				+ " WHERE " + Cart.CART_ID + " = ?";
 		
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -160,8 +158,8 @@ public class CartService {
 	public int deleteCart(int cartID)
 	{
 		
-		String deleteStatement = "DELETE FROM " + CartContract.TABLE_NAME
-								+ " WHERE " + CartContract.CART_ID + " = ?";
+		String deleteStatement = "DELETE FROM " + Cart.TABLE_NAME
+								+ " WHERE " + Cart.CART_ID + " = ?";
 		
 		
 		Connection connection= null;
@@ -216,13 +214,13 @@ public class CartService {
 	
 	public ArrayList<Cart> readCarts(Integer endUserID,Integer shopID)
 	{
-		String query = "SELECT * FROM " + CartContract.TABLE_NAME;
+		String query = "SELECT * FROM " + Cart.TABLE_NAME;
 
 		boolean isFirst = true;
 
 		if(endUserID != null)
 		{
-			query = query + " WHERE " + CartContract.END_USER_ID + " = " + endUserID;
+			query = query + " WHERE " + Cart.END_USER_ID + " = " + endUserID;
 
 			isFirst = false;
 		}
@@ -231,11 +229,11 @@ public class CartService {
 		{
 			if(isFirst)
 			{
-				query = query + " WHERE " + CartContract.SHOP_ID + " = " + shopID;
+				query = query + " WHERE " + Cart.SHOP_ID + " = " + shopID;
 
 			}else
 			{
-				query = query + " AND " + CartContract.SHOP_ID + " = " + shopID;
+				query = query + " AND " + Cart.SHOP_ID + " = " + shopID;
 
 			}
 
@@ -261,9 +259,9 @@ public class CartService {
 
 				Cart cart = new Cart();
 
-				cart.setCartID(rs.getInt(CartContract.CART_ID));
-				cart.setEndUserID(rs.getInt(CartContract.END_USER_ID));
-				cart.setShopID(rs.getInt(CartContract.SHOP_ID));
+				cart.setCartID(rs.getInt(Cart.CART_ID));
+				cart.setEndUserID(rs.getInt(Cart.END_USER_ID));
+				cart.setShopID(rs.getInt(Cart.SHOP_ID));
 
 				cartsList.add(cart);
 				
@@ -316,8 +314,8 @@ public class CartService {
 	public Cart readCart(int cartID)
 	{
 		
-		String query = "SELECT * FROM " + CartContract.TABLE_NAME
-						+ " WHERE " + CartContract.CART_ID + " = " + cartID;
+		String query = "SELECT * FROM " + Cart.TABLE_NAME
+						+ " WHERE " + Cart.CART_ID + " = " + cartID;
 		
 		Connection connection = null;
 		Statement statement = null;
@@ -335,9 +333,9 @@ public class CartService {
 			while(rs.next())
 			{
 				cart = new Cart();
-				cart.setCartID(rs.getInt(CartContract.CART_ID));
-				cart.setShopID(rs.getInt(CartContract.SHOP_ID));
-				cart.setEndUserID(rs.getInt(CartContract.END_USER_ID));
+				cart.setCartID(rs.getInt(Cart.CART_ID));
+				cart.setShopID(rs.getInt(Cart.SHOP_ID));
+				cart.setEndUserID(rs.getInt(Cart.END_USER_ID));
 			}
 			
 			

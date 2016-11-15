@@ -4,7 +4,6 @@
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ServerProperties;
-import org.nearbyshops.ContractClasses.*;
 
 
 import org.glassfish.jersey.server.ResourceConfig;
@@ -13,6 +12,7 @@ import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.*;
 import org.nearbyshops.ModelDeliverySelf.DeliveryAddress;
+import org.nearbyshops.ModelDeliverySelf.DeliveryGuySelf;
 import org.nearbyshops.ModelReviewItem.FavouriteItem;
 import org.nearbyshops.ModelReviewItem.ItemReview;
 import org.nearbyshops.ModelReviewItem.ItemReviewThanks;
@@ -37,7 +37,9 @@ import java.sql.Statement;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-/**
+import static org.nearbyshops.Model.CartItem.createtableCartItemPostgres;
+
+	/**
  * Main class.
  *
  */
@@ -234,50 +236,14 @@ public class Main implements ActionListener {
 
 			statement.executeUpdate(DeliveryAddress.createTableDeliveryAddressPostgres);
 
-
-
 			// Create table Delivery Vehicle Self
-
-
-			String createtableDeliveryGuySelfPostgres = "CREATE TABLE IF NOT EXISTS " + DeliveryGuySelfContract.TABLE_NAME + "("
-					+ " " + DeliveryGuySelfContract.ID + " SERIAL PRIMARY KEY,"
-					+ " " + DeliveryGuySelfContract.VEHICLE_NAME + " VARCHAR(30),"
-					+ " " + DeliveryGuySelfContract.SHOP_ID + " INT,"
-					+ " FOREIGN KEY(" + DeliveryGuySelfContract.SHOP_ID +") REFERENCES " + Shop.TABLE_NAME + "(" + Shop.SHOP_ID + ")"
-					+ ")";
-
-
-			statement.executeUpdate(createtableDeliveryGuySelfPostgres);
+			statement.executeUpdate(DeliveryGuySelf.createtableDeliveryGuySelfPostgres);
 
 			statement.executeUpdate(Order.createTableOrderPostgres);
 			statement.executeUpdate(OrderItem.createtableOrderItemPostgres);
 
-
-			String createTableCartPostgres = "CREATE TABLE IF NOT EXISTS " + CartContract.TABLE_NAME + "("
-					+ " " + CartContract.CART_ID + " SERIAL PRIMARY KEY,"
-					+ " " + CartContract.END_USER_ID + " INT,"
-					+ " " + CartContract.SHOP_ID + " INT,"
-					+ " FOREIGN KEY(" + CartContract.END_USER_ID +") REFERENCES " + EndUser.TABLE_NAME + "(" + EndUser.END_USER_ID + "),"
-					+ " FOREIGN KEY(" + CartContract.SHOP_ID +") REFERENCES " + Shop.TABLE_NAME + "(" + Shop.SHOP_ID + "),"
-					+ " UNIQUE (" + CartContract.END_USER_ID + "," + CartContract.SHOP_ID + ")"
-					+ ")";
-
-			statement.executeUpdate(createTableCartPostgres);
-
-
-
-			String createtableCartItemPostgres = "CREATE TABLE IF NOT EXISTS " + CartItemContract.TABLE_NAME + "("
-					+ " " + CartItemContract.ITEM_ID + " INT,"
-					+ " " + CartItemContract.CART_ID + " INT,"
-					+ " " + CartItemContract.ITEM_QUANTITY + " INT,"
-					+ " FOREIGN KEY(" + CartItemContract.ITEM_ID +") REFERENCES " + Item.TABLE_NAME + "(" + Item.ITEM_ID + "),"
-					+ " FOREIGN KEY(" + CartItemContract.CART_ID +") REFERENCES " + CartContract.TABLE_NAME + "(" + CartContract.CART_ID + "),"
-					+ " PRIMARY KEY (" + CartItemContract.ITEM_ID + ", " + CartItemContract.CART_ID + ")"
-					+ ")";
-
-
-			statement.executeUpdate(createtableCartItemPostgres);
-
+			statement.executeUpdate(Cart.createTableCartPostgres);
+			statement.executeUpdate(CartItem.createtableCartItemPostgres);
 
 			statement.executeUpdate(ServiceConfiguration.createTableServiceConfigurationPostgres);
 			statement.executeUpdate(Settings.createTableSettingsPostgres);
