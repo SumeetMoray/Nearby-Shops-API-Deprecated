@@ -1,4 +1,4 @@
-package org.nearbyshops.DAOsRemaining;
+package org.nearbyshops.DAOPreparedCartOrder;
 
 import org.nearbyshops.JDBCContract;
 import org.nearbyshops.Model.Cart;

@@ -32,10 +32,6 @@ public class CartResource {
 
 		cart.setCartID(idOfInsertedRow);
 
-
-		
-
-
 		if(idOfInsertedRow >=1)
 		{
 			
@@ -137,7 +133,6 @@ public class CartResource {
 		List<Cart> cartList = Globals.cartService.readCarts(endUserID,shopID);
 
 		GenericEntity<List<Cart>> listEntity = new GenericEntity<List<Cart>>(cartList){
-			
 		};
 	
 		

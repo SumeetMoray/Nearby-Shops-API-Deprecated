@@ -1,13 +1,14 @@
-package org.nearbyshops.DAOs;
+package org.nearbyshops.DAOPreparedCartOrder;
+
 
 import org.nearbyshops.JDBCContract;
-import org.nearbyshops.ModelRoles.Admin;
+import org.nearbyshops.ModelDelivery.DeliveryGuySelf;
 
 import java.sql.*;
 import java.util.ArrayList;
 
 
-public class AdminDAO {
+public class DeliveryGuySelfDAO {
 
 	
 	@Override
@@ -18,19 +19,22 @@ public class AdminDAO {
 	
 	
 	
-	public int saveServiceProvider(Admin admin)
-	{	
-		
+	public int saveDeliveryVehicleSelf(DeliveryGuySelf deliveryGuySelf)
+	{
+
 		Connection conn = null;
 		Statement stmt = null;
 		int rowIdOfInsertedRow = -1;
 
-		String insertEndUser = "INSERT INTO "
-				+ Admin.TABLE_NAME
-				+ "("  
-				+ Admin.ADMIN_NAME
-				+ ") VALUES("
-				+ "'" + admin.getAdministratorName()	+ "')";
+		String insertItemCategory = "INSERT INTO "
+				+ DeliveryGuySelf.TABLE_NAME
+				+ "("
+				+ DeliveryGuySelf.VEHICLE_NAME + ","
+				+ DeliveryGuySelf.SHOP_ID + ""
+				+ " ) VALUES ( "
+				+ "'" + deliveryGuySelf.getVehicleName()	+ "',"
+				+ "" + deliveryGuySelf.getShopID() + ""
+				+ ")";
 		
 		try {
 			
@@ -39,7 +43,7 @@ public class AdminDAO {
 			
 			stmt = conn.createStatement();
 			
-			rowIdOfInsertedRow = stmt.executeUpdate(insertEndUser,Statement.RETURN_GENERATED_KEYS);
+			rowIdOfInsertedRow = stmt.executeUpdate(insertItemCategory,Statement.RETURN_GENERATED_KEYS);
 			
 			ResultSet rs = stmt.getGeneratedKeys();
 
@@ -84,13 +88,13 @@ public class AdminDAO {
 	}
 	
 
-	public int updateServiceProvider(Admin admin)
+	public int updateDeliveryVehicleSelf(DeliveryGuySelf deliveryGuySelf)
 	{	
-		String updateStatement = "UPDATE " + Admin.TABLE_NAME
-				+ " SET " + Admin.ADMIN_NAME + " = "
-				+ "'" + admin.getAdministratorName() + "'"
-				+ " WHERE ID = "
-				+ admin.getAdminID();
+		String updateStatement = "UPDATE " + DeliveryGuySelf.TABLE_NAME
+				+ " SET "
+				+ DeliveryGuySelf.VEHICLE_NAME + " = "  + "'" + deliveryGuySelf.getVehicleName() + "'"  + ","
+				+ DeliveryGuySelf.SHOP_ID + " = "  + " " + deliveryGuySelf.getShopID() + " "  + ""
+				+ " WHERE " + DeliveryGuySelf.ID + " = " + deliveryGuySelf.getDeliveryGuyID();
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -142,11 +146,11 @@ public class AdminDAO {
 	}
 	
 
-	public int deleteServiceProvider(int serviceProviderID)
+	public int deleteDeliveryVehicleSelf(int vehicleID)
 	{
 		
-		String deleteStatement = "DELETE FROM " + Admin.TABLE_NAME + " WHERE ID = "
-				+ serviceProviderID;
+		String deleteStatement = "DELETE FROM " + DeliveryGuySelf.TABLE_NAME
+				+ " WHERE " + DeliveryGuySelf.ID + " = " + vehicleID;
 		
 		
 		Connection conn= null;
@@ -201,11 +205,40 @@ public class AdminDAO {
 	
 	
 	
-	public ArrayList<Admin> getServiceProvider()
+	public ArrayList<DeliveryGuySelf> readDeliveryVehicleSelf(int shopID)
 	{
-		String query = "SELECT * FROM " + Admin.TABLE_NAME;
-		ArrayList<Admin> serviceProvidersList = new ArrayList<Admin>();
-		
+		String query = "SELECT * FROM " + DeliveryGuySelf.TABLE_NAME;
+
+		//boolean isFirst = true;
+
+		if(shopID > 0)
+		{
+			query = query + " WHERE " + DeliveryGuySelf.SHOP_ID + " = " + shopID;
+
+				//isFirst = false;
+		}
+
+		/*
+
+		if(shopID > 0 )
+		{
+			if(isFirst)
+			{
+				query = query + " WHERE " + CartContract.ITEM_ID + " = " + shopID;
+
+			}else
+			{
+				query = query + " AND " + CartContract.ITEM_ID + " = " + shopID;
+
+			}
+
+		}
+
+		*/
+
+
+
+		ArrayList<DeliveryGuySelf> vehiclesList = new ArrayList<DeliveryGuySelf>();
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -224,13 +257,14 @@ public class AdminDAO {
 			while(rs.next())
 			{
 
-				Admin admin = new Admin();
+				DeliveryGuySelf deliveryGuySelf = new DeliveryGuySelf();
 
-				admin.setAdminID(rs.getInt(Admin.ADMIN_ID));
-				admin.setAdministratorName(rs.getString(Admin.ADMIN_NAME));
+				deliveryGuySelf.setDeliveryGuyID(rs.getInt(DeliveryGuySelf.ID));
+				deliveryGuySelf.setShopID(rs.getInt(DeliveryGuySelf.SHOP_ID));
+				deliveryGuySelf.setVehicleName(rs.getString(DeliveryGuySelf.VEHICLE_NAME));
 
-				serviceProvidersList.add(admin);
-
+				vehiclesList.add(deliveryGuySelf);
+				
 			}
 			
 
@@ -273,23 +307,22 @@ public class AdminDAO {
 		}
 		
 								
-		return serviceProvidersList;
+		return vehiclesList;
 	}
 
 	
-	public Admin getServiceProvider(int serviceProviderID)
+	public DeliveryGuySelf readVehicle(int vehicleID)
 	{
 		
-		String query = "SELECT * FROM " + Admin.TABLE_NAME
-						+ " WHERE " + Admin.ADMIN_ID + " = " + serviceProviderID;
+		String query = "SELECT * FROM " + DeliveryGuySelf.TABLE_NAME
+						+ " WHERE " + DeliveryGuySelf.ID + " = " + vehicleID;
 		
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
-		
-	
-		//Distributor distributor = null;
-		Admin admin = null;
+
+
+		DeliveryGuySelf deliveryGuySelf = null;
 		
 		try {
 			
@@ -302,10 +335,11 @@ public class AdminDAO {
 			
 			while(rs.next())
 			{
-				admin = new Admin();
+				deliveryGuySelf = new DeliveryGuySelf();
 
-				admin.setAdminID(rs.getInt(Admin.ADMIN_ID));
-				admin.setAdministratorName(rs.getString(Admin.ADMIN_NAME));
+				deliveryGuySelf.setVehicleName(rs.getString(DeliveryGuySelf.VEHICLE_NAME));
+				deliveryGuySelf.setShopID(rs.getInt(DeliveryGuySelf.SHOP_ID));
+				deliveryGuySelf.setDeliveryGuyID(rs.getInt(DeliveryGuySelf.ID));
 
 			}
 			
@@ -348,6 +382,6 @@ public class AdminDAO {
 			}
 		}
 	
-		return admin;
+		return deliveryGuySelf;
 	}	
 }

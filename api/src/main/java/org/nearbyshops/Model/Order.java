@@ -1,7 +1,7 @@
 package org.nearbyshops.Model;
 
-import org.nearbyshops.ModelDeliverySelf.DeliveryAddress;
-import org.nearbyshops.ModelDeliverySelf.DeliveryGuySelf;
+import org.nearbyshops.ModelDelivery.DeliveryAddress;
+import org.nearbyshops.ModelDelivery.DeliveryGuySelf;
 import org.nearbyshops.ModelRoles.EndUser;
 import org.nearbyshops.ModelStats.OrderStats;
 

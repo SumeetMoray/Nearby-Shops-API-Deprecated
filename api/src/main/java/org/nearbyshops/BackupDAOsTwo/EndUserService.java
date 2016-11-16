@@ -1,14 +1,13 @@
-package org.nearbyshops.DAOsRemaining;
-
+package org.nearbyshops.BackupDAOsTwo;
 
 import org.nearbyshops.JDBCContract;
-import org.nearbyshops.ModelDeliverySelf.DeliveryGuySelf;
+import org.nearbyshops.ModelRoles.EndUser;
 
 import java.sql.*;
 import java.util.ArrayList;
 
 
-public class DeliveryGuySelfDAO {
+public class EndUserService {
 
 	
 	@Override
@@ -19,22 +18,21 @@ public class DeliveryGuySelfDAO {
 	
 	
 	
-	public int saveDeliveryVehicleSelf(DeliveryGuySelf deliveryGuySelf)
-	{
-
+	public int saveEndUser(EndUser endUser)
+	{	
+		
 		Connection conn = null;
 		Statement stmt = null;
 		int rowIdOfInsertedRow = -1;
 
-		String insertItemCategory = "INSERT INTO "
-				+ DeliveryGuySelf.TABLE_NAME
+		String insertEndUser = "INSERT INTO "
+				+ EndUser.TABLE_NAME
 				+ "("
-				+ DeliveryGuySelf.VEHICLE_NAME + ","
-				+ DeliveryGuySelf.SHOP_ID + ""
-				+ " ) VALUES ( "
-				+ "'" + deliveryGuySelf.getVehicleName()	+ "',"
-				+ "" + deliveryGuySelf.getShopID() + ""
-				+ ")";
+				+ EndUser.USERNAME + ","
+				+ EndUser.PASSWORD
+				+ ") VALUES("
+				+ "'" + endUser.getUsername() + "'" + ","
+				+ "'" + endUser.getPassword() + "'" + ")";
 		
 		try {
 			
@@ -43,7 +41,7 @@ public class DeliveryGuySelfDAO {
 			
 			stmt = conn.createStatement();
 			
-			rowIdOfInsertedRow = stmt.executeUpdate(insertItemCategory,Statement.RETURN_GENERATED_KEYS);
+			rowIdOfInsertedRow = stmt.executeUpdate(insertEndUser,Statement.RETURN_GENERATED_KEYS);
 			
 			ResultSet rs = stmt.getGeneratedKeys();
 
@@ -88,13 +86,14 @@ public class DeliveryGuySelfDAO {
 	}
 	
 
-	public int updateDeliveryVehicleSelf(DeliveryGuySelf deliveryGuySelf)
+	public int updateEndUser(EndUser endUser)
 	{	
-		String updateStatement = "UPDATE " + DeliveryGuySelf.TABLE_NAME
+		String updateStatement = "UPDATE " + EndUser.TABLE_NAME
 				+ " SET "
-				+ DeliveryGuySelf.VEHICLE_NAME + " = "  + "'" + deliveryGuySelf.getVehicleName() + "'"  + ","
-				+ DeliveryGuySelf.SHOP_ID + " = "  + " " + deliveryGuySelf.getShopID() + " "  + ""
-				+ " WHERE " + DeliveryGuySelf.ID + " = " + deliveryGuySelf.getDeliveryGuyID();
+				+ EndUser.USERNAME + " = " + "'" + endUser.getUsername() + "'" + ","
+				+ EndUser.PASSWORD + " = " + "'" + endUser.getPassword() + "'"
+				+ " WHERE "
+				+ EndUser.END_USER_ID  + " = " + endUser.getEndUserID();
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -146,11 +145,11 @@ public class DeliveryGuySelfDAO {
 	}
 	
 
-	public int deleteDeliveryVehicleSelf(int vehicleID)
+	public int deleteEndUser(int endUserID)
 	{
 		
-		String deleteStatement = "DELETE FROM " + DeliveryGuySelf.TABLE_NAME
-				+ " WHERE " + DeliveryGuySelf.ID + " = " + vehicleID;
+		String deleteStatement = "DELETE FROM " + EndUser.TABLE_NAME + " WHERE ID = "
+				+ endUserID;
 		
 		
 		Connection conn= null;
@@ -205,40 +204,11 @@ public class DeliveryGuySelfDAO {
 	
 	
 	
-	public ArrayList<DeliveryGuySelf> readDeliveryVehicleSelf(int shopID)
+	public ArrayList<EndUser> getEndUser()
 	{
-		String query = "SELECT * FROM " + DeliveryGuySelf.TABLE_NAME;
-
-		//boolean isFirst = true;
-
-		if(shopID > 0)
-		{
-			query = query + " WHERE " + DeliveryGuySelf.SHOP_ID + " = " + shopID;
-
-				//isFirst = false;
-		}
-
-		/*
-
-		if(shopID > 0 )
-		{
-			if(isFirst)
-			{
-				query = query + " WHERE " + CartContract.ITEM_ID + " = " + shopID;
-
-			}else
-			{
-				query = query + " AND " + CartContract.ITEM_ID + " = " + shopID;
-
-			}
-
-		}
-
-		*/
-
-
-
-		ArrayList<DeliveryGuySelf> vehiclesList = new ArrayList<DeliveryGuySelf>();
+		String query = "SELECT * FROM " + EndUser.TABLE_NAME;
+		ArrayList<EndUser> endUsersList = new ArrayList<EndUser>();
+		
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -257,14 +227,12 @@ public class DeliveryGuySelfDAO {
 			while(rs.next())
 			{
 
-				DeliveryGuySelf deliveryGuySelf = new DeliveryGuySelf();
+				EndUser endUser = new EndUser();
 
-				deliveryGuySelf.setDeliveryGuyID(rs.getInt(DeliveryGuySelf.ID));
-				deliveryGuySelf.setShopID(rs.getInt(DeliveryGuySelf.SHOP_ID));
-				deliveryGuySelf.setVehicleName(rs.getString(DeliveryGuySelf.VEHICLE_NAME));
+				endUser.setEndUserID(rs.getInt(EndUser.END_USER_ID));
+				endUser.setUsername(rs.getString(EndUser.USERNAME));
 
-				vehiclesList.add(deliveryGuySelf);
-				
+				endUsersList.add(endUser);
 			}
 			
 
@@ -307,22 +275,23 @@ public class DeliveryGuySelfDAO {
 		}
 		
 								
-		return vehiclesList;
+		return endUsersList;
 	}
 
 	
-	public DeliveryGuySelf readVehicle(int vehicleID)
+	public EndUser getEndUser(int endUserID)
 	{
 		
-		String query = "SELECT * FROM " + DeliveryGuySelf.TABLE_NAME
-						+ " WHERE " + DeliveryGuySelf.ID + " = " + vehicleID;
+		String query = "SELECT * FROM " + EndUser.TABLE_NAME
+						+ " WHERE ID = " + endUserID;
 		
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
-
-
-		DeliveryGuySelf deliveryGuySelf = null;
+		
+	
+		//Distributor distributor = null;
+		EndUser endUser = null;
 		
 		try {
 			
@@ -335,12 +304,9 @@ public class DeliveryGuySelfDAO {
 			
 			while(rs.next())
 			{
-				deliveryGuySelf = new DeliveryGuySelf();
-
-				deliveryGuySelf.setVehicleName(rs.getString(DeliveryGuySelf.VEHICLE_NAME));
-				deliveryGuySelf.setShopID(rs.getInt(DeliveryGuySelf.SHOP_ID));
-				deliveryGuySelf.setDeliveryGuyID(rs.getInt(DeliveryGuySelf.ID));
-
+				endUser = new EndUser();
+				endUser.setEndUserID(rs.getInt(EndUser.END_USER_ID));
+				endUser.setUsername(rs.getString(EndUser.USERNAME));
 			}
 			
 			
@@ -382,6 +348,111 @@ public class DeliveryGuySelfDAO {
 			}
 		}
 	
-		return deliveryGuySelf;
-	}	
+		return endUser;
+	}
+
+
+
+
+	public EndUser getEndUserPassword(Integer endUserID, String username)
+	{
+
+
+		String query = "";
+
+
+		if(endUserID!=null)
+		{
+			query = "SELECT * FROM " + EndUser.TABLE_NAME
+					+ " WHERE ID = " + endUserID;
+
+		}
+
+		else if(username!=null)
+		{
+			query = "SELECT * FROM " + EndUser.TABLE_NAME
+					+ " WHERE " +  EndUser.USERNAME + " = " + "'" + username + "'";
+
+		}
+
+
+
+		if(query.equals(""))
+		{
+			return null;
+		}
+
+
+
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+
+
+//		Distributor distributor = null;
+		EndUser endUser = null;
+
+		try {
+
+			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
+					JDBCContract.CURRENT_USERNAME,JDBCContract.CURRENT_PASSWORD);
+
+			stmt = conn.createStatement();
+
+			rs = stmt.executeQuery(query);
+
+			while(rs.next())
+			{
+				endUser = new EndUser();
+
+				endUser.setEndUserID(rs.getInt(EndUser.END_USER_ID));
+				endUser.setUsername(rs.getString(EndUser.USERNAME));
+				endUser.setPassword(rs.getString(EndUser.PASSWORD));
+			}
+
+
+			//System.out.println("Total itemCategories queried " + itemCategoryList.size());
+
+
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally
+
+		{
+
+			try {
+				if(rs!=null)
+				{rs.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(stmt!=null)
+				{stmt.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(conn!=null)
+				{conn.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return endUser;
+	}
+
+
+
+
 }

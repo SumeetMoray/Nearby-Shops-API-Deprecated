@@ -1,7 +1,6 @@
-package org.nearbyshops.ModelDeliverySelf;
+package org.nearbyshops.ModelDelivery;
 
 
-import org.nearbyshops.Model.Shop;
 import org.nearbyshops.ModelRoles.EndUser;
 
 /**

@@ -1,4 +1,4 @@
-package org.nearbyshops.DAOsRemaining;
+package org.nearbyshops.BackupsDAO;
 
 
 import org.nearbyshops.JDBCContract;

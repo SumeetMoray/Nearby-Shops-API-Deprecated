@@ -1,13 +1,13 @@
-package org.nearbyshops.DAOs;
+package org.nearbyshops.BackupsDAO;
 
 import org.nearbyshops.JDBCContract;
-import org.nearbyshops.ModelRoles.EndUser;
+import org.nearbyshops.ModelDelivery.DeliveryAddress;
 
 import java.sql.*;
 import java.util.ArrayList;
 
 
-public class EndUserService {
+public class DeliveryAddressService {
 
 	
 	@Override
@@ -18,21 +18,32 @@ public class EndUserService {
 	
 	
 	
-	public int saveEndUser(EndUser endUser)
-	{	
-		
+	public int saveAddress(DeliveryAddress deliveryAddress)
+	{
+
 		Connection conn = null;
 		Statement stmt = null;
 		int rowIdOfInsertedRow = -1;
 
-		String insertEndUser = "INSERT INTO "
-				+ EndUser.TABLE_NAME
-				+ "("
-				+ EndUser.USERNAME + ","
-				+ EndUser.PASSWORD
-				+ ") VALUES("
-				+ "'" + endUser.getUsername() + "'" + ","
-				+ "'" + endUser.getPassword() + "'" + ")";
+		String insertItemCategory = "INSERT INTO "
+				+ DeliveryAddress.TABLE_NAME
+				+ "("  
+				+ DeliveryAddress.END_USER_ID + ","
+				+ DeliveryAddress.PINCODE + ","
+				+ DeliveryAddress.PHONE_NUMBER + ","
+				+ DeliveryAddress.NAME + ","
+				+ DeliveryAddress.CITY + ","
+				+ DeliveryAddress.DELIVERY_ADDRESS + ","
+				+ DeliveryAddress.LANDMARK + ""
+				+ " ) VALUES ( "
+				+ "" + deliveryAddress.getEndUserID()	+ ","
+				+ "" + deliveryAddress.getPincode() + ","
+				+ "" + deliveryAddress.getPhoneNumber() + ","
+				+ "'" + deliveryAddress.getName() + "',"
+				+ "'" + deliveryAddress.getCity() + "',"
+				+ "'" + deliveryAddress.getDeliveryAddress() + "',"
+				+ "'" + deliveryAddress.getLandmark() + "'"
+				+ ")";
 		
 		try {
 			
@@ -41,7 +52,7 @@ public class EndUserService {
 			
 			stmt = conn.createStatement();
 			
-			rowIdOfInsertedRow = stmt.executeUpdate(insertEndUser,Statement.RETURN_GENERATED_KEYS);
+			rowIdOfInsertedRow = stmt.executeUpdate(insertItemCategory,Statement.RETURN_GENERATED_KEYS);
 			
 			ResultSet rs = stmt.getGeneratedKeys();
 
@@ -86,14 +97,33 @@ public class EndUserService {
 	}
 	
 
-	public int updateEndUser(EndUser endUser)
+	public int updateAddress(DeliveryAddress address)
 	{	
-		String updateStatement = "UPDATE " + EndUser.TABLE_NAME
+		String updateStatement = "UPDATE " + DeliveryAddress.TABLE_NAME
 				+ " SET "
-				+ EndUser.USERNAME + " = " + "'" + endUser.getUsername() + "'" + ","
-				+ EndUser.PASSWORD + " = " + "'" + endUser.getPassword() + "'"
-				+ " WHERE "
-				+ EndUser.END_USER_ID  + " = " + endUser.getEndUserID();
+				+ DeliveryAddress.END_USER_ID + " = "
+				+ "" + address.getEndUserID() + ""
+				+ ","
+				+ DeliveryAddress.LANDMARK + " = "
+				+ "'" + address.getLandmark() + "'"
+				+ ","
+				+ DeliveryAddress.DELIVERY_ADDRESS + " = "
+				+ "'" + address.getDeliveryAddress() + "'"
+				+ ","
+				+ DeliveryAddress.CITY + " = "
+				+ "'" + address.getCity() + "'"
+				+ ","
+				+ DeliveryAddress.PHONE_NUMBER + " = "
+				+ "" + address.getPhoneNumber() + ""
+				+ ","
+				+ DeliveryAddress.PINCODE + " = "
+				+ "" + address.getPincode() + ""
+				+ ","
+				+ DeliveryAddress.NAME + " = "
+				+ "'" + address.getName() + "'"
+
+				+ " WHERE " + DeliveryAddress.ID + " = "
+				+ address.getId();
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -145,11 +175,11 @@ public class EndUserService {
 	}
 	
 
-	public int deleteEndUser(int endUserID)
+	public int deleteAddress(int deliveryAddressID)
 	{
 		
-		String deleteStatement = "DELETE FROM " + EndUser.TABLE_NAME + " WHERE ID = "
-				+ endUserID;
+		String deleteStatement = "DELETE FROM " + DeliveryAddress.TABLE_NAME + " WHERE " + DeliveryAddress.ID + " = "
+				+ deliveryAddressID;
 		
 		
 		Connection conn= null;
@@ -204,11 +234,39 @@ public class EndUserService {
 	
 	
 	
-	public ArrayList<EndUser> getEndUser()
+	public ArrayList<DeliveryAddress> readAddresses(int endUserID)
 	{
-		String query = "SELECT * FROM " + EndUser.TABLE_NAME;
-		ArrayList<EndUser> endUsersList = new ArrayList<EndUser>();
-		
+		String query = "SELECT * FROM " + DeliveryAddress.TABLE_NAME;
+
+		boolean isFirst = true;
+
+		if(endUserID > 0)
+		{
+			query = query + " WHERE " + DeliveryAddress.END_USER_ID + " = " + endUserID;
+
+			isFirst = false;
+		}
+
+		/*
+
+		if(shopID > 0 )
+		{
+			if(isFirst)
+			{
+				query = query + " WHERE " + CartContract.ITEM_ID + " = " + shopID;
+
+			}else
+			{
+				query = query + " AND " + CartContract.ITEM_ID + " = " + shopID;
+
+			}
+
+		}
+
+		*/
+
+
+		ArrayList<DeliveryAddress> addressesList = new ArrayList<>();
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -227,12 +285,18 @@ public class EndUserService {
 			while(rs.next())
 			{
 
-				EndUser endUser = new EndUser();
+				DeliveryAddress address = new DeliveryAddress();
 
-				endUser.setEndUserID(rs.getInt(EndUser.END_USER_ID));
-				endUser.setUsername(rs.getString(EndUser.USERNAME));
+				address.setEndUserID(rs.getInt(DeliveryAddress.END_USER_ID));
+				address.setCity(rs.getString(DeliveryAddress.CITY));
+				address.setDeliveryAddress(rs.getString(DeliveryAddress.DELIVERY_ADDRESS));
+				address.setId(rs.getInt(DeliveryAddress.ID));
+				address.setLandmark(rs.getString(DeliveryAddress.LANDMARK));
+				address.setName(rs.getString(DeliveryAddress.NAME));
+				address.setPhoneNumber(rs.getLong(DeliveryAddress.PHONE_NUMBER));
+				address.setPincode(rs.getLong(DeliveryAddress.PINCODE));
 
-				endUsersList.add(endUser);
+				addressesList.add(address);
 			}
 			
 
@@ -275,23 +339,23 @@ public class EndUserService {
 		}
 		
 								
-		return endUsersList;
+		return addressesList;
 	}
 
 	
-	public EndUser getEndUser(int endUserID)
+	public DeliveryAddress readAddress(int addressID)
 	{
 		
-		String query = "SELECT * FROM " + EndUser.TABLE_NAME
-						+ " WHERE ID = " + endUserID;
+		String query = "SELECT * FROM " + DeliveryAddress.TABLE_NAME
+						+ " WHERE " + DeliveryAddress.ID + " = " + addressID;
 		
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
-		
-	
-		//Distributor distributor = null;
-		EndUser endUser = null;
+
+
+//		DeliveryAddress deliveryAddress = null;
+		DeliveryAddress address = null;
 		
 		try {
 			
@@ -304,9 +368,18 @@ public class EndUserService {
 			
 			while(rs.next())
 			{
-				endUser = new EndUser();
-				endUser.setEndUserID(rs.getInt(EndUser.END_USER_ID));
-				endUser.setUsername(rs.getString(EndUser.USERNAME));
+
+				address = new DeliveryAddress();
+
+				address.setEndUserID(rs.getInt(DeliveryAddress.END_USER_ID));
+				address.setCity(rs.getString(DeliveryAddress.CITY));
+				address.setDeliveryAddress(rs.getString(DeliveryAddress.DELIVERY_ADDRESS));
+				address.setId(rs.getInt(DeliveryAddress.ID));
+				address.setLandmark(rs.getString(DeliveryAddress.LANDMARK));
+				address.setName(rs.getString(DeliveryAddress.NAME));
+				address.setPhoneNumber(rs.getLong(DeliveryAddress.PHONE_NUMBER));
+				address.setPincode(rs.getLong(DeliveryAddress.PINCODE));
+
 			}
 			
 			
@@ -348,111 +421,6 @@ public class EndUserService {
 			}
 		}
 	
-		return endUser;
-	}
-
-
-
-
-	public EndUser getEndUserPassword(Integer endUserID, String username)
-	{
-
-
-		String query = "";
-
-
-		if(endUserID!=null)
-		{
-			query = "SELECT * FROM " + EndUser.TABLE_NAME
-					+ " WHERE ID = " + endUserID;
-
-		}
-
-		else if(username!=null)
-		{
-			query = "SELECT * FROM " + EndUser.TABLE_NAME
-					+ " WHERE " +  EndUser.USERNAME + " = " + "'" + username + "'";
-
-		}
-
-
-
-		if(query.equals(""))
-		{
-			return null;
-		}
-
-
-
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-//		Distributor distributor = null;
-		EndUser endUser = null;
-
-		try {
-
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
-					JDBCContract.CURRENT_USERNAME,JDBCContract.CURRENT_PASSWORD);
-
-			stmt = conn.createStatement();
-
-			rs = stmt.executeQuery(query);
-
-			while(rs.next())
-			{
-				endUser = new EndUser();
-
-				endUser.setEndUserID(rs.getInt(EndUser.END_USER_ID));
-				endUser.setUsername(rs.getString(EndUser.USERNAME));
-				endUser.setPassword(rs.getString(EndUser.PASSWORD));
-			}
-
-
-			//System.out.println("Total itemCategories queried " + itemCategoryList.size());
-
-
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally
-
-		{
-
-			try {
-				if(rs!=null)
-				{rs.close();}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			try {
-
-				if(stmt!=null)
-				{stmt.close();}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			try {
-
-				if(conn!=null)
-				{conn.close();}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		return endUser;
-	}
-
-
-
-
+		return address;
+	}	
 }

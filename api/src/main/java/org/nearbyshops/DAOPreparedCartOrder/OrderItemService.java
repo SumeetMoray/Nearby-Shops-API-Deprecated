@@ -129,7 +129,6 @@ public class OrderItemService {
 		try {
 			
 			connection = dataSource.getConnection();
-			
 			statement = connection.createStatement();
 			
 			updatedRows = statement.executeUpdate(updateStatement);
@@ -205,11 +204,9 @@ public class OrderItemService {
 		int rowsCountDeleted = 0;
 		try {
 			
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
-					JDBCContract.CURRENT_USERNAME,JDBCContract.CURRENT_PASSWORD);
-			
+			conn = dataSource.getConnection();
 			stmt = conn.createStatement();
-			
+
 			rowsCountDeleted = stmt.executeUpdate(deleteStatement);
 			
 			System.out.println(" Deleted Count: " + rowsCountDeleted);	

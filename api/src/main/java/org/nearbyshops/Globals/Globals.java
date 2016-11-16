@@ -2,9 +2,7 @@ package org.nearbyshops.Globals;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.nearbyshops.DAOPreparedCartOrder.CartService;
-import org.nearbyshops.DAOPreparedCartOrder.OrderItemService;
-import org.nearbyshops.DAOPreparedCartOrder.OrderService;
+import org.nearbyshops.DAOPreparedCartOrder.*;
 import org.nearbyshops.DAOPreparedReviewItem.FavoriteItemDAOPrepared;
 import org.nearbyshops.DAOPreparedReviewItem.ItemReviewDAOPrepared;
 import org.nearbyshops.DAOPreparedReviewItem.ItemReviewThanksDAOPrepared;
@@ -13,9 +11,8 @@ import org.nearbyshops.DAOPreparedReviewShop.ShopReviewDAOPrepared;
 import org.nearbyshops.DAOPreparedReviewShop.ShopReviewThanksDAOPrepared;
 import org.nearbyshops.DAOPreparedSettings.ServiceConfigurationDAOPrepared;
 import org.nearbyshops.DAOPreparedSettings.SettingsDAOPrepared;
-import org.nearbyshops.DAOs.EndUserService;
+import org.nearbyshops.BackupDAOsTwo.EndUserService;
 import org.nearbyshops.DAOsPreparedRoles.*;
-import org.nearbyshops.DAOsRemaining.*;
 import org.nearbyshops.DAOsPrepared.*;
 import org.nearbyshops.JDBCContract;
 

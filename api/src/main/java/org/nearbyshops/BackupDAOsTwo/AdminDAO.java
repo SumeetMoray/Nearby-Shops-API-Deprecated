@@ -1,18 +1,13 @@
-package org.nearbyshops.DAOs;
+package org.nearbyshops.BackupDAOsTwo;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import org.nearbyshops.JDBCContract;
+import org.nearbyshops.ModelRoles.Admin;
+
+import java.sql.*;
 import java.util.ArrayList;
 
 
-import org.nearbyshops.JDBCContract;
-import org.nearbyshops.ModelRoles.Distributor;
-
-
-public class DistributorService {
+public class AdminDAO {
 
 	
 	@Override
@@ -23,22 +18,19 @@ public class DistributorService {
 	
 	
 	
-	public int saveDistributor(Distributor distributor)
+	public int saveServiceProvider(Admin admin)
 	{	
 		
 		Connection conn = null;
 		Statement stmt = null;
 		int rowIdOfInsertedRow = -1;
 
-		String insertItemCategory = "INSERT INTO "
-				+ Distributor.TABLE_NAME
+		String insertEndUser = "INSERT INTO "
+				+ Admin.TABLE_NAME
 				+ "("  
-				+ Distributor.DISTRIBUTOR_NAME + ","
-				+ Distributor.PASSWORD
+				+ Admin.ADMIN_NAME
 				+ ") VALUES("
-				+ "'" + distributor.getDistributorName()	+ "'" + ","
-				+ "'" + distributor.getPassword() + "'" +
-				")";
+				+ "'" + admin.getAdministratorName()	+ "')";
 		
 		try {
 			
@@ -47,7 +39,7 @@ public class DistributorService {
 			
 			stmt = conn.createStatement();
 			
-			rowIdOfInsertedRow = stmt.executeUpdate(insertItemCategory,Statement.RETURN_GENERATED_KEYS);
+			rowIdOfInsertedRow = stmt.executeUpdate(insertEndUser,Statement.RETURN_GENERATED_KEYS);
 			
 			ResultSet rs = stmt.getGeneratedKeys();
 
@@ -92,14 +84,13 @@ public class DistributorService {
 	}
 	
 
-	public int updateDistributor(Distributor distributor)
+	public int updateServiceProvider(Admin admin)
 	{	
-		String updateStatement = "UPDATE " + Distributor.TABLE_NAME
-				+ " SET "
-				+ Distributor.DISTRIBUTOR_NAME + " = " + "'" + distributor.getDistributorName() + "'" + ","
-				+ Distributor.PASSWORD + " = " + "'" + distributor.getPassword() + "'"
+		String updateStatement = "UPDATE " + Admin.TABLE_NAME
+				+ " SET " + Admin.ADMIN_NAME + " = "
+				+ "'" + admin.getAdministratorName() + "'"
 				+ " WHERE ID = "
-				+ distributor.getDistributorID();
+				+ admin.getAdminID();
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -151,11 +142,11 @@ public class DistributorService {
 	}
 	
 
-	public int deleteDistributor(int distributorID)
+	public int deleteServiceProvider(int serviceProviderID)
 	{
 		
-		String deleteStatement = "DELETE FROM " + Distributor.TABLE_NAME + " WHERE ID = "
-				+ distributorID;
+		String deleteStatement = "DELETE FROM " + Admin.TABLE_NAME + " WHERE ID = "
+				+ serviceProviderID;
 		
 		
 		Connection conn= null;
@@ -210,10 +201,10 @@ public class DistributorService {
 	
 	
 	
-	public ArrayList<Distributor> readAllDistributor()
+	public ArrayList<Admin> getServiceProvider()
 	{
-		String query = "SELECT * FROM " + Distributor.TABLE_NAME;
-		ArrayList<Distributor> distributorList = new ArrayList<Distributor>();
+		String query = "SELECT * FROM " + Admin.TABLE_NAME;
+		ArrayList<Admin> serviceProvidersList = new ArrayList<Admin>();
 		
 		
 		Connection conn = null;
@@ -232,20 +223,17 @@ public class DistributorService {
 			
 			while(rs.next())
 			{
-				
-				Distributor distributor = new Distributor();
-				
-				distributor.setDistributorID(rs.getInt(Distributor.DISTRIBUTOR_ID));
-				distributor.setDistributorName(rs.getString(Distributor.DISTRIBUTOR_NAME));
-	
-				distributorList.add(distributor);
-				
+
+				Admin admin = new Admin();
+
+				admin.setAdminID(rs.getInt(Admin.ADMIN_ID));
+				admin.setAdministratorName(rs.getString(Admin.ADMIN_NAME));
+
+				serviceProvidersList.add(admin);
+
 			}
 			
-			
-			
-			
-			System.out.println("Total Distributor queried " + distributorList.size());	
+
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -285,22 +273,23 @@ public class DistributorService {
 		}
 		
 								
-		return distributorList;
+		return serviceProvidersList;
 	}
 
 	
-	public Distributor getDistributor(int distributorID)
+	public Admin getServiceProvider(int serviceProviderID)
 	{
 		
-		String query = "SELECT * FROM " + Distributor.TABLE_NAME
-						+ " WHERE ID = " + distributorID;
+		String query = "SELECT * FROM " + Admin.TABLE_NAME
+						+ " WHERE " + Admin.ADMIN_ID + " = " + serviceProviderID;
 		
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
 		
 	
-		Distributor distributor = null;
+		//Distributor distributor = null;
+		Admin admin = null;
 		
 		try {
 			
@@ -313,9 +302,11 @@ public class DistributorService {
 			
 			while(rs.next())
 			{
-				distributor = new Distributor();
-				distributor.setDistributorID(rs.getInt(Distributor.DISTRIBUTOR_ID));
-				distributor.setDistributorName(rs.getString(Distributor.DISTRIBUTOR_NAME));
+				admin = new Admin();
+
+				admin.setAdminID(rs.getInt(Admin.ADMIN_ID));
+				admin.setAdministratorName(rs.getString(Admin.ADMIN_NAME));
+
 			}
 			
 			
@@ -357,102 +348,6 @@ public class DistributorService {
 			}
 		}
 	
-		return distributor;
-	}
-
-	public Distributor getDistributorPassword(Integer distributorID, String username)
-	{
-
-
-		String query = "";
-
-
-		if(distributorID!=null)
-		{
-			query = "SELECT * FROM " + Distributor.TABLE_NAME
-					+ " WHERE ID = " + distributorID;
-
-		}
-
-		else if(username!=null)
-		{
-			query = "SELECT * FROM " + Distributor.TABLE_NAME
-					+ " WHERE " +  Distributor.DISTRIBUTOR_NAME + " = " + "'" + username + "'";
-
-		}
-
-
-
-		if(query.equals(""))
-		{
-			return null;
-		}
-
-
-
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-
-
-		Distributor distributor = null;
-
-		try {
-
-			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
-					JDBCContract.CURRENT_USERNAME,JDBCContract.CURRENT_PASSWORD);
-
-			stmt = conn.createStatement();
-
-			rs = stmt.executeQuery(query);
-
-			while(rs.next())
-			{
-				distributor = new Distributor();
-				distributor.setDistributorID(rs.getInt(Distributor.DISTRIBUTOR_ID));
-				distributor.setDistributorName(rs.getString(Distributor.DISTRIBUTOR_NAME));
-				distributor.setPassword(rs.getString(Distributor.PASSWORD));
-			}
-
-
-			//System.out.println("Total itemCategories queried " + itemCategoryList.size());
-
-
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally
-
-		{
-
-			try {
-				if(rs!=null)
-				{rs.close();}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			try {
-
-				if(stmt!=null)
-				{stmt.close();}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			try {
-
-				if(conn!=null)
-				{conn.close();}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		return distributor;
-	}
+		return admin;
+	}	
 }

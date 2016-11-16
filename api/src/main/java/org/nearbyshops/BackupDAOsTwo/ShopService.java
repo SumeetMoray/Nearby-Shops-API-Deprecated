@@ -1,4 +1,4 @@
-package org.nearbyshops.DAOs;
+package org.nearbyshops.BackupDAOsTwo;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -1,7 +1,7 @@
 package org.nearbyshops.RESTEndpoints;
 
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.ModelDeliverySelf.DeliveryGuySelf;
+import org.nearbyshops.ModelDelivery.DeliveryGuySelf;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;

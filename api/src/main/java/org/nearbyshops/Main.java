@@ -11,8 +11,8 @@ import org.nearbyshops.DAOPreparedSettings.SettingsDAOPrepared;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.*;
-import org.nearbyshops.ModelDeliverySelf.DeliveryAddress;
-import org.nearbyshops.ModelDeliverySelf.DeliveryGuySelf;
+import org.nearbyshops.ModelDelivery.DeliveryAddress;
+import org.nearbyshops.ModelDelivery.DeliveryGuySelf;
 import org.nearbyshops.ModelReviewItem.FavouriteItem;
 import org.nearbyshops.ModelReviewItem.ItemReview;
 import org.nearbyshops.ModelReviewItem.ItemReviewThanks;
@@ -37,9 +37,7 @@ import java.sql.Statement;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import static org.nearbyshops.Model.CartItem.createtableCartItemPostgres;
-
-	/**
+    /**
  * Main class.
  *
  */

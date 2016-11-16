@@ -1,13 +1,18 @@
-package org.nearbyshops.DAOsRemaining;
+package org.nearbyshops.BackupDAOsTwo;
 
-import org.nearbyshops.JDBCContract;
-import org.nearbyshops.ModelDeliverySelf.DeliveryAddress;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 
-public class DeliveryAddressService {
+import org.nearbyshops.JDBCContract;
+import org.nearbyshops.ModelRoles.Distributor;
+
+
+public class DistributorService {
 
 	
 	@Override
@@ -18,32 +23,22 @@ public class DeliveryAddressService {
 	
 	
 	
-	public int saveAddress(DeliveryAddress deliveryAddress)
-	{
-
+	public int saveDistributor(Distributor distributor)
+	{	
+		
 		Connection conn = null;
 		Statement stmt = null;
 		int rowIdOfInsertedRow = -1;
 
 		String insertItemCategory = "INSERT INTO "
-				+ DeliveryAddress.TABLE_NAME
+				+ Distributor.TABLE_NAME
 				+ "("  
-				+ DeliveryAddress.END_USER_ID + ","
-				+ DeliveryAddress.PINCODE + ","
-				+ DeliveryAddress.PHONE_NUMBER + ","
-				+ DeliveryAddress.NAME + ","
-				+ DeliveryAddress.CITY + ","
-				+ DeliveryAddress.DELIVERY_ADDRESS + ","
-				+ DeliveryAddress.LANDMARK + ""
-				+ " ) VALUES ( "
-				+ "" + deliveryAddress.getEndUserID()	+ ","
-				+ "" + deliveryAddress.getPincode() + ","
-				+ "" + deliveryAddress.getPhoneNumber() + ","
-				+ "'" + deliveryAddress.getName() + "',"
-				+ "'" + deliveryAddress.getCity() + "',"
-				+ "'" + deliveryAddress.getDeliveryAddress() + "',"
-				+ "'" + deliveryAddress.getLandmark() + "'"
-				+ ")";
+				+ Distributor.DISTRIBUTOR_NAME + ","
+				+ Distributor.PASSWORD
+				+ ") VALUES("
+				+ "'" + distributor.getDistributorName()	+ "'" + ","
+				+ "'" + distributor.getPassword() + "'" +
+				")";
 		
 		try {
 			
@@ -97,33 +92,14 @@ public class DeliveryAddressService {
 	}
 	
 
-	public int updateAddress(DeliveryAddress address)
+	public int updateDistributor(Distributor distributor)
 	{	
-		String updateStatement = "UPDATE " + DeliveryAddress.TABLE_NAME
+		String updateStatement = "UPDATE " + Distributor.TABLE_NAME
 				+ " SET "
-				+ DeliveryAddress.END_USER_ID + " = "
-				+ "" + address.getEndUserID() + ""
-				+ ","
-				+ DeliveryAddress.LANDMARK + " = "
-				+ "'" + address.getLandmark() + "'"
-				+ ","
-				+ DeliveryAddress.DELIVERY_ADDRESS + " = "
-				+ "'" + address.getDeliveryAddress() + "'"
-				+ ","
-				+ DeliveryAddress.CITY + " = "
-				+ "'" + address.getCity() + "'"
-				+ ","
-				+ DeliveryAddress.PHONE_NUMBER + " = "
-				+ "" + address.getPhoneNumber() + ""
-				+ ","
-				+ DeliveryAddress.PINCODE + " = "
-				+ "" + address.getPincode() + ""
-				+ ","
-				+ DeliveryAddress.NAME + " = "
-				+ "'" + address.getName() + "'"
-
-				+ " WHERE " + DeliveryAddress.ID + " = "
-				+ address.getId();
+				+ Distributor.DISTRIBUTOR_NAME + " = " + "'" + distributor.getDistributorName() + "'" + ","
+				+ Distributor.PASSWORD + " = " + "'" + distributor.getPassword() + "'"
+				+ " WHERE ID = "
+				+ distributor.getDistributorID();
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -175,11 +151,11 @@ public class DeliveryAddressService {
 	}
 	
 
-	public int deleteAddress(int deliveryAddressID)
+	public int deleteDistributor(int distributorID)
 	{
 		
-		String deleteStatement = "DELETE FROM " + DeliveryAddress.TABLE_NAME + " WHERE " + DeliveryAddress.ID + " = "
-				+ deliveryAddressID;
+		String deleteStatement = "DELETE FROM " + Distributor.TABLE_NAME + " WHERE ID = "
+				+ distributorID;
 		
 		
 		Connection conn= null;
@@ -234,39 +210,11 @@ public class DeliveryAddressService {
 	
 	
 	
-	public ArrayList<DeliveryAddress> readAddresses(int endUserID)
+	public ArrayList<Distributor> readAllDistributor()
 	{
-		String query = "SELECT * FROM " + DeliveryAddress.TABLE_NAME;
-
-		boolean isFirst = true;
-
-		if(endUserID > 0)
-		{
-			query = query + " WHERE " + DeliveryAddress.END_USER_ID + " = " + endUserID;
-
-			isFirst = false;
-		}
-
-		/*
-
-		if(shopID > 0 )
-		{
-			if(isFirst)
-			{
-				query = query + " WHERE " + CartContract.ITEM_ID + " = " + shopID;
-
-			}else
-			{
-				query = query + " AND " + CartContract.ITEM_ID + " = " + shopID;
-
-			}
-
-		}
-
-		*/
-
-
-		ArrayList<DeliveryAddress> addressesList = new ArrayList<>();
+		String query = "SELECT * FROM " + Distributor.TABLE_NAME;
+		ArrayList<Distributor> distributorList = new ArrayList<Distributor>();
+		
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -284,22 +232,20 @@ public class DeliveryAddressService {
 			
 			while(rs.next())
 			{
-
-				DeliveryAddress address = new DeliveryAddress();
-
-				address.setEndUserID(rs.getInt(DeliveryAddress.END_USER_ID));
-				address.setCity(rs.getString(DeliveryAddress.CITY));
-				address.setDeliveryAddress(rs.getString(DeliveryAddress.DELIVERY_ADDRESS));
-				address.setId(rs.getInt(DeliveryAddress.ID));
-				address.setLandmark(rs.getString(DeliveryAddress.LANDMARK));
-				address.setName(rs.getString(DeliveryAddress.NAME));
-				address.setPhoneNumber(rs.getLong(DeliveryAddress.PHONE_NUMBER));
-				address.setPincode(rs.getLong(DeliveryAddress.PINCODE));
-
-				addressesList.add(address);
+				
+				Distributor distributor = new Distributor();
+				
+				distributor.setDistributorID(rs.getInt(Distributor.DISTRIBUTOR_ID));
+				distributor.setDistributorName(rs.getString(Distributor.DISTRIBUTOR_NAME));
+	
+				distributorList.add(distributor);
+				
 			}
 			
-
+			
+			
+			
+			System.out.println("Total Distributor queried " + distributorList.size());	
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -339,23 +285,22 @@ public class DeliveryAddressService {
 		}
 		
 								
-		return addressesList;
+		return distributorList;
 	}
 
 	
-	public DeliveryAddress readAddress(int addressID)
+	public Distributor getDistributor(int distributorID)
 	{
 		
-		String query = "SELECT * FROM " + DeliveryAddress.TABLE_NAME
-						+ " WHERE " + DeliveryAddress.ID + " = " + addressID;
+		String query = "SELECT * FROM " + Distributor.TABLE_NAME
+						+ " WHERE ID = " + distributorID;
 		
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
-
-
-//		DeliveryAddress deliveryAddress = null;
-		DeliveryAddress address = null;
+		
+	
+		Distributor distributor = null;
 		
 		try {
 			
@@ -368,18 +313,9 @@ public class DeliveryAddressService {
 			
 			while(rs.next())
 			{
-
-				address = new DeliveryAddress();
-
-				address.setEndUserID(rs.getInt(DeliveryAddress.END_USER_ID));
-				address.setCity(rs.getString(DeliveryAddress.CITY));
-				address.setDeliveryAddress(rs.getString(DeliveryAddress.DELIVERY_ADDRESS));
-				address.setId(rs.getInt(DeliveryAddress.ID));
-				address.setLandmark(rs.getString(DeliveryAddress.LANDMARK));
-				address.setName(rs.getString(DeliveryAddress.NAME));
-				address.setPhoneNumber(rs.getLong(DeliveryAddress.PHONE_NUMBER));
-				address.setPincode(rs.getLong(DeliveryAddress.PINCODE));
-
+				distributor = new Distributor();
+				distributor.setDistributorID(rs.getInt(Distributor.DISTRIBUTOR_ID));
+				distributor.setDistributorName(rs.getString(Distributor.DISTRIBUTOR_NAME));
 			}
 			
 			
@@ -421,6 +357,102 @@ public class DeliveryAddressService {
 			}
 		}
 	
-		return address;
-	}	
+		return distributor;
+	}
+
+	public Distributor getDistributorPassword(Integer distributorID, String username)
+	{
+
+
+		String query = "";
+
+
+		if(distributorID!=null)
+		{
+			query = "SELECT * FROM " + Distributor.TABLE_NAME
+					+ " WHERE ID = " + distributorID;
+
+		}
+
+		else if(username!=null)
+		{
+			query = "SELECT * FROM " + Distributor.TABLE_NAME
+					+ " WHERE " +  Distributor.DISTRIBUTOR_NAME + " = " + "'" + username + "'";
+
+		}
+
+
+
+		if(query.equals(""))
+		{
+			return null;
+		}
+
+
+
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+
+
+		Distributor distributor = null;
+
+		try {
+
+			conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
+					JDBCContract.CURRENT_USERNAME,JDBCContract.CURRENT_PASSWORD);
+
+			stmt = conn.createStatement();
+
+			rs = stmt.executeQuery(query);
+
+			while(rs.next())
+			{
+				distributor = new Distributor();
+				distributor.setDistributorID(rs.getInt(Distributor.DISTRIBUTOR_ID));
+				distributor.setDistributorName(rs.getString(Distributor.DISTRIBUTOR_NAME));
+				distributor.setPassword(rs.getString(Distributor.PASSWORD));
+			}
+
+
+			//System.out.println("Total itemCategories queried " + itemCategoryList.size());
+
+
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally
+
+		{
+
+			try {
+				if(rs!=null)
+				{rs.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(stmt!=null)
+				{stmt.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(conn!=null)
+				{conn.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return distributor;
+	}
 }
