@@ -1,4 +1,4 @@
-package org.nearbyshops.ModelRoles;
+package org.nearbyshops.ADeprecationReview;
 
 
 public class VehicleSelfDriver {

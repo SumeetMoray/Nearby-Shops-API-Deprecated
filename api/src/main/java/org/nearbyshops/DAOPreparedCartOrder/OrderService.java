@@ -56,7 +56,7 @@ public class OrderService {
             rowCountAvailableItemQuantity = Globals.shopItemDAO.updateAvailableItemQuantity(orderID);
 
             // delete cart_item here
-            Globals.cartItemService.deleteCartItem(0,cartID);
+            Globals.cartItemService.deleteCartItem(null,cartID);
 
             // delete cart here
             Globals.cartService.deleteCart(cartID);
@@ -281,7 +281,7 @@ public class OrderService {
                 order.setPaymentReceived(rs.getBoolean(Order.PAYMENT_RECEIVED));
 
                 order.setDeliveryAddressID((Integer) rs.getObject(Order.DELIVERY_ADDRESS_ID));
-                order.setDeliveryVehicleSelfID((Integer) rs.getObject(Order.DELIVERY_VEHICLE_SELF_ID));
+                order.setDeliveryVehicleSelfID((Integer) rs.getObject(Order.DELIVERY_GUY_SELF_ID));
             }
 
 
@@ -356,7 +356,7 @@ public class OrderService {
                 + Order.TABLE_NAME + "." + Order.DELIVERY_RECEIVED + ","
                 + Order.TABLE_NAME + "." + Order.PAYMENT_RECEIVED + ","
 
-                + Order.TABLE_NAME + "." + Order.DELIVERY_VEHICLE_SELF_ID + ","
+                + Order.TABLE_NAME + "." + Order.DELIVERY_GUY_SELF_ID + ","
                 + Order.TABLE_NAME + "." + Order.END_USER_ID + ","
                 + Order.TABLE_NAME + "." + Order.PICK_FROM_SHOP + ","
 
@@ -484,13 +484,13 @@ public class OrderService {
         {
             if(isFirst)
             {
-                query = query + " WHERE " + Order.DELIVERY_VEHICLE_SELF_ID + " = " + deliveryGuyID;
+                query = query + " WHERE " + Order.DELIVERY_GUY_SELF_ID + " = " + deliveryGuyID;
 
                 isFirst = false;
 
             }else
             {
-                query = query + " AND " + Order.DELIVERY_VEHICLE_SELF_ID + " = " + deliveryGuyID;
+                query = query + " AND " + Order.DELIVERY_GUY_SELF_ID + " = " + deliveryGuyID;
             }
 
         }
@@ -608,7 +608,7 @@ public class OrderService {
 
                 order.setPaymentReceived(rs.getBoolean(Order.PAYMENT_RECEIVED));
                 order.setDeliveryAddressID((Integer) rs.getObject(Order.DELIVERY_ADDRESS_ID));
-                order.setDeliveryVehicleSelfID((Integer) rs.getObject(Order.DELIVERY_VEHICLE_SELF_ID));
+                order.setDeliveryVehicleSelfID((Integer) rs.getObject(Order.DELIVERY_GUY_SELF_ID));
 
 
                 /*if(getDeliveryAddress!=null && getDeliveryAddress)
@@ -810,13 +810,13 @@ public class OrderService {
         {
             if(isFirst)
             {
-                query = query + " WHERE " + Order.DELIVERY_VEHICLE_SELF_ID + " = " + deliveryGuyID;
+                query = query + " WHERE " + Order.DELIVERY_GUY_SELF_ID + " = " + deliveryGuyID;
 
                 isFirst = false;
 
             }else
             {
-                query = query + " AND " + Order.DELIVERY_VEHICLE_SELF_ID + " = " + deliveryGuyID;
+                query = query + " AND " + Order.DELIVERY_GUY_SELF_ID + " = " + deliveryGuyID;
             }
 
         }
@@ -937,7 +937,7 @@ public class OrderService {
                 + " " + Order.DELIVERY_RECEIVED + " = ?,"
                 + " " + Order.DELIVERY_CHARGES + " = ?,"
                 + " " + Order.DELIVERY_ADDRESS_ID + " = ?,"
-                      + Order.DELIVERY_VEHICLE_SELF_ID + " = ?,"
+                      + Order.DELIVERY_GUY_SELF_ID + " = ?,"
                       + Order.PICK_FROM_SHOP + " = ?"
                 + " WHERE " + Order.ORDER_ID + " = ?";
 

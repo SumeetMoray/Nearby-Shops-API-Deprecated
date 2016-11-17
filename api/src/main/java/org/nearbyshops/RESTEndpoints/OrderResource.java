@@ -1,12 +1,17 @@
 package org.nearbyshops.RESTEndpoints;
 
+import org.glassfish.jersey.media.sse.EventOutput;
+import org.glassfish.jersey.media.sse.SseBroadcaster;
+import org.glassfish.jersey.media.sse.SseFeature;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.Order;
 import org.nearbyshops.ModelEndPoints.ItemEndPoint;
 import org.nearbyshops.ModelEndPoints.OrderEndPoint;
 import org.nearbyshops.ModelStats.OrderStats;
+import org.nearbyshops.zExperimental.SSEEndpoint;
 
+import javax.inject.Singleton;
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
@@ -15,6 +20,7 @@ import javax.ws.rs.core.Response.Status;
 import java.util.List;
 
 
+@Singleton
 @Path("/Order")
 public class OrderResource {
 
@@ -23,6 +29,31 @@ public class OrderResource {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
+
+	@GET
+	@Path("/Notifications/{ShopID}")
+	@Produces(SseFeature.SERVER_SENT_EVENTS)
+	public EventOutput listenToBroadcast(@PathParam("ShopID")int shopID) {
+		final EventOutput eventOutput = new EventOutput();
+
+		if(Globals.broadcasterMap.get(shopID)!=null)
+		{
+			SseBroadcaster broadcasterOne = Globals.broadcasterMap.get(shopID);
+			broadcasterOne.add(eventOutput);
+		}
+		else
+		{
+			SseBroadcaster broadcasterTwo = new SseBroadcaster();
+			broadcasterTwo.add(eventOutput);
+			Globals.broadcasterMap.put(shopID,broadcasterTwo);
+		}
+
+		return eventOutput;
+	}
+
+
+
 	
 	
 	@POST
@@ -36,13 +67,12 @@ public class OrderResource {
 
 		if(orderResult!=null)
 		{
-			
-			
-			Response response = Response.status(Status.CREATED)
+
+			Globals.broadcastMessage(String.valueOf(orderResult.getOrderID()) + "Has been received !",order.getShopID());
+
+			return Response.status(Status.CREATED)
 					.entity(orderResult)
 					.build();
-			
-			return response;
 			
 		}
 		else
@@ -72,19 +102,17 @@ public class OrderResource {
 
 		if(rowCount >= 1)
 		{
-			Response response = Response.status(Status.OK)
+
+			return Response.status(Status.OK)
 					.entity(null)
 					.build();
-
-			return response;
 		}
 		if(rowCount <= 0)
 		{
-			Response response = Response.status(Status.NOT_MODIFIED)
+
+			return Response.status(Status.NOT_MODIFIED)
 					.entity(null)
 					.build();
-
-			return response;
 		}
 
 
@@ -293,7 +321,7 @@ public class OrderResource {
 
 /*
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

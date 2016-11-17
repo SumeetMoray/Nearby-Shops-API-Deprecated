@@ -1,7 +1,7 @@
 package org.nearbyshops.Model;
 
 import org.nearbyshops.ModelDelivery.DeliveryAddress;
-import org.nearbyshops.ModelDelivery.DeliveryGuySelf;
+import org.nearbyshops.ModelRoles.DeliveryGuySelf;
 import org.nearbyshops.ModelRoles.EndUser;
 import org.nearbyshops.ModelStats.OrderStats;
 
@@ -31,7 +31,7 @@ public class Order {
     public static final String DELIVERY_RECEIVED = "DELIVERY_RECEIVED";
     public static final String PAYMENT_RECEIVED = "PAYMENT_RECEIVED";
 
-    public static final String DELIVERY_VEHICLE_SELF_ID = "DELIVERY_VEHICLE_SELF_ID";
+    public static final String DELIVERY_GUY_SELF_ID = "DELIVERY_GUY_SELF_ID";
 
 //    public static final String ORDER_TOTAL = "ORDER_TOTAL";
 //    public static final String TAX_AMOUNT = "TAX_AMOUNT";
@@ -66,12 +66,12 @@ public class Order {
             + " " + Order.DELIVERY_CHARGES + " INT,"
             + " " + Order.DELIVERY_ADDRESS_ID + " INT,"
             + " " + Order.PICK_FROM_SHOP + " boolean,"
-            + " " + Order.DELIVERY_VEHICLE_SELF_ID + " INT,"
+            + " " + Order.DELIVERY_GUY_SELF_ID + " INT,"
             + " " + Order.DATE_TIME_PLACED + " timestamp with time zone NOT NULL DEFAULT now(),"
             + " FOREIGN KEY(" + Order.END_USER_ID +") REFERENCES " + EndUser.TABLE_NAME + "(" + EndUser.END_USER_ID + "),"
             + " FOREIGN KEY(" + Order.SHOP_ID +") REFERENCES " + Shop.TABLE_NAME + "(" + Shop.SHOP_ID + "),"
             + " FOREIGN KEY(" + Order.DELIVERY_ADDRESS_ID +") REFERENCES " + DeliveryAddress.TABLE_NAME + "(" + DeliveryAddress.ID + "),"
-            + " FOREIGN KEY(" + Order.DELIVERY_VEHICLE_SELF_ID +") REFERENCES " + DeliveryGuySelf.TABLE_NAME + "(" + DeliveryGuySelf.ID + ")"
+            + " FOREIGN KEY(" + Order.DELIVERY_GUY_SELF_ID +") REFERENCES " + DeliveryGuySelf.TABLE_NAME + "(" + DeliveryGuySelf.ID + ")"
             + ")";
 
 

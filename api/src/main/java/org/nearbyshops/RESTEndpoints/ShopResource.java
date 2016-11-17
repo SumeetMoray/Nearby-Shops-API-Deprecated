@@ -24,6 +24,7 @@ import org.nearbyshops.Model.Shop;
 import org.nearbyshops.ModelEndPoints.ShopEndPoint;
 import org.nearbyshops.Utility.GeoLocation;
 
+
 @Path("/v1/Shop")
 @Produces(MediaType.APPLICATION_JSON)
 public class ShopResource {
@@ -192,19 +193,17 @@ public class ShopResource {
 			
 			if(list.size()<=0)
 			{
-				Response response = Response.status(Status.NO_CONTENT)
+
+				return Response.status(Status.NO_CONTENT)
 						.entity(listEntity)
 						.build();
-				
-				return response;
 				
 			}else
 			{
-				Response response = Response.status(Status.OK)
+
+				return Response.status(Status.OK)
 						.entity(listEntity)
 						.build();
-				
-				return response;
 			}
 	
 	}
@@ -360,12 +359,12 @@ public class ShopResource {
 			endPoint.setResults(shopsList);
 		}
 
-
+/*
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}
+		}*/
 
 
 		//Marker

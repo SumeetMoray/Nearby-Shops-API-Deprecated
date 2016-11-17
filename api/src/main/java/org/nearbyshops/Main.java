@@ -12,7 +12,7 @@ import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.*;
 import org.nearbyshops.ModelDelivery.DeliveryAddress;
-import org.nearbyshops.ModelDelivery.DeliveryGuySelf;
+import org.nearbyshops.ModelRoles.DeliveryGuySelf;
 import org.nearbyshops.ModelReviewItem.FavouriteItem;
 import org.nearbyshops.ModelReviewItem.ItemReview;
 import org.nearbyshops.ModelReviewItem.ItemReviewThanks;
@@ -221,20 +221,15 @@ public class Main implements ActionListener {
 			statement.executeUpdate(Item.createTableItemPostgres);
 			statement.executeUpdate(Distributor.createTableDistributorPostgres);
 			statement.executeUpdate(DistributorStaff.createTableDistributorStaffPostgres);
-
 			statement.executeUpdate(Shop.createTableShopPostgres);
 			statement.executeUpdate(ShopItem.createTableShopItemPostgres);
 			statement.executeUpdate(EndUser.createTableEndUserPostgres);
 
-
 			// Create Table Admin
 			statement.executeUpdate(Admin.createTableAdminPostgres);
-			// Create Table Staff
 			statement.executeUpdate(Staff.createTableStaffPostgres);
 
 			statement.executeUpdate(DeliveryAddress.createTableDeliveryAddressPostgres);
-
-			// Create table Delivery Vehicle Self
 			statement.executeUpdate(DeliveryGuySelf.createtableDeliveryGuySelfPostgres);
 
 			statement.executeUpdate(Order.createTableOrderPostgres);
@@ -246,16 +241,12 @@ public class Main implements ActionListener {
 			statement.executeUpdate(ServiceConfiguration.createTableServiceConfigurationPostgres);
 			statement.executeUpdate(Settings.createTableSettingsPostgres);
 
-
 			// tables for shop reviews
-
 			statement.executeUpdate(ShopReview.createTableShopReviewPostgres);
 			statement.executeUpdate(FavouriteShop.createTableFavouriteBookPostgres);
 			statement.executeUpdate(ShopReviewThanks.createTableShopReviewThanksPostgres);
 
-
 			// tables for Item reviews
-
 			statement.executeUpdate(ItemReview.createTableItemReviewPostgres);
 			statement.executeUpdate(FavouriteItem.createTableFavouriteItemPostgres);
 			statement.executeUpdate(ItemReviewThanks.createTableItemReviewThanksPostgres);

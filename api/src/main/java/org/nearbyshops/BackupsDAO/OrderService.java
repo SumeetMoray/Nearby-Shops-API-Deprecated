@@ -273,7 +273,7 @@ public class OrderService {
                 order.setOrderID(rs.getInt(Order.ORDER_ID));
                 order.setPickFromShop(rs.getBoolean(Order.PICK_FROM_SHOP));
                 order.setDateTimePlaced(rs.getTimestamp(Order.DATE_TIME_PLACED));
-                order.setDeliveryVehicleSelfID(rs.getInt(Order.DELIVERY_VEHICLE_SELF_ID));
+                order.setDeliveryVehicleSelfID(rs.getInt(Order.DELIVERY_GUY_SELF_ID));
 
                 order.setStatusHomeDelivery(rs.getInt(Order.STATUS_HOME_DELIVERY));
                 order.setStatusPickFromShop(rs.getInt(Order.STATUS_PICK_FROM_SHOP));
@@ -422,13 +422,13 @@ public class OrderService {
         {
             if(isFirst)
             {
-                query = query + " WHERE " + Order.DELIVERY_VEHICLE_SELF_ID + " = " + deliveryGuyID;
+                query = query + " WHERE " + Order.DELIVERY_GUY_SELF_ID + " = " + deliveryGuyID;
 
                 isFirst = false;
 
             }else
             {
-                query = query + " AND " + Order.DELIVERY_VEHICLE_SELF_ID + " = " + deliveryGuyID;
+                query = query + " AND " + Order.DELIVERY_GUY_SELF_ID + " = " + deliveryGuyID;
             }
 
         }
@@ -530,7 +530,7 @@ public class OrderService {
                 order.setOrderID(rs.getInt(Order.ORDER_ID));
                 order.setPickFromShop(rs.getBoolean(Order.PICK_FROM_SHOP));
                 order.setDateTimePlaced(rs.getTimestamp(Order.DATE_TIME_PLACED));
-                order.setDeliveryVehicleSelfID(rs.getInt(Order.DELIVERY_VEHICLE_SELF_ID));
+                order.setDeliveryVehicleSelfID(rs.getInt(Order.DELIVERY_GUY_SELF_ID));
 
 
                 order.setStatusHomeDelivery(rs.getInt(Order.STATUS_HOME_DELIVERY));
@@ -684,13 +684,13 @@ public class OrderService {
         {
             if(isFirst)
             {
-                query = query + " WHERE " + Order.DELIVERY_VEHICLE_SELF_ID + " = " + deliveryGuyID;
+                query = query + " WHERE " + Order.DELIVERY_GUY_SELF_ID + " = " + deliveryGuyID;
 
                 isFirst = false;
 
             }else
             {
-                query = query + " AND " + Order.DELIVERY_VEHICLE_SELF_ID + " = " + deliveryGuyID;
+                query = query + " AND " + Order.DELIVERY_GUY_SELF_ID + " = " + deliveryGuyID;
             }
 
         }
@@ -857,12 +857,12 @@ public class OrderService {
 
         if(order.getDeliveryVehicleSelfID() == 0)
         {
-            //deliveryVehiclePart = " " + Order.DELIVERY_VEHICLE_SELF_ID + " = " + " " +   + " " + ",";
-            //deliveryVehiclePart = " " + Order.DELIVERY_VEHICLE_SELF_ID + " = " + " " + " " + ",";
+            //deliveryVehiclePart = " " + Order.DELIVERY_GUY_SELF_ID + " = " + " " +   + " " + ",";
+            //deliveryVehiclePart = " " + Order.DELIVERY_GUY_SELF_ID + " = " + " " + " " + ",";
 
         }else
         {
-            deliveryVehiclePart = " " + Order.DELIVERY_VEHICLE_SELF_ID + " = " + " " + order.getDeliveryVehicleSelfID() + " " + ",";
+            deliveryVehiclePart = " " + Order.DELIVERY_GUY_SELF_ID + " = " + " " + order.getDeliveryVehicleSelfID() + " " + ",";
         }
 
 

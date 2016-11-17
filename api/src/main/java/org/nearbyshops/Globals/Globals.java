@@ -2,6 +2,8 @@ package org.nearbyshops.Globals;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.glassfish.jersey.media.sse.OutboundEvent;
+import org.glassfish.jersey.media.sse.SseBroadcaster;
 import org.nearbyshops.DAOPreparedCartOrder.*;
 import org.nearbyshops.DAOPreparedReviewItem.FavoriteItemDAOPrepared;
 import org.nearbyshops.DAOPreparedReviewItem.ItemReviewDAOPrepared;
@@ -15,6 +17,10 @@ import org.nearbyshops.BackupDAOsTwo.EndUserService;
 import org.nearbyshops.DAOsPreparedRoles.*;
 import org.nearbyshops.DAOsPrepared.*;
 import org.nearbyshops.JDBCContract;
+
+import javax.ws.rs.core.MediaType;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Globals {
@@ -77,6 +83,44 @@ public class Globals {
 
 		return dataSource;
 	}
+
+
+
+	// SSE Notifications Support
+
+	public static Map<Integer,SseBroadcaster> broadcasterMap = new HashMap<>();
+
+	public static String broadcastMessage(String message, int shopID) {
+		OutboundEvent.Builder eventBuilder = new OutboundEvent.Builder();
+		OutboundEvent event = eventBuilder.name("message")
+				.mediaType(MediaType.TEXT_PLAIN_TYPE)
+				.data(String.class, message)
+				.build();
+
+		if(broadcasterMap.get(shopID)!=null)
+		{
+			broadcasterMap.get(shopID).broadcast(event);
+		}
+
+		return "Message '" + message + "' has been broadcast.";
+	}
+
+
+
+	public static SseBroadcaster broadcaster = new SseBroadcaster();
+
+	public static String broadcastMessage(String message) {
+		OutboundEvent.Builder eventBuilder = new OutboundEvent.Builder();
+		OutboundEvent event = eventBuilder.name("message")
+				.mediaType(MediaType.TEXT_PLAIN_TYPE)
+				.data(String.class, message)
+				.build();
+
+		broadcaster.broadcast(event);
+
+		return "Message '" + message + "' has been broadcast.";
+	}
+
 
 
 

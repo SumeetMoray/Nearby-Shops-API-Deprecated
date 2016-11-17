@@ -163,28 +163,29 @@ public class CartItemService {
 
 
 
-	public int deleteCartItem(int itemID,int cartID)
+	public int deleteCartItem(Integer itemID,Integer cartID)
 	{
 
-		String deleteStatement = "DELETE FROM " + CartItem.TABLE_NAME
-				+ " WHERE " + CartItem.ITEM_ID + " = ?"
-				+ " AND " + CartItem.CART_ID + " = ?";
+		String deleteStatement = "DELETE FROM " + CartItem.TABLE_NAME;
+
+//				+ " WHERE " + CartItem.ITEM_ID + " = ?"
+//				+ " AND " + CartItem.CART_ID + " = ?";
 
 
 
 //		deleteStatement = deleteStatement + " WHERE " + CartItem.ITEM_ID + " = " + itemID;
 //		deleteStatement = deleteStatement + " AND " + CartItem.CART_ID + " = " + cartID;
-/*
 
 		boolean isFirst = true;
 
-		if(itemID > 0)
+		if(itemID !=null)
 		{
 
+			deleteStatement = deleteStatement + " WHERE " + CartItem.ITEM_ID + " = " + itemID;
 			isFirst = false;
 		}
 
-		if(cartID > 0)
+		if(cartID !=null)
 		{
 			if(isFirst)
 			{
@@ -195,21 +196,20 @@ public class CartItemService {
 			}
 
 		}
-*/
 
 
 		Connection connection= null;
-		PreparedStatement statement = null;
+		Statement statement = null;
 		int rowsCountDeleted = 0;
 		try {
 			
 			connection = dataSource.getConnection();
-			statement = connection.prepareStatement(deleteStatement);
+			statement = connection.createStatement();
 
-			statement.setObject(1,itemID);
-			statement.setObject(2,cartID);
+//			statement.setObject(1,itemID);
+//			statement.setObject(2,cartID);
 
-			rowsCountDeleted = statement.executeUpdate();
+			rowsCountDeleted = statement.executeUpdate(deleteStatement);
 			System.out.println(" Deleted Count CartItem : " + rowsCountDeleted);
 			
 			connection.close();

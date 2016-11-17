@@ -1,14 +1,18 @@
-package org.nearbyshops.DAOPreparedCartOrder;
+package org.nearbyshops.BackupDAOsRemaining;
 
 
+import com.zaxxer.hikari.HikariDataSource;
+import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.JDBCContract;
-import org.nearbyshops.ModelDelivery.DeliveryGuySelf;
+import org.nearbyshops.ModelRoles.DeliveryGuySelf;
 
 import java.sql.*;
 import java.util.ArrayList;
 
 
 public class DeliveryGuySelfDAO {
+
+	private HikariDataSource dataSource = Globals.getDataSource();
 
 	
 	@Override
@@ -29,10 +33,10 @@ public class DeliveryGuySelfDAO {
 		String insertItemCategory = "INSERT INTO "
 				+ DeliveryGuySelf.TABLE_NAME
 				+ "("
-				+ DeliveryGuySelf.VEHICLE_NAME + ","
+				+ DeliveryGuySelf.NAME + ","
 				+ DeliveryGuySelf.SHOP_ID + ""
 				+ " ) VALUES ( "
-				+ "'" + deliveryGuySelf.getVehicleName()	+ "',"
+				+ "'" + deliveryGuySelf.getName()	+ "',"
 				+ "" + deliveryGuySelf.getShopID() + ""
 				+ ")";
 		
@@ -92,7 +96,7 @@ public class DeliveryGuySelfDAO {
 	{	
 		String updateStatement = "UPDATE " + DeliveryGuySelf.TABLE_NAME
 				+ " SET "
-				+ DeliveryGuySelf.VEHICLE_NAME + " = "  + "'" + deliveryGuySelf.getVehicleName() + "'"  + ","
+				+ DeliveryGuySelf.NAME + " = "  + "'" + deliveryGuySelf.getName() + "'"  + ","
 				+ DeliveryGuySelf.SHOP_ID + " = "  + " " + deliveryGuySelf.getShopID() + " "  + ""
 				+ " WHERE " + DeliveryGuySelf.ID + " = " + deliveryGuySelf.getDeliveryGuyID();
 		
@@ -261,7 +265,7 @@ public class DeliveryGuySelfDAO {
 
 				deliveryGuySelf.setDeliveryGuyID(rs.getInt(DeliveryGuySelf.ID));
 				deliveryGuySelf.setShopID(rs.getInt(DeliveryGuySelf.SHOP_ID));
-				deliveryGuySelf.setVehicleName(rs.getString(DeliveryGuySelf.VEHICLE_NAME));
+				deliveryGuySelf.setName(rs.getString(DeliveryGuySelf.NAME));
 
 				vehiclesList.add(deliveryGuySelf);
 				
@@ -337,7 +341,7 @@ public class DeliveryGuySelfDAO {
 			{
 				deliveryGuySelf = new DeliveryGuySelf();
 
-				deliveryGuySelf.setVehicleName(rs.getString(DeliveryGuySelf.VEHICLE_NAME));
+				deliveryGuySelf.setName(rs.getString(DeliveryGuySelf.NAME));
 				deliveryGuySelf.setShopID(rs.getInt(DeliveryGuySelf.SHOP_ID));
 				deliveryGuySelf.setDeliveryGuyID(rs.getInt(DeliveryGuySelf.ID));
 

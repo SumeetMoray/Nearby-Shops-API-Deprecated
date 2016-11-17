@@ -1,7 +1,7 @@
 package org.nearbyshops.RESTEndpoints;
 
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.ModelDelivery.DeliveryGuySelf;
+import org.nearbyshops.ModelRoles.DeliveryGuySelf;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
@@ -35,24 +35,21 @@ public class DeliveryGuySelfResource {
 
 		if(idOfInsertedRow >=1)
 		{
-			
-			
-			Response response = Response.status(Status.CREATED)
+
+
+			return Response.status(Status.CREATED)
 					.location(URI.create("/api/DeliveryGuySelf/" + idOfInsertedRow))
 					.entity(vehicleSelf)
 					.build();
 			
-			return response;
-			
 		}else if(idOfInsertedRow <=0)
 		{
-			Response response = Response.status(Status.NOT_MODIFIED)
-					.entity(null)
-					.build();
-			
+
 			//Response.status(Status.CREATED).location(arg0)
 			
-			return response;
+			return Response.status(Status.NOT_MODIFIED)
+					.entity(null)
+					.build();
 		}
 		
 		return null;
