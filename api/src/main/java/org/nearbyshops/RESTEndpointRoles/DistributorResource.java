@@ -9,7 +9,9 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
 
+import com.google.gson.Gson;
 import org.glassfish.jersey.internal.util.Base64;
+import org.nearbyshops.CustomSecurityContext;
 import org.nearbyshops.DAOsPreparedRoles.DistributorDAOPrepared;
 import org.nearbyshops.Globals.APIErrors;
 import org.nearbyshops.Globals.GlobalConstants;
@@ -87,9 +89,50 @@ public class DistributorResource {
 	@RolesAllowed({GlobalConstants.ROLE_DISTRIBUTOR,GlobalConstants.ROLE_STAFF,GlobalConstants.ROLE_ADMIN})
 	public Response updateDistributor(@PathParam("DistributorID")int distributorID,
 									  Distributor distributor,
-									  @Context HttpHeaders headers)
+									  @Context HttpHeaders headers,@Context SecurityContext sc)
 	{
 
+
+		if(sc instanceof CustomSecurityContext)
+		{
+			System.out.println("SC instance of CustomSecurityContext");
+			Object object = ((CustomSecurityContext)sc).getAccountInformation();
+
+			if(object instanceof Distributor)
+			{
+				System.out.println("Object instance of Distributor");
+
+				if(((Distributor)object).getDistributorID()!=distributorID)
+				{
+					// attempt to update the account of another distributor
+
+					Response responseError = Response.status(Status.FORBIDDEN)
+							.entity(new ErrorNBSAPI(403, APIErrors.UPDATE_BY_WRONG_USER))
+							.build();
+
+					throw new ForbiddenException(APIErrors.UPDATE_BY_WRONG_USER,responseError);
+				}
+			}
+		}
+
+
+
+
+		if(Globals.object instanceof Distributor)
+		{
+			if(((Distributor)Globals.object).getDistributorID()!=distributorID)
+			{
+				// attempt to update the account of another distributor
+
+				Response responseError = Response.status(Status.FORBIDDEN)
+						.entity(new ErrorNBSAPI(403, APIErrors.UPDATE_BY_WRONG_USER))
+						.build();
+
+				throw new ForbiddenException(APIErrors.UPDATE_BY_WRONG_USER,responseError);
+			}
+		}
+
+/*
 		if(!verifyDistributorAccount(headers,distributorID))
 		{
 
@@ -98,7 +141,7 @@ public class DistributorResource {
 					.build();
 
 			throw new ForbiddenException(APIErrors.UPDATE_BY_WRONG_USER,responseError);
-		}
+		}*/
 
 
 
@@ -112,19 +155,17 @@ public class DistributorResource {
 		
 		if(rowCount >= 1)
 		{
-			Response response = Response.status(Status.OK)
+
+			return Response.status(Status.OK)
 					.entity(null)
 					.build();
-			
-			return response;
 		}
 		if(rowCount == 0)
 		{
-			Response response = Response.status(Status.NOT_MODIFIED)
+
+			return Response.status(Status.NOT_MODIFIED)
 					.entity(null)
 					.build();
-			
-			return response;
 		}
 		
 		
@@ -452,11 +493,9 @@ public class DistributorResource {
 		} else
 		{
 
-			Response response = Response.status(Status.UNAUTHORIZED)
+			return Response.status(Status.UNAUTHORIZED)
 					.entity(distributor)
 					.build();
-
-			return response;
 
 		}
 

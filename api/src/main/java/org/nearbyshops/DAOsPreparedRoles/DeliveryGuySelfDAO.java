@@ -246,36 +246,32 @@ public class DeliveryGuySelfDAO {
 
 	
 	
-	public ArrayList<DeliveryGuySelf> readDeliveryVehicleSelf(Integer shopID)
+	public ArrayList<DeliveryGuySelf> readDeliveryVehicleSelf(Integer shopID, Boolean isEnabled)
 	{
 		String query = "SELECT * FROM " + DeliveryGuySelf.TABLE_NAME;
 
-		//boolean isFirst = true;
+		boolean isFirst = true;
 
 		if(shopID != null)
 		{
 			query = query + " WHERE " + DeliveryGuySelf.SHOP_ID + " = " + shopID;
 
-				//isFirst = false;
+				isFirst = false;
 		}
 
-		/*
-
-		if(shopID > 0 )
+		if(isEnabled !=null)
 		{
 			if(isFirst)
 			{
-				query = query + " WHERE " + CartContract.ITEM_ID + " = " + shopID;
+				query = query + " WHERE " + DeliveryGuySelf.IS_ENABLED + " = "  + isEnabled;
 
-			}else
-			{
-				query = query + " AND " + CartContract.ITEM_ID + " = " + shopID;
-
+				isFirst = false;
 			}
-
+			else
+			{
+				query = query + " AND " + DeliveryGuySelf.IS_ENABLED + " = "  + isEnabled;
+			}
 		}
-
-		*/
 
 
 
@@ -359,6 +355,85 @@ public class DeliveryGuySelfDAO {
 	}
 
 
+
+	public boolean checkUsernameExists(String username)
+	{
+
+		String query = "SELECT " + DeliveryGuySelf.USERNAME
+					+ " FROM " + DeliveryGuySelf.TABLE_NAME
+					+ " WHERE " + DeliveryGuySelf.USERNAME + " = '" + username + "'";
+
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet rs = null;
+
+//		System.out.println(query);
+
+		DeliveryGuySelf deliveryGuySelf = null;
+
+		try {
+
+			connection = dataSource.getConnection();
+			statement = connection.createStatement();
+			rs = statement.executeQuery(query);
+
+//			if(rs.getFetchSize()==0)
+//			{
+//				return false;
+//			}
+//			else
+//			{
+//				return true;
+//			}
+
+
+			while(rs.next())
+			{
+
+				return true;
+			}
+
+
+			//System.out.println("Total itemCategories queried " + itemCategoryList.size());
+
+
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally
+
+		{
+
+			try {
+				if(rs!=null)
+				{rs.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(statement!=null)
+				{statement.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(connection!=null)
+				{connection.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return false;
+	}
 
 	
 	public DeliveryGuySelf readVehicle(int deliveryGuyID)

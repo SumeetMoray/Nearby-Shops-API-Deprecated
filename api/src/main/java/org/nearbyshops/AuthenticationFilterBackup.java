@@ -1,13 +1,13 @@
 package org.nearbyshops;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.nearbyshops.DAOsPreparedRoles.*;
-import org.nearbyshops.Globals.APIErrors;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
-import org.nearbyshops.ModelRoles.*;
+import org.nearbyshops.ModelRoles.Distributor;
+import org.nearbyshops.ModelRoles.DistributorStaff;
+import org.nearbyshops.ModelRoles.EndUser;
+import org.nearbyshops.ModelRoles.Staff;
 
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.RolesAllowed;
@@ -16,10 +16,11 @@ import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.lang.reflect.Method;
-import java.security.Principal;
 import java.util.*;
 
 /**
@@ -27,8 +28,8 @@ import java.util.*;
  */
 
 
-@Provider
-public class AuthenticationFilter implements ContainerRequestFilter {
+
+public class AuthenticationFilterBackup implements ContainerRequestFilter {
 
 
     private AdminDAOPrepared adminDAOPrepared = Globals.adminDAOPrepared;
@@ -53,11 +54,15 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext requestContext) {
         Method method = resourceInfo.getResourceMethod();
 
-//        System.out.println("Security Fileter");
-
+        System.out.println("Security Fileter");
+        //Access allowed for all
+//        if (!method.isAnnotationPresent(PermitAll.class)) {
+            //Access denied for all
             if (method.isAnnotationPresent(DenyAll.class)) {
+//                requestContext.abortWith(ACCESS_FORBIDDEN);
 
                 throw new ForbiddenException("Access is ErrorNBSAPI !");
+//                return;
             }
 
 
@@ -78,7 +83,13 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 //                requestContext.abortWith(ACCESS_DENIED);
 
                 throw new NotAuthorizedException("Access is Denied ! Credentials not present");
+
+//                return;
             }
+
+            //Get encoded username and password
+
+
 
 
             final String encodedUserPassword = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
@@ -100,20 +111,42 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             System.out.println(username);
             System.out.println(password);
 
-            Globals.object = isUserAllowed(username, password, rolesSet);
 
 
+
+            requestContext.setProperty("property",new Object());
+
+                //Is user valid?
+                if (!isUserAllowed(username, password, rolesSet)) {
+
+/*
+                    Response unauthorizedResponse = Response
+                            .status(Response.Status.UNAUTHORIZED)
+                            .entity("Access Denied !")
+                            .build();
+*/
+
+//                    requestContext.abortWith(ACCESS_DENIED);
+
+//                    throw new NotAuthorizedException("Access Denied. Username or Password is Incorrect !");
+                    Response response = Response.status(403)
+                            .entity(new ErrorNBSAPI(403, "We are not able to identify you !"))
+                            .build();
+
+                    throw new ForbiddenException("Username or password is Incorrect !",response);
+
+                }
             }
         }
 
+//    }
 
-    private Object isUserAllowed(final String username, final String password, final Set<String> rolesSet)
+
+    private boolean isUserAllowed(final String username, final String password, final Set<String> rolesSet)
     {
+        boolean isAllowed = false;
 
-
-        //        boolean isAllowed = false;
-
-        //        boolean isEnabled = false;
+        boolean isEnabled = false;
 
         //Step 1. Fetch password from database and match with password in argument
         //If both match then get the defined role for user from database and continue; else return isAllowed [false]
@@ -127,104 +160,50 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             if(role.equals(GlobalConstants.ROLE_ADMIN))
             {
 
-                Admin admin = adminDAOPrepared.checkAdmin(null,username,password);
-                if(admin != null)
+                if(adminDAOPrepared.checkAdmin(null,username,password)!=null)
                 {
-                    return admin;
+                    isAllowed = true;
+                    return isAllowed;
                 }
-
 
             }else if(role.equals(GlobalConstants.ROLE_STAFF))
             {
                 Staff staff = staffDAOPrepared.checkStaff(null,username,password);
 
-                if(staff!=null)
+                if(staff!=null && staff.getEnabled())
                 {
-                    if(staff.getEnabled())
-                    {
-                        return staff;
-                    }
-                    else
-                    {
-
-                        Response response = Response.status(403)
-                                .entity(new ErrorNBSAPI(403, "Your account is disabled. Contact administrator to know more !"))
-                                .build();
-
-                        throw new ForbiddenException("Username or password is Incorrect !",response);
-
-                    }
+                    isAllowed = true;
+                    return isAllowed;
                 }
-
-
             }else if(role.equals(GlobalConstants.ROLE_DISTRIBUTOR))
             {
 
                 Distributor distributor = distributorDAOPrepared.checkDistributor(null,username,password);
                 // Distributor account exist and is enabled
-
-//                System.out.println(distributor.getDistributorID());
-
-                if(distributor!=null)
+                if(distributor!=null && distributor.getEnabled())
                 {
-                    if(distributor.getEnabled())
-                    {
-                        return distributor;
-                    }
-                    else
-                    {
-
-                        Response response = Response.status(403)
-                                .entity(new ErrorNBSAPI(403, "Your account is disabled. Contact administrator to know more !"))
-                                .build();
-
-                        throw new ForbiddenException("Username or password is Incorrect !",response);
-
-                    }
+                        isAllowed = true;
+                        return isAllowed;
                 }
-
             }else if (role.equals(GlobalConstants.ROLE_DISTRIBUTOR_STAFF))
             {
 
                 DistributorStaff distributorStaff = distributorStaffDAO.checkDistributor(null,username,password);
                 // Distributor account exist and is enabled
-                if(distributorStaff!=null )
+                if(distributorStaff!=null && distributorStaff.getEnabled())
                 {
-                    if(distributorStaff.getEnabled())
-                    {
-                        return distributorStaff;
-                    }
-                    else
-                    {
-
-                        Response response = Response.status(403)
-                                .entity(new ErrorNBSAPI(403, "Your account is disabled. Contact administrator to know more !"))
-                                .build();
-
-                        throw new ForbiddenException("Username or password is Incorrect !",response);
-
-                    }
+                    isAllowed = true;
+                    return isAllowed;
                 }
             }
             else if(role.equals(GlobalConstants.ROLE_END_USER))
             {
                 EndUser endUser = endUserDAOPrepared.checkEndUser(null,username,password);
                 // Distributor account exist and is enabled
-                if(endUser!=null )
+                if(endUser!=null && endUser.getEnabled())
                 {
-                    if(!endUser.getEnabled())
-                    {
-                        Response response = Response.status(403)
-                                .entity(new ErrorNBSAPI(403, "Your account is disabled. Contact administrator to know more !"))
-                                .build();
-
-                        throw new ForbiddenException("Permission denied !",response);
-                    }
-                    else
-                    {
-                        return endUser;
-                    }
-
+                    isAllowed = true;
+                    return isAllowed;
                 }
 
             }
@@ -232,8 +211,21 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
         }
 
+/*
+        if(username.equals("howtodoinjava") && password.equals("password"))
+        {
+            String userRole = "ADMIN";
 
-        throw new NotAuthorizedException("Access is Denied ! We are not able to Identify you. ");
+            //Step 2. Verify user role
+            if(rolesSet.contains(userRole))
+            {
+                isAllowed = true;
+            }
+        }
+              */
+
+
+        return isAllowed;
     }
 
 

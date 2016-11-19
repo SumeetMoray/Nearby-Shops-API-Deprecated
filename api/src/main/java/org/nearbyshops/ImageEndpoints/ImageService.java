@@ -149,7 +149,9 @@ public class ImageService {
     /*
      * Download a JPEG file.
      */
-    @GET
+
+
+    /*@GET
     @Path("{name}.jpg")
     @Produces("image/jpeg")
     public InputStream getJpegImage(@PathParam("name") String fileName) throws IOException {
@@ -162,7 +164,7 @@ public class ImageService {
         }
         
         return Files.newInputStream(dest);
-    }
+    }*/
     
     
     @GET
@@ -188,8 +190,8 @@ public class ImageService {
     }
     
     /*
-     * Download a PNG file.
-     */
+     /** Download a PNG file.
+     *//*
     @GET
     @Path("{name}.png")
     @Produces("image/png")
@@ -203,7 +205,7 @@ public class ImageService {
         }
         
         return Files.newInputStream(dest);
-    }
+    }*/
     
     
     
@@ -232,7 +234,7 @@ public class ImageService {
 		}
     	  	
     	
-    	if(deleteStatus == false)
+    	if(!deleteStatus)
     	{
     		 response = Response.status(Status.NOT_MODIFIED).build();
     	

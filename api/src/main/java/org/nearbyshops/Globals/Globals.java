@@ -63,6 +63,12 @@ public class Globals {
 	public static ShopItemByItemDAO shopItemByItemDAO = new ShopItemByItemDAO();
 
 
+
+	// static reference for holding security object
+
+	public static Object object;
+
+
 	// Configure Connection Pooling
 
 	private static HikariDataSource dataSource;
