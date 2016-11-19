@@ -171,7 +171,7 @@ public class Main implements ActionListener {
 		finally{
 
 
-			// close the connection and statement object
+			// close the connection and statement accountApproved
 
 			if(stmt !=null)
 			{
@@ -358,7 +358,7 @@ public class Main implements ActionListener {
 		finally{
 			
 			
-			// close the connection and statement object
+			// close the connection and statement accountApproved
 
 			if(statement !=null)
 			{

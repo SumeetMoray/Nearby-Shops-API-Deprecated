@@ -1,9 +1,6 @@
 package org.nearbyshops;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.nearbyshops.DAOsPreparedRoles.*;
-import org.nearbyshops.Globals.APIErrors;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
@@ -19,7 +16,6 @@ import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.*;
 import javax.ws.rs.ext.Provider;
 import java.lang.reflect.Method;
-import java.security.Principal;
 import java.util.*;
 
 /**
@@ -35,6 +31,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     private StaffDAOPrepared staffDAOPrepared = Globals.staffDAOPrepared;
     private DistributorDAOPrepared distributorDAOPrepared = Globals.distributorDAOPrepared;
     private DistributorStaffDAOPrepared distributorStaffDAO = Globals.distributorStaffDAOPrepared;
+    private DeliveryGuySelfDAO deliveryGuySelfDAO = Globals.deliveryGuySelfDAO;
     private EndUserDAOPrepared endUserDAOPrepared = Globals.endUserDAOPrepared;
 
 
@@ -100,7 +97,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             System.out.println(username);
             System.out.println(password);
 
-            Globals.object = isUserAllowed(username, password, rolesSet);
+            Globals.accountApproved = isUserAllowed(username, password, rolesSet);
 
 
             }
@@ -228,9 +225,32 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                 }
 
             }
+            else if(role.equals(GlobalConstants.ROLE_DELIVERY_GUY_SELF))
+            {
+                DeliveryGuySelf deliveryGuySelf = deliveryGuySelfDAO.checkDeliveryGuy(null,username,password);
+                // Distributor account exist and is enabled
+                if(deliveryGuySelf!=null )
+                {
+                    if(!deliveryGuySelf.getEnabled())
+                    {
+                        Response response = Response.status(403)
+                                .entity(new ErrorNBSAPI(403, "Your account is disabled. Contact administrator to know more !"))
+                                .build();
+
+                        throw new ForbiddenException("Permission denied !",response);
+                    }
+                    else
+                    {
+                        return deliveryGuySelf;
+                    }
+
+                }
+
+            }
 
 
         }
+
 
 
         throw new NotAuthorizedException("Access is Denied ! We are not able to Identify you. ");

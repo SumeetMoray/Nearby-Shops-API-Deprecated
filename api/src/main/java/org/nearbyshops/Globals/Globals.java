@@ -64,9 +64,9 @@ public class Globals {
 
 
 
-	// static reference for holding security object
+	// static reference for holding security accountApproved
 
-	public static Object object;
+	public static Object accountApproved;
 
 
 	// Configure Connection Pooling

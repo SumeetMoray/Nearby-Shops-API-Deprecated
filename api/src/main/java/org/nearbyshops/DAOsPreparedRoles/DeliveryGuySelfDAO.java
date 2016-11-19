@@ -516,5 +516,151 @@ public class DeliveryGuySelfDAO {
 		}
 	
 		return deliveryGuySelf;
-	}	
+	}
+
+
+	public void logMessage(String message)
+	{
+		System.out.println(message);
+	}
+
+
+
+
+	public DeliveryGuySelf checkDeliveryGuy(Integer deliveryGuyID, String username, String password)
+	{
+
+
+		logMessage("Checking DeliveryGuySelf");
+
+
+		boolean isFirst = true;
+
+		String query = "SELECT "
+						+ DeliveryGuySelf.ID + ","
+						+ DeliveryGuySelf.USERNAME + ","
+						+ DeliveryGuySelf.PASSWORD + ","
+						+ DeliveryGuySelf.IS_ENABLED + ","
+						+ DeliveryGuySelf.SHOP_ID
+						+ " FROM " + DeliveryGuySelf.TABLE_NAME;
+
+
+		if(deliveryGuyID!=null)
+		{
+			query = query + " WHERE " + DeliveryGuySelf.ID + " = " + deliveryGuyID;
+
+			isFirst = false;
+		}
+
+		if(username!=null)
+		{
+			String queryPartUsername = DeliveryGuySelf.USERNAME + " = '" + username + "'";
+
+			if(isFirst)
+			{
+				query = query + " WHERE " + queryPartUsername;
+
+				isFirst = false;
+			}
+			else
+			{
+				query = query + " AND " + queryPartUsername;
+			}
+		}
+
+
+		if(password!=null)
+		{
+			String queryPartPassword = DeliveryGuySelf.PASSWORD + " = '" + password + "'";
+
+			if(isFirst)
+			{
+				query = query + " WHERE " + queryPartPassword;
+			}
+			else
+			{
+				query = query + " AND " + queryPartPassword;
+			}
+		}
+
+
+		logMessage(query);
+
+
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet rs = null;
+
+
+		//Distributor distributor = null;
+		//Admin admin = null;
+
+		DeliveryGuySelf deliveryGuySelf = null;
+
+		try {
+
+			connection = dataSource.getConnection();
+			statement = connection.createStatement();
+
+			rs = statement.executeQuery(query);
+
+			while(rs.next())
+			{
+
+				logMessage("Inside While check deliveryGUySelf");
+
+				deliveryGuySelf = new DeliveryGuySelf();
+
+				deliveryGuySelf.setDeliveryGuyID(rs.getInt(DeliveryGuySelf.ID));
+				deliveryGuySelf.setShopID(rs.getInt(DeliveryGuySelf.SHOP_ID));
+				deliveryGuySelf.setUsername(rs.getString(DeliveryGuySelf.USERNAME));
+				deliveryGuySelf.setPassword(rs.getString(DeliveryGuySelf.PASSWORD));
+				deliveryGuySelf.setEnabled(rs.getBoolean(DeliveryGuySelf.IS_ENABLED));
+
+
+			}
+
+
+			//System.out.println("Total itemCategories queried " + itemCategoryList.size());
+
+
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally
+
+		{
+
+			try {
+				if(rs!=null)
+				{rs.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(statement!=null)
+				{statement.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(connection!=null)
+				{connection.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return deliveryGuySelf;
+	}
+
+
 }

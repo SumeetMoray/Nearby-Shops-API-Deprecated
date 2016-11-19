@@ -1,9 +1,18 @@
 package org.nearbyshops.RESTEndpointRoles;
 
 import net.coobird.thumbnailator.Thumbnails;
+import org.nearbyshops.DAOsPrepared.ShopDAO;
+import org.nearbyshops.DAOsPreparedRoles.DeliveryGuySelfDAO;
+import org.nearbyshops.Globals.APIErrors;
+import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Image;
+import org.nearbyshops.Model.Shop;
+import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
 import org.nearbyshops.ModelRoles.DeliveryGuySelf;
+import org.nearbyshops.ModelRoles.Distributor;
+
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
@@ -20,6 +29,9 @@ import java.util.List;
 @Path("/DeliveryGuySelf")
 public class DeliveryGuySelfResource {
 
+	private ShopDAO shopDAO = Globals.shopDAO;
+	private DeliveryGuySelfDAO deliveryGuySelfDAO = Globals.deliveryGuySelfDAO;
+
 
 	public DeliveryGuySelfResource() {
 		super();
@@ -30,8 +42,29 @@ public class DeliveryGuySelfResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes({MediaType.APPLICATION_JSON})
+	@RolesAllowed({GlobalConstants.ROLE_DISTRIBUTOR})
 	public Response createDelivery(DeliveryGuySelf deliveryGuySelf)
 	{
+
+
+		if(Globals.accountApproved instanceof Distributor)
+		{
+			// get Shop Object
+			Shop shop = shopDAO.getShop(deliveryGuySelf.getShopID(),null,null);
+
+			if(shop.getDistributorID()!= ((Distributor)Globals.accountApproved).getDistributorID())
+			{
+				// update by wrong account . Throw an Exception
+				Response responseError = Response.status(Status.FORBIDDEN)
+						.entity(new ErrorNBSAPI(403, APIErrors.UPDATE_BY_WRONG_USER))
+						.build();
+
+				throw new ForbiddenException(APIErrors.UPDATE_BY_WRONG_USER,responseError);
+
+			}
+		}
+
+
 
 
 		int idOfInsertedRow = Globals.deliveryGuySelfDAO.saveDeliveryVehicleSelf(deliveryGuySelf);
@@ -66,8 +99,48 @@ public class DeliveryGuySelfResource {
 	@PUT
 	@Path("/{DeliveryGuyID}")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_DISTRIBUTOR,GlobalConstants.ROLE_DELIVERY_GUY_SELF})
 	public Response updateCart(@PathParam("DeliveryGuyID")int deliveryGuyID, DeliveryGuySelf deliveryGuySelf)
 	{
+
+
+		if(Globals.accountApproved instanceof Distributor)
+		{
+			DeliveryGuySelf deliveryGuyVerified = deliveryGuySelfDAO.readVehicle(deliveryGuySelf.getDeliveryGuyID());
+			// get Shop Object
+			Shop shop = shopDAO.getShop(deliveryGuyVerified.getShopID(),null,null);
+
+			if(shop.getDistributorID()!= ((Distributor)Globals.accountApproved).getDistributorID())
+			{
+				// update by wrong account . Throw an Exception
+				Response responseError = Response.status(Status.FORBIDDEN)
+						.entity(new ErrorNBSAPI(403, APIErrors.UPDATE_BY_WRONG_USER))
+						.build();
+
+				throw new ForbiddenException(APIErrors.UPDATE_BY_WRONG_USER,responseError);
+
+			}
+		}
+
+
+
+
+		if(Globals.accountApproved instanceof DeliveryGuySelf)
+		{
+			if(deliveryGuySelf.getDeliveryGuyID() != ((DeliveryGuySelf) Globals.accountApproved).getDeliveryGuyID());
+			{
+				// update by wrong account . Throw an Exception
+				Response responseError = Response.status(Status.FORBIDDEN)
+						.entity(new ErrorNBSAPI(403, APIErrors.UPDATE_BY_WRONG_USER))
+						.build();
+
+				throw new ForbiddenException(APIErrors.UPDATE_BY_WRONG_USER,responseError);
+
+			}
+		}
+
+
+
 
 		deliveryGuySelf.setDeliveryGuyID(deliveryGuyID);
 		int rowCount = Globals.deliveryGuySelfDAO.updateDeliveryVehicleSelf(deliveryGuySelf);
@@ -94,8 +167,28 @@ public class DeliveryGuySelfResource {
 
 	@DELETE
 	@Path("/{DeliveryGuyID}")
+	@RolesAllowed({GlobalConstants.ROLE_DISTRIBUTOR})
 	public Response deleteDelivery(@PathParam("DeliveryGuyID")int deliveryGuyID)
 	{
+
+		if(Globals.accountApproved instanceof Distributor)
+		{
+			DeliveryGuySelf deliveryGuyVerified = deliveryGuySelfDAO.readVehicle(deliveryGuyID);
+			// get Shop Object
+			Shop shop = shopDAO.getShop(deliveryGuyVerified.getShopID(),null,null);
+
+			if(shop.getDistributorID()!= ((Distributor)Globals.accountApproved).getDistributorID())
+			{
+				// update by wrong account . Throw an Exception
+				Response responseError = Response.status(Status.FORBIDDEN)
+						.entity(new ErrorNBSAPI(403, APIErrors.UPDATE_BY_WRONG_USER))
+						.build();
+
+				throw new ForbiddenException(APIErrors.UPDATE_BY_WRONG_USER,responseError);
+
+			}
+		}
+
 
 		int rowCount = Globals.deliveryGuySelfDAO.deleteDeliveryVehicleSelf(deliveryGuyID);
 		
@@ -115,14 +208,17 @@ public class DeliveryGuySelfResource {
 					.entity(null)
 					.build();
 		}
-		
-		
+
+
 		return null;
 	}
+
+
 	
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_DISTRIBUTOR})
 	public Response getDeliveryGuyList(@QueryParam("ShopID")Integer shopID,
 									   @QueryParam("IsEnabled") Boolean isEnabled)
 	{
@@ -155,8 +251,25 @@ public class DeliveryGuySelfResource {
 	@GET
 	@Path("/{DeliveryGuyID}")
 	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_DISTRIBUTOR,GlobalConstants.ROLE_DELIVERY_GUY_SELF})
 	public Response getDeliveryGuy(@PathParam("DeliveryGuyID")int deliveryGuyID)
 	{
+
+		if(Globals.accountApproved instanceof DeliveryGuySelf)
+		{
+			if(deliveryGuyID != ((DeliveryGuySelf) Globals.accountApproved).getDeliveryGuyID());
+			{
+				// update by wrong account . Throw an Exception
+				Response responseError = Response.status(Status.FORBIDDEN)
+						.entity(new ErrorNBSAPI(403, APIErrors.ACCESS_FORBIDDEN))
+						.build();
+
+				throw new ForbiddenException(APIErrors.ACCESS_FORBIDDEN,responseError);
+
+			}
+		}
+
+
 
 		DeliveryGuySelf vehicleSelf = Globals.deliveryGuySelfDAO.readVehicle(deliveryGuyID);
 		
@@ -177,6 +290,7 @@ public class DeliveryGuySelfResource {
 		}
 		
 	}
+
 
 
 	@GET
@@ -213,6 +327,7 @@ public class DeliveryGuySelfResource {
 	@POST
 	@Path("/Image")
 	@Consumes({MediaType.APPLICATION_OCTET_STREAM})
+	@RolesAllowed({GlobalConstants.ROLE_DISTRIBUTOR,GlobalConstants.ROLE_DELIVERY_GUY_SELF})
 	public Response uploadImage(InputStream in, @HeaderParam("Content-Length") long fileSize,
 							 @QueryParam("PreviousImageName") String previousImageName
 	) throws Exception
@@ -330,6 +445,7 @@ public class DeliveryGuySelfResource {
 
 	@DELETE
 	@Path("/Image/{name}")
+	@RolesAllowed({GlobalConstants.ROLE_DISTRIBUTOR,GlobalConstants.ROLE_DELIVERY_GUY_SELF})
 	public Response deleteImageFile(@PathParam("name")String fileName)
 	{
 

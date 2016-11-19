@@ -9,16 +9,13 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
 
-import com.google.gson.Gson;
 import org.glassfish.jersey.internal.util.Base64;
 import org.nearbyshops.CustomSecurityContext;
 import org.nearbyshops.DAOsPreparedRoles.DistributorDAOPrepared;
 import org.nearbyshops.Globals.APIErrors;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.Model.Item;
 import org.nearbyshops.ModelEndPoints.DistributorEndPoint;
-import org.nearbyshops.ModelEndPoints.ItemEndPoint;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
 import org.nearbyshops.ModelRoles.Distributor;
 
@@ -118,9 +115,9 @@ public class DistributorResource {
 
 
 
-		if(Globals.object instanceof Distributor)
+		if(Globals.accountApproved instanceof Distributor)
 		{
-			if(((Distributor)Globals.object).getDistributorID()!=distributorID)
+			if(((Distributor)Globals.accountApproved).getDistributorID()!=distributorID)
 			{
 				// attempt to update the account of another distributor
 
