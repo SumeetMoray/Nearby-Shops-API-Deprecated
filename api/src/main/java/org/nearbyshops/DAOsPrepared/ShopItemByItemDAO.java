@@ -262,7 +262,7 @@ public class ShopItemByItemDAO {
 			// Applying shop visibility filter. Gives all the shops which are visible at the given location defined by
 			// latCenter and lonCenter. For more information see the API documentation.
 
-
+			/*
 			String queryPartLatLonCenterTwo = "";
 
 			queryPartLatLonCenterTwo = queryPartLatLonCenterTwo
@@ -285,7 +285,7 @@ public class ShopItemByItemDAO {
 					+ Shop.TABLE_NAME
 					+ "."
 					+ Shop.LON_MIN
-					+ " <= " + lonCenter;
+					+ " <= " + lonCenter;*/
 
 			//+ " BETWEEN " + latmax + " AND " + latmin;
 
@@ -422,15 +422,19 @@ public class ShopItemByItemDAO {
 
 				+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + ","
 				+ ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID + ","
-				+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_PRICE + ","
+				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID ;
+
+
+
+		/*+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_PRICE + ","
 				+ ShopItem.TABLE_NAME + "." + ShopItem.AVAILABLE_ITEM_QUANTITY + ","
 				+ ShopItem.TABLE_NAME + "." + ShopItem.EXTRA_DELIVERY_CHARGE + ","
 				+ ShopItem.TABLE_NAME + "." + ShopItem.DATE_TIME_ADDED + ","
 				+ ShopItem.TABLE_NAME + "." + ShopItem.LAST_UPDATE_DATE_TIME + ","
 
-				+ "distance,"
-				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID + ","
-				+ Shop.TABLE_NAME + "." + Shop.SHOP_NAME + ","
+				+ "distance,"*/
+
+		/*+ Shop.TABLE_NAME + "." + Shop.SHOP_NAME + ","
 				+ Shop.TABLE_NAME + "." + Shop.LON_CENTER + ","
 				+ Shop.TABLE_NAME + "." + Shop.LAT_CENTER + ","
 				+ Shop.TABLE_NAME + "." + Shop.DELIVERY_RANGE + ","
@@ -452,7 +456,7 @@ public class ShopItemByItemDAO {
 				+ Shop.TABLE_NAME + "." + Shop.SHORT_DESCRIPTION + ","
 				+ Shop.TABLE_NAME + "." + Shop.LONG_DESCRIPTION + ","
 				+ Shop.TABLE_NAME + "." + Shop.IS_OPEN + ","
-				+ Shop.TABLE_NAME + "." + Shop.DATE_TIME_STARTED + "";
+				+ Shop.TABLE_NAME + "." + Shop.DATE_TIME_STARTED +*/
 
 
 
@@ -499,7 +503,7 @@ public class ShopItemByItemDAO {
 		 */
 
 
-		if(itemID!=null || itemCategoryID!=null || (latCenter!=null && lonCenter!=null))
+		/*if(itemID!=null || itemCategoryID!=null || (latCenter!=null && lonCenter!=null))
 		{
 
 			query = queryJoin;
@@ -510,7 +514,11 @@ public class ShopItemByItemDAO {
 		{
 
 			query = queryNormal;
-		}
+		}*/
+
+
+		// item ID is always avialable so its always going to be a join query
+		query = queryJoin;
 
 
 

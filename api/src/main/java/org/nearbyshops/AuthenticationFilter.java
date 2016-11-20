@@ -227,7 +227,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             }
             else if(role.equals(GlobalConstants.ROLE_DELIVERY_GUY_SELF))
             {
-                DeliveryGuySelf deliveryGuySelf = deliveryGuySelfDAO.checkDeliveryGuy(null,username,password);
+                DeliveryGuySelf deliveryGuySelf = deliveryGuySelfDAO.checkDeliveryGuy(username,password);
                 // Distributor account exist and is enabled
                 if(deliveryGuySelf!=null )
                 {

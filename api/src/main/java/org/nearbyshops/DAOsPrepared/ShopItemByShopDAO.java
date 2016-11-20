@@ -59,6 +59,7 @@ public class ShopItemByShopDAO {
 					+ ShopItem.TABLE_NAME + "." + ShopItem.DATE_TIME_ADDED + ","
 					+ ShopItem.TABLE_NAME + "." + ShopItem.LAST_UPDATE_DATE_TIME + ","
 
+					+ Item.TABLE_NAME + "." + Item.ITEM_ID + ","
 					+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + ","
 					+ Item.TABLE_NAME + "." + Item.ITEM_IMAGE_URL + ","
 					+ Item.TABLE_NAME + "." + Item.ITEM_NAME + ","
@@ -378,23 +379,28 @@ public class ShopItemByShopDAO {
 
 				+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + ","
 				+ ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID + ","
-				+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_PRICE + ","
+				+ Item.TABLE_NAME + "." + Item.ITEM_ID ;
+
+
+
+
+				/*+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_PRICE + ","
 				+ ShopItem.TABLE_NAME + "." + ShopItem.AVAILABLE_ITEM_QUANTITY + ","
 				+ ShopItem.TABLE_NAME + "." + ShopItem.EXTRA_DELIVERY_CHARGE + ","
 				+ ShopItem.TABLE_NAME + "." + ShopItem.DATE_TIME_ADDED + ","
-				+ ShopItem.TABLE_NAME + "." + ShopItem.LAST_UPDATE_DATE_TIME + ","
+				+ ShopItem.TABLE_NAME + "." + ShopItem.LAST_UPDATE_DATE_TIME + ","*/
 
-				+ Shop.TABLE_NAME + "." + Shop.LAT_CENTER + ","
-				+ Shop.TABLE_NAME + "." + Shop.LON_CENTER + ","
+		/*+ Shop.TABLE_NAME + "." + Shop.LAT_CENTER + ","
+				+ Shop.TABLE_NAME + "." + Shop.LON_CENTER + ","*/
 
-				+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + ","
+
+		/*+ "," + Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + ","
 				+ Item.TABLE_NAME + "." + Item.ITEM_IMAGE_URL + ","
 				+ Item.TABLE_NAME + "." + Item.ITEM_NAME + ","
 				+ Item.TABLE_NAME + "." + Item.ITEM_DESC + ","
 				+ Item.TABLE_NAME + "." + Item.QUANTITY_UNIT + ","
 				+ Item.TABLE_NAME + "." + Item.DATE_TIME_CREATED + ","
-				+ Item.TABLE_NAME + "." + Item.ITEM_DESCRIPTION_LONG ;
-
+				+ Item.TABLE_NAME + "." + Item.ITEM_DESCRIPTION_LONG*/
 
 
 		if(sortBy!=null)

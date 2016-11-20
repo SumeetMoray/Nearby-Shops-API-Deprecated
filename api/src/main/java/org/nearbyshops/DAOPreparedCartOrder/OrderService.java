@@ -339,6 +339,7 @@ public class OrderService {
                                        Integer deliveryGuyID,
                                        Boolean paymentsReceived,
                                        Boolean deliveryReceived,
+                                       Double latCenter, Double lonCenter,
                                        String sortBy,
                                        Integer limit, Integer offset,
                                        Boolean getDeliveryAddress,
@@ -347,6 +348,11 @@ public class OrderService {
 
 
         String query = "SELECT "
+
+                + "6371 * acos( cos( radians("
+                + latCenter + ")) * cos( radians( " + DeliveryAddress.LATITUDE + ") ) * cos(radians( " + DeliveryAddress.LONGITUDE + " ) - radians("
+                + lonCenter + "))"
+                + " + sin( radians(" + latCenter + ")) * sin(radians( " + DeliveryAddress.LATITUDE + " ))) as distance" + ","
 
                 + Order.TABLE_NAME + "." + Order.ORDER_ID + ","
                 + Order.TABLE_NAME + "." + Order.DELIVERY_ADDRESS_ID + ","
@@ -371,6 +377,9 @@ public class OrderService {
                 + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.ID + ","
                 + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.LANDMARK + ","
                 + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.NAME + ","
+
+                + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.LATITUDE + ","
+                + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.LONGITUDE + ","
 
                 + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.PHONE_NUMBER + ","
                 + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.PINCODE + ","
@@ -536,6 +545,7 @@ public class OrderService {
 
 
 
+
         // all the non-aggregate columns which are present in select must be present in group by also.
         query = query
                 + " group by "
@@ -613,6 +623,7 @@ public class OrderService {
 
                 /*if(getDeliveryAddress!=null && getDeliveryAddress)
                 {*/
+
                     DeliveryAddress address = new DeliveryAddress();
 
                     address.setEndUserID(rs.getInt(DeliveryAddress.END_USER_ID));
@@ -625,6 +636,11 @@ public class OrderService {
 
                     address.setPhoneNumber(rs.getLong(DeliveryAddress.PHONE_NUMBER));
                     address.setPincode(rs.getLong(DeliveryAddress.PINCODE));
+
+
+                    address.setLatitude(rs.getDouble(DeliveryAddress.LATITUDE));
+                    address.setLongitude(rs.getDouble(DeliveryAddress.LONGITUDE));
+                    address.setRt_distance(rs.getDouble("distance"));
 
                     order.setDeliveryAddress(address);
 //                }

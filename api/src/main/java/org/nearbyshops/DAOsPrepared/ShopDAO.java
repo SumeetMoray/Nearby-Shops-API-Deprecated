@@ -697,10 +697,10 @@ public class ShopDAO {
 		queryGroupBy = queryGroupBy
 
 				+ " group by "
+				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID ;
 
-				+ "distance,"
-				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID + ","
-				+ Shop.TABLE_NAME + "." + Shop.SHOP_NAME + ","
+//		+ "distance,"
+		/*+ Shop.TABLE_NAME + "." + Shop.SHOP_NAME + ","
 				+ Shop.TABLE_NAME + "." + Shop.LON_CENTER + ","
 				+ Shop.TABLE_NAME + "." + Shop.LAT_CENTER + ","
 				+ Shop.TABLE_NAME + "." + Shop.DELIVERY_RANGE + ","
@@ -723,7 +723,7 @@ public class ShopDAO {
 				+ Shop.TABLE_NAME + "." + Shop.SHORT_DESCRIPTION + ","
 				+ Shop.TABLE_NAME + "." + Shop.LONG_DESCRIPTION + ","
 				+ Shop.TABLE_NAME + "." + Shop.IS_OPEN + ","
-				+ Shop.TABLE_NAME + "." + Shop.DATE_TIME_STARTED + "";
+				+ Shop.TABLE_NAME + "." + Shop.DATE_TIME_STARTED + ""*/
 
 
 		queryJoin = queryJoin + queryGroupBy;
@@ -1421,7 +1421,9 @@ public class ShopDAO {
 				+ " group by "
 
 				+ "distance,"
-				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID + ","
+				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID ;
+
+		/*+ ","
 				+ Shop.TABLE_NAME + "." + Shop.SHOP_NAME + ","
 				+ Shop.TABLE_NAME + "." + Shop.LON_CENTER + ","
 				+ Shop.TABLE_NAME + "." + Shop.LAT_CENTER + ","
@@ -1444,7 +1446,7 @@ public class ShopDAO {
 				+ Shop.TABLE_NAME + "." + Shop.SHORT_DESCRIPTION + ","
 				+ Shop.TABLE_NAME + "." + Shop.LONG_DESCRIPTION + ","
 				+ Shop.TABLE_NAME + "." + Shop.IS_OPEN + ","
-				+ Shop.TABLE_NAME + "." + Shop.DATE_TIME_STARTED + "";
+				+ Shop.TABLE_NAME + "." + Shop.DATE_TIME_STARTED + ""*/
 
 
 
@@ -1885,30 +1887,33 @@ public class ShopDAO {
 					+ " group by "
 
 					+ "distance,"
-					+ Shop.TABLE_NAME + "." + Shop.SHOP_ID + ","
-					+ Shop.TABLE_NAME + "." + Shop.SHOP_NAME + ","
-					+ Shop.TABLE_NAME + "." + Shop.LON_CENTER + ","
-					+ Shop.TABLE_NAME + "." + Shop.LAT_CENTER + ","
-					+ Shop.TABLE_NAME + "." + Shop.DELIVERY_RANGE + ","
-					+ Shop.TABLE_NAME + "." + Shop.DELIVERY_CHARGES + ","
-					+ Shop.TABLE_NAME + "." + Shop.DISTRIBUTOR_ID + ","
-					+ Shop.TABLE_NAME + "." + Shop.IMAGE_PATH + ","
-					+ Shop.TABLE_NAME + "." + Shop.LAT_MAX + ","
-					+ Shop.TABLE_NAME + "." + Shop.LAT_MIN + ","
-					+ Shop.TABLE_NAME + "." + Shop.LON_MAX + ","
-					+ Shop.TABLE_NAME + "." + Shop.LON_MIN + ","
+					+ Shop.TABLE_NAME + "." + Shop.SHOP_ID ;
 
-					+ Shop.TABLE_NAME + "." + Shop.SHOP_ADDRESS + ","
-					+ Shop.TABLE_NAME + "." + Shop.CITY + ","
-					+ Shop.TABLE_NAME + "." + Shop.PINCODE + ","
-					+ Shop.TABLE_NAME + "." + Shop.LANDMARK + ","
-					+ Shop.TABLE_NAME + "." + Shop.BILL_AMOUNT_FOR_FREE_DELIVERY + ","
-					+ Shop.TABLE_NAME + "." + Shop.CUSTOMER_HELPLINE_NUMBER + ","
-					+ Shop.TABLE_NAME + "." + Shop.DELIVERY_HELPLINE_NUMBER + ","
-					+ Shop.TABLE_NAME + "." + Shop.SHORT_DESCRIPTION + ","
-					+ Shop.TABLE_NAME + "." + Shop.LONG_DESCRIPTION + ","
-					+ Shop.TABLE_NAME + "." + Shop.IS_OPEN + ","
-					+ Shop.TABLE_NAME + "." + Shop.DATE_TIME_STARTED + "";
+		/*
+		+ ","
+				+ Shop.TABLE_NAME + "." + Shop.SHOP_NAME + ","
+				+ Shop.TABLE_NAME + "." + Shop.LON_CENTER + ","
+				+ Shop.TABLE_NAME + "." + Shop.LAT_CENTER + ","
+				+ Shop.TABLE_NAME + "." + Shop.DELIVERY_RANGE + ","
+				+ Shop.TABLE_NAME + "." + Shop.DELIVERY_CHARGES + ","
+				+ Shop.TABLE_NAME + "." + Shop.DISTRIBUTOR_ID + ","
+				+ Shop.TABLE_NAME + "." + Shop.IMAGE_PATH + ","
+				+ Shop.TABLE_NAME + "." + Shop.LAT_MAX + ","
+				+ Shop.TABLE_NAME + "." + Shop.LAT_MIN + ","
+				+ Shop.TABLE_NAME + "." + Shop.LON_MAX + ","
+				+ Shop.TABLE_NAME + "." + Shop.LON_MIN + ","
+
+				+ Shop.TABLE_NAME + "." + Shop.SHOP_ADDRESS + ","
+				+ Shop.TABLE_NAME + "." + Shop.CITY + ","
+				+ Shop.TABLE_NAME + "." + Shop.PINCODE + ","
+				+ Shop.TABLE_NAME + "." + Shop.LANDMARK + ","
+				+ Shop.TABLE_NAME + "." + Shop.BILL_AMOUNT_FOR_FREE_DELIVERY + ","
+				+ Shop.TABLE_NAME + "." + Shop.CUSTOMER_HELPLINE_NUMBER + ","
+				+ Shop.TABLE_NAME + "." + Shop.DELIVERY_HELPLINE_NUMBER + ","
+				+ Shop.TABLE_NAME + "." + Shop.SHORT_DESCRIPTION + ","
+				+ Shop.TABLE_NAME + "." + Shop.LONG_DESCRIPTION + ","
+				+ Shop.TABLE_NAME + "." + Shop.IS_OPEN + ","
+				+ Shop.TABLE_NAME + "." + Shop.DATE_TIME_STARTED + ""*/
 
 
 

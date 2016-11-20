@@ -62,6 +62,16 @@ public class DeliveryAddress {
     private Double longitude;
     private int endUserID;
 
+    private Double rt_distance;
+
+
+    public Double getRt_distance() {
+        return rt_distance;
+    }
+
+    public void setRt_distance(Double rt_distance) {
+        this.rt_distance = rt_distance;
+    }
 
     public Double getLatitude() {
         return latitude;

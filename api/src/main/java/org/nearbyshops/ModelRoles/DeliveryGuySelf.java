@@ -23,6 +23,11 @@ public class DeliveryGuySelf {
     public static final String PROFILE_IMAGE_URL = "PROFILE_IMAGE_URL";
     public static final String PHONE_NUMBER = "PHONE_NUMBER";
 
+    public static final String DESIGNATION = "DESIGNATION";
+    public static final String CURRENT_LATITUDE = "CURRENT_LATITUDE";
+    public static final String CURRENT_LONGITUDE = "CURRENT_LONGITUDE";
+
+
     // to be Implemented
     public static final String IS_ENABLED = "IS_ENABLED";
     public static final String IS_WAITLISTED = "IS_WAITLISTED";
@@ -40,6 +45,10 @@ public class DeliveryGuySelf {
             + " " + DeliveryGuySelf.ABOUT + " text,"
             + " " + DeliveryGuySelf.PROFILE_IMAGE_URL + " text,"
             + " " + DeliveryGuySelf.PHONE_NUMBER + " text,"
+
+            + " " + DeliveryGuySelf.DESIGNATION + " text,"
+            + " " + DeliveryGuySelf.CURRENT_LATITUDE + " float,"
+            + " " + DeliveryGuySelf.CURRENT_LONGITUDE + " float,"
 
             + " " + DeliveryGuySelf.IS_ENABLED + " boolean,"
             + " " + DeliveryGuySelf.IS_WAITLISTED + " boolean,"
@@ -64,6 +73,37 @@ public class DeliveryGuySelf {
     private Boolean isEnabled;
     private Boolean isWaitlisted;
 
+    private Double currentLatitude;
+    private Double currentLongitude;
+    private String designation;
+
+
+
+
+
+    public Double getCurrentLatitude() {
+        return currentLatitude;
+    }
+
+    public void setCurrentLatitude(Double currentLatitude) {
+        this.currentLatitude = currentLatitude;
+    }
+
+    public Double getCurrentLongitude() {
+        return currentLongitude;
+    }
+
+    public void setCurrentLongitude(Double currentLongitude) {
+        this.currentLongitude = currentLongitude;
+    }
+
+    public String getDesignation() {
+        return designation;
+    }
+
+    public void setDesignation(String designation) {
+        this.designation = designation;
+    }
 
     public String getPhoneNumber() {
         return phoneNumber;

@@ -230,6 +230,7 @@ public class OrderResource {
 							  @QueryParam("DeliveryReceived") Boolean deliveryReceived,
 							  @QueryParam("GetDeliveryAddress")Boolean getDeliveryAddress,
 							  @QueryParam("GetStats")Boolean getStats,
+							  @QueryParam("latCenter")Double latCenter, @QueryParam("lonCenter")Double lonCenter,
 							  @QueryParam("SortBy") String sortBy,
 							  @QueryParam("Limit")Integer limit, @QueryParam("Offset")Integer offset,
 							  @QueryParam("metadata_only")Boolean metaonly)
@@ -284,6 +285,7 @@ public class OrderResource {
 							homeDeliveryStatus,pickFromShopStatus,
 							deliveryGuyID,
 							paymentsReceived,deliveryReceived,
+							latCenter,lonCenter,
 							sortBy,limit,offset,getDeliveryAddress,getStats);
 
 

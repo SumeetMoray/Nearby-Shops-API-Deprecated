@@ -379,6 +379,7 @@ public class DeliveryAddressService {
 				address.setEndUserID(rs.getInt(DeliveryAddress.END_USER_ID));
 				address.setCity(rs.getString(DeliveryAddress.CITY));
 				address.setDeliveryAddress(rs.getString(DeliveryAddress.DELIVERY_ADDRESS));
+
 				address.setId(rs.getInt(DeliveryAddress.ID));
 				address.setLandmark(rs.getString(DeliveryAddress.LANDMARK));
 

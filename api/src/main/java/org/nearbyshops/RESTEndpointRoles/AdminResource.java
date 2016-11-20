@@ -316,6 +316,7 @@ public class AdminResource {
 
 
 
+
 	private static final String AUTHENTICATION_SCHEME = "Basic";
 	private static final String AUTHORIZATION_PROPERTY = "Authorization";
 

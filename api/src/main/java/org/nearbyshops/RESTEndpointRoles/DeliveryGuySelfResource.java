@@ -1,6 +1,7 @@
 package org.nearbyshops.RESTEndpointRoles;
 
 import net.coobird.thumbnailator.Thumbnails;
+import org.glassfish.jersey.internal.util.Base64;
 import org.nearbyshops.DAOsPrepared.ShopDAO;
 import org.nearbyshops.DAOsPreparedRoles.DeliveryGuySelfDAO;
 import org.nearbyshops.Globals.APIErrors;
@@ -14,9 +15,7 @@ import org.nearbyshops.ModelRoles.Distributor;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
-import javax.ws.rs.core.GenericEntity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
 import java.io.*;
 import java.net.URI;
@@ -24,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.StringTokenizer;
 
 
 @Path("/DeliveryGuySelf")
@@ -103,6 +103,8 @@ public class DeliveryGuySelfResource {
 	public Response updateCart(@PathParam("DeliveryGuyID")int deliveryGuyID, DeliveryGuySelf deliveryGuySelf)
 	{
 
+		deliveryGuySelf.setDeliveryGuyID(deliveryGuyID);
+
 
 		if(Globals.accountApproved instanceof Distributor)
 		{
@@ -127,7 +129,7 @@ public class DeliveryGuySelfResource {
 
 		if(Globals.accountApproved instanceof DeliveryGuySelf)
 		{
-			if(deliveryGuySelf.getDeliveryGuyID() != ((DeliveryGuySelf) Globals.accountApproved).getDeliveryGuyID());
+			if(deliveryGuyID != ((DeliveryGuySelf) Globals.accountApproved).getDeliveryGuyID())
 			{
 				// update by wrong account . Throw an Exception
 				Response responseError = Response.status(Status.FORBIDDEN)
@@ -135,14 +137,13 @@ public class DeliveryGuySelfResource {
 						.build();
 
 				throw new ForbiddenException(APIErrors.UPDATE_BY_WRONG_USER,responseError);
-
 			}
 		}
 
 
 
 
-		deliveryGuySelf.setDeliveryGuyID(deliveryGuyID);
+
 		int rowCount = Globals.deliveryGuySelfDAO.updateDeliveryVehicleSelf(deliveryGuySelf);
 
 		if(rowCount >= 1)
@@ -313,6 +314,47 @@ public class DeliveryGuySelfResource {
 		}
 
 	}
+
+
+
+
+
+	@GET
+	@Path("Login")
+	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_DELIVERY_GUY_SELF})
+	public Response getDistributorLogin(@Context HttpHeaders header)
+	{
+
+		DeliveryGuySelf deliveryGuySelf = null;
+
+		if(Globals.accountApproved instanceof DeliveryGuySelf)
+		{
+//			deliveryGuySelf = (DeliveryGuySelf) Globals.accountApproved;
+			deliveryGuySelf = deliveryGuySelfDAO
+					.readVehicle(((DeliveryGuySelf) Globals.accountApproved).getDeliveryGuyID());
+		}
+
+
+		if(deliveryGuySelf!= null)
+		{
+
+			return Response.status(Status.OK)
+					.entity(deliveryGuySelf)
+					.build();
+
+		} else
+		{
+
+			return Response.status(Status.UNAUTHORIZED)
+					.entity(null)
+					.build();
+
+		}
+
+	}
+
+
 
 
 

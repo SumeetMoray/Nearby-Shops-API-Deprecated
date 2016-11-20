@@ -320,7 +320,6 @@ public class DeliveryGuySelfDAO {
 		
 
 		finally
-		
 		{
 			
 			try {
@@ -356,84 +355,6 @@ public class DeliveryGuySelfDAO {
 
 
 
-	public boolean checkUsernameExists(String username)
-	{
-
-		String query = "SELECT " + DeliveryGuySelf.USERNAME
-					+ " FROM " + DeliveryGuySelf.TABLE_NAME
-					+ " WHERE " + DeliveryGuySelf.USERNAME + " = '" + username + "'";
-
-		Connection connection = null;
-		Statement statement = null;
-		ResultSet rs = null;
-
-//		System.out.println(query);
-
-		DeliveryGuySelf deliveryGuySelf = null;
-
-		try {
-
-			connection = dataSource.getConnection();
-			statement = connection.createStatement();
-			rs = statement.executeQuery(query);
-
-//			if(rs.getFetchSize()==0)
-//			{
-//				return false;
-//			}
-//			else
-//			{
-//				return true;
-//			}
-
-
-			while(rs.next())
-			{
-
-				return true;
-			}
-
-
-			//System.out.println("Total itemCategories queried " + itemCategoryList.size());
-
-
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally
-
-		{
-
-			try {
-				if(rs!=null)
-				{rs.close();}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			try {
-
-				if(statement!=null)
-				{statement.close();}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			try {
-
-				if(connection!=null)
-				{connection.close();}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		return false;
-	}
 
 	
 	public DeliveryGuySelf readVehicle(int deliveryGuyID)
@@ -519,6 +440,90 @@ public class DeliveryGuySelfDAO {
 	}
 
 
+
+
+	public boolean checkUsernameExists(String username)
+	{
+
+		String query = "SELECT " + DeliveryGuySelf.USERNAME
+				+ " FROM " + DeliveryGuySelf.TABLE_NAME
+				+ " WHERE " + DeliveryGuySelf.USERNAME + " = '" + username + "'";
+
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet rs = null;
+
+//		System.out.println(query);
+
+		DeliveryGuySelf deliveryGuySelf = null;
+
+		try {
+
+			connection = dataSource.getConnection();
+			statement = connection.createStatement();
+			rs = statement.executeQuery(query);
+
+//			if(rs.getFetchSize()==0)
+//			{
+//				return false;
+//			}
+//			else
+//			{
+//				return true;
+//			}
+
+
+			while(rs.next())
+			{
+
+				return true;
+			}
+
+
+			//System.out.println("Total itemCategories queried " + itemCategoryList.size());
+
+
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally
+
+		{
+
+			try {
+				if(rs!=null)
+				{rs.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(statement!=null)
+				{statement.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(connection!=null)
+				{connection.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return false;
+	}
+
+
+
+
 	public void logMessage(String message)
 	{
 		System.out.println(message);
@@ -527,7 +532,7 @@ public class DeliveryGuySelfDAO {
 
 
 
-	public DeliveryGuySelf checkDeliveryGuy(Integer deliveryGuyID, String username, String password)
+	public DeliveryGuySelf checkDeliveryGuy(String username, String password)
 	{
 
 
@@ -545,27 +550,21 @@ public class DeliveryGuySelfDAO {
 						+ " FROM " + DeliveryGuySelf.TABLE_NAME;
 
 
-		if(deliveryGuyID!=null)
+
+		/*if(deliveryGuyID!=null)
 		{
 			query = query + " WHERE " + DeliveryGuySelf.ID + " = " + deliveryGuyID;
 
 			isFirst = false;
-		}
+		}*/
 
 		if(username!=null)
 		{
 			String queryPartUsername = DeliveryGuySelf.USERNAME + " = '" + username + "'";
 
-			if(isFirst)
-			{
-				query = query + " WHERE " + queryPartUsername;
+			query = query + " WHERE " + queryPartUsername;
 
-				isFirst = false;
-			}
-			else
-			{
-				query = query + " AND " + queryPartUsername;
-			}
+			isFirst = false;
 		}
 
 
@@ -584,7 +583,7 @@ public class DeliveryGuySelfDAO {
 		}
 
 
-		logMessage(query);
+//		logMessage(query);
 
 
 		Connection connection = null;

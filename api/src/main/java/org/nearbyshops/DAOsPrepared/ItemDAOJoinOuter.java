@@ -20,10 +20,10 @@ public class ItemDAOJoinOuter {
 
 
 
-	private GeoLocation center;
-	private GeoLocation[] minMaxArray;
-	private GeoLocation pointOne;
-	private GeoLocation pointTwo;
+//	private GeoLocation center;
+//	private GeoLocation[] minMaxArray;
+//	private GeoLocation pointOne;
+//	private GeoLocation pointTwo;
 
 
 	@Override
@@ -99,10 +99,12 @@ public class ItemDAOJoinOuter {
 
 				+ " group by "
 				+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + ","
-				+ Item.TABLE_NAME + "." + Item.ITEM_ID + ","
-				+ Item.TABLE_NAME + "." + Item.ITEM_IMAGE_URL + ","
-				+ Item.TABLE_NAME + "." + Item.ITEM_NAME + ","
-				+ Item.TABLE_NAME + "." + Item.ITEM_DESC;
+				+ Item.TABLE_NAME + "." + Item.ITEM_ID ;
+
+//				+ ","
+//				+ Item.TABLE_NAME + "." + Item.ITEM_IMAGE_URL + ","
+//				+ Item.TABLE_NAME + "." + Item.ITEM_NAME + ","
+//				+ Item.TABLE_NAME + "." + Item.ITEM_DESC
 
 
 
