@@ -1,5 +1,6 @@
 package org.nearbyshops.RESTEndpointRoles;
 
+import jdk.nashorn.internal.objects.Global;
 import net.coobird.thumbnailator.Thumbnails;
 import org.glassfish.jersey.internal.util.Base64;
 import org.nearbyshops.DAOsPrepared.ShopDAO;
@@ -12,6 +13,7 @@ import org.nearbyshops.Model.Shop;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
 import org.nearbyshops.ModelRoles.DeliveryGuySelf;
 import org.nearbyshops.ModelRoles.Distributor;
+import org.nearbyshops.ModelRoles.ShopAdmin;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
@@ -42,7 +44,7 @@ public class DeliveryGuySelfResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes({MediaType.APPLICATION_JSON})
-//	@RolesAllowed({GlobalConstants.ROLE_DISTRIBUTOR})
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN})
 	public Response createDelivery(DeliveryGuySelf deliveryGuySelf)
 	{
 
@@ -63,6 +65,23 @@ public class DeliveryGuySelfResource {
 
 			}
 		}*/
+
+		if(Globals.accountApproved instanceof ShopAdmin)
+		{
+			// get Shop Object
+			// Shop shop = shopDAO.getShop(deliveryGuySelf.getShopID(),null,null);
+
+			if(deliveryGuySelf.getShopID() != ((ShopAdmin)Globals.accountApproved).getShopID())
+			{
+				// update by wrong account . Throw an Exception
+				Response responseError = Response.status(Status.FORBIDDEN)
+						.entity(new ErrorNBSAPI(403, APIErrors.UPDATE_BY_WRONG_USER))
+						.build();
+
+				throw new ForbiddenException(APIErrors.UPDATE_BY_WRONG_USER,responseError);
+
+			}
+		}
 
 
 
@@ -99,7 +118,7 @@ public class DeliveryGuySelfResource {
 	@PUT
 	@Path("/{DeliveryGuyID}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_DELIVERY_GUY_SELF})
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN})
 	public Response updateCart(@PathParam("DeliveryGuyID")int deliveryGuyID, DeliveryGuySelf deliveryGuySelf)
 	{
 
@@ -125,7 +144,57 @@ public class DeliveryGuySelfResource {
 		}*/
 
 
+		if(Globals.accountApproved instanceof ShopAdmin)
+		{
+			// get Shop Object
+			// Shop shop = shopDAO.getShop(deliveryGuySelf.getShopID(),null,null);
 
+			DeliveryGuySelf deliveryGuySelfTwo = deliveryGuySelfDAO.readVehicle(deliveryGuyID);
+
+			if(deliveryGuySelfTwo.getShopID() != ((ShopAdmin)Globals.accountApproved).getShopID())
+			{
+				// update by wrong account . Throw an Exception
+				Response responseError = Response.status(Status.FORBIDDEN)
+						.entity(new ErrorNBSAPI(403, APIErrors.UPDATE_BY_WRONG_USER))
+						.build();
+
+				throw new ForbiddenException(APIErrors.UPDATE_BY_WRONG_USER,responseError);
+
+			}
+		}
+
+
+
+
+		int rowCount = Globals.deliveryGuySelfDAO.updateDeliveryGuySelf(deliveryGuySelf);
+
+		if(rowCount >= 1)
+		{
+
+			return Response.status(Status.OK)
+					.entity(null)
+					.build();
+		}
+		if(rowCount == 0)
+		{
+
+			return Response.status(Status.NOT_MODIFIED)
+					.entity(null)
+					.build();
+		}
+
+
+		return null;
+	}
+
+	@PUT
+	@Path("/UpdateBySelf/{DeliveryGuyID}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_DELIVERY_GUY_SELF})
+	public Response updateBySelf(@PathParam("DeliveryGuyID")int deliveryGuyID, DeliveryGuySelf deliveryGuySelf)
+	{
+
+		deliveryGuySelf.setDeliveryGuyID(deliveryGuyID);
 
 		if(Globals.accountApproved instanceof DeliveryGuySelf)
 		{
@@ -142,9 +211,7 @@ public class DeliveryGuySelfResource {
 
 
 
-
-
-		int rowCount = Globals.deliveryGuySelfDAO.updateDeliveryVehicleSelf(deliveryGuySelf);
+		int rowCount = Globals.deliveryGuySelfDAO.updateBySelf(deliveryGuySelf);
 
 		if(rowCount >= 1)
 		{
@@ -166,19 +233,21 @@ public class DeliveryGuySelfResource {
 	}
 
 
+
+
+
 	@DELETE
 	@Path("/{DeliveryGuyID}")
-//	@RolesAllowed({GlobalConstants.ROLE_DISTRIBUTOR})
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN,GlobalConstants.ROLE_ADMIN})
 	public Response deleteDelivery(@PathParam("DeliveryGuyID")int deliveryGuyID)
 	{
 
-		/*if(Globals.accountApproved instanceof Distributor)
+		if(Globals.accountApproved instanceof ShopAdmin)
 		{
-			DeliveryGuySelf deliveryGuyVerified = deliveryGuySelfDAO.readVehicle(deliveryGuyID);
-			// get Shop Object
-			Shop shop = shopDAO.getShop(deliveryGuyVerified.getShopID(),null,null);
 
-			if(shop.getDistributorID()!= ((Distributor)Globals.accountApproved).getDistributorID())
+			DeliveryGuySelf deliveryGuySelfTwo = deliveryGuySelfDAO.readVehicle(deliveryGuyID);
+
+			if(deliveryGuySelfTwo.getShopID() != ((ShopAdmin)Globals.accountApproved).getShopID())
 			{
 				// update by wrong account . Throw an Exception
 				Response responseError = Response.status(Status.FORBIDDEN)
@@ -188,7 +257,21 @@ public class DeliveryGuySelfResource {
 				throw new ForbiddenException(APIErrors.UPDATE_BY_WRONG_USER,responseError);
 
 			}
-		}*/
+		}
+
+
+		if(Globals.accountApproved instanceof DeliveryGuySelf)
+		{
+			if(deliveryGuyID != ((DeliveryGuySelf) Globals.accountApproved).getDeliveryGuyID())
+			{
+				// update by wrong account . Throw an Exception
+				Response responseError = Response.status(Status.FORBIDDEN)
+						.entity(new ErrorNBSAPI(403, APIErrors.UPDATE_BY_WRONG_USER))
+						.build();
+
+				throw new ForbiddenException(APIErrors.UPDATE_BY_WRONG_USER,responseError);
+			}
+		}
 
 
 		int rowCount = Globals.deliveryGuySelfDAO.deleteDeliveryVehicleSelf(deliveryGuyID);
@@ -219,10 +302,16 @@ public class DeliveryGuySelfResource {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-//	@RolesAllowed({GlobalConstants.ROLE_DISTRIBUTOR})
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN})
 	public Response getDeliveryGuyList(@QueryParam("ShopID")Integer shopID,
 									   @QueryParam("IsEnabled") Boolean isEnabled)
 	{
+
+		// Shop Admin is allowed to view only his delivery Guys not the Delivery Guys of other shops
+		if(Globals.accountApproved instanceof ShopAdmin)
+		{
+			shopID = ((ShopAdmin) Globals.accountApproved).getShopID();
+		}
 
 
 		List<DeliveryGuySelf> vehicleSelfList = Globals.deliveryGuySelfDAO.readDeliveryVehicleSelf(shopID,isEnabled);
@@ -252,10 +341,11 @@ public class DeliveryGuySelfResource {
 	@GET
 	@Path("/{DeliveryGuyID}")
 	@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_DELIVERY_GUY_SELF})
+	@RolesAllowed({GlobalConstants.ROLE_DELIVERY_GUY_SELF,GlobalConstants.ROLE_SHOP_ADMIN})
 	public Response getDeliveryGuy(@PathParam("DeliveryGuyID")int deliveryGuyID)
 	{
 
+		// Delivery Guy can view only his account not the account of others
 		if(Globals.accountApproved instanceof DeliveryGuySelf)
 		{
 			if(deliveryGuyID != ((DeliveryGuySelf) Globals.accountApproved).getDeliveryGuyID());
@@ -369,7 +459,7 @@ public class DeliveryGuySelfResource {
 	@POST
 	@Path("/Image")
 	@Consumes({MediaType.APPLICATION_OCTET_STREAM})
-	@RolesAllowed({GlobalConstants.ROLE_DELIVERY_GUY_SELF})
+	@RolesAllowed({GlobalConstants.ROLE_DELIVERY_GUY_SELF,GlobalConstants.ROLE_SHOP_ADMIN})
 	public Response uploadImage(InputStream in, @HeaderParam("Content-Length") long fileSize,
 							 @QueryParam("PreviousImageName") String previousImageName
 	) throws Exception
@@ -485,9 +575,10 @@ public class DeliveryGuySelfResource {
 	}
 
 
+
 	@DELETE
 	@Path("/Image/{name}")
-	@RolesAllowed({GlobalConstants.ROLE_DELIVERY_GUY_SELF})
+	@RolesAllowed({GlobalConstants.ROLE_DELIVERY_GUY_SELF,GlobalConstants.ROLE_SHOP_ADMIN})
 	public Response deleteImageFile(@PathParam("name")String fileName)
 	{
 

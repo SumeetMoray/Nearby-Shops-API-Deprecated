@@ -171,7 +171,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                     {
                         return distributor;
                     }
-                    else
+                    elseFixed Group By clauses in Shop and ShopItem and Item endpoints
                     {
 
                         Response response = Response.status(403)

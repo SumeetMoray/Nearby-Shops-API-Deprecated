@@ -129,7 +129,9 @@ public class ShopAdminDAO {
 
 
 	public int updateShopAdmin(ShopAdmin shopAdmin)
-	{	
+	{
+
+
 		String updateStatement = "UPDATE " + ShopAdmin.TABLE_NAME
 				+ " SET "
 
@@ -516,7 +518,7 @@ public class ShopAdminDAO {
 				ShopAdmin shopAdmin = new ShopAdmin();
 
 				shopAdmin.setName(rs.getString(ShopAdmin.NAME));
-				shopAdmin.setShopID(rs.getInt(ShopAdmin.SHOP_ID));
+				shopAdmin.setShopID((Integer) rs.getObject(ShopAdmin.SHOP_ID));
 
 				shopAdmin.setUsername(rs.getString(ShopAdmin.USERNAME));
 				shopAdmin.setPassword(rs.getString(ShopAdmin.PASSWORD));
@@ -530,7 +532,7 @@ public class ShopAdminDAO {
 				shopAdmin.setEnabled(rs.getBoolean(ShopAdmin.IS_ENABLED));
 				shopAdmin.setWaitlisted(rs.getBoolean(ShopAdmin.IS_WAITLISTED));
 
-				shopAdmin.setShopAdminID(rs.getInt(ShopAdmin.SHOP_ADMIN_ID));
+				shopAdmin.setShopAdminID((Integer) rs.getObject(ShopAdmin.SHOP_ADMIN_ID));
 
 
 				vehiclesList.add(shopAdmin);
@@ -780,7 +782,8 @@ public class ShopAdminDAO {
 				shopAdmin = new ShopAdmin();
 
 				shopAdmin.setName(rs.getString(ShopAdmin.NAME));
-				shopAdmin.setShopID(rs.getInt(ShopAdmin.SHOP_ID));
+//				shopAdmin.setShopID(rs.getInt(ShopAdmin.SHOP_ID));
+				shopAdmin.setShopID((Integer) rs.getObject(ShopAdmin.SHOP_ID));
 
 				shopAdmin.setUsername(rs.getString(ShopAdmin.USERNAME));
 				shopAdmin.setPassword(rs.getString(ShopAdmin.PASSWORD));

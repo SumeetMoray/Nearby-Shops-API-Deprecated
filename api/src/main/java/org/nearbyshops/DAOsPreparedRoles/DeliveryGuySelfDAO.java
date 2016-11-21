@@ -106,7 +106,7 @@ public class DeliveryGuySelfDAO {
 	
 
 
-	public int updateDeliveryVehicleSelf(DeliveryGuySelf deliveryGuySelf)
+	public int updateDeliveryGuySelf(DeliveryGuySelf deliveryGuySelf)
 	{	
 		String updateStatement = "UPDATE " + DeliveryGuySelf.TABLE_NAME
 				+ " SET "
@@ -181,6 +181,82 @@ public class DeliveryGuySelfDAO {
 
 		return updatedRows;
 		
+	}
+
+	public int updateBySelf(DeliveryGuySelf deliveryGuySelf)
+	{
+		String updateStatement = "UPDATE " + DeliveryGuySelf.TABLE_NAME
+				+ " SET "
+				+ DeliveryGuySelf.USERNAME + " = ?,"
+				+ DeliveryGuySelf.PASSWORD + " = ?,"
+				+ DeliveryGuySelf.ABOUT + " = ?,"
+				+ DeliveryGuySelf.PROFILE_IMAGE_URL + " = ?,"
+				+ DeliveryGuySelf.PHONE_NUMBER + " = ?,"
+
+				+ DeliveryGuySelf.NAME + " = ?,"
+				+ DeliveryGuySelf.SHOP_ID + " = ?"
+
+				+ " WHERE " + DeliveryGuySelf.ID + " = ?";
+
+		Connection connection = null;
+		PreparedStatement statement = null;
+		int updatedRows = -1;
+
+		try {
+
+			connection = dataSource.getConnection();
+			statement = connection.prepareStatement(updateStatement);
+
+			statement.setString(1,deliveryGuySelf.getUsername());
+			statement.setString(2,deliveryGuySelf.getPassword());
+			statement.setString(3,deliveryGuySelf.getAbout());
+			statement.setString(4,deliveryGuySelf.getProfileImageURL());
+			statement.setString(5,deliveryGuySelf.getPhoneNumber());
+
+//			statement.setObject(6,deliveryGuySelf.getEnabled());
+//			statement.setObject(7,deliveryGuySelf.getWaitlisted());
+
+			statement.setString(6,deliveryGuySelf.getName());
+			statement.setObject(7,deliveryGuySelf.getShopID());
+
+			statement.setObject(8,deliveryGuySelf.getDeliveryGuyID());
+
+			updatedRows = statement.executeUpdate();
+
+
+			System.out.println("Total rows updated: " + updatedRows);
+
+			//conn.close();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally
+
+		{
+
+			try {
+
+				if(statement!=null)
+				{statement.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(connection!=null)
+				{connection.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return updatedRows;
+
 	}
 	
 

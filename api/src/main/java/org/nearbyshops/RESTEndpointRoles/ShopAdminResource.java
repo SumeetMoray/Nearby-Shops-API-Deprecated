@@ -163,6 +163,8 @@ public class ShopAdminResource {
 
 
 
+
+
 	@DELETE
 	@Path("/{ShopAdminID}")
 	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN,GlobalConstants.ROLE_ADMIN})
