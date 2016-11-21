@@ -433,7 +433,7 @@ public class DeliveryGuySelfDAO {
 
 
 	
-	public DeliveryGuySelf readVehicle(int deliveryGuyID)
+	public DeliveryGuySelf readDeliveryGuySelf(int deliveryGuyID)
 	{
 		
 		String query = "SELECT * FROM " + DeliveryGuySelf.TABLE_NAME

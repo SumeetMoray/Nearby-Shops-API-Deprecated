@@ -37,7 +37,7 @@ public class ShopAdminDAO {
 				+ "("
 
 				+ ShopAdmin.NAME + ","
-				+ ShopAdmin.SHOP_ID + ","
+//				+ ShopAdmin.SHOP_ID + ","
 
 				+ ShopAdmin.USERNAME + ","
 				+ ShopAdmin.PASSWORD + ","
@@ -51,7 +51,7 @@ public class ShopAdminDAO {
 				+ ShopAdmin.IS_ENABLED + ","
 				+ ShopAdmin.IS_WAITLISTED + ""
 
-				+ " ) VALUES (?,?,?,?, ?,?,?,? ,?,?)";
+				+ " ) VALUES (?,?,?,?, ?,?,?,? ,?)";
 		
 		try {
 			
@@ -59,19 +59,19 @@ public class ShopAdminDAO {
 			statement = connection.prepareStatement(insertItemCategory,Statement.RETURN_GENERATED_KEYS);
 
 			statement.setString(1,shopAdmin.getName());
-			statement.setObject(2,shopAdmin.getShopID());
+//			statement.setObject(2,shopAdmin.getShopID());
 
-			statement.setString(3,shopAdmin.getUsername());
-			statement.setString(4,shopAdmin.getPassword());
+			statement.setString(2,shopAdmin.getUsername());
+			statement.setString(3,shopAdmin.getPassword());
 
-			statement.setString(5,shopAdmin.getAbout());
-			statement.setString(6,shopAdmin.getProfileImageURL());
-			statement.setString(7,shopAdmin.getPhoneNumber());
+			statement.setString(4,shopAdmin.getAbout());
+			statement.setString(5,shopAdmin.getProfileImageURL());
+			statement.setString(6,shopAdmin.getPhoneNumber());
 
-			statement.setString(8,shopAdmin.getDesignation());
+			statement.setString(7,shopAdmin.getDesignation());
 
-			statement.setObject(9,shopAdmin.getEnabled());
-			statement.setObject(10,shopAdmin.getWaitlisted());
+			statement.setObject(8,shopAdmin.getEnabled());
+			statement.setObject(9,shopAdmin.getWaitlisted());
 
 			rowIdOfInsertedRow = statement.executeUpdate();
 			ResultSet rs = statement.getGeneratedKeys();
@@ -136,7 +136,7 @@ public class ShopAdminDAO {
 				+ " SET "
 
 				+ ShopAdmin.NAME + " =?,"
-				+ ShopAdmin.SHOP_ID + " =?,"
+//				+ ShopAdmin.SHOP_ID + " =?,"
 
 				+ ShopAdmin.USERNAME + " =?,"
 				+ ShopAdmin.PASSWORD + " =?,"
@@ -163,20 +163,20 @@ public class ShopAdminDAO {
 
 
 			statement.setString(1,shopAdmin.getName());
-			statement.setObject(2,shopAdmin.getShopID());
+//			statement.setObject(2,shopAdmin.getShopID());
 
-			statement.setString(3,shopAdmin.getUsername());
-			statement.setString(4,shopAdmin.getPassword());
+			statement.setString(2,shopAdmin.getUsername());
+			statement.setString(3,shopAdmin.getPassword());
 
-			statement.setString(5,shopAdmin.getAbout());
-			statement.setString(6,shopAdmin.getProfileImageURL());
-			statement.setString(7,shopAdmin.getPhoneNumber());
+			statement.setString(4,shopAdmin.getAbout());
+			statement.setString(5,shopAdmin.getProfileImageURL());
+			statement.setString(6,shopAdmin.getPhoneNumber());
 
-			statement.setString(8,shopAdmin.getDesignation());
+			statement.setString(7,shopAdmin.getDesignation());
 
-			statement.setObject(9,shopAdmin.getEnabled());
-			statement.setObject(10,shopAdmin.getWaitlisted());
-			statement.setObject(11,shopAdmin.getShopAdminID());
+			statement.setObject(8,shopAdmin.getEnabled());
+			statement.setObject(9,shopAdmin.getWaitlisted());
+			statement.setObject(10,shopAdmin.getShopAdminID());
 
 
 //			statement.setString(1,shopAdmin.getName());
@@ -235,7 +235,7 @@ public class ShopAdminDAO {
 				+ " SET "
 
 				+ ShopAdmin.NAME + " =?,"
-				+ ShopAdmin.SHOP_ID + " =?,"
+//				+ ShopAdmin.SHOP_ID + " =?,"
 
 				+ ShopAdmin.USERNAME + " =?,"
 				+ ShopAdmin.PASSWORD + " =?,"
@@ -259,19 +259,78 @@ public class ShopAdminDAO {
 
 
 			statement.setString(1,shopAdmin.getName());
-			statement.setObject(2,shopAdmin.getShopID());
+//			statement.setObject(2,shopAdmin.getShopID());
 
-			statement.setString(3,shopAdmin.getUsername());
-			statement.setString(4,shopAdmin.getPassword());
+			statement.setString(2,shopAdmin.getUsername());
+			statement.setString(3,shopAdmin.getPassword());
 
-			statement.setString(5,shopAdmin.getAbout());
-			statement.setString(6,shopAdmin.getProfileImageURL());
-			statement.setString(7,shopAdmin.getPhoneNumber());
+			statement.setString(4,shopAdmin.getAbout());
+			statement.setString(5,shopAdmin.getProfileImageURL());
+			statement.setString(6,shopAdmin.getPhoneNumber());
 
-			statement.setString(8,shopAdmin.getDesignation());
+			statement.setString(7,shopAdmin.getDesignation());
 
-			statement.setObject(9,shopAdmin.getShopAdminID());
+			statement.setObject(8,shopAdmin.getShopAdminID());
 
+
+			updatedRows = statement.executeUpdate();
+
+
+			System.out.println("Total rows updated: " + updatedRows);
+
+			//conn.close();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally
+
+		{
+
+			try {
+
+				if(statement!=null)
+				{statement.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(connection!=null)
+				{connection.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return updatedRows;
+
+	}
+
+	public int updateShopID(ShopAdmin shopAdmin)
+	{
+		// Shop Admin is not allowed to update Enabled or Waitlisted fields they are reserved for Service Level Admins only.
+
+		String updateStatement = "UPDATE " + ShopAdmin.TABLE_NAME
+				+ " SET "
+				+ ShopAdmin.SHOP_ID + " =?"
+				+ " WHERE " + ShopAdmin.SHOP_ADMIN_ID + " = ?";
+
+		Connection connection = null;
+		PreparedStatement statement = null;
+		int updatedRows = -1;
+
+		try {
+
+			connection = dataSource.getConnection();
+			statement = connection.prepareStatement(updateStatement);
+
+			statement.setObject(1,shopAdmin.getShopID());
+			statement.setObject(2,shopAdmin.getShopAdminID());
 
 			updatedRows = statement.executeUpdate();
 
@@ -367,8 +426,7 @@ public class ShopAdminDAO {
 		
 		return rowsCountDeleted;
 	}
-	
-	
+
 
 
 

@@ -94,7 +94,7 @@ public class DeliveryGuySelfResource {
 	{
 
 		deliveryGuySelf.setDeliveryGuyID(deliveryGuyID);
-		int rowCount = Globals.deliveryGuySelfDAO.updateDeliveryVehicleSelf(deliveryGuySelf);
+		int rowCount = Globals.deliveryGuySelfDAO.updateDeliveryGuySelf(deliveryGuySelf);
 
 		if(rowCount >= 1)
 		{
@@ -183,7 +183,7 @@ public class DeliveryGuySelfResource {
 	public Response getCart(@PathParam("DeliveryGuyID")int deliveryGuyID)
 	{
 
-		DeliveryGuySelf vehicleSelf = Globals.deliveryGuySelfDAO.readVehicle(deliveryGuyID);
+		DeliveryGuySelf vehicleSelf = Globals.deliveryGuySelfDAO.readDeliveryGuySelf(deliveryGuyID);
 		
 		if(vehicleSelf != null)
 		{

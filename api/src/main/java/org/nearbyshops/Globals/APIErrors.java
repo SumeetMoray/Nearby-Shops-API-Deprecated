@@ -9,4 +9,7 @@ public class APIErrors {
 
     public static final String ACCESS_FORBIDDEN = "You are trying to access the account of another user. You do not have permission for this operation !";
 
+    public static final String UPDATE_BY_WRONG_SHOP_OWNER = "You are not allowed to update the shop you do not own !";
+    public static final String DELETE_BY_WRONG_SHOP_OWNER = "You are not allowed to Delete the shop you do not own !";
+
 }

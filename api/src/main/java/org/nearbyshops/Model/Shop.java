@@ -44,6 +44,8 @@ public class Shop {
 	public static final String SHOP_ENABLED = "SHOP_ENABLED";
 	public static final String SHOP_WAITLISTED = "SHOP_WAITLISTED";
 
+	public static final String SHOP_ADMIN_ID = "SHOP_ADMIN_ID";
+
 	// deprecated columns
 //	public static final String LAT_MAX = "LAT_MAX";
 //	public static final String LON_MAX = "LON_MAX";
@@ -109,7 +111,9 @@ public class Shop {
 			+ " " + Shop.LONG_DESCRIPTION + " text,"
 
 			+ " " + Shop.DATE_TIME_STARTED + " timestamp with time zone NOT NULL DEFAULT now(),"
-			+ " " + Shop.IS_OPEN + " boolean " + ")" ;
+			+ " " + Shop.IS_OPEN + " boolean ,"
+			+ " " + Shop.SHOP_ADMIN_ID + " INT UNIQUE NOT NULL "
+			+ ")" ;
 
 //			+ " FOREIGN KEY(" + Shop.DISTRIBUTOR_ID +") REFERENCES " + Distributor.TABLE_NAME + "(" + Distributor.DISTRIBUTOR_ID + ")"
 //			+ ")"
@@ -162,6 +166,7 @@ public class Shop {
 
 	private Timestamp dateTimeStarted;
 	private boolean isOpen;
+	private int shopAdminID;
 
 
 	// real time variables
@@ -178,6 +183,14 @@ public class Shop {
 //	private double latMin;
 //	private double lonMin;
 
+
+	public int getShopAdminID() {
+		return shopAdminID;
+	}
+
+	public void setShopAdminID(int shopAdminID) {
+		this.shopAdminID = shopAdminID;
+	}
 
 	public int getShopID() {
 		return shopID;

@@ -2,17 +2,14 @@ package org.nearbyshops.RESTEndpointRoles;
 
 import jdk.nashorn.internal.objects.Global;
 import net.coobird.thumbnailator.Thumbnails;
-import org.glassfish.jersey.internal.util.Base64;
 import org.nearbyshops.DAOsPrepared.ShopDAO;
 import org.nearbyshops.DAOsPreparedRoles.DeliveryGuySelfDAO;
 import org.nearbyshops.Globals.APIErrors;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Image;
-import org.nearbyshops.Model.Shop;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
 import org.nearbyshops.ModelRoles.DeliveryGuySelf;
-import org.nearbyshops.ModelRoles.Distributor;
 import org.nearbyshops.ModelRoles.ShopAdmin;
 
 import javax.annotation.security.RolesAllowed;
@@ -149,7 +146,7 @@ public class DeliveryGuySelfResource {
 			// get Shop Object
 			// Shop shop = shopDAO.getShop(deliveryGuySelf.getShopID(),null,null);
 
-			DeliveryGuySelf deliveryGuySelfTwo = deliveryGuySelfDAO.readVehicle(deliveryGuyID);
+			DeliveryGuySelf deliveryGuySelfTwo = deliveryGuySelfDAO.readDeliveryGuySelf(deliveryGuyID);
 
 			if(deliveryGuySelfTwo.getShopID() != ((ShopAdmin)Globals.accountApproved).getShopID())
 			{
@@ -245,7 +242,7 @@ public class DeliveryGuySelfResource {
 		if(Globals.accountApproved instanceof ShopAdmin)
 		{
 
-			DeliveryGuySelf deliveryGuySelfTwo = deliveryGuySelfDAO.readVehicle(deliveryGuyID);
+			DeliveryGuySelf deliveryGuySelfTwo = deliveryGuySelfDAO.readDeliveryGuySelf(deliveryGuyID);
 
 			if(deliveryGuySelfTwo.getShopID() != ((ShopAdmin)Globals.accountApproved).getShopID())
 			{
@@ -362,7 +359,7 @@ public class DeliveryGuySelfResource {
 
 
 
-		DeliveryGuySelf vehicleSelf = Globals.deliveryGuySelfDAO.readVehicle(deliveryGuyID);
+		DeliveryGuySelf vehicleSelf = Globals.deliveryGuySelfDAO.readDeliveryGuySelf(deliveryGuyID);
 		
 		if(vehicleSelf != null)
 		{
@@ -422,7 +419,7 @@ public class DeliveryGuySelfResource {
 		{
 //			deliveryGuySelf = (DeliveryGuySelf) Globals.accountApproved;
 			deliveryGuySelf = deliveryGuySelfDAO
-					.readVehicle(((DeliveryGuySelf) Globals.accountApproved).getDeliveryGuyID());
+					.readDeliveryGuySelf(((DeliveryGuySelf) Globals.accountApproved).getDeliveryGuyID());
 		}
 
 
@@ -443,9 +440,6 @@ public class DeliveryGuySelfResource {
 		}
 
 	}
-
-
-
 
 
 
@@ -616,8 +610,6 @@ public class DeliveryGuySelfResource {
 
 		return response;
 	}
-
-
 
 
 }
