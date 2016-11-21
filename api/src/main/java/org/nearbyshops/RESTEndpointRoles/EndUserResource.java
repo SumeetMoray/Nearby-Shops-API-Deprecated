@@ -5,10 +5,8 @@ import org.nearbyshops.DAOsPreparedRoles.EndUserDAOPrepared;
 import org.nearbyshops.Globals.APIErrors;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.ModelEndPoints.DistributorEndPoint;
 import org.nearbyshops.ModelEndPoints.EndUserEndPoint;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
-import org.nearbyshops.ModelRoles.Distributor;
 import org.nearbyshops.ModelRoles.EndUser;
 
 import javax.annotation.security.RolesAllowed;

@@ -29,10 +29,11 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
     private AdminDAOPrepared adminDAOPrepared = Globals.adminDAOPrepared;
     private StaffDAOPrepared staffDAOPrepared = Globals.staffDAOPrepared;
-    private DistributorDAOPrepared distributorDAOPrepared = Globals.distributorDAOPrepared;
+//    private DistributorDAOPrepared distributorDAOPrepared = Globals.distributorDAOPrepared;
     private DistributorStaffDAOPrepared distributorStaffDAO = Globals.distributorStaffDAOPrepared;
     private DeliveryGuySelfDAO deliveryGuySelfDAO = Globals.deliveryGuySelfDAO;
     private EndUserDAOPrepared endUserDAOPrepared = Globals.endUserDAOPrepared;
+    private ShopAdminDAO shopAdminDAO = Globals.shopAdminDAO;
 
 
     @Context
@@ -154,7 +155,9 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                 }
 
 
-            }else if(role.equals(GlobalConstants.ROLE_DISTRIBUTOR))
+            }
+
+            /*else if(role.equals(GlobalConstants.ROLE_DISTRIBUTOR))
             {
 
                 Distributor distributor = distributorDAOPrepared.checkDistributor(null,username,password);
@@ -180,7 +183,9 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                     }
                 }
 
-            }else if (role.equals(GlobalConstants.ROLE_DISTRIBUTOR_STAFF))
+            }*/
+
+            else if (role.equals(GlobalConstants.ROLE_SHOP_STAFF))
             {
 
                 DistributorStaff distributorStaff = distributorStaffDAO.checkDistributor(null,username,password);
@@ -247,6 +252,29 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                 }
 
             }
+            else if(role.equals(GlobalConstants.ROLE_SHOP_ADMIN))
+            {
+                ShopAdmin shopAdmin = shopAdminDAO.checkShopAdmin(username,password);
+                // Distributor account exist and is enabled
+                if(shopAdmin!=null )
+                {
+                    if(!shopAdmin.getEnabled())
+                    {
+                        Response response = Response.status(403)
+                                .entity(new ErrorNBSAPI(403, "Your account is disabled. Contact administrator to know more !"))
+                                .build();
+
+                        throw new ForbiddenException("Permission denied !",response);
+                    }
+                    else
+                    {
+                        return shopAdmin;
+                    }
+
+                }
+
+            }
+
 
 
         }

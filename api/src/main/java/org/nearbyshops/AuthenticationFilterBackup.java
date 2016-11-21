@@ -19,7 +19,6 @@ import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -175,7 +174,8 @@ public class AuthenticationFilterBackup implements ContainerRequestFilter {
                     isAllowed = true;
                     return isAllowed;
                 }
-            }else if(role.equals(GlobalConstants.ROLE_DISTRIBUTOR))
+            }
+            /*else if(role.equals(GlobalConstants.ROLE_DISTRIBUTOR))
             {
 
                 Distributor distributor = distributorDAOPrepared.checkDistributor(null,username,password);
@@ -185,7 +185,8 @@ public class AuthenticationFilterBackup implements ContainerRequestFilter {
                         isAllowed = true;
                         return isAllowed;
                 }
-            }else if (role.equals(GlobalConstants.ROLE_DISTRIBUTOR_STAFF))
+            }*/
+            else if (role.equals(GlobalConstants.ROLE_SHOP_STAFF))
             {
 
                 DistributorStaff distributorStaff = distributorStaffDAO.checkDistributor(null,username,password);

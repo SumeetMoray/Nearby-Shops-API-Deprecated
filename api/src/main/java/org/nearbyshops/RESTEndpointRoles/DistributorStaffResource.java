@@ -33,7 +33,7 @@ public class DistributorStaffResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_DISTRIBUTOR})
+//	@RolesAllowed({GlobalConstants.ROLE_DISTRIBUTOR})
 	public Response createDistributorStaff(DistributorStaff distributorStaff)
 	{
 
@@ -80,7 +80,7 @@ public class DistributorStaffResource {
 	@PUT
 	@Path("/{DistributorID}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_DISTRIBUTOR_STAFF,GlobalConstants.ROLE_DISTRIBUTOR})
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_STAFF,GlobalConstants.ROLE_SHOP_ADMIN})
 	public Response updateDistributor(@PathParam("DistributorID")int distributorID,
 									  DistributorStaff distributorStaff,
 									  @Context HttpHeaders headers)
@@ -132,7 +132,7 @@ public class DistributorStaffResource {
 
 	@DELETE
 	@Path("/{DistributorID}")
-	@RolesAllowed({GlobalConstants.ROLE_DISTRIBUTOR_STAFF,GlobalConstants.ROLE_DISTRIBUTOR_STAFF})
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_STAFF,GlobalConstants.ROLE_SHOP_STAFF})
 	public Response deleteDistributor(@PathParam("DistributorID")int distributorID,
 									  @Context HttpHeaders headers)
 	{
@@ -308,7 +308,7 @@ public class DistributorStaffResource {
 	@GET
 	@Path("Login")
 	@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_DISTRIBUTOR_STAFF})
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_STAFF})
 	public Response getDistributorLogin(@Context HttpHeaders header)
 	{
 

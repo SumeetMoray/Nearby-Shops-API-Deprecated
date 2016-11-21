@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.List;
 
 import javax.validation.Valid;
-import javax.validation.executable.ValidateOnExecution;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -212,19 +211,17 @@ public class ItemResource {
 			
 			if(list.size()<=0)
 			{
-				Response response = Response.status(Status.NO_CONTENT)
+
+				return Response.status(Status.NO_CONTENT)
 						.entity(listEntity)
 						.build();
-				
-				return response;
 				
 			}else
 			{
-				Response response = Response.status(Status.OK)
+
+				return Response.status(Status.OK)
 						.entity(listEntity)
 						.build();
-				
-				return response;
 			}	
 	}
 
@@ -467,20 +464,17 @@ public class ItemResource {
 		
 		if(item!= null)
 		{
-			Response response = Response.status(Status.OK)
+
+			return Response.status(Status.OK)
 			.entity(item)
 			.build();
 			
-			return response;
-			
 		} else 
 		{
-			
-			Response response = Response.status(Status.NO_CONTENT)
+
+			return Response.status(Status.NO_CONTENT)
 					.entity(item)
 					.build();
-			
-			return response;
 			
 		}
 	}

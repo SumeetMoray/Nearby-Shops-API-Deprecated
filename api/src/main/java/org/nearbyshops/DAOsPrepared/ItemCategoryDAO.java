@@ -397,7 +397,7 @@ public class ItemCategoryDAO {
 
 
 
-			String queryPartlatLonCenterTwo = "";
+			/*String queryPartlatLonCenterTwo = "";
 
 			queryPartlatLonCenterTwo = queryPartlatLonCenterTwo
 					+ " AND "
@@ -419,7 +419,7 @@ public class ItemCategoryDAO {
 					+ Shop.TABLE_NAME
 					+ "."
 					+ Shop.LON_MIN
-					+ " <= " + lonCenter;
+					+ " <= " + lonCenter;*/
 
 			//+ " BETWEEN " + latmax + " AND " + latmin;
 

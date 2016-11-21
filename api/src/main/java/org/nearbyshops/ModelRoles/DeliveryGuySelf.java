@@ -75,6 +75,7 @@ public class DeliveryGuySelf {
 
     private Double currentLatitude;
     private Double currentLongitude;
+
     private String designation;
 
 

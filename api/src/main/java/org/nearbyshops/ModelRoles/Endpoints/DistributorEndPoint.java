@@ -1,4 +1,4 @@
-package org.nearbyshops.ModelEndPoints;
+package org.nearbyshops.ModelRoles.Endpoints;
 
 import org.nearbyshops.Model.Item;
 import org.nearbyshops.ModelRoles.Distributor;

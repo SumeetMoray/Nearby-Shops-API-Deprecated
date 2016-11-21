@@ -469,7 +469,7 @@ public class ItemCategoryService {
 
 
 
-			String queryPartlatLonCenterTwo = "";
+			/*String queryPartlatLonCenterTwo = "";
 
 			queryPartlatLonCenterTwo = queryPartlatLonCenterTwo
 					+ " AND "
@@ -492,7 +492,7 @@ public class ItemCategoryService {
 					+ "."
 					+ Shop.LON_MIN
 					+ " <= " + lonCenter;
-
+*/
 			//+ " BETWEEN " + latmax + " AND " + latmin;
 
 			String queryPartlatLonCenter = "";

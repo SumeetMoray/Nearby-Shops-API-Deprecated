@@ -219,9 +219,13 @@ public class Main implements ActionListener {
 
 			statement.executeUpdate(ItemCategory.createTableItemCategoryPostgres);
 			statement.executeUpdate(Item.createTableItemPostgres);
-			statement.executeUpdate(Distributor.createTableDistributorPostgres);
+
+//			statement.executeUpdate(Distributor.createTableDistributorPostgres);
+
 			statement.executeUpdate(DistributorStaff.createTableDistributorStaffPostgres);
 			statement.executeUpdate(Shop.createTableShopPostgres);
+			statement.executeUpdate(ShopAdmin.createtableShopAdminPostgres);
+
 			statement.executeUpdate(ShopItem.createTableShopItemPostgres);
 			statement.executeUpdate(EndUser.createTableEndUserPostgres);
 

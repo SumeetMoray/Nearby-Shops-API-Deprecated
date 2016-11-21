@@ -15,7 +15,7 @@ public class DistributorStaff {
 
 	// Column names for Distributor
 	public static final String DISTRIBUTOR_STAFF_ID = "DISTRIBUTOR_STAFF_ID";
-	public static final String NAME = "NAME";
+	public static final String NAME = "NAME_ADMIN";
 	public static final String USERNAME = "USERNAME";
 	public static final String PASSWORD = "PASSWORD";
 

@@ -663,7 +663,7 @@ public class ItemDAO {
 			// latCenter and lonCenter. For more information see the API documentation.
 
 
-			String queryPartLatLonBounding = "";
+			/*String queryPartLatLonBounding = "";
 
 			queryPartLatLonBounding = queryPartLatLonBounding
 					+ " AND "
@@ -685,7 +685,7 @@ public class ItemDAO {
 					+ Shop.TABLE_NAME
 					+ "."
 					+ Shop.LON_MIN
-					+ " <= " + lonCenter;
+					+ " <= " + lonCenter;*/
 
 			//+ " BETWEEN " + latmax + " AND " + latmin;
 

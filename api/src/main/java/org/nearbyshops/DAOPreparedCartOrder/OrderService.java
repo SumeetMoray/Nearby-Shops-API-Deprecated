@@ -7,7 +7,7 @@ import org.nearbyshops.Model.OrderItem;
 import org.nearbyshops.ModelDelivery.DeliveryAddress;
 import org.nearbyshops.ModelEndPoints.OrderEndPoint;
 import org.nearbyshops.ModelStats.OrderStats;
-import org.nearbyshops.ModelStats.OrderStatusHomeDelivery;
+import org.nearbyshops.ModelOrderStatus.OrderStatusHomeDelivery;
 
 import java.sql.*;
 import java.util.ArrayList;

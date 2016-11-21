@@ -1,7 +1,5 @@
-package org.nearbyshops.Model;
+package org.nearbyshops.BackupShopAdmin;
 
-
-import org.nearbyshops.ModelRoles.ShopAdmin;
 
 import java.sql.Timestamp;
 
@@ -25,7 +23,7 @@ public class Shop {
 	public static final String PICK_FROM_SHOP_AVAILABLE = "PICK_FROM_SHOP_AVAILABLE";
 	public static final String HOME_DELIVERY_AVAILABLE = "HOME_DELIVERY_AVAILABLE";
 
-	public static final String LOGO_IMAGE_PATH = "LOGO_IMAGE_PATH";
+	public static final String LOGO_IMAGE_ID = "LOGO_IMAGE_PATH";
 
 	// recently Added
 	public static final String SHOP_ADDRESS = "SHOP_ADDRESS";
@@ -64,15 +62,6 @@ public class Shop {
 	//	public static final String IMAGE_PATH = "IMAGE_PATH";
 //	public static final String BACKDROP_IMAGE_PATH = "BACKDROP_IMAGE_PATH";
 
-	// shop admin fields / columns
-//			+ " " + ShopAdmin.NAME_ADMIN + " text,"
-//			+ " " + ShopAdmin.USERNAME + " text UNIQUE,"
-//			+ " " + ShopAdmin.PASSWORD + " text,"
-//			+ " " + ShopAdmin.PROFILE_IMAGE_URL + " text,"
-//			+ " " + ShopAdmin.PHONE_NUMBER + " text,"
-//			+ " " + ShopAdmin.ADMIN_ENABLED + " boolean,"
-//			+ " " + ShopAdmin.ADMIN_WAITLISTED + " boolean" +
-
 
 
 
@@ -95,7 +84,7 @@ public class Shop {
 			+ " " + Shop.SHOP_ENABLED + " boolean,"
 			+ " " + Shop.SHOP_WAITLISTED + " boolean,"
 
-			+ " " + Shop.LOGO_IMAGE_PATH + " text,"
+			+ " " + Shop.LOGO_IMAGE_ID + " text,"
 
 			+ " " + Shop.SHOP_ADDRESS + " text,"
 			+ " " + Shop.CITY + " text,"
@@ -109,7 +98,8 @@ public class Shop {
 			+ " " + Shop.LONG_DESCRIPTION + " text,"
 
 			+ " " + Shop.DATE_TIME_STARTED + " timestamp with time zone NOT NULL DEFAULT now(),"
-			+ " " + Shop.IS_OPEN + " boolean " + ")" ;
+			+ " " + Shop.IS_OPEN + " boolean";
+
 
 //			+ " FOREIGN KEY(" + Shop.DISTRIBUTOR_ID +") REFERENCES " + Distributor.TABLE_NAME + "(" + Distributor.DISTRIBUTOR_ID + ")"
 //			+ ")"
@@ -120,6 +110,10 @@ public class Shop {
 	}
 
 
+
+
+	// real time variables
+	private double distance;
 
 	// normal variables
 	private int shopID;
@@ -145,7 +139,7 @@ public class Shop {
 
 
 	
-	private String logoImagePath;
+	private String logoImageID;
 
 
 	// added recently
@@ -164,8 +158,8 @@ public class Shop {
 	private boolean isOpen;
 
 
-	// real time variables
-	private double rt_distance;
+
+
 	private float rt_rating_avg;
 	private float rt_rating_count;
 
@@ -179,21 +173,31 @@ public class Shop {
 //	private double lonMin;
 
 
-	public int getShopID() {
-		return shopID;
+	public float getRt_rating_avg() {
+		return rt_rating_avg;
 	}
 
-	public void setShopID(int shopID) {
-		this.shopID = shopID;
+	public void setRt_rating_avg(float rt_rating_avg) {
+		this.rt_rating_avg = rt_rating_avg;
 	}
 
-	public String getShopName() {
-		return shopName;
+	public float getRt_rating_count() {
+		return rt_rating_count;
 	}
 
-	public void setShopName(String shopName) {
-		this.shopName = shopName;
+	public void setRt_rating_count(float rt_rating_count) {
+		this.rt_rating_count = rt_rating_count;
 	}
+
+	public double getDistance() {
+		return distance;
+	}
+
+	public void setDistance(double distance) {
+		this.distance = distance;
+	}
+
+
 
 	public double getDeliveryRange() {
 		return deliveryRange;
@@ -219,6 +223,8 @@ public class Shop {
 		this.lonCenter = lonCenter;
 	}
 
+
+
 	public double getDeliveryCharges() {
 		return deliveryCharges;
 	}
@@ -227,53 +233,24 @@ public class Shop {
 		this.deliveryCharges = deliveryCharges;
 	}
 
-	public int getBillAmountForFreeDelivery() {
-		return billAmountForFreeDelivery;
+
+
+	public int getShopID() {
+		return shopID;
 	}
 
-	public void setBillAmountForFreeDelivery(int billAmountForFreeDelivery) {
-		this.billAmountForFreeDelivery = billAmountForFreeDelivery;
+	public void setShopID(int shopID) {
+		this.shopID = shopID;
 	}
 
-	public Boolean getPickFromShopAvailable() {
-		return pickFromShopAvailable;
+	public String getShopName() {
+		return shopName;
 	}
 
-	public void setPickFromShopAvailable(Boolean pickFromShopAvailable) {
-		this.pickFromShopAvailable = pickFromShopAvailable;
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
 	}
 
-	public Boolean getHomeDeliveryAvailable() {
-		return homeDeliveryAvailable;
-	}
-
-	public void setHomeDeliveryAvailable(Boolean homeDeliveryAvailable) {
-		this.homeDeliveryAvailable = homeDeliveryAvailable;
-	}
-
-	public Boolean getShopEnabled() {
-		return shopEnabled;
-	}
-
-	public void setShopEnabled(Boolean shopEnabled) {
-		this.shopEnabled = shopEnabled;
-	}
-
-	public Boolean getShopWaitlisted() {
-		return shopWaitlisted;
-	}
-
-	public void setShopWaitlisted(Boolean shopWaitlisted) {
-		this.shopWaitlisted = shopWaitlisted;
-	}
-
-	public String getLogoImagePath() {
-		return logoImagePath;
-	}
-
-	public void setLogoImagePath(String logoImagePath) {
-		this.logoImagePath = logoImagePath;
-	}
 
 	public String getShopAddress() {
 		return shopAddress;
@@ -305,6 +282,14 @@ public class Shop {
 
 	public void setLandmark(String landmark) {
 		this.landmark = landmark;
+	}
+
+	public int getBillAmountForFreeDelivery() {
+		return billAmountForFreeDelivery;
+	}
+
+	public void setBillAmountForFreeDelivery(int billAmountForFreeDelivery) {
+		this.billAmountForFreeDelivery = billAmountForFreeDelivery;
 	}
 
 	public String getCustomerHelplineNumber() {
@@ -347,35 +332,11 @@ public class Shop {
 		this.dateTimeStarted = dateTimeStarted;
 	}
 
-	public boolean isOpen() {
+	public boolean getisOpen() {
 		return isOpen;
 	}
 
-	public void setOpen(boolean open) {
+	public void setisOpen(boolean open) {
 		isOpen = open;
-	}
-
-	public double getRt_distance() {
-		return rt_distance;
-	}
-
-	public void setRt_distance(double rt_distance) {
-		this.rt_distance = rt_distance;
-	}
-
-	public float getRt_rating_avg() {
-		return rt_rating_avg;
-	}
-
-	public void setRt_rating_avg(float rt_rating_avg) {
-		this.rt_rating_avg = rt_rating_avg;
-	}
-
-	public float getRt_rating_count() {
-		return rt_rating_count;
-	}
-
-	public void setRt_rating_count(float rt_rating_count) {
-		this.rt_rating_count = rt_rating_count;
 	}
 }

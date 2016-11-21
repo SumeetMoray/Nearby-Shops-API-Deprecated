@@ -62,6 +62,8 @@ public class Globals {
 	public static ShopItemDAO shopItemDAO = new ShopItemDAO();
 	public static ShopItemByItemDAO shopItemByItemDAO = new ShopItemByItemDAO();
 
+	public static ShopAdminDAO shopAdminDAO = new ShopAdminDAO();
+
 
 
 	// static reference for holding security accountApproved

@@ -29,10 +29,10 @@ import org.nearbyshops.Utility.GeoLocation;
 @Produces(MediaType.APPLICATION_JSON)
 public class ShopResource {
 
-	private GeoLocation center;
-	private GeoLocation[] minMaxArray;
-	private GeoLocation pointOne;
-	private GeoLocation pointTwo;
+//	private GeoLocation center;
+//	private GeoLocation[] minMaxArray;
+//	private GeoLocation pointOne;
+//	private GeoLocation pointTwo;
 
 
 	private ShopDAO shopDAO = Globals.shopDAO;
@@ -46,16 +46,16 @@ public class ShopResource {
 	{
 
 		// generate bounding coordinates for the shop based on its center and delivery range
-		center = GeoLocation.fromDegrees(shop.getLatCenter(),shop.getLonCenter());
-		minMaxArray = center.boundingCoordinates(shop.getDeliveryRange(),6371.01);
-
-		pointOne = minMaxArray[0];
-		pointTwo = minMaxArray[1];
-
-		shop.setLatMin(pointOne.getLatitudeInDegrees());
-		shop.setLonMin(pointOne.getLongitudeInDegrees());
-		shop.setLatMax(pointTwo.getLatitudeInDegrees());
-		shop.setLonMax(pointTwo.getLongitudeInDegrees());
+//		center = GeoLocation.fromDegrees(shop.getLatCenter(),shop.getLonCenter());
+//		minMaxArray = center.boundingCoordinates(shop.getDeliveryRange(),6371.01);
+//
+//		pointOne = minMaxArray[0];
+//		pointTwo = minMaxArray[1];
+//
+//		shop.setLatMin(pointOne.getLatitudeInDegrees());
+//		shop.setLonMin(pointOne.getLongitudeInDegrees());
+//		shop.setLatMax(pointTwo.getLatitudeInDegrees());
+//		shop.setLonMax(pointTwo.getLongitudeInDegrees());
 
 		int idOfInsertedRow = shopDAO.insertShop(shop);
 
@@ -95,16 +95,16 @@ public class ShopResource {
 	{
 
 		// generate bounding coordinates for the shop based on its center and delivery range
-		center = GeoLocation.fromDegrees(shop.getLatCenter(),shop.getLonCenter());
-		minMaxArray = center.boundingCoordinates(shop.getDeliveryRange(),6371.01);
-
-		pointOne = minMaxArray[0];
-		pointTwo = minMaxArray[1];
-
-		shop.setLatMin(pointOne.getLatitudeInDegrees());
-		shop.setLonMin(pointOne.getLongitudeInDegrees());
-		shop.setLatMax(pointTwo.getLatitudeInDegrees());
-		shop.setLonMax(pointTwo.getLongitudeInDegrees());
+//		center = GeoLocation.fromDegrees(shop.getLatCenter(),shop.getLonCenter());
+//		minMaxArray = center.boundingCoordinates(shop.getDeliveryRange(),6371.01);
+//
+//		pointOne = minMaxArray[0];
+//		pointTwo = minMaxArray[1];
+//
+//		shop.setLatMin(pointOne.getLatitudeInDegrees());
+//		shop.setLonMin(pointOne.getLongitudeInDegrees());
+//		shop.setLatMax(pointTwo.getLatitudeInDegrees());
+//		shop.setLonMax(pointTwo.getLongitudeInDegrees());
 
 
 		shop.setShopID(ShopID);
@@ -162,7 +162,7 @@ public class ShopResource {
 
 	}
 	
-	
+
 
 	@GET
 	@Path("/Deprecated")
@@ -179,7 +179,7 @@ public class ShopResource {
 	{
 		
 		List<Shop> list = shopDAO.getShops(
-				distributorID,itemCategoryID,
+				itemCategoryID,
 				latCenter, lonCenter,
 				deliveryRangeMin,deliveryRangeMax,
 				proximity,searchString,sortBy,limit,offset
@@ -253,8 +253,8 @@ public class ShopResource {
 		}
 
 
-		ShopEndPoint endPoint = shopDAO.getEndPointMetadata(distributorID,
-				itemCategoryID, latCenter,lonCenter,deliveryRangeMin,deliveryRangeMax,proximity,searchString);
+		ShopEndPoint endPoint = shopDAO.getEndPointMetadata(itemCategoryID,
+				latCenter,lonCenter,deliveryRangeMin,deliveryRangeMax,proximity,searchString);
 
 
 		endPoint.setLimit(set_limit);
@@ -275,7 +275,7 @@ public class ShopResource {
 		if(metaonly==null || (!metaonly)) {
 
 
-			shopsList = shopDAO.getShops(distributorID,itemCategoryID,
+			shopsList = shopDAO.getShops(itemCategoryID,
 					latCenter,lonCenter,deliveryRangeMin,deliveryRangeMax,proximity,searchString,sortBy,
 					limit,offset);
 
@@ -387,20 +387,17 @@ public class ShopResource {
 		
 		if(shop!= null)
 		{
-			Response response = Response.status(Status.OK)
+
+			return Response.status(Status.OK)
 			.entity(shop)
 			.build();
 			
-			return response;
-			
 		} else 
 		{
-			
-			Response response = Response.status(Status.NO_CONTENT)
+
+			return Response.status(Status.NO_CONTENT)
 					.entity(shop)
 					.build();
-			
-			return response;
 			
 		}	
 	}

@@ -66,12 +66,6 @@ public class ShopItemByItemDAO {
 					+ Shop.TABLE_NAME + "." + Shop.LAT_CENTER + ","
 					+ Shop.TABLE_NAME + "." + Shop.DELIVERY_RANGE + ","
 					+ Shop.TABLE_NAME + "." + Shop.DELIVERY_CHARGES + ","
-					+ Shop.TABLE_NAME + "." + Shop.DISTRIBUTOR_ID + ","
-					+ Shop.TABLE_NAME + "." + Shop.IMAGE_PATH + ","
-					+ Shop.TABLE_NAME + "." + Shop.LAT_MAX + ","
-					+ Shop.TABLE_NAME + "." + Shop.LAT_MIN + ","
-					+ Shop.TABLE_NAME + "." + Shop.LON_MAX + ","
-					+ Shop.TABLE_NAME + "." + Shop.LON_MIN + ","
 
 					+ Shop.TABLE_NAME + "." + Shop.SHOP_ADDRESS + ","
 					+ Shop.TABLE_NAME + "." + Shop.CITY + ","
@@ -554,19 +548,12 @@ public class ShopItemByItemDAO {
 
 
 					Shop shop = new Shop();
-					shop.setDistance(rs.getDouble("distance"));
+					shop.setRt_distance(rs.getDouble("distance"));
 					shop.setShopID(rs.getInt(Shop.SHOP_ID));
 					shop.setShopName(rs.getString(Shop.SHOP_NAME));
 					shop.setLatCenter(rs.getFloat(Shop.LAT_CENTER));
 					shop.setLonCenter(rs.getFloat(Shop.LON_CENTER));
 					shop.setDeliveryCharges(rs.getFloat(Shop.DELIVERY_CHARGES));
-					shop.setLatMax(rs.getDouble(Shop.LAT_MAX));
-					shop.setLonMax(rs.getDouble(Shop.LON_MAX));
-					shop.setLatMin(rs.getDouble(Shop.LAT_MIN));
-					shop.setLonMin(rs.getDouble(Shop.LON_MIN));
-					shop.setDistributorID(rs.getInt(Shop.DISTRIBUTOR_ID));
-					shop.setDeliveryRange(rs.getDouble(Shop.DELIVERY_RANGE));
-					shop.setImagePath(rs.getString(Shop.IMAGE_PATH));
 
 					shop.setShopAddress(rs.getString(Shop.SHOP_ADDRESS));
 					shop.setCity(rs.getString(Shop.CITY));
@@ -578,7 +565,7 @@ public class ShopItemByItemDAO {
 					shop.setShortDescription(rs.getString(Shop.SHORT_DESCRIPTION));
 					shop.setLongDescription(rs.getString(Shop.LONG_DESCRIPTION));
 					shop.setDateTimeStarted(rs.getTimestamp(Shop.DATE_TIME_STARTED));
-					shop.setisOpen(rs.getBoolean(Shop.IS_OPEN));
+					shop.setOpen(rs.getBoolean(Shop.IS_OPEN));
 
 					shop.setRt_rating_avg(rs.getFloat("avg_rating"));
 					shop.setRt_rating_count(rs.getFloat("rating_count"));
