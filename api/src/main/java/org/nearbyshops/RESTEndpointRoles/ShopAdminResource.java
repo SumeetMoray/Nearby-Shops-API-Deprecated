@@ -52,6 +52,7 @@ public class ShopAdminResource {
 
 		// this is a public endpoint and all new registrations require approval before their accounts get activated.
 		shopAdmin.setEnabled(false);
+		shopAdmin.setWaitlisted(false);
 
 		int idOfInsertedRow = Globals.shopAdminDAO.saveShopAdmin(shopAdmin);
 
@@ -119,7 +120,7 @@ public class ShopAdminResource {
 	@PUT
 	@Path("/UpdateBySelf/{ShopAdminID}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN_DISABLED})
 	public Response updateBySelf(@PathParam("ShopAdminID")int shopAdminID, ShopAdmin shopAdmin)
 	{
 
@@ -167,7 +168,7 @@ public class ShopAdminResource {
 
 	@DELETE
 	@Path("/{ShopAdminID}")
-	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN,GlobalConstants.ROLE_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN_DISABLED,GlobalConstants.ROLE_ADMIN})
 	public Response deleteShopAdmin(@PathParam("ShopAdminID")int shopAdminID)
 	{
 
@@ -222,37 +223,53 @@ public class ShopAdminResource {
 									 @QueryParam("metadata_only")Boolean metaonly)
 	{
 
-		int set_limit = 30;
-		int set_offset = 0;
+//		int set_limit = 30;
+//		int set_offset = 0;
+
+
+
+//		if(limit!= null) {
+//
+//			if (limit >= max_limit) {
+//
+//				set_limit = max_limit;
+//			}
+//			else
+//			{
+//
+//				set_limit = limit;
+//			}
+//
+//		}
+//
+//		if(offset!=null)
+//		{
+//			set_offset = offset;
+//		}
+
+
 		final int max_limit = 100;
 
-
-		if(limit!= null) {
-
-			if (limit >= max_limit) {
-
-				set_limit = max_limit;
-			}
-			else
-			{
-
-				set_limit = limit;
-			}
-
-		}
-
-		if(offset!=null)
+		if(limit!=null)
 		{
-			set_offset = offset;
+			if(limit>=max_limit)
+			{
+				limit = max_limit;
+			}
 		}
+		else
+		{
+			limit = 30;
+		}
+
 
 
 		ShopAdminEndPoint endPoint = shopAdminDAO.getEndpointMetadata(enabled,waitlisted,searchString);
 
 
-		endPoint.setLimit(set_limit);
+		endPoint.setLimit(limit);
 		endPoint.setMax_limit(max_limit);
-		endPoint.setOffset(set_offset);
+		endPoint.setOffset(offset);
 
 
 		ArrayList<ShopAdmin> shopAdminList = null;
@@ -306,14 +323,15 @@ public class ShopAdminResource {
 
 	}
 	
-	
+
+
+
 	@GET
 	@Path("/{ShopAdminID}")
 	@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN,GlobalConstants.ROLE_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN_DISABLED,GlobalConstants.ROLE_ADMIN})
 	public Response getShopAdmin(@PathParam("ShopAdminID")int shopAdminID)
 	{
-		ShopAdmin shopAdmin = shopAdminDAO.getShopAdmin(shopAdminID);
 
 		// Shop Admin is forbidden to view the account details of another account.
 		if(Globals.accountApproved instanceof ShopAdmin)
@@ -331,6 +349,7 @@ public class ShopAdminResource {
 
 
 
+		ShopAdmin shopAdmin = shopAdminDAO.getShopAdmin(shopAdminID);
 		
 		if(shopAdmin != null)
 		{
@@ -383,7 +402,7 @@ public class ShopAdminResource {
 	@GET
 	@Path("Login")
 	@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN_DISABLED})
 	public Response getShopAdminLogin(@Context HttpHeaders header)
 	{
 
@@ -427,7 +446,7 @@ public class ShopAdminResource {
 	@POST
 	@Path("/Image")
 	@Consumes({MediaType.APPLICATION_OCTET_STREAM})
-	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN,GlobalConstants.ROLE_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN_DISABLED,GlobalConstants.ROLE_ADMIN})
 	public Response uploadImage(InputStream in, @HeaderParam("Content-Length") long fileSize,
 							 @QueryParam("PreviousImageName") String previousImageName
 	) throws Exception
@@ -545,7 +564,7 @@ public class ShopAdminResource {
 
 	@DELETE
 	@Path("/Image/{name}")
-	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN,GlobalConstants.ROLE_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN_DISABLED,GlobalConstants.ROLE_ADMIN})
 	public Response deleteImageFile(@PathParam("name")String fileName)
 	{
 

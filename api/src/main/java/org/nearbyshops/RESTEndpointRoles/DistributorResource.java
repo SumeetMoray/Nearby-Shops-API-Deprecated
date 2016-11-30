@@ -17,7 +17,7 @@ import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.ModelRoles.Endpoints.DistributorEndPoint;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
-import org.nearbyshops.ModelRoles.Distributor;
+import org.nearbyshops.ModelRoles.Deprecated.Distributor;
 
 
 @Path("/v1/Distributor")

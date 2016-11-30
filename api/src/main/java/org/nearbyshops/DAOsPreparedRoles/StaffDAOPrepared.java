@@ -2,6 +2,8 @@ package org.nearbyshops.DAOsPreparedRoles;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.Globals.Globals;
+import org.nearbyshops.ModelRoles.DeliveryGuySelf;
+import org.nearbyshops.ModelRoles.ShopAdmin;
 import org.nearbyshops.ModelRoles.Staff;
 
 import java.sql.*;
@@ -21,6 +23,7 @@ public class StaffDAOPrepared {
 	}
 
 
+
 	public int saveStaff(Staff staff) {
 
 		Connection connection = null;
@@ -30,16 +33,23 @@ public class StaffDAOPrepared {
 		String insert = "INSERT INTO "
 				+ Staff.TABLE_NAME
 				+ "("
-				+ Staff.STAFF_NAME + ","
+
 				+ Staff.USER_NAME + ","
 				+ Staff.PASSWORD + ","
+
+				+ Staff.DESIGNATION + ","
+				+ Staff.PHONE_NUMBER + ","
+				+ Staff.GOVERNMENT_ID_NAME + ","
+				+ Staff.GOVERNMENT_ID_NUMBER + ","
 
 				+ Staff.ABOUT + ","
 				+ Staff.PROFILE_IMAGE_URL + ","
 
 				+ Staff.IS_ENABLED + ","
-				+ Staff.IS_WAITLISTED + ""
-				+ ") VALUES(?,?,?, ?,?, ?,?)";
+//				+ Staff.IS_WAITLISTED + ","
+				+ Staff.STAFF_NAME
+
+				+ ") VALUES(?,?, ?,?,?,?, ?,?, ?,?)";
 
 		try {
 
@@ -47,15 +57,23 @@ public class StaffDAOPrepared {
 
 			statement = connection.prepareStatement(insert, PreparedStatement.RETURN_GENERATED_KEYS);
 
-			statement.setString(1, staff.getStaffName());
-			statement.setString(2, staff.getUsername());
-			statement.setString(3, staff.getPassword());
 
-			statement.setString(4,staff.getAbout());
-			statement.setString(5,staff.getProfileImageURL());
+			statement.setString(1, staff.getUsername());
+			statement.setString(2, staff.getPassword());
 
-			statement.setObject(6,staff.getEnabled());
-			statement.setObject(7,staff.getWaitlisted());
+			statement.setString(3,staff.getDesignation());
+			statement.setString(4,staff.getPhone());
+			statement.setString(5,staff.getGovtIDName());
+			statement.setString(6,staff.getGovtIDNumber());
+
+			statement.setString(7,staff.getAbout());
+			statement.setString(8,staff.getProfileImageURL());
+
+			statement.setObject(9,staff.getEnabled());
+//			statement.setObject(10,staff.getWaitlisted());
+			statement.setString(10, staff.getStaffName());
+
+//			statement.setInt(11, staff.getStaffID());
 
 			rowIdOfInsertedRow = statement.executeUpdate();
 
@@ -95,23 +113,30 @@ public class StaffDAOPrepared {
 			}
 		}
 
-
 		return rowIdOfInsertedRow;
 	}
 
 
 	public int updateStaff(Staff staff) {
+
 		String updateStatement = "UPDATE " + Staff.TABLE_NAME
 				+ " SET "
-				+ Staff.STAFF_NAME + " = ?,"
-				+ Staff.USER_NAME + " = ?,"
-				+ Staff.PASSWORD + " = ?,"
 
-				+ Staff.ABOUT + " = ?,"
-				+ Staff.PROFILE_IMAGE_URL + " = ?,"
+				+ Staff.USER_NAME + " =?,"
+				+ Staff.PASSWORD + " =?,"
 
-				+ Staff.IS_ENABLED + " = ?,"
-				+ Staff.IS_WAITLISTED + " = ?"
+				+ Staff.DESIGNATION + " =?,"
+				+ Staff.PHONE_NUMBER + " =?,"
+				+ Staff.GOVERNMENT_ID_NAME + " =?,"
+				+ Staff.GOVERNMENT_ID_NUMBER + " =?,"
+
+				+ Staff.ABOUT + " =?,"
+				+ Staff.PROFILE_IMAGE_URL + " =?,"
+
+				+ Staff.IS_ENABLED + " =?,"
+//				+ Staff.IS_WAITLISTED + " =?,"
+				+ Staff.STAFF_NAME + " =?"
+
 				+ " WHERE " + Staff.STAFF_ID + " = ?";
 
 		Connection connection = null;
@@ -123,16 +148,111 @@ public class StaffDAOPrepared {
 			connection = dataSource.getConnection();
 			statement = connection.prepareStatement(updateStatement, PreparedStatement.RETURN_GENERATED_KEYS);
 
-			statement.setString(1, staff.getStaffName());
-			statement.setString(2, staff.getUsername());
-			statement.setString(3, staff.getPassword());
+			statement.setString(1, staff.getUsername());
+			statement.setString(2, staff.getPassword());
 
-			statement.setString(4,staff.getAbout());
-			statement.setString(5,staff.getProfileImageURL());
+			statement.setString(3,staff.getDesignation());
+			statement.setString(4,staff.getPhone());
+			statement.setString(5,staff.getGovtIDName());
+			statement.setString(6,staff.getGovtIDNumber());
 
-			statement.setObject(6,staff.getEnabled());
-			statement.setObject(7,staff.getWaitlisted());
-			statement.setInt(8, staff.getStaffID());
+			statement.setString(7,staff.getAbout());
+			statement.setString(8,staff.getProfileImageURL());
+
+			statement.setObject(9,staff.getEnabled());
+//			statement.setObject(10,staff.getWaitlisted());
+			statement.setString(10, staff.getStaffName());
+
+			statement.setInt(11, staff.getStaffID());
+
+			updatedRows = statement.executeUpdate();
+
+
+			System.out.println("Total rows updated: " + updatedRows);
+
+			//conn.close();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally
+
+		{
+
+			try {
+
+				if (statement != null) {
+					statement.close();
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return updatedRows;
+
+	}
+
+
+
+	public int updateStaffBySelf(Staff staff) {
+
+		String updateStatement = "UPDATE " + Staff.TABLE_NAME
+				+ " SET "
+
+				+ Staff.USER_NAME + " =?,"
+				+ Staff.PASSWORD + " =?,"
+
+				+ Staff.DESIGNATION + " =?,"
+				+ Staff.PHONE_NUMBER + " =?,"
+				+ Staff.GOVERNMENT_ID_NAME + " =?,"
+				+ Staff.GOVERNMENT_ID_NUMBER + " =?,"
+
+				+ Staff.ABOUT + " =?,"
+				+ Staff.PROFILE_IMAGE_URL + " =?,"
+
+//				+ Staff.IS_ENABLED + " =?,"
+//				+ Staff.IS_WAITLISTED + " =?,"
+				+ Staff.STAFF_NAME + " =?"
+
+				+ " WHERE " + Staff.STAFF_ID + " = ?";
+
+		Connection connection = null;
+		PreparedStatement statement = null;
+		int updatedRows = -1;
+
+		try {
+
+			connection = dataSource.getConnection();
+			statement = connection.prepareStatement(updateStatement, PreparedStatement.RETURN_GENERATED_KEYS);
+
+			statement.setString(1, staff.getUsername());
+			statement.setString(2, staff.getPassword());
+
+			statement.setString(3,staff.getDesignation());
+			statement.setString(4,staff.getPhone());
+			statement.setString(5,staff.getGovtIDName());
+			statement.setString(6,staff.getGovtIDNumber());
+
+			statement.setString(7,staff.getAbout());
+			statement.setString(8,staff.getProfileImageURL());
+
+//			statement.setObject(9,staff.getEnabled());
+//			statement.setObject(10,staff.getWaitlisted());
+			statement.setString(9, staff.getStaffName());
+
+			statement.setInt(10, staff.getStaffID());
 
 			updatedRows = statement.executeUpdate();
 
@@ -230,8 +350,44 @@ public class StaffDAOPrepared {
 	}
 
 
-	public ArrayList<Staff> getStaff() {
-		String query = "SELECT * FROM " + Staff.TABLE_NAME;
+	public ArrayList<Staff> getStaff(Boolean isEnabled) {
+
+
+		boolean isFirst = true;
+
+		String query = "SELECT "
+				+ Staff.STAFF_ID + ","
+				+ Staff.USER_NAME + ","
+				+ Staff.PASSWORD + ","
+
+				+ Staff.DESIGNATION + ","
+				+ Staff.PHONE_NUMBER + ","
+				+ Staff.GOVERNMENT_ID_NAME + ","
+				+ Staff.GOVERNMENT_ID_NUMBER + ","
+				+ Staff.TIMESTAMP_CREATED + ","
+
+				+ Staff.ABOUT + ","
+				+ Staff.PROFILE_IMAGE_URL + ","
+
+				+ Staff.IS_ENABLED + ","
+//				+ Staff.IS_WAITLISTED + ","
+				+ Staff.STAFF_NAME +
+
+				" FROM " + Staff.TABLE_NAME;
+
+
+
+		if(isEnabled !=null)
+		{
+			query = query + " WHERE " + Staff.IS_ENABLED + " = "  + isEnabled;
+
+			isFirst = false;
+		}
+
+
+
+		logMessage(query);
+
 		ArrayList<Staff> staffList = new ArrayList<Staff>();
 
 
@@ -251,19 +407,27 @@ public class StaffDAOPrepared {
 				Staff staff = new Staff();
 
 				staff.setStaffID(rs.getInt(Staff.STAFF_ID));
-				staff.setStaffName(rs.getString(Staff.STAFF_NAME));
 				staff.setUsername(rs.getString(Staff.USER_NAME));
 				staff.setPassword(rs.getString(Staff.PASSWORD));
+
+				staff.setDesignation(rs.getString(Staff.DESIGNATION));
+				staff.setPhone(rs.getString(Staff.PHONE_NUMBER));
+				staff.setGovtIDName(rs.getString(Staff.GOVERNMENT_ID_NAME));
+				staff.setGovtIDNumber(rs.getString(Staff.GOVERNMENT_ID_NUMBER));
+				staff.setTimestampCreated(rs.getTimestamp(Staff.TIMESTAMP_CREATED));
 
 				staff.setAbout(rs.getString(Staff.ABOUT));
 				staff.setProfileImageURL(rs.getString(Staff.PROFILE_IMAGE_URL));
 
 				staff.setEnabled(rs.getBoolean(Staff.IS_ENABLED));
-				staff.setWaitlisted(rs.getBoolean(Staff.IS_WAITLISTED));
-				staffList.add(staff);
+//				staff.setWaitlisted(rs.getBoolean(Staff.IS_WAITLISTED));
+				staff.setStaffName(rs.getString(Staff.STAFF_NAME));
 
+				staffList.add(staff);
 			}
 
+
+			logMessage("Staff List Size : " + String.valueOf(staffList.size()));
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -309,7 +473,26 @@ public class StaffDAOPrepared {
 
 	public Staff getStaff(int staffID) {
 
-		String query = "SELECT * FROM " + Staff.TABLE_NAME
+		String query = "SELECT "
+				+ Staff.STAFF_ID + ","
+				+ Staff.USER_NAME + ","
+				+ Staff.PASSWORD + ","
+
+				+ Staff.DESIGNATION + ","
+				+ Staff.PHONE_NUMBER + ","
+				+ Staff.GOVERNMENT_ID_NAME + ","
+				+ Staff.GOVERNMENT_ID_NUMBER + ","
+				+ Staff.TIMESTAMP_CREATED + ","
+
+				+ Staff.ABOUT + ","
+				+ Staff.PROFILE_IMAGE_URL + ","
+
+				+ Staff.IS_ENABLED + ","
+//				+ Staff.IS_WAITLISTED + ","
+				+ Staff.STAFF_NAME +
+
+				" FROM " + Staff.TABLE_NAME
+
 				+ " WHERE " + Staff.STAFF_ID + " = " + staffID;
 
 		Connection connection = null;
@@ -330,18 +513,23 @@ public class StaffDAOPrepared {
 			while (rs.next()) {
 
 				staff = new Staff();
-
 				staff.setStaffID(rs.getInt(Staff.STAFF_ID));
-				staff.setStaffName(rs.getString(Staff.STAFF_NAME));
 				staff.setUsername(rs.getString(Staff.USER_NAME));
 				staff.setPassword(rs.getString(Staff.PASSWORD));
 
+
+				staff.setDesignation(rs.getString(Staff.DESIGNATION));
+				staff.setPhone(rs.getString(Staff.PHONE_NUMBER));
+				staff.setGovtIDName(rs.getString(Staff.GOVERNMENT_ID_NAME));
+				staff.setGovtIDNumber(rs.getString(Staff.GOVERNMENT_ID_NUMBER));
+				staff.setTimestampCreated(rs.getTimestamp(Staff.TIMESTAMP_CREATED));
 
 				staff.setAbout(rs.getString(Staff.ABOUT));
 				staff.setProfileImageURL(rs.getString(Staff.PROFILE_IMAGE_URL));
 
 				staff.setEnabled(rs.getBoolean(Staff.IS_ENABLED));
-				staff.setWaitlisted(rs.getBoolean(Staff.IS_WAITLISTED));
+//				staff.setWaitlisted(rs.getBoolean(Staff.IS_WAITLISTED));
+				staff.setStaffName(rs.getString(Staff.STAFF_NAME));
 
 			}
 
@@ -390,6 +578,75 @@ public class StaffDAOPrepared {
 	}
 
 
+
+	public boolean checkUsernameExists(String username)
+	{
+
+		String query = "SELECT " + Staff.USER_NAME
+				+ " FROM " + Staff.TABLE_NAME
+				+ " WHERE " + Staff.USER_NAME + " = '" + username + "'";
+
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet rs = null;
+
+//		System.out.println(query);
+
+//		ShopAdmin shopAdmin = null;
+
+		try {
+
+			connection = dataSource.getConnection();
+			statement = connection.createStatement();
+			rs = statement.executeQuery(query);
+
+
+			while(rs.next())
+			{
+
+				return true;
+			}
+
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally
+
+		{
+
+			try {
+				if(rs!=null)
+				{rs.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(statement!=null)
+				{statement.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(connection!=null)
+				{connection.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return false;
+	}
+
+
+
 	public void logMessage(String message)
 	{
 		System.out.println(message);
@@ -406,7 +663,12 @@ public class StaffDAOPrepared {
 
 		boolean isFirst = true;
 
-		String query = "SELECT * FROM " + Staff.TABLE_NAME;
+		String query = "SELECT "
+						+ Staff.STAFF_ID + ","
+						+ Staff.USER_NAME + ","
+						+ Staff.PASSWORD + ","
+						+ Staff.IS_ENABLED  +
+						" FROM " + Staff.TABLE_NAME;
 
 		if(staffID!=null)
 		{
@@ -470,16 +732,17 @@ public class StaffDAOPrepared {
 				staff = new Staff();
 
 				staff.setStaffID(rs.getInt(Staff.STAFF_ID));
-				staff.setStaffName(rs.getString(Staff.STAFF_NAME));
+//				staff.setStaffName(rs.getString(Staff.STAFF_NAME));
+
 				staff.setUsername(rs.getString(Staff.USER_NAME));
 				staff.setPassword(rs.getString(Staff.PASSWORD));
 
 
-				staff.setAbout(rs.getString(Staff.ABOUT));
-				staff.setProfileImageURL(rs.getString(Staff.PROFILE_IMAGE_URL));
+//				staff.setAbout(rs.getString(Staff.ABOUT));
+//				staff.setProfileImageURL(rs.getString(Staff.PROFILE_IMAGE_URL));
 
 				staff.setEnabled(rs.getBoolean(Staff.IS_ENABLED));
-				staff.setWaitlisted(rs.getBoolean(Staff.IS_WAITLISTED));
+//				staff.setWaitlisted(rs.getBoolean(Staff.IS_WAITLISTED));
 
 			}
 

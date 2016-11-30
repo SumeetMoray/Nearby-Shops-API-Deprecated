@@ -135,17 +135,17 @@ public class ShopAdminDAO {
 		String updateStatement = "UPDATE " + ShopAdmin.TABLE_NAME
 				+ " SET "
 
-				+ ShopAdmin.NAME + " =?,"
+//				+ ShopAdmin.NAME + " =?,"
 //				+ ShopAdmin.SHOP_ID + " =?,"
 
-				+ ShopAdmin.USERNAME + " =?,"
-				+ ShopAdmin.PASSWORD + " =?,"
+//				+ ShopAdmin.USERNAME + " =?,"
+//				+ ShopAdmin.PASSWORD + " =?,"
 
-				+ ShopAdmin.ABOUT + " =?,"
-				+ ShopAdmin.PROFILE_IMAGE_URL + " =?,"
-				+ ShopAdmin.PHONE_NUMBER + " =?,"
+//				+ ShopAdmin.ABOUT + " =?,"
+//				+ ShopAdmin.PROFILE_IMAGE_URL + " =?,"
+//				+ ShopAdmin.PHONE_NUMBER + " =?,"
 
-				+ ShopAdmin.DESIGNATION + " =?,"
+//				+ ShopAdmin.DESIGNATION + " =?,"
 
 				+ ShopAdmin.IS_ENABLED + " =?,"
 				+ ShopAdmin.IS_WAITLISTED + " =?"
@@ -162,21 +162,21 @@ public class ShopAdminDAO {
 			statement = connection.prepareStatement(updateStatement);
 
 
-			statement.setString(1,shopAdmin.getName());
+//			statement.setString(1,shopAdmin.getName());
 //			statement.setObject(2,shopAdmin.getShopID());
 
-			statement.setString(2,shopAdmin.getUsername());
-			statement.setString(3,shopAdmin.getPassword());
+//			statement.setString(2,shopAdmin.getUsername());
+//			statement.setString(3,shopAdmin.getPassword());
 
-			statement.setString(4,shopAdmin.getAbout());
-			statement.setString(5,shopAdmin.getProfileImageURL());
-			statement.setString(6,shopAdmin.getPhoneNumber());
+//			statement.setString(4,shopAdmin.getAbout());
+//			statement.setString(5,shopAdmin.getProfileImageURL());
+//			statement.setString(6,shopAdmin.getPhoneNumber());
 
-			statement.setString(7,shopAdmin.getDesignation());
+//			statement.setString(7,shopAdmin.getDesignation());
 
-			statement.setObject(8,shopAdmin.getEnabled());
-			statement.setObject(9,shopAdmin.getWaitlisted());
-			statement.setObject(10,shopAdmin.getShopAdminID());
+			statement.setObject(1,shopAdmin.getEnabled());
+			statement.setObject(2,shopAdmin.getWaitlisted());
+			statement.setObject(3,shopAdmin.getShopAdminID());
 
 
 //			statement.setString(1,shopAdmin.getName());
@@ -438,14 +438,16 @@ public class ShopAdminDAO {
 											 String sortBy,
 											 Integer limit, Integer offset)
 	{
-		String query = "SELECT "
+		//+ "count(*) OVER() AS full_count " + ","
 
+		String query = "SELECT "
+//						+ "count(*) over() AS full_count " + ","
 						+ ShopAdmin.SHOP_ADMIN_ID + ","
 						+ ShopAdmin.NAME + ","
-						+ ShopAdmin.SHOP_ID + ","
+//						+ ShopAdmin.SHOP_ID + ","
 
-						+ ShopAdmin.USERNAME + ","
-						+ ShopAdmin.PASSWORD + ","
+//						+ ShopAdmin.USERNAME + ","
+//						+ ShopAdmin.PASSWORD + ","
 
 						+ ShopAdmin.ABOUT + ","
 						+ ShopAdmin.PROFILE_IMAGE_URL + ","
@@ -523,6 +525,12 @@ public class ShopAdminDAO {
 		// Applying Filters
 
 
+//		query = query + " Group by " +
+//				ShopAdmin.SHOP_ADMIN_ID;
+
+
+
+
 
 		if(sortBy!=null)
 		{
@@ -557,6 +565,8 @@ public class ShopAdminDAO {
 
 
 
+//		ShopAdminEndPoint endPoint = new ShopAdminEndPoint();
+
 		ArrayList<ShopAdmin> vehiclesList = new ArrayList<ShopAdmin>();
 		
 		Connection connection = null;
@@ -576,10 +586,10 @@ public class ShopAdminDAO {
 				ShopAdmin shopAdmin = new ShopAdmin();
 
 				shopAdmin.setName(rs.getString(ShopAdmin.NAME));
-				shopAdmin.setShopID((Integer) rs.getObject(ShopAdmin.SHOP_ID));
+//				shopAdmin.setShopID((Integer) rs.getObject(ShopAdmin.SHOP_ID));
 
-				shopAdmin.setUsername(rs.getString(ShopAdmin.USERNAME));
-				shopAdmin.setPassword(rs.getString(ShopAdmin.PASSWORD));
+//				shopAdmin.setUsername(rs.getString(ShopAdmin.USERNAME));
+//				shopAdmin.setPassword(rs.getString(ShopAdmin.PASSWORD));
 
 				shopAdmin.setAbout(rs.getString(ShopAdmin.ABOUT));
 				shopAdmin.setProfileImageURL(rs.getString(ShopAdmin.PROFILE_IMAGE_URL));
@@ -596,7 +606,7 @@ public class ShopAdminDAO {
 				vehiclesList.add(shopAdmin);
 			}
 			
-
+//rs.getInt("full_count")
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -800,7 +810,7 @@ public class ShopAdminDAO {
 
 				+ ShopAdmin.SHOP_ADMIN_ID + ","
 				+ ShopAdmin.NAME + ","
-				+ ShopAdmin.SHOP_ID + ","
+//				+ ShopAdmin.SHOP_ID + ","
 
 				+ ShopAdmin.USERNAME + ","
 				+ ShopAdmin.PASSWORD + ","
@@ -841,7 +851,7 @@ public class ShopAdminDAO {
 
 				shopAdmin.setName(rs.getString(ShopAdmin.NAME));
 //				shopAdmin.setShopID(rs.getInt(ShopAdmin.SHOP_ID));
-				shopAdmin.setShopID((Integer) rs.getObject(ShopAdmin.SHOP_ID));
+//				shopAdmin.setShopID((Integer) rs.getObject(ShopAdmin.SHOP_ID));
 
 				shopAdmin.setUsername(rs.getString(ShopAdmin.USERNAME));
 				shopAdmin.setPassword(rs.getString(ShopAdmin.PASSWORD));
@@ -1006,7 +1016,7 @@ public class ShopAdminDAO {
 
 		String query = "SELECT "
 						+ ShopAdmin.TABLE_NAME + "." + ShopAdmin.SHOP_ADMIN_ID + ","
-						+ ShopAdmin.TABLE_NAME + "." + ShopAdmin.SHOP_ID + ","
+//						+ ShopAdmin.TABLE_NAME + "." + ShopAdmin.SHOP_ID + ","
 						+ ShopAdmin.USERNAME + ","
 						+ ShopAdmin.PASSWORD + ","
 						+ ShopAdmin.IS_ENABLED + ""
@@ -1088,7 +1098,7 @@ public class ShopAdminDAO {
 
 
 				shopAdmin.setShopAdminID(rs.getInt(ShopAdmin.SHOP_ADMIN_ID));
-				shopAdmin.setShopID(rs.getInt(ShopAdmin.SHOP_ID));
+//				shopAdmin.setShopID(rs.getInt(ShopAdmin.SHOP_ID));
 
 				shopAdmin.setUsername(rs.getString(ShopAdmin.USERNAME));
 				shopAdmin.setPassword(rs.getString(ShopAdmin.PASSWORD));

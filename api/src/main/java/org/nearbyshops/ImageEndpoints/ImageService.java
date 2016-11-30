@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.nearbyshops.Model.Image;
 
-@Path("/Images")
+//@Path("/Images")
 public class ImageService {
     
     /*

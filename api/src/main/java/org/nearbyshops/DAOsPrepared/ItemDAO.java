@@ -601,28 +601,15 @@ public class ItemDAO {
 				+  "(avg(" + ItemReview.TABLE_NAME + "." + ItemReview.RATING + ")* count( DISTINCT " + ItemReview.TABLE_NAME + "." + ItemReview.END_USER_ID + ") ) as popularity"
 
 				+ " FROM "
-
-				+ Shop.TABLE_NAME  + "," + ShopItem.TABLE_NAME + ","
-
-				+ ItemReview.TABLE_NAME  + " RIGHT OUTER JOIN " + Item.TABLE_NAME
-
-				+ " ON (" + ItemReview.TABLE_NAME + "." + ItemReview.ITEM_ID
-				+ " = " + Item.TABLE_NAME + "." + Item.ITEM_ID + ")" + ","
-
+				+ Shop.TABLE_NAME  + ","
+				+ ShopItem.TABLE_NAME + ","
+				+ ItemReview.TABLE_NAME
+				+ " RIGHT OUTER JOIN " + Item.TABLE_NAME + " ON (" + ItemReview.TABLE_NAME + "." + ItemReview.ITEM_ID + " = " + Item.TABLE_NAME + "." + Item.ITEM_ID + ")" + ","
 				+ ItemCategory.TABLE_NAME
 
-				+ " WHERE " 
-				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID
-				+ "="
-				+ ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
-				+ " AND "
-				+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID
-				+ "="
-				+ Item.TABLE_NAME + "." + Item.ITEM_ID
-				+ " AND "
-				+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID
-				+ "="
-				+ ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
+				+ " WHERE " + Shop.TABLE_NAME + "." + Shop.SHOP_ID + "=" + ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
+				+ " AND " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "=" + Item.TABLE_NAME + "." + Item.ITEM_ID
+				+ " AND " + Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "=" + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
 		
 		
 
@@ -882,17 +869,19 @@ public class ItemDAO {
 
 
 
-		boolean isJoinQuery = false;
+//		boolean isJoinQuery = false;
+//
+//		if(shopID != null || (latCenter!= null && lonCenter!=null))
+//		{
+//			query = queryJoin;
+//			isJoinQuery = true;
+//
+//		}else
+//		{
+//			query = queryNormal;
+//		}
 
-		if(shopID != null || (latCenter!= null && lonCenter!=null))
-		{
-			query = queryJoin;
-			isJoinQuery = true;
-
-		}else
-		{
-			query = queryNormal;
-		}
+		query = queryJoin;
 		
 		
 		
@@ -927,8 +916,8 @@ public class ItemDAO {
 
 
 
-				if(isJoinQuery)
-				{
+//				if(isJoinQuery)
+//				{
 					ItemStats itemStats = new ItemStats();
 					itemStats.setMax_price(rs.getDouble("max_price"));
 					itemStats.setMin_price(rs.getDouble("min_price"));
@@ -939,7 +928,7 @@ public class ItemDAO {
 					item.setRt_rating_avg(rs.getFloat("avg_rating"));
 					item.setRt_rating_count(rs.getFloat("rating_count"));
 
-				}
+//				}
 
 				itemList.add(item);
 			}
@@ -1250,15 +1239,17 @@ public class ItemDAO {
 
 //		boolean isJoinQuery = false;
 
-		if(shopID != null || (latCenter!= null && lonCenter!=null))
-		{
-			query = queryJoin;
+//		if(shopID != null || (latCenter!= null && lonCenter!=null))
+//		{
+//			query = queryJoin;
 //			isJoinQuery = true;
+//
+//		}else
+//		{
+//			query = queryNormal;
+//		}
 
-		}else
-		{
-			query = queryNormal;
-		}
+		query = queryJoin;
 
 
 

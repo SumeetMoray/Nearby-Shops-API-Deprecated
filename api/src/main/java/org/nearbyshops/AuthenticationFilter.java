@@ -5,6 +5,7 @@ import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
 import org.nearbyshops.ModelRoles.*;
+import org.nearbyshops.ModelRoles.Deprecated.DistributorStaff;
 
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.RolesAllowed;
@@ -252,6 +253,17 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                 }
 
             }
+
+            else if(role.equals(GlobalConstants.ROLE_SHOP_ADMIN_DISABLED))
+            {
+                ShopAdmin shopAdmin = shopAdminDAO.checkShopAdmin(username,password);
+                // Distributor account exist and is enabled
+                if(shopAdmin!=null )
+                {
+                    return shopAdmin;
+                }
+
+            }
             else if(role.equals(GlobalConstants.ROLE_SHOP_ADMIN))
             {
                 ShopAdmin shopAdmin = shopAdminDAO.checkShopAdmin(username,password);
@@ -266,7 +278,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
                         throw new ForbiddenException("Permission denied !",response);
                     }
-                    else
+                    if(shopAdmin.getEnabled())
                     {
                         return shopAdmin;
                     }
@@ -274,16 +286,11 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                 }
 
             }
-
-
-
         }
-
 
 
         throw new NotAuthorizedException("Access is Denied ! We are not able to Identify you. ");
     }
-
 
 }
 

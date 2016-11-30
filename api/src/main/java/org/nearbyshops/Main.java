@@ -20,6 +20,7 @@ import org.nearbyshops.ModelReviewShop.FavouriteShop;
 import org.nearbyshops.ModelReviewShop.ShopReview;
 import org.nearbyshops.ModelReviewShop.ShopReviewThanks;
 import org.nearbyshops.ModelRoles.*;
+import org.nearbyshops.ModelRoles.Deprecated.DistributorStaff;
 import org.nearbyshops.ModelSettings.ServiceConfiguration;
 import org.nearbyshops.ModelSettings.Settings;
 

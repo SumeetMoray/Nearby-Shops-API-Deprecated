@@ -1,11 +1,11 @@
 package org.nearbyshops.RESTEndpointRoles;
 
-import com.sun.net.httpserver.Headers;
-import org.glassfish.jersey.internal.util.Base64;
+import net.coobird.thumbnailator.Thumbnails;
 import org.nearbyshops.DAOsPreparedRoles.StaffDAOPrepared;
 import org.nearbyshops.Globals.APIErrors;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
+import org.nearbyshops.Model.Image;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
 import org.nearbyshops.ModelRoles.Staff;
 
@@ -13,9 +13,16 @@ import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
-import java.util.StringTokenizer;
+
+import static org.nearbyshops.Globals.Globals.staffDAOPrepared;
 
 
 @Path("/v1/Staff")
@@ -34,11 +41,12 @@ public class StaffResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed(GlobalConstants.ROLE_ADMIN)
-	public Response createstaff(Staff staff)
+	public Response createStaff(Staff staff)
 	{
 
 //		staff.setEnabled(true);
 //		staff.setWaitlisted(false);
+
 
 		int idOfInsertedRow = daoPrepared.saveStaff(staff);
 
@@ -46,50 +54,36 @@ public class StaffResource {
 
 		if(idOfInsertedRow >=1)
 		{
-			
-			
-			Response response = Response.status(Status.CREATED)
+
+
+			return Response.status(Status.CREATED)
 					.location(URI.create("/api/staff/" + idOfInsertedRow))
 					.entity(staff)
 					.build();
 			
-			return response;
-			
 		}else if(idOfInsertedRow <=0)
 		{
-			Response response = Response.status(Status.NOT_MODIFIED)
-					.entity(null)
-					.build();
-			
+
 			//Response.status(Status.CREATED).location(arg0)
 			
-			return response;
+			return Response.status(Status.NOT_MODIFIED)
+					.entity(null)
+					.build();
 		}
 		
 		return null;
-		
 	}
+
+
 
 	
 	@PUT
 	@Path("/{StaffID}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_STAFF,GlobalConstants.ROLE_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_ADMIN})
 	public Response updateSTAFF(@PathParam("StaffID")int staffID,
-								Staff staff,
-								@Context HttpHeaders headers)
+								Staff staff)
 	{
-
-		if(!verifyStaffAccount(headers,staffID))
-		{
-
-			Response responseError = Response.status(Status.FORBIDDEN)
-					.entity(new ErrorNBSAPI(403, APIErrors.UPDATE_BY_WRONG_USER))
-					.build();
-
-			throw new ForbiddenException(APIErrors.UPDATE_BY_WRONG_USER,responseError);
-		}
-
 
 		staff.setStaffID(staffID);
 
@@ -97,40 +91,93 @@ public class StaffResource {
 
 		if(rowCount >= 1)
 		{
-			Response response = Response.status(Status.OK)
+
+			return Response.status(Status.OK)
 					.entity(null)
 					.build();
-			
-			return response;
 		}
 		if(rowCount == 0)
 		{
-			Response response = Response.status(Status.NOT_MODIFIED)
+
+			return Response.status(Status.NOT_MODIFIED)
 					.entity(null)
 					.build();
-			
-			return response;
 		}
 
 		return null;
 	}
 
-	@DELETE
-	@Path("/{ServiceProviderID}")
-	//@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
-	public Response deleteStaff(@PathParam("ServiceProviderID")int staffID,
-								@Context HttpHeaders headers)
+
+
+	@PUT
+	@Path("/UpdateBySelf/{StaffID}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_STAFF})
+	public Response updateBySelf(@PathParam("StaffID")int staffID, Staff staff)
 	{
 
-		if(!verifyStaffAccount(headers,staffID))
+//		@Context HttpHeaders headers
+
+		staff.setStaffID(staffID);
+
+		if(Globals.accountApproved instanceof Staff)
+		{
+			if(((Staff) Globals.accountApproved).getStaffID()!=staffID)
+			{
+				// an atempt to update the account of other staff member. Which is not permitted !
+				Response responseError = Response.status(Status.FORBIDDEN)
+						.entity(new ErrorNBSAPI(403, APIErrors.UPDATE_BY_WRONG_USER))
+						.build();
+
+				throw new ForbiddenException(APIErrors.UPDATE_BY_WRONG_USER,responseError);
+			}
+		}
+
+
+		int rowCount = daoPrepared.updateStaffBySelf(staff);
+
+		if(rowCount >= 1)
 		{
 
-			Response responseError = Response.status(Status.FORBIDDEN)
-					.entity(new ErrorNBSAPI(403, APIErrors.UPDATE_BY_WRONG_USER))
+			return Response.status(Status.OK)
+					.entity(null)
 					.build();
+		}
+		if(rowCount == 0)
+		{
 
-			throw new ForbiddenException(APIErrors.UPDATE_BY_WRONG_USER,responseError);
+			return Response.status(Status.NOT_MODIFIED)
+					.entity(null)
+					.build();
+		}
+
+		return null;
+	}
+
+
+
+
+	@DELETE
+	@Path("/{StaffID}")
+	//@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
+	public Response deleteStaff(@PathParam("StaffID")int staffID)
+	{
+		//		@Context HttpHeaders headers
+
+
+
+		if(Globals.accountApproved instanceof Staff)
+		{
+			if(((Staff) Globals.accountApproved).getStaffID()!=staffID)
+			{
+				// an attempt to delete the account of other staff member. Which is not permitted !
+				Response responseError = Response.status(Status.FORBIDDEN)
+						.entity(new ErrorNBSAPI(403, APIErrors.UPDATE_BY_WRONG_USER))
+						.build();
+
+				throw new ForbiddenException(APIErrors.UPDATE_BY_WRONG_USER,responseError);
+			}
 		}
 
 
@@ -140,20 +187,18 @@ public class StaffResource {
 		
 		if(rowCount>=1)
 		{
-			Response response = Response.status(Status.OK)
+
+			return Response.status(Status.OK)
 					.entity(null)
 					.build();
-			
-			return response;
 		}
 		
 		if(rowCount == 0)
 		{
-			Response response = Response.status(Status.NOT_MODIFIED)
+
+			return Response.status(Status.NOT_MODIFIED)
 					.entity(null)
 					.build();
-			
-			return response;
 		}
 		
 		
@@ -164,11 +209,10 @@ public class StaffResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed(GlobalConstants.ROLE_ADMIN)
-	public Response getStaff()
+	public Response getStaff(@QueryParam("IsEnabled") Boolean isEnabled)
 	{
 
-
-		List<Staff> list = daoPrepared.getStaff();
+		List<Staff> list = daoPrepared.getStaff(isEnabled);
 
 		GenericEntity<List<Staff>> listEntity = new GenericEntity<List<Staff>>(list){
 			
@@ -177,28 +221,25 @@ public class StaffResource {
 		
 		if(list.size()<=0)
 		{
-			Response response = Response.status(Status.NO_CONTENT)
-					.entity(listEntity)
+
+			return Response.status(Status.NO_CONTENT)
 					.build();
-			
-			return response;
 			
 		}else
 		{
-			Response response = Response.status(Status.OK)
+
+			return Response.status(Status.OK)
 					.entity(listEntity)
 					.build();
-			
-			return response;
 		}
 		
 	}
 	
 	
-	@GET
+	/*@GET
 	@Path("/{staffID}")
 	@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
+	@RolesAllowed({GlobalConstants.ROLE_ADMIN})
 	public Response getStaff(@PathParam("staffID")int staffID)
 	{
 
@@ -206,23 +247,46 @@ public class StaffResource {
 		
 		if(staff != null)
 		{
-			Response response = Response.status(Status.OK)
+
+			return Response.status(Status.OK)
 			.entity(staff)
 			.build();
 			
-			return response;
-			
 		} else 
 		{
-			
-			Response response = Response.status(Status.NO_CONTENT)
-					.entity(staff)
+
+			return Response.status(Status.NO_CONTENT)
 					.build();
-			
-			return response;
 			
 		}
 		
+	}*/
+
+
+
+
+
+	@GET
+	@Path("/CheckUsernameExists/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getCart(@PathParam("username")String username)
+	{
+		// Roles allowed not used for this method due to performance and effeciency requirements. Also
+		// this endpoint doesnt required to be secured as it does not expose any confidential information
+
+		boolean result = staffDAOPrepared.checkUsernameExists(username);
+
+		if(result)
+		{
+			return Response.status(Status.OK)
+					.build();
+
+		} else
+		{
+			return Response.status(Status.NO_CONTENT)
+					.build();
+		}
+
 	}
 
 
@@ -234,6 +298,33 @@ public class StaffResource {
 	public Response getDistributorLogin(@Context HttpHeaders header)
 	{
 
+
+		Staff staff = null;
+
+		if(Globals.accountApproved instanceof Staff)
+		{
+			staff = Globals.staffDAOPrepared.getStaff(((Staff) Globals.accountApproved).getStaffID());
+		}
+
+
+		if(staff != null)
+		{
+
+			return Response.status(Status.OK)
+					.entity(staff)
+					.build();
+
+		} else
+		{
+
+			return Response.status(Status.UNAUTHORIZED)
+					.build();
+
+		}
+
+
+
+/*
 		//Get request headers
 		final MultivaluedMap<String, String> headers = header.getRequestHeaders();
 
@@ -280,20 +371,17 @@ public class StaffResource {
 
 		} else
 		{
-
-			Response response = Response.status(Status.UNAUTHORIZED)
-					.entity(staff)
+			return Response.status(Status.UNAUTHORIZED)
 					.build();
-
-			return response;
-
-		}
+		}*/
 
 	}
 
 
+	
 
-	private static final String AUTHENTICATION_SCHEME = "Basic";
+
+	/*private static final String AUTHENTICATION_SCHEME = "Basic";
 	private static final String AUTHORIZATION_PROPERTY = "Authorization";
 
 	private boolean verifyStaffAccount(HttpHeaders header, int staffID)
@@ -345,6 +433,179 @@ public class StaffResource {
 		}
 
 		return true;
+	}
+	*/
+
+
+
+
+
+
+	// Image MEthods
+
+	private static final java.nio.file.Path BASE_DIR = Paths.get("./images/Staff");
+	private static final double MAX_IMAGE_SIZE_MB = 2;
+
+
+	@POST
+	@Path("/Image")
+	@Consumes({MediaType.APPLICATION_OCTET_STREAM})
+	@RolesAllowed({GlobalConstants.ROLE_DELIVERY_GUY_SELF,GlobalConstants.ROLE_SHOP_ADMIN})
+	public Response uploadImage(InputStream in, @HeaderParam("Content-Length") long fileSize,
+								@QueryParam("PreviousImageName") String previousImageName
+	) throws Exception
+	{
+
+
+		if(previousImageName!=null)
+		{
+			Files.deleteIfExists(BASE_DIR.resolve(previousImageName));
+			Files.deleteIfExists(BASE_DIR.resolve("three_hundred_" + previousImageName + ".jpg"));
+			Files.deleteIfExists(BASE_DIR.resolve("five_hundred_" + previousImageName + ".jpg"));
+		}
+
+
+		File theDir = new File(BASE_DIR.toString());
+
+		// if the directory does not exist, create it
+		if (!theDir.exists()) {
+
+			System.out.println("Creating directory: " + BASE_DIR.toString());
+
+			boolean result = false;
+
+			try{
+				theDir.mkdir();
+				result = true;
+			}
+			catch(Exception se){
+				//handle it
+			}
+			if(result) {
+				System.out.println("DIR created");
+			}
+		}
+
+
+
+		String fileName = "" + System.currentTimeMillis();
+
+		// Copy the file to its location.
+		long filesize = Files.copy(in, BASE_DIR.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
+
+		if(filesize > MAX_IMAGE_SIZE_MB * 1048 * 1024)
+		{
+			// delete file if it exceeds the file size limit
+			Files.deleteIfExists(BASE_DIR.resolve(fileName));
+
+			return Response.status(Status.EXPECTATION_FAILED).build();
+		}
+
+
+		createThumbnails(fileName);
+
+
+		Image image = new Image();
+		image.setPath(fileName);
+
+		// Return a 201 Created response with the appropriate Location header.
+
+		return Response.status(Status.CREATED).location(URI.create("/api/Images/" + fileName)).entity(image).build();
+	}
+
+
+
+	private void createThumbnails(String filename)
+	{
+		try {
+
+			Thumbnails.of(BASE_DIR.toString() + "/" + filename)
+					.size(300,300)
+					.outputFormat("jpg")
+					.toFile(new File(BASE_DIR.toString() + "/" + "three_hundred_" + filename));
+
+			//.toFile(new File("five-" + filename + ".jpg"));
+
+			//.toFiles(Rename.PREFIX_DOT_THUMBNAIL);
+
+
+			Thumbnails.of(BASE_DIR.toString() + "/" + filename)
+					.size(500,500)
+					.outputFormat("jpg")
+					.toFile(new File(BASE_DIR.toString() + "/" + "five_hundred_" + filename));
+
+
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+
+	@GET
+	@Path("/Image/{name}")
+	@Produces("image/jpeg")
+	public InputStream getImage(@PathParam("name") String fileName) {
+
+		//fileName += ".jpg";
+		java.nio.file.Path dest = BASE_DIR.resolve(fileName);
+
+		if (!Files.exists(dest)) {
+			throw new WebApplicationException(Status.NOT_FOUND);
+		}
+
+
+		try {
+			return Files.newInputStream(dest);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+
+
+	@DELETE
+	@Path("/Image/{name}")
+	@RolesAllowed({GlobalConstants.ROLE_DELIVERY_GUY_SELF,GlobalConstants.ROLE_SHOP_ADMIN})
+	public Response deleteImageFile(@PathParam("name")String fileName)
+	{
+
+		boolean deleteStatus = false;
+
+		Response response;
+
+		System.out.println("Filename: " + fileName);
+
+		try {
+
+
+			//Files.delete(BASE_DIR.resolve(fileName));
+			deleteStatus = Files.deleteIfExists(BASE_DIR.resolve(fileName));
+
+			// delete thumbnails
+			Files.deleteIfExists(BASE_DIR.resolve("three_hundred_" + fileName + ".jpg"));
+			Files.deleteIfExists(BASE_DIR.resolve("five_hundred_" + fileName + ".jpg"));
+
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+		if(!deleteStatus)
+		{
+			response = Response.status(Status.NOT_MODIFIED).build();
+
+		}else
+		{
+			response = Response.status(Status.OK).build();
+		}
+
+		return response;
 	}
 
 

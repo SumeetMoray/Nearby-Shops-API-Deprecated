@@ -4,8 +4,7 @@ import org.nearbyshops.DAOsPreparedRoles.*;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
-import org.nearbyshops.ModelRoles.Distributor;
-import org.nearbyshops.ModelRoles.DistributorStaff;
+import org.nearbyshops.ModelRoles.Deprecated.DistributorStaff;
 import org.nearbyshops.ModelRoles.EndUser;
 import org.nearbyshops.ModelRoles.Staff;
 

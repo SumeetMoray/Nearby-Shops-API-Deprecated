@@ -308,6 +308,7 @@ public class ItemResource {
 
 
 
+	//@QueryParam("ShopID")Integer shopID,
 
 	@GET
 	@Path("/OuterJoin")
@@ -373,9 +374,9 @@ public class ItemResource {
 
 
 
-	@GET
-	@Path("/Async")
-	@Produces(MediaType.APPLICATION_JSON)
+//	@GET
+//	@Path("/Async")
+//	@Produces(MediaType.APPLICATION_JSON)
 	public void asyncGet(@Suspended final AsyncResponse asyncResponse,
 						 @QueryParam("ItemCategoryID") final Integer itemCategoryID,
 						 @QueryParam("SortBy") final String sortBy,

@@ -1,7 +1,6 @@
 package org.nearbyshops.ModelRoles.Endpoints;
 
-import org.nearbyshops.Model.Item;
-import org.nearbyshops.ModelRoles.Distributor;
+import org.nearbyshops.ModelRoles.Deprecated.Distributor;
 
 import java.util.List;
 

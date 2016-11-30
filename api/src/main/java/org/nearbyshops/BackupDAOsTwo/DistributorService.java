@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 
 import org.nearbyshops.JDBCContract;
-import org.nearbyshops.ModelRoles.Distributor;
+import org.nearbyshops.ModelRoles.Deprecated.Distributor;
 
 
 public class DistributorService {

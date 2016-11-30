@@ -380,7 +380,7 @@ public class ShopDAO {
 				+ Shop.TABLE_NAME + "." + Shop.SHORT_DESCRIPTION + ","
 				+ Shop.TABLE_NAME + "." + Shop.LONG_DESCRIPTION + ","
 				+ Shop.TABLE_NAME + "." + Shop.IS_OPEN + ","
-				+ Shop.TABLE_NAME + "." + Shop.DATE_TIME_STARTED + ","
+				+ Shop.TABLE_NAME + "." + Shop.TIMESTAMP_CREATED + ","
 
 				+  "avg(" + ShopReview.TABLE_NAME + "." + ShopReview.RATING + ") as avg_rating" + ","
 				+  "count( DISTINCT " + ShopReview.TABLE_NAME + "." + ShopReview.END_USER_ID + ") as rating_count" + ""
@@ -422,7 +422,7 @@ public class ShopDAO {
 				+ Shop.TABLE_NAME + "." + Shop.SHORT_DESCRIPTION + ","
 				+ Shop.TABLE_NAME + "." + Shop.LONG_DESCRIPTION + ","
 				+ Shop.TABLE_NAME + "." + Shop.IS_OPEN + ","
-				+ Shop.TABLE_NAME + "." + Shop.DATE_TIME_STARTED + ","
+				+ Shop.TABLE_NAME + "." + Shop.TIMESTAMP_CREATED + ","
 
 				+  "avg(" + ShopReview.TABLE_NAME + "." + ShopReview.RATING + ") as avg_rating" + ","
 				+  "count( DISTINCT " + ShopReview.TABLE_NAME + "." + ShopReview.END_USER_ID + ") as rating_count" + ""
@@ -723,7 +723,7 @@ public class ShopDAO {
 				+ Shop.TABLE_NAME + "." + Shop.SHORT_DESCRIPTION + ","
 				+ Shop.TABLE_NAME + "." + Shop.LONG_DESCRIPTION + ","
 				+ Shop.TABLE_NAME + "." + Shop.IS_OPEN + ","
-				+ Shop.TABLE_NAME + "." + Shop.DATE_TIME_STARTED + ""*/
+				+ Shop.TABLE_NAME + "." + Shop.TIMESTAMP_CREATED + ""*/
 
 
 		queryJoin = queryJoin + queryGroupBy;
@@ -829,7 +829,7 @@ public class ShopDAO {
 				shop.setDeliveryHelplineNumber(rs.getString(Shop.DELIVERY_HELPLINE_NUMBER));
 				shop.setShortDescription(rs.getString(Shop.SHORT_DESCRIPTION));
 				shop.setLongDescription(rs.getString(Shop.LONG_DESCRIPTION));
-				shop.setDateTimeStarted(rs.getTimestamp(Shop.DATE_TIME_STARTED));
+				shop.setTimestampCreated(rs.getTimestamp(Shop.TIMESTAMP_CREATED));
 //				shop.setisOpen(rs.getBoolean(Shop.IS_OPEN));
 
 				shop.setRt_rating_avg(rs.getFloat("avg_rating"));
@@ -1277,7 +1277,7 @@ public class ShopDAO {
 				+ Shop.TABLE_NAME + "." + Shop.SHORT_DESCRIPTION + ","
 				+ Shop.TABLE_NAME + "." + Shop.LONG_DESCRIPTION + ","
 				+ Shop.TABLE_NAME + "." + Shop.IS_OPEN + ","
-				+ Shop.TABLE_NAME + "." + Shop.DATE_TIME_STARTED + ","
+				+ Shop.TABLE_NAME + "." + Shop.TIMESTAMP_CREATED + ","
 
 				+  "avg(" + ShopReview.TABLE_NAME + "." + ShopReview.RATING + ") as avg_rating" + ","
 				+  "count( DISTINCT " + ShopReview.TABLE_NAME + "." + ShopReview.END_USER_ID + ") as rating_count" + ""
@@ -1446,7 +1446,7 @@ public class ShopDAO {
 				+ Shop.TABLE_NAME + "." + Shop.SHORT_DESCRIPTION + ","
 				+ Shop.TABLE_NAME + "." + Shop.LONG_DESCRIPTION + ","
 				+ Shop.TABLE_NAME + "." + Shop.IS_OPEN + ","
-				+ Shop.TABLE_NAME + "." + Shop.DATE_TIME_STARTED + ""*/
+				+ Shop.TABLE_NAME + "." + Shop.TIMESTAMP_CREATED + ""*/
 
 
 
@@ -1527,7 +1527,7 @@ public class ShopDAO {
 				shop.setDeliveryHelplineNumber(rs.getString(Shop.DELIVERY_HELPLINE_NUMBER));
 				shop.setShortDescription(rs.getString(Shop.SHORT_DESCRIPTION));
 				shop.setLongDescription(rs.getString(Shop.LONG_DESCRIPTION));
-				shop.setDateTimeStarted(rs.getTimestamp(Shop.DATE_TIME_STARTED));
+				shop.setTimestampCreated(rs.getTimestamp(Shop.TIMESTAMP_CREATED));
 //				shop.setisOpen(rs.getBoolean(Shop.IS_OPEN));
 
 				shop.setRt_rating_avg(rs.getFloat("avg_rating"));
@@ -1866,7 +1866,7 @@ public class ShopDAO {
 					+ Shop.TABLE_NAME + "." + Shop.SHORT_DESCRIPTION + ","
 					+ Shop.TABLE_NAME + "." + Shop.LONG_DESCRIPTION + ","
 					+ Shop.TABLE_NAME + "." + Shop.IS_OPEN + ","
-					+ Shop.TABLE_NAME + "." + Shop.DATE_TIME_STARTED + ","
+					+ Shop.TABLE_NAME + "." + Shop.TIMESTAMP_CREATED + ","
 
 					+  "avg(" + ShopReview.TABLE_NAME + "." + ShopReview.RATING + ") as avg_rating" + ","
 					+  "count( DISTINCT " + ShopReview.TABLE_NAME + "." + ShopReview.END_USER_ID + ") as rating_count" + ""
@@ -1913,7 +1913,7 @@ public class ShopDAO {
 				+ Shop.TABLE_NAME + "." + Shop.SHORT_DESCRIPTION + ","
 				+ Shop.TABLE_NAME + "." + Shop.LONG_DESCRIPTION + ","
 				+ Shop.TABLE_NAME + "." + Shop.IS_OPEN + ","
-				+ Shop.TABLE_NAME + "." + Shop.DATE_TIME_STARTED + ""*/
+				+ Shop.TABLE_NAME + "." + Shop.TIMESTAMP_CREATED + ""*/
 
 
 
@@ -1976,7 +1976,7 @@ public class ShopDAO {
 				shop.setDeliveryHelplineNumber(rs.getString(Shop.DELIVERY_HELPLINE_NUMBER));
 				shop.setShortDescription(rs.getString(Shop.SHORT_DESCRIPTION));
 				shop.setLongDescription(rs.getString(Shop.LONG_DESCRIPTION));
-				shop.setDateTimeStarted(rs.getTimestamp(Shop.DATE_TIME_STARTED));
+				shop.setTimestampCreated(rs.getTimestamp(Shop.TIMESTAMP_CREATED));
 //				shop.setisOpen(rs.getBoolean(Shop.IS_OPEN));
 
 

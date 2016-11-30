@@ -1,4 +1,4 @@
-package org.nearbyshops.ModelRoles;
+package org.nearbyshops.ModelRoles.Deprecated;
 
 
 public class DistributorStaff {

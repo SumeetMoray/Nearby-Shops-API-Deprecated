@@ -1,6 +1,5 @@
 package org.nearbyshops.RESTEndpointRoles;
 
-import jdk.nashorn.internal.objects.Global;
 import net.coobird.thumbnailator.Thumbnails;
 import org.nearbyshops.DAOsPrepared.ShopDAO;
 import org.nearbyshops.DAOsPreparedRoles.DeliveryGuySelfDAO;
@@ -8,6 +7,7 @@ import org.nearbyshops.Globals.APIErrors;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Image;
+import org.nearbyshops.Model.Shop;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
 import org.nearbyshops.ModelRoles.DeliveryGuySelf;
 import org.nearbyshops.ModelRoles.ShopAdmin;
@@ -22,7 +22,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
-import java.util.StringTokenizer;
 
 
 @Path("/DeliveryGuySelf")
@@ -68,7 +67,10 @@ public class DeliveryGuySelfResource {
 			// get Shop Object
 			// Shop shop = shopDAO.getShop(deliveryGuySelf.getShopID(),null,null);
 
-			if(deliveryGuySelf.getShopID() != ((ShopAdmin)Globals.accountApproved).getShopID())
+			ShopAdmin shopAdmin = (ShopAdmin)Globals.accountApproved;
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
+
+			if(deliveryGuySelf.getShopID() != shop.getShopID())
 			{
 				// update by wrong account . Throw an Exception
 				Response responseError = Response.status(Status.FORBIDDEN)
@@ -147,8 +149,9 @@ public class DeliveryGuySelfResource {
 			// Shop shop = shopDAO.getShop(deliveryGuySelf.getShopID(),null,null);
 
 			DeliveryGuySelf deliveryGuySelfTwo = deliveryGuySelfDAO.readDeliveryGuySelf(deliveryGuyID);
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(((ShopAdmin)Globals.accountApproved).getShopAdminID());
 
-			if(deliveryGuySelfTwo.getShopID() != ((ShopAdmin)Globals.accountApproved).getShopID())
+			if(deliveryGuySelfTwo.getShopID() != shop.getShopID())
 			{
 				// update by wrong account . Throw an Exception
 				Response responseError = Response.status(Status.FORBIDDEN)
@@ -156,8 +159,8 @@ public class DeliveryGuySelfResource {
 						.build();
 
 				throw new ForbiddenException(APIErrors.UPDATE_BY_WRONG_USER,responseError);
-
 			}
+
 		}
 
 
@@ -183,6 +186,9 @@ public class DeliveryGuySelfResource {
 
 		return null;
 	}
+
+
+
 
 	@PUT
 	@Path("/UpdateBySelf/{DeliveryGuyID}")
@@ -244,7 +250,9 @@ public class DeliveryGuySelfResource {
 
 			DeliveryGuySelf deliveryGuySelfTwo = deliveryGuySelfDAO.readDeliveryGuySelf(deliveryGuyID);
 
-			if(deliveryGuySelfTwo.getShopID() != ((ShopAdmin)Globals.accountApproved).getShopID())
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(((ShopAdmin)Globals.accountApproved).getShopID());
+
+			if(deliveryGuySelfTwo.getShopID() != shop.getShopID())
 			{
 				// update by wrong account . Throw an Exception
 				Response responseError = Response.status(Status.FORBIDDEN)
@@ -307,16 +315,19 @@ public class DeliveryGuySelfResource {
 		// Shop Admin is allowed to view only his delivery Guys not the Delivery Guys of other shops
 		if(Globals.accountApproved instanceof ShopAdmin)
 		{
-			shopID = ((ShopAdmin) Globals.accountApproved).getShopID();
+//			shopID = ((ShopAdmin) Globals.accountApproved).getShopID();
+
+			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
+			shopID = shop.getShopID();
 		}
 
 
 		List<DeliveryGuySelf> vehicleSelfList = Globals.deliveryGuySelfDAO.readDeliveryVehicleSelf(shopID,isEnabled);
-
 		GenericEntity<List<DeliveryGuySelf>> listEntity = new GenericEntity<List<DeliveryGuySelf>>(vehicleSelfList){
-			
+
 		};
-	
+
 		
 		if(vehicleSelfList.size()<=0)
 		{
@@ -338,7 +349,7 @@ public class DeliveryGuySelfResource {
 	@GET
 	@Path("/{DeliveryGuyID}")
 	@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_DELIVERY_GUY_SELF,GlobalConstants.ROLE_SHOP_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_DELIVERY_GUY_SELF})
 	public Response getDeliveryGuy(@PathParam("DeliveryGuyID")int deliveryGuyID)
 	{
 

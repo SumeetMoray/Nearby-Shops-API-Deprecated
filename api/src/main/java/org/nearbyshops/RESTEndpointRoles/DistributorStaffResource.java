@@ -6,7 +6,7 @@ import org.nearbyshops.Globals.APIErrors;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
-import org.nearbyshops.ModelRoles.DistributorStaff;
+import org.nearbyshops.ModelRoles.Deprecated.DistributorStaff;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;

@@ -17,7 +17,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
-@Path("/ServiceConfigImages")
+//@Path("/ServiceConfigImages")
 public class ImagesForService {
     
     /*

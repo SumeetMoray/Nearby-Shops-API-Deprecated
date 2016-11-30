@@ -5,6 +5,7 @@ import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ShopItem;
 import org.nearbyshops.ModelEndPoints.ItemEndPoint;
+import org.nearbyshops.ModelReviewItem.ItemReview;
 import org.nearbyshops.ModelStats.ItemStats;
 import org.nearbyshops.Utility.GeoLocation;
 
@@ -34,15 +35,17 @@ public class ItemDAOJoinOuter {
 
 
 
+	//Integer shopID,
 
 	public List<Item> getItems(
+
 					Integer itemCategoryID,
 					String sortBy,
 					Integer limit, Integer offset
 	) {
 
 
-		boolean isfirst = false;
+		boolean isfirst = true;
 
 		String query = "";
 		
@@ -54,6 +57,7 @@ public class ItemDAOJoinOuter {
 				+ "max(" + ShopItem.ITEM_PRICE + ") as max_price" + ","
 				+ "avg(" + ShopItem.ITEM_PRICE + ") as avg_price" + ","
 				+ "count(" + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + ") as shop_count" + ","
+
 				+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + ","
 				+ Item.TABLE_NAME + "." + Item.ITEM_ID + ","
 				+ Item.TABLE_NAME + "." + Item.ITEM_IMAGE_URL + ","
@@ -62,11 +66,15 @@ public class ItemDAOJoinOuter {
 
 				+ Item.TABLE_NAME + "." + Item.QUANTITY_UNIT + ","
 				+ Item.TABLE_NAME + "." + Item.DATE_TIME_CREATED + ","
-				+ Item.TABLE_NAME + "." + Item.ITEM_DESCRIPTION_LONG + ""
+				+ Item.TABLE_NAME + "." + Item.ITEM_DESCRIPTION_LONG + ","
 
-				+ " FROM " + ShopItem.TABLE_NAME + " RIGHT OUTER JOIN " + Item.TABLE_NAME
-				+ " ON (" + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID
-				+ "=" + Item.TABLE_NAME + "." + Item.ITEM_ID + ")";
+				+  "avg(" + ItemReview.TABLE_NAME + "." + ItemReview.RATING + ") as avg_rating" + ","
+				+  "count( DISTINCT " + ItemReview.TABLE_NAME + "." + ItemReview.END_USER_ID + ") as rating_count" + ""
+
+				+ " FROM " + Item.TABLE_NAME
+				+ " LEFT OUTER JOIN " + ShopItem.TABLE_NAME + " ON (" + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "=" + Item.TABLE_NAME + "." + Item.ITEM_ID + ") "
+				+ " LEFT OUTER JOIN " + ItemReview.TABLE_NAME +  " ON (" + ItemReview.TABLE_NAME + "." + ItemReview.ITEM_ID + " = " + Item.TABLE_NAME + "." + Item.ITEM_ID + ")" + "";
+
 
 
 
@@ -91,6 +99,28 @@ public class ItemDAOJoinOuter {
 			
 		}
 
+
+
+		/*if(shopID!=null)
+		{
+			String queryPart = "";
+
+			queryPart = queryPart + ShopItem.TABLE_NAME
+					+ "."
+					+ ShopItem.SHOP_ID + " = " + shopID;
+
+			if(isfirst)
+			{
+				queryJoin = queryJoin + " WHERE " + queryPart;
+				isfirst = false;
+			}
+			else
+			{
+				queryJoin = queryJoin + " AND " + queryPart;
+			}
+
+
+		}*/
 
 
 
@@ -152,10 +182,10 @@ public class ItemDAOJoinOuter {
 		 */
 
 
-		boolean isJoinQuery = false;
+//		boolean isJoinQuery = false;
 
 		query = queryJoin;
-		isJoinQuery = true;
+//		isJoinQuery = true;
 
 		ArrayList<Item> itemList = new ArrayList<Item>();
 		Connection connection = null;
@@ -185,15 +215,16 @@ public class ItemDAOJoinOuter {
 				item.setQuantityUnit(rs.getString(Item.QUANTITY_UNIT));
 
 
-				if(isJoinQuery)
-				{
-					ItemStats itemStats = new ItemStats();
-					itemStats.setMax_price(rs.getDouble("max_price"));
-					itemStats.setMin_price(rs.getDouble("min_price"));
-					itemStats.setAvg_price(rs.getDouble("avg_price"));
-					itemStats.setShopCount(rs.getInt("shop_count"));
-					item.setItemStats(itemStats);
-				}
+				ItemStats itemStats = new ItemStats();
+				itemStats.setMax_price(rs.getDouble("max_price"));
+				itemStats.setMin_price(rs.getDouble("min_price"));
+				itemStats.setAvg_price(rs.getDouble("avg_price"));
+				itemStats.setShopCount(rs.getInt("shop_count"));
+
+				itemStats.setRating_avg(rs.getDouble("avg_rating"));
+				itemStats.setRatingCount(rs.getInt("rating_count"));
+
+				item.setItemStats(itemStats);
 
 				itemList.add(item);
 			}

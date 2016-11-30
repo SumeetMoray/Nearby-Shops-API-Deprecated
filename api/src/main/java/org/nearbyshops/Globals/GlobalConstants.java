@@ -67,6 +67,7 @@ public class GlobalConstants {
     public static final String ROLE_SHOP_STAFF = "SHOP_STAFF";
     public static final String ROLE_DELIVERY_GUY_SELF = "ROLE_DELIVERY_GUY_SELF";
     public static final String ROLE_SHOP_ADMIN = "ROLE_SHOP_ADMIN";
+    public static final String ROLE_SHOP_ADMIN_DISABLED = "ROLE_SHOP_ADMIN_DISABLED";
 
     public static final String ROLE_END_USER = "END_USER";
 

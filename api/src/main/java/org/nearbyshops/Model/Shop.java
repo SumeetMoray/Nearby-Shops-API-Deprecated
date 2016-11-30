@@ -1,8 +1,6 @@
 package org.nearbyshops.Model;
 
 
-import org.nearbyshops.ModelRoles.ShopAdmin;
-
 import java.sql.Timestamp;
 
 public class Shop {
@@ -37,7 +35,7 @@ public class Shop {
 	public static final String DELIVERY_HELPLINE_NUMBER = "DELIVERY_HELPLINE_NUMBER";
 	public static final String SHORT_DESCRIPTION = "SHORT_DESCRIPTION";
 	public static final String LONG_DESCRIPTION = "LONG_DESCRIPTION";
-	public static final String DATE_TIME_STARTED = "DATE_TIME_STARTED";
+	public static final String TIMESTAMP_CREATED = "TIMESTAMP_CREATED";
 	public static final String IS_OPEN = "IS_SHOP_OPEN";
 
 	// to be added
@@ -45,6 +43,9 @@ public class Shop {
 	public static final String SHOP_WAITLISTED = "SHOP_WAITLISTED";
 
 	public static final String SHOP_ADMIN_ID = "SHOP_ADMIN_ID";
+
+	public static final String GOVERNMENT_ID_NUMBER = "GOVERNMENT_ID_NUMBER";
+	public static final String GOVERNMENT_ID_NAME = "GOVERNMENT_ID_NAME";
 
 	// deprecated columns
 //	public static final String LAT_MAX = "LAT_MAX";
@@ -94,8 +95,8 @@ public class Shop {
 			+ " " + Shop.PICK_FROM_SHOP_AVAILABLE + " boolean,"
 			+ " " + Shop.HOME_DELIVERY_AVAILABLE + " boolean,"
 
-			+ " " + Shop.SHOP_ENABLED + " boolean,"
-			+ " " + Shop.SHOP_WAITLISTED + " boolean,"
+			+ " " + Shop.SHOP_ENABLED + " boolean NOT NULL,"
+			+ " " + Shop.SHOP_WAITLISTED + " boolean NOT NULL,"
 
 			+ " " + Shop.LOGO_IMAGE_PATH + " text,"
 
@@ -110,7 +111,10 @@ public class Shop {
 			+ " " + Shop.SHORT_DESCRIPTION + " text,"
 			+ " " + Shop.LONG_DESCRIPTION + " text,"
 
-			+ " " + Shop.DATE_TIME_STARTED + " timestamp with time zone NOT NULL DEFAULT now(),"
+			+ " " + Shop.GOVERNMENT_ID_NAME + " text,"
+			+ " " + Shop.GOVERNMENT_ID_NUMBER + " text,"
+
+			+ " " + Shop.TIMESTAMP_CREATED + " timestamp with time zone NOT NULL DEFAULT now(),"
 			+ " " + Shop.IS_OPEN + " boolean ,"
 			+ " " + Shop.SHOP_ADMIN_ID + " INT UNIQUE NOT NULL "
 			+ ")" ;
@@ -164,7 +168,7 @@ public class Shop {
 	private String shortDescription;
 	private String longDescription;
 
-	private Timestamp dateTimeStarted;
+	private Timestamp timestampCreated;
 	private boolean isOpen;
 	private int shopAdminID;
 
@@ -352,12 +356,12 @@ public class Shop {
 		this.longDescription = longDescription;
 	}
 
-	public Timestamp getDateTimeStarted() {
-		return dateTimeStarted;
+	public Timestamp getTimestampCreated() {
+		return timestampCreated;
 	}
 
-	public void setDateTimeStarted(Timestamp dateTimeStarted) {
-		this.dateTimeStarted = dateTimeStarted;
+	public void setTimestampCreated(Timestamp timestampCreated) {
+		this.timestampCreated = timestampCreated;
 	}
 
 	public boolean isOpen() {

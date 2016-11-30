@@ -38,6 +38,11 @@ public class ShopAdmin {
     public static final String IS_ENABLED = "IS_ENABLED";
     public static final String IS_WAITLISTED = "IS_WAITLISTED";
 
+    public static final String GOVERNMENT_ID_NUMBER = "GOVERNMENT_ID_NUMBER";
+    public static final String GOVERNMENT_ID_NAME = "GOVERNMENT_ID_NAME";
+
+    public static final String TIMESTAMP_CREATED = "TIMESTAMP_CREATED";
+
 
 
     // create table statement
@@ -46,10 +51,10 @@ public class ShopAdmin {
             + " " + ShopAdmin.SHOP_ADMIN_ID + " SERIAL PRIMARY KEY,"
 
             + " " + ShopAdmin.NAME + " text,"
-            + " " + ShopAdmin.SHOP_ID + " INT UNIQUE,"
+//            + " " + ShopAdmin.SHOP_ID + " INT UNIQUE,"
 
-            + " " + ShopAdmin.USERNAME + " text UNIQUE,"
-            + " " + ShopAdmin.PASSWORD + " text,"
+            + " " + ShopAdmin.USERNAME + " text UNIQUE NOT NULL,"
+            + " " + ShopAdmin.PASSWORD + " text NOT NULL,"
 
             + " " + ShopAdmin.ABOUT + " text,"
             + " " + ShopAdmin.PROFILE_IMAGE_URL + " text,"
@@ -57,10 +62,14 @@ public class ShopAdmin {
 
             + " " + ShopAdmin.DESIGNATION + " text,"
 
-            + " " + ShopAdmin.IS_ENABLED + " boolean,"
-            + " " + ShopAdmin.IS_WAITLISTED + " boolean,"
+            + " " + ShopAdmin.GOVERNMENT_ID_NAME + " text,"
+            + " " + ShopAdmin.GOVERNMENT_ID_NUMBER + " text,"
+            + " " + ShopAdmin.TIMESTAMP_CREATED + " timestamp with time zone NOT NULL DEFAULT now(),"
 
-            + " FOREIGN KEY(" + ShopAdmin.SHOP_ID +") REFERENCES " + Shop.TABLE_NAME + "(" + Shop.SHOP_ID + ")"
+            + " " + ShopAdmin.IS_ENABLED + " boolean NOT NULL,"
+            + " " + ShopAdmin.IS_WAITLISTED + " boolean NOT NULL"
+
+//            + " FOREIGN KEY(" + ShopAdmin.SHOP_ID +") REFERENCES " + Shop.TABLE_NAME + "(" + Shop.SHOP_ID + ")"
             + ")";
 
 

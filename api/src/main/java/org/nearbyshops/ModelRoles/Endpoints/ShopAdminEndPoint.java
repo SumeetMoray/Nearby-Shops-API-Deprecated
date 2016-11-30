@@ -1,6 +1,5 @@
 package org.nearbyshops.ModelRoles.Endpoints;
 
-import org.nearbyshops.ModelRoles.Distributor;
 import org.nearbyshops.ModelRoles.ShopAdmin;
 
 import java.util.List;

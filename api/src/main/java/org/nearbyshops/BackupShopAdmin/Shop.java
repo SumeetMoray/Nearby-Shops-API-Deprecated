@@ -35,7 +35,7 @@ public class Shop {
 	public static final String DELIVERY_HELPLINE_NUMBER = "DELIVERY_HELPLINE_NUMBER";
 	public static final String SHORT_DESCRIPTION = "SHORT_DESCRIPTION";
 	public static final String LONG_DESCRIPTION = "LONG_DESCRIPTION";
-	public static final String DATE_TIME_STARTED = "DATE_TIME_STARTED";
+	public static final String DATE_TIME_STARTED = "TIMESTAMP_CREATED";
 	public static final String IS_OPEN = "IS_SHOP_OPEN";
 
 	// to be added
