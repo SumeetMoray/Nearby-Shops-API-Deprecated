@@ -9,6 +9,7 @@ import org.nearbyshops.Utility.GeoLocation;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ShopItemDAO {
 
@@ -83,6 +84,99 @@ public class ShopItemDAO {
 			
 			try {
 				
+				if(connection!=null)
+				{connection.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return rowCount;
+	}
+
+
+
+	public int insertShopItemBulk(List<ShopItem> shopItemList)
+	{
+
+		Connection connection = null;
+		PreparedStatement statement = null;
+		int rowCount = 0;
+
+		//+ "" + shopItem.getQuantityUnit() + ","
+		//+ "" + shopItem.getQuantityMultiple() + ","
+
+		String insertShop = "INSERT INTO "
+				+ ShopItem.TABLE_NAME
+				+ "("
+				+ ShopItem.SHOP_ID + ","
+				+ ShopItem.ITEM_PRICE + ","
+				+ ShopItem.ITEM_ID + ","
+
+				+ ShopItem.AVAILABLE_ITEM_QUANTITY + ","
+				+ ShopItem.EXTRA_DELIVERY_CHARGE + ","
+				+ ShopItem.LAST_UPDATE_DATE_TIME
+				+ " ) VALUES (?,?,? ,?,?,?)";
+
+		/*+ "" + shopItem.getItemID() + ","
+				+ "" + shopItem.getItemPrice() + ","
+				+ "" + shopItem.getItemID() + ","*/
+
+
+		/* + "" + shopItem.getAvailableItemQuantity() + ","
+				+ "" + shopItem.getExtraDeliveryCharge() + ","
+				+ "" + "now()" + ""
+				*/
+
+		try {
+
+			connection = dataSource.getConnection();
+			statement = connection.prepareStatement(insertShop,Statement.RETURN_GENERATED_KEYS);
+
+
+			for(ShopItem shopItem: shopItemList)
+			{
+				statement.setObject(1,shopItem.getShopID());
+				statement.setObject(2,shopItem.getItemPrice());
+				statement.setObject(3,shopItem.getItemID());
+
+				statement.setObject(4,shopItem.getAvailableItemQuantity());
+				statement.setObject(5,shopItem.getExtraDeliveryCharge());
+				statement.setTimestamp(6,new Timestamp(System.currentTimeMillis()));
+
+				statement.addBatch();
+			}
+
+
+			int[] rowCountArray = statement.executeBatch();
+
+			for(int rows: rowCountArray)
+			{
+				rowCount = rowCount + rows;
+			}
+
+			System.out.println("Rows Inserted : INSERT BULK = " + rowCount);
+
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally
+		{
+
+			try {
+
+				if(statement!=null)
+				{statement.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
 				if(connection!=null)
 				{connection.close();}
 			} catch (SQLException e) {

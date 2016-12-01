@@ -90,6 +90,7 @@ public class ShopItemResource {
 			rowCountSum = rowCountSum + shopItemDAO.insertShopItem(shopItem);
 		}
 
+//		rowCountSum = shopItemDAO.insertShopItemBulk(itemList);
 
 		if(rowCountSum ==  itemList.size())
 		{
@@ -98,7 +99,7 @@ public class ShopItemResource {
 					.entity(null)
 					.build();
 		}
-		else if( rowCountSum < itemList.size() && rowCountSum > 0)
+		else if( (rowCountSum < itemList.size()) && (rowCountSum > 0))
 		{
 
 			return Response.status(Status.PARTIAL_CONTENT)

@@ -60,7 +60,7 @@ public class Item {
 	// Typically its the name of the manufacturer
 	
 	// Only required for JDBC
-	private int itemCategoryID;
+	private Integer itemCategoryID;
 	private ItemStats itemStats;
 
 	// recently added
@@ -121,6 +121,14 @@ public class Item {
 		// TODO Auto-generated constructor stub
 	}
 
+	public Integer getItemCategoryID() {
+		return itemCategoryID;
+	}
+
+	public void setItemCategoryID(Integer itemCategoryID) {
+		this.itemCategoryID = itemCategoryID;
+	}
+
 	public String getQuantityUnit() {
 		return quantityUnit;
 	}
@@ -144,12 +152,6 @@ public class Item {
 	}
 	public void setItemStats(ItemStats itemStats) {
 		this.itemStats = itemStats;
-	}
-	public int getItemCategoryID() {
-		return itemCategoryID;
-	}
-	public void setItemCategoryID(int itemCategoryID) {
-		this.itemCategoryID = itemCategoryID;
 	}
 	public ItemCategory getItemCategory() {
 		return itemCategory;

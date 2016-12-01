@@ -3,6 +3,7 @@ package org.nearbyshops.DAOsPrepared;
 import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Item;
+import org.nearbyshops.Model.ItemCategory;
 import org.nearbyshops.Model.ShopItem;
 import org.nearbyshops.ModelEndPoints.ItemEndPoint;
 import org.nearbyshops.ModelReviewItem.ItemReview;
@@ -18,8 +19,6 @@ public class ItemDAOJoinOuter {
 
 
 	private HikariDataSource dataSource = Globals.getDataSource();
-
-
 
 //	private GeoLocation center;
 //	private GeoLocation[] minMaxArray;
@@ -40,6 +39,7 @@ public class ItemDAOJoinOuter {
 	public List<Item> getItems(
 
 					Integer itemCategoryID,
+					Boolean parentIsNull,
 					String sortBy,
 					Integer limit, Integer offset
 	) {
@@ -97,6 +97,27 @@ public class ItemDAOJoinOuter {
 					+ "."
 					+ Item.ITEM_CATEGORY_ID + " = " + itemCategoryID;
 			
+		}
+
+
+
+
+		if(parentIsNull!=null&& parentIsNull)
+		{
+
+			String queryNormalPart = Item.ITEM_CATEGORY_ID + " IS NULL";
+
+			if(isfirst)
+			{
+//				queryNormal = queryNormal + " WHERE " + queryNormalPart;
+				queryJoin = queryJoin + " WHERE " + queryNormalPart;
+
+			}else
+			{
+//				queryNormal = queryNormal + " AND " + queryNormalPart;
+				queryJoin = queryJoin + " AND " + queryNormalPart;
+
+			}
 		}
 
 
@@ -276,9 +297,12 @@ public class ItemDAOJoinOuter {
 
 
 	public ItemEndPoint getEndPointMetadata(
-			Integer itemCategoryID)
+			Integer itemCategoryID,
+			Boolean parentIsNull)
 	{
 
+
+		boolean isfirst = true;
 
 		String query = "";
 
@@ -301,15 +325,35 @@ public class ItemDAOJoinOuter {
 					+ "."
 					+ Item.ITEM_CATEGORY_ID + " = " + itemCategoryID;
 
+			isfirst = false;
 
 
 			//" WHERE ITEM_CATEGORY_ID = " + itemCategoryID
 
-			queryNormal = queryNormal + " WHERE "
-					+ Item.TABLE_NAME
-					+ "."
-					+ Item.ITEM_CATEGORY_ID + " = " + itemCategoryID;
+//			queryNormal = queryNormal + " WHERE "
+//					+ Item.TABLE_NAME
+//					+ "."
+//					+ Item.ITEM_CATEGORY_ID + " = " + itemCategoryID;
 
+		}
+
+
+		if(parentIsNull!=null&& parentIsNull)
+		{
+
+			String queryNormalPart = Item.ITEM_CATEGORY_ID + " IS NULL";
+
+			if(isfirst)
+			{
+//				queryNormal = queryNormal + " WHERE " + queryNormalPart;
+				queryJoin = queryJoin + " WHERE " + queryNormalPart;
+
+			}else
+			{
+//				queryNormal = queryNormal + " AND " + queryNormalPart;
+				queryJoin = queryJoin + " AND " + queryNormalPart;
+
+			}
 		}
 
 

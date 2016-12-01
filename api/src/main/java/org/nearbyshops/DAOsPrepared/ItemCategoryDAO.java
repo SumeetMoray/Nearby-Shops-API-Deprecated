@@ -12,17 +12,18 @@ import org.nearbyshops.Utility.GeoLocation;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ItemCategoryDAO {
 
 	private HikariDataSource dataSource = Globals.getDataSource();
 
-	private GeoLocation center;
+//	private GeoLocation center;
 
-	private GeoLocation[] minMaxArray;
-	private GeoLocation pointOne;
-	private GeoLocation pointTwo;
+//	private GeoLocation[] minMaxArray;
+//	private GeoLocation pointOne;
+//	private GeoLocation pointTwo;
 
 
 	@Override
@@ -118,7 +119,230 @@ public class ItemCategoryDAO {
 		return idOfInsertedRow;
 	}
 
-	
+
+	public int changeParent(ItemCategory itemCategory)
+	{
+		int rowCount = 0;
+
+
+		if(itemCategory.getParentCategoryID()!=null)
+		{
+			if(itemCategory.getParentCategoryID() == itemCategory.getItemCategoryID())
+			{
+				// an Item category cannot have itself as its own parent so abort this operation and return
+				return 0;
+			}
+
+			// a hack for android app. The android parcelable does not support Non primitives.
+			// So cant have null for the ID.
+			// The value of -1 represents the NULL when the request coming from an android app.
+			// So when you see a -1 for parent set it to null which really means a detached item category,
+			// an item category not having any parent
+
+			if(itemCategory.getParentCategoryID()==-1)
+			{
+				itemCategory.setParentCategoryID(null);
+			}
+		}
+
+
+//		if(itemCategory.getParentCategoryID()!=null)
+//		{
+//
+//		}
+
+		String updateStatement = "";
+
+		updateStatement = "UPDATE "
+
+				+ ItemCategory.TABLE_NAME
+				+ " SET "
+//				+ " " + ItemCategory.ITEM_CATEGORY_NAME + " = ?,"
+//				+ " " + ItemCategory.ITEM_CATEGORY_DESCRIPTION + " = ?,"
+//				+ " " + ItemCategory.IMAGE_PATH + " = ?,"
+
+				+ " " + ItemCategory.PARENT_CATEGORY_ID + " = ?"
+//				+ " " + ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT + " = ?,"
+//				+ " " + ItemCategory.IS_ABSTRACT + " = ?,"
+
+//				+ " " + ItemCategory.IS_LEAF_NODE + " = ?"
+
+				+ " WHERE "
+				+  ItemCategory.ITEM_CATEGORY_ID + "= ?";
+
+
+		Connection connection = null;
+//		Statement stmt = null;
+		PreparedStatement statement = null;
+
+
+		try {
+
+			connection = dataSource.getConnection();
+			statement = connection.prepareStatement(updateStatement);
+
+//			statement.setString(1,itemCategory.getCategoryName());
+//			statement.setString(2,itemCategory.getCategoryDescription());
+//			statement.setString(3,itemCategory.getImagePath());
+
+			statement.setObject(1,itemCategory.getParentCategoryID());
+//			statement.setString(5,itemCategory.getDescriptionShort());
+//			statement.setBoolean(6,itemCategory.getisAbstractNode());
+
+//			statement.setBoolean(7,itemCategory.getIsLeafNode());
+			statement.setInt(2,itemCategory.getItemCategoryID());
+
+			rowCount = statement.executeUpdate();
+
+
+			System.out.println("Total rows updated: " + rowCount);
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally
+
+		{
+
+			try {
+
+				if(statement!=null)
+				{statement.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(connection!=null)
+				{connection.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return rowCount;
+	}
+
+
+
+
+
+
+	public int changeParentBulk(List<ItemCategory> itemCategoryList)
+	{
+		int rowCount = 0;
+
+		String updateStatement = "";
+
+		updateStatement = "UPDATE "
+
+				+ ItemCategory.TABLE_NAME
+				+ " SET "
+//				+ " " + ItemCategory.ITEM_CATEGORY_NAME + " = ?,"
+//				+ " " + ItemCategory.ITEM_CATEGORY_DESCRIPTION + " = ?,"
+//				+ " " + ItemCategory.IMAGE_PATH + " = ?,"
+
+				+ " " + ItemCategory.PARENT_CATEGORY_ID + " = ?"
+//				+ " " + ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT + " = ?,"
+//				+ " " + ItemCategory.IS_ABSTRACT + " = ?,"
+
+//				+ " " + ItemCategory.IS_LEAF_NODE + " = ?"
+
+				+ " WHERE "
+				+  ItemCategory.ITEM_CATEGORY_ID + "= ?";
+
+
+		Connection connection = null;
+//		Statement stmt = null;
+		PreparedStatement statement = null;
+
+
+		try {
+
+			connection = dataSource.getConnection();
+			statement = connection.prepareStatement(updateStatement);
+
+//			statement.setString(1,itemCategory.getCategoryName());
+//			statement.setString(2,itemCategory.getCategoryDescription());
+//			statement.setString(3,itemCategory.getImagePath());
+
+
+//			statement.setString(5,itemCategory.getDescriptionShort());
+//			statement.setBoolean(6,itemCategory.getisAbstractNode());
+
+//			statement.setBoolean(7,itemCategory.getIsLeafNode());
+
+			for(ItemCategory itemCategory: itemCategoryList)
+			{
+
+				if(itemCategory.getParentCategoryID()!=null)
+				{
+					if(itemCategory.getParentCategoryID() == itemCategory.getItemCategoryID())
+					{
+						// an Item category cannot have itself as
+						// its own parent so abort this operation and return
+						continue;
+					}
+
+					if(itemCategory.getParentCategoryID()==-1)
+					{
+						itemCategory.setParentCategoryID(null);
+					}
+
+				}
+
+
+				statement.setObject(1,itemCategory.getParentCategoryID());
+				statement.setInt(2,itemCategory.getItemCategoryID());
+				statement.addBatch();
+			}
+
+
+			int[] rowSumArray = statement.executeBatch();
+
+			for(int rows : rowSumArray)
+			{
+				rowCount = rowCount + rows;
+			}
+
+
+			System.out.println("Total rows updated: CHANGE PARENT BULK " + rowCount);
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally
+
+		{
+
+			try {
+
+				if(statement!=null)
+				{statement.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(connection!=null)
+				{connection.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return rowCount;
+	}
+
+
 
 
 
@@ -134,11 +358,8 @@ public class ItemCategoryDAO {
 				// an Item category cannot have itself as its own parent so abort this operation and return
 				return 0;
 			}
-		}
 
 
-		if(itemCategory.getParentCategoryID()!=null)
-		{
 			// a hack for android app. The android parcelable does not support Non primitives.
 			// So cant have null for the ID.
 			// The value of -1 represents the NULL when the request coming from an android app.
@@ -150,6 +371,11 @@ public class ItemCategoryDAO {
 				itemCategory.setParentCategoryID(null);
 			}
 		}
+
+
+//		if(itemCategory.getParentCategoryID()!=null)
+//		{
+//		}
 		
 		String updateStatement = "";
 
