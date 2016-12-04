@@ -1,4 +1,4 @@
-package org.nearbyshops.RESTEndpoints;
+package org.nearbyshops.RESTEndpointsOrder;
 
 import org.nearbyshops.DAOsPrepared.ShopDAO;
 import org.nearbyshops.Globals.Globals;

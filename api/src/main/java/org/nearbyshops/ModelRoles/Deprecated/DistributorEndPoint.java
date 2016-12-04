@@ -1,4 +1,4 @@
-package org.nearbyshops.ModelRoles.Endpoints;
+package org.nearbyshops.ModelRoles.Deprecated;
 
 import org.nearbyshops.ModelRoles.Deprecated.Distributor;
 

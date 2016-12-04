@@ -46,7 +46,7 @@ public class StaffDAOPrepared {
 				+ Staff.PROFILE_IMAGE_URL + ","
 
 				+ Staff.IS_ENABLED + ","
-//				+ Staff.IS_WAITLISTED + ","
+
 				+ Staff.STAFF_NAME
 
 				+ ") VALUES(?,?, ?,?,?,?, ?,?, ?,?)";

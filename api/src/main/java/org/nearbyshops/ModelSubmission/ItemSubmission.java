@@ -17,6 +17,8 @@ public class ItemSubmission {
     int itemID ; // null if its an add or a value if its an edit // foreign key nulls allowed
     boolean submissionApproved;
 
+    boolean isReviewed;
+
 
     // Version History is suggestions sorted by timestampAccepted field
 }

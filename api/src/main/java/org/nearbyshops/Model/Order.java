@@ -33,22 +33,22 @@ public class Order {
 
     public static final String DELIVERY_GUY_SELF_ID = "DELIVERY_GUY_SELF_ID";
 
-//    public static final String ORDER_TOTAL = "ORDER_TOTAL";
+    public static final String ORDER_TOTAL = "ORDER_TOTAL";
 //    public static final String TAX_AMOUNT = "TAX_AMOUNT";
-//    public static final String ITEM_COUNT = "ITEM_COUNT";
-//    public static final String APP_SERVICE_CHARGE = "APP_SERVICE_CHARGE";
+    public static final String ITEM_COUNT = "ITEM_COUNT";
+    public static final String APP_SERVICE_CHARGE = "APP_SERVICE_CHARGE";
 
-//    public static final String REASON_FOR_CANCELLED_BY_USER = "REASON_FOR_CANCELLED_BY_USER";
-//    public static final String REASON_FOR_CANCELLED_BY_SHOP = "REASON_FOR_CANCELLED_BY_SHOP";
-//    public static final String REASON_FOR_ORDER_RETURNED = "REASON_FOR_ORDER_RETURNED";
+    public static final String REASON_FOR_CANCELLED_BY_USER = "REASON_FOR_CANCELLED_BY_USER";
+    public static final String REASON_FOR_CANCELLED_BY_SHOP = "REASON_FOR_CANCELLED_BY_SHOP";
+    public static final String REASON_FOR_ORDER_RETURNED = "REASON_FOR_ORDER_RETURNED";
 
 
     public static final String DATE_TIME_PLACED = "DATE_TIME_PLACED";
 
-//    public static final String TIMESTAMP_HD_CONFIRMED = "TIMESTAMP_HD_CONFIRMED";
-//    public static final String TIMESTAMP_HD_PACKED = "TIMESTAMP_HD_PACKED";
-//    public static final String TIMESTAMP_HD_OUT_FOR_DELIVERY = "TIMESTAMP_HD_OUT_FOR_DELIVERY";
-//    public static final String TIMESTAMP_HD_DELIVERED = "TIMESTAMP_HD_DELIVERED";
+    public static final String TIMESTAMP_HD_CONFIRMED = "TIMESTAMP_HD_CONFIRMED";
+    public static final String TIMESTAMP_HD_PACKED = "TIMESTAMP_HD_PACKED";
+    public static final String TIMESTAMP_HD_OUT_FOR_DELIVERY = "TIMESTAMP_HD_OUT_FOR_DELIVERY";
+    public static final String TIMESTAMP_HD_DELIVERED = "TIMESTAMP_HD_DELIVERED";
 
 
 
@@ -59,6 +59,20 @@ public class Order {
             + " " + Order.ORDER_ID + " SERIAL PRIMARY KEY,"
             + " " + Order.END_USER_ID + " INT,"
             + " " + Order.SHOP_ID + " INT,"
+
+            + " " + Order.ORDER_TOTAL + " INT,"
+            + " " + Order.ITEM_COUNT + " INT,"
+            + " " + Order.APP_SERVICE_CHARGE + " INT,"
+
+            + " " + Order.REASON_FOR_CANCELLED_BY_SHOP + " text,"
+            + " " + Order.REASON_FOR_CANCELLED_BY_USER + " text,"
+            + " " + Order.REASON_FOR_ORDER_RETURNED + " text,"
+
+            + " " + Order.TIMESTAMP_HD_CONFIRMED + " timestamp with time zone,"
+            + " " + Order.TIMESTAMP_HD_PACKED + " timestamp with time zone,"
+            + " " + Order.TIMESTAMP_HD_OUT_FOR_DELIVERY + " timestamp with time zone,"
+            + " " + Order.TIMESTAMP_HD_DELIVERED + " timestamp with time zone,"
+
             + " " + Order.STATUS_HOME_DELIVERY + " INT,"
             + " " + Order.STATUS_PICK_FROM_SHOP + " INT,"
             + " " + Order.DELIVERY_RECEIVED + " boolean,"
@@ -93,7 +107,7 @@ public class Order {
     private Integer deliveryAddressID;
     private Boolean pickFromShop;
 
-    private Integer deliveryVehicleSelfID;
+    private Integer deliveryGuySelfID;
     private Timestamp dateTimePlaced;
 
     private DeliveryAddress deliveryAddress;
@@ -181,12 +195,12 @@ public class Order {
         this.pickFromShop = pickFromShop;
     }
 
-    public Integer getDeliveryVehicleSelfID() {
-        return deliveryVehicleSelfID;
+    public Integer getDeliveryGuySelfID() {
+        return deliveryGuySelfID;
     }
 
-    public void setDeliveryVehicleSelfID(Integer deliveryVehicleSelfID) {
-        this.deliveryVehicleSelfID = deliveryVehicleSelfID;
+    public void setDeliveryGuySelfID(Integer deliveryGuySelfID) {
+        this.deliveryGuySelfID = deliveryGuySelfID;
     }
 
     public Timestamp getDateTimePlaced() {

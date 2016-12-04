@@ -10,6 +10,7 @@ public class ItemStats {
     private Double max_price;
     private Double avg_price;
     private Integer shopCount;
+
     private Double rating_avg;
     private Integer ratingCount;
 

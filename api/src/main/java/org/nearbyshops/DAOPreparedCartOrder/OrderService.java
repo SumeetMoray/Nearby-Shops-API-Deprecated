@@ -251,7 +251,25 @@ public class OrderService {
     public Order readOrder(int orderID)
     {
 
-        String query = "SELECT * FROM " + Order.TABLE_NAME
+        String query = "SELECT "
+
+                 + Order.ORDER_ID + ","
+                 + Order.DELIVERY_ADDRESS_ID + ","
+                 + Order.DATE_TIME_PLACED + ","
+
+                 + Order.DELIVERY_CHARGES + ","
+                 + Order.DELIVERY_RECEIVED + ","
+                 + Order.PAYMENT_RECEIVED + ","
+
+                 + Order.DELIVERY_GUY_SELF_ID + ","
+                 + Order.END_USER_ID + ","
+                 + Order.PICK_FROM_SHOP + ","
+
+                + Order.SHOP_ID + ","
+                + Order.STATUS_HOME_DELIVERY + ","
+                + Order.STATUS_PICK_FROM_SHOP + ""
+
+                + " FROM " + Order.TABLE_NAME
                 + " WHERE " + Order.ORDER_ID + " = " + orderID;
 
         Connection connection = null;
@@ -269,19 +287,22 @@ public class OrderService {
             while(rs.next())
             {
                 order = new Order();
+
                 order.setShopID(rs.getInt(Order.SHOP_ID));
                 order.setDeliveryCharges(rs.getInt(Order.DELIVERY_CHARGES));
                 order.setEndUserID(rs.getInt(Order.END_USER_ID));
+
                 order.setOrderID(rs.getInt(Order.ORDER_ID));
                 order.setPickFromShop(rs.getBoolean(Order.PICK_FROM_SHOP));
                 order.setDateTimePlaced(rs.getTimestamp(Order.DATE_TIME_PLACED));
+
                 order.setStatusHomeDelivery(rs.getInt(Order.STATUS_HOME_DELIVERY));
                 order.setStatusPickFromShop(rs.getInt(Order.STATUS_PICK_FROM_SHOP));
                 order.setDeliveryReceived(rs.getBoolean(Order.DELIVERY_RECEIVED));
-                order.setPaymentReceived(rs.getBoolean(Order.PAYMENT_RECEIVED));
 
+                order.setPaymentReceived(rs.getBoolean(Order.PAYMENT_RECEIVED));
                 order.setDeliveryAddressID((Integer) rs.getObject(Order.DELIVERY_ADDRESS_ID));
-                order.setDeliveryVehicleSelfID((Integer) rs.getObject(Order.DELIVERY_GUY_SELF_ID));
+                order.setDeliveryGuySelfID((Integer) rs.getObject(Order.DELIVERY_GUY_SELF_ID));
             }
 
 
@@ -325,11 +346,6 @@ public class OrderService {
 
         return order;
     }
-
-
-
-
-
 
 
 
@@ -618,7 +634,7 @@ public class OrderService {
 
                 order.setPaymentReceived(rs.getBoolean(Order.PAYMENT_RECEIVED));
                 order.setDeliveryAddressID((Integer) rs.getObject(Order.DELIVERY_ADDRESS_ID));
-                order.setDeliveryVehicleSelfID((Integer) rs.getObject(Order.DELIVERY_GUY_SELF_ID));
+                order.setDeliveryGuySelfID((Integer) rs.getObject(Order.DELIVERY_GUY_SELF_ID));
 
 
                 /*if(getDeliveryAddress!=null && getDeliveryAddress)
@@ -976,7 +992,7 @@ public class OrderService {
             statement.setObject(6,order.getDeliveryReceived());
             statement.setObject(7,order.getDeliveryCharges());
             statement.setObject(8,order.getDeliveryAddressID());
-            statement.setObject(9,order.getDeliveryVehicleSelfID());
+            statement.setObject(9,order.getDeliveryGuySelfID());
             statement.setObject(10,order.getPickFromShop());
             statement.setObject(11,order.getOrderID());
 
@@ -1018,16 +1034,395 @@ public class OrderService {
 
 
 
+    public Order readStatusHomeDelivery(int orderID)
+    {
+
+        String query = "SELECT "
+
+//                + Order.ORDER_ID + ","
+//                + Order.DELIVERY_ADDRESS_ID + ","
+//                + Order.DATE_TIME_PLACED + ","
+
+//                + Order.DELIVERY_CHARGES + ","
+                + Order.DELIVERY_RECEIVED + ","
+//                + Order.PAYMENT_RECEIVED + ","
+
+//                + Order.DELIVERY_GUY_SELF_ID + ","
+//                + Order.END_USER_ID + ","
+//                + Order.PICK_FROM_SHOP + ","
+
+                + Order.SHOP_ID + ","
+                + Order.STATUS_HOME_DELIVERY + ""
+//                + Order.STATUS_PICK_FROM_SHOP + ""
+
+                + " FROM " + Order.TABLE_NAME
+                + " WHERE " + Order.ORDER_ID + " = " + orderID;
+
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet rs = null;
+
+        Order order = null;
+
+        try {
+
+            connection = dataSource.getConnection();
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+
+            while(rs.next())
+            {
+                order = new Order();
+
+
+//                order.setDeliveryCharges(rs.getInt(Order.DELIVERY_CHARGES));
+//                order.setEndUserID(rs.getInt(Order.END_USER_ID));
+
+                order.setOrderID(orderID);
+                order.setDeliveryReceived(rs.getBoolean(Order.DELIVERY_RECEIVED));
+                order.setShopID(rs.getInt(Order.SHOP_ID));
+                order.setStatusHomeDelivery(rs.getInt(Order.STATUS_HOME_DELIVERY));
+//                order.setPickFromShop(rs.getBoolean(Order.PICK_FROM_SHOP));
+//                order.setDateTimePlaced(rs.getTimestamp(Order.DATE_TIME_PLACED));
+
+
+//                order.setStatusPickFromShop(rs.getInt(Order.STATUS_PICK_FROM_SHOP));
+
+
+//                order.setPaymentReceived(rs.getBoolean(Order.PAYMENT_RECEIVED));
+//
+//               order.setDeliveryAddressID((Integer) rs.getObject(Order.DELIVERY_ADDRESS_ID));
+//                order.setDeliveryGuySelfID((Integer) rs.getObject(Order.DELIVERY_GUY_SELF_ID));
+            }
+
+
+            //System.out.println("Total itemCategories queried " + itemCategoryList.size());
+
+
+
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally
+
+        {
+
+            try {
+                if(rs!=null)
+                {rs.close();}
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            try {
+
+                if(statement!=null)
+                {statement.close();}
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            try {
+
+                if(connection!=null)
+                {connection.close();}
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+        return order;
+    }
+
+
+
+
+    public int updateDeliveryReceived(Order order)
+    {
+        String updateStatement = "UPDATE " + Order.TABLE_NAME
+
+                + " SET "
+                + " " + Order.DELIVERY_RECEIVED + " = ?"
+                + " WHERE " + Order.ORDER_ID + " = ?";
+
+
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        int updatedRows = -1;
+
+        try {
+
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement(updateStatement);
+
+            statement.setObject(1,order.getDeliveryReceived());
+            statement.setObject(2,order.getOrderID());
+
+            updatedRows = statement.executeUpdate();
+            System.out.println("Total rows updated: " + updatedRows);
+
+            //conn.close();
+
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        finally
+
+        {
+
+            try {
+
+                if(statement!=null)
+                {statement.close();}
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            try {
+
+                if(connection!=null)
+                {connection.close();}
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+        return updatedRows;
+    }
+
+
+
+    public int updatePaymentReceived(Order order)
+    {
+        String updateStatement = "UPDATE " + Order.TABLE_NAME
+
+                + " SET "
+                + " " + Order.PAYMENT_RECEIVED + " = ?"
+                + " WHERE " + Order.ORDER_ID + " = ?";
+
+
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        int updatedRows = -1;
+
+        try {
+
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement(updateStatement);
+
+            statement.setObject(1,order.getPaymentReceived());
+            statement.setObject(2,order.getOrderID());
+
+            updatedRows = statement.executeUpdate();
+            System.out.println("Total rows updated: " + updatedRows);
+
+            //conn.close();
+
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        finally
+
+        {
+
+            try {
+
+                if(statement!=null)
+                {statement.close();}
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            try {
+
+                if(connection!=null)
+                {connection.close();}
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+        return updatedRows;
+    }
+
+
+
+    public int updateDeliveryGuySelfID(Order order)
+    {
+        String updateStatement = "UPDATE " + Order.TABLE_NAME
+
+                + " SET "
+//                + Order.END_USER_ID + " = ?,"
+//                + " " + Order.SHOP_ID + " = ?,"
+                + " " + Order.STATUS_HOME_DELIVERY + " = ?,"
+//                + " " + Order.STATUS_PICK_FROM_SHOP + " = ?"
+//                + " " + Order.PAYMENT_RECEIVED + " = ?,"
+//                + " " + Order.DELIVERY_RECEIVED + " = ?"
+//                + " " + Order.DELIVERY_CHARGES + " = ?,"
+//                + " " + Order.DELIVERY_ADDRESS_ID + " = ?,"
+                + Order.DELIVERY_GUY_SELF_ID + " = ?"
+//                + Order.PICK_FROM_SHOP + " = ?"
+                + " WHERE " + Order.ORDER_ID + " = ?";
+
+
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        int updatedRows = -1;
+
+        try {
+
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement(updateStatement);
+
+//            statement.setObject(1,order.getEndUserID());
+//            statement.setObject(1,order.getShopID());
+            statement.setObject(1,order.getStatusHomeDelivery());
+//            statement.setObject(4,order.getStatusPickFromShop());
+//            statement.setObject(2,order.getPaymentReceived());
+//            statement.setObject(3,order.getDeliveryReceived());
+//            statement.setObject(7,order.getDeliveryCharges());
+//            statement.setObject(8,order.getDeliveryAddressID());
+            statement.setObject(2,order.getDeliveryGuySelfID());
+//            statement.setObject(10,order.getPickFromShop());
+            statement.setObject(3,order.getOrderID());
+
+
+            updatedRows = statement.executeUpdate();
+            System.out.println("Total rows updated: " + updatedRows);
+
+            //conn.close();
+
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        finally
+
+        {
+
+            try {
+
+                if(statement!=null)
+                {statement.close();}
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            try {
+
+                if(connection!=null)
+                {connection.close();}
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+        return updatedRows;
+    }
+
+
+
+    public int updateStatusHomeDelivery(Order order)
+    {
+        String updateStatement = "UPDATE " + Order.TABLE_NAME
+
+                + " SET "
+//                + Order.END_USER_ID + " = ?,"
+//                + " " + Order.SHOP_ID + " = ?,"
+                + " " + Order.STATUS_HOME_DELIVERY + " = ?"
+//                + " " + Order.STATUS_PICK_FROM_SHOP + " = ?"
+//                + " " + Order.PAYMENT_RECEIVED + " = ?,"
+//                + " " + Order.DELIVERY_RECEIVED + " = ?"
+//                + " " + Order.DELIVERY_CHARGES + " = ?,"
+//                + " " + Order.DELIVERY_ADDRESS_ID + " = ?,"
+//                + Order.DELIVERY_GUY_SELF_ID + " = ?"
+//                + Order.PICK_FROM_SHOP + " = ?"
+                + " WHERE " + Order.ORDER_ID + " = ?";
+
+
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        int updatedRows = -1;
+
+        try {
+
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement(updateStatement);
+
+//            statement.setObject(1,order.getEndUserID());
+//            statement.setObject(1,order.getShopID());
+            statement.setObject(1,order.getStatusHomeDelivery());
+//            statement.setObject(4,order.getStatusPickFromShop());
+//            statement.setObject(2,order.getPaymentReceived());
+//            statement.setObject(3,order.getDeliveryReceived());
+//            statement.setObject(7,order.getDeliveryCharges());
+//            statement.setObject(8,order.getDeliveryAddressID());
+//            statement.setObject(2,order.getDeliveryGuySelfID());
+//            statement.setObject(10,order.getPickFromShop());
+            statement.setObject(2,order.getOrderID());
+
+
+            updatedRows = statement.executeUpdate();
+            System.out.println("Total rows updated: " + updatedRows);
+
+            //conn.close();
+
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        finally
+
+        {
+
+            try {
+
+                if(statement!=null)
+                {statement.close();}
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            try {
+
+                if(connection!=null)
+                {connection.close();}
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+        return updatedRows;
+    }
+
+
 
     public int returnOrderByDeliveryGuy(Integer orderID)
     {
-        Order order = readOrder(orderID);
+        Order order = readStatusHomeDelivery(orderID);
 
         if(order!=null && (order.getStatusHomeDelivery()==5 || (order.getStatusHomeDelivery() ==6 && !order.getDeliveryReceived())))
         {
             order.setStatusHomeDelivery(OrderStatusHomeDelivery.RETURN_PENDING);
 
-            return updateOrder(order);
+            return updateStatusHomeDelivery(order);
         }
 
         return 0;
@@ -1037,7 +1432,7 @@ public class OrderService {
 
     public int orderCancelledByShop(Integer orderID)
     {
-        Order order = readOrder(orderID);
+        Order order = readStatusHomeDelivery(orderID);
 
         if(order!=null) {
 
@@ -1052,11 +1447,14 @@ public class OrderService {
                 order.setStatusHomeDelivery(OrderStatusHomeDelivery.CANCELLED_BY_SHOP_RETURN_PENDING);
             }
 
-            return updateOrder(order);
+            return updateStatusHomeDelivery(order);
         }
 
         return 0;
     }
+
+
+
 
 
 }

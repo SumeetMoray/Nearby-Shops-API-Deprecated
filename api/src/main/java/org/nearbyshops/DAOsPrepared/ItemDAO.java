@@ -148,7 +148,12 @@ public class ItemDAO {
 //			statement.setString(2,item.getItemDescription());
 //			statement.setString(3,item.getItemImageURL());
 
-			statement.setInt(1,item.getItemCategoryID());
+			if(item.getItemCategoryID()!=null && (item.getItemCategoryID()==-1||item.getItemCategoryID()==0))
+			{
+				item.setItemCategoryID(null);
+			}
+
+			statement.setObject(1,item.getItemCategoryID());
 //			statement.setString(5,item.getQuantityUnit());
 //			statement.setString(6,item.getItemDescriptionLong());
 			statement.setInt(2,item.getItemID());

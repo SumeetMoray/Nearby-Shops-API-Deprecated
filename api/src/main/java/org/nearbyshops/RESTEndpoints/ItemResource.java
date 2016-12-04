@@ -368,11 +368,11 @@ public class ItemResource {
 		}
 
 
-		/*try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}*/
+//		try {
+//			Thread.sleep(1000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 
 		//Marker
 
@@ -441,6 +441,13 @@ public class ItemResource {
 
 			endPoint.setResults(list);
 		}
+
+
+//		try {
+//			Thread.sleep(500);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 
 
 		//Marker

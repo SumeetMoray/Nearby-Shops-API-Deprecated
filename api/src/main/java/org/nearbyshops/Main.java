@@ -21,6 +21,7 @@ import org.nearbyshops.ModelReviewShop.ShopReview;
 import org.nearbyshops.ModelReviewShop.ShopReviewThanks;
 import org.nearbyshops.ModelRoles.*;
 import org.nearbyshops.ModelRoles.Deprecated.DistributorStaff;
+import org.nearbyshops.ModelSecurity.ForbiddenOperations;
 import org.nearbyshops.ModelSettings.ServiceConfiguration;
 import org.nearbyshops.ModelSettings.Settings;
 
@@ -256,6 +257,8 @@ public class Main implements ActionListener {
 			statement.executeUpdate(FavouriteItem.createTableFavouriteItemPostgres);
 			statement.executeUpdate(ItemReviewThanks.createTableItemReviewThanksPostgres);
 
+			// tabled for keeping security records
+			statement.executeUpdate(ForbiddenOperations.createTableForbiddenOperationPostgres);
 
 			System.out.println("Tables Created ... !");
 

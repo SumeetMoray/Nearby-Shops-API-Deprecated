@@ -11,6 +11,7 @@ import org.nearbyshops.DAOPreparedReviewItem.ItemReviewThanksDAOPrepared;
 import org.nearbyshops.DAOPreparedReviewShop.FavoriteBookDAOPrepared;
 import org.nearbyshops.DAOPreparedReviewShop.ShopReviewDAOPrepared;
 import org.nearbyshops.DAOPreparedReviewShop.ShopReviewThanksDAOPrepared;
+import org.nearbyshops.DAOPreparedSecurity.ForbiddenOperationsDAO;
 import org.nearbyshops.DAOPreparedSettings.ServiceConfigurationDAOPrepared;
 import org.nearbyshops.DAOPreparedSettings.SettingsDAOPrepared;
 import org.nearbyshops.BackupDAOsTwo.EndUserService;
@@ -63,6 +64,9 @@ public class Globals {
 	public static ShopItemByItemDAO shopItemByItemDAO = new ShopItemByItemDAO();
 
 	public static ShopAdminDAO shopAdminDAO = new ShopAdminDAO();
+
+	// security
+	public static ForbiddenOperationsDAO forbiddenOperationsDAO = new ForbiddenOperationsDAO();
 
 
 

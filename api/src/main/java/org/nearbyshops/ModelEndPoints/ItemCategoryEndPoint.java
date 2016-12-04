@@ -9,18 +9,18 @@ import java.util.ArrayList;
  */
 public class ItemCategoryEndPoint {
 
-    Integer itemCount;
+    int itemCount;
     Integer offset;
     Integer limit;
     Integer max_limit;
     ArrayList<ItemCategory> results;
 
 
-    public Integer getItemCount() {
+    public int getItemCount() {
         return itemCount;
     }
 
-    public void setItemCount(Integer itemCount) {
+    public void setItemCount(int itemCount) {
         this.itemCount = itemCount;
     }
 

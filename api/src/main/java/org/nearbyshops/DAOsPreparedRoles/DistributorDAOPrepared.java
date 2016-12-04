@@ -2,7 +2,7 @@ package org.nearbyshops.DAOsPreparedRoles;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.ModelRoles.Endpoints.DistributorEndPoint;
+import org.nearbyshops.ModelRoles.Deprecated.DistributorEndPoint;
 import org.nearbyshops.ModelRoles.Deprecated.Distributor;
 
 import java.sql.*;

@@ -273,7 +273,7 @@ public class OrderService {
                 order.setOrderID(rs.getInt(Order.ORDER_ID));
                 order.setPickFromShop(rs.getBoolean(Order.PICK_FROM_SHOP));
                 order.setDateTimePlaced(rs.getTimestamp(Order.DATE_TIME_PLACED));
-                order.setDeliveryVehicleSelfID(rs.getInt(Order.DELIVERY_GUY_SELF_ID));
+                order.setDeliveryGuySelfID(rs.getInt(Order.DELIVERY_GUY_SELF_ID));
 
                 order.setStatusHomeDelivery(rs.getInt(Order.STATUS_HOME_DELIVERY));
                 order.setStatusPickFromShop(rs.getInt(Order.STATUS_PICK_FROM_SHOP));
@@ -530,7 +530,7 @@ public class OrderService {
                 order.setOrderID(rs.getInt(Order.ORDER_ID));
                 order.setPickFromShop(rs.getBoolean(Order.PICK_FROM_SHOP));
                 order.setDateTimePlaced(rs.getTimestamp(Order.DATE_TIME_PLACED));
-                order.setDeliveryVehicleSelfID(rs.getInt(Order.DELIVERY_GUY_SELF_ID));
+                order.setDeliveryGuySelfID(rs.getInt(Order.DELIVERY_GUY_SELF_ID));
 
 
                 order.setStatusHomeDelivery(rs.getInt(Order.STATUS_HOME_DELIVERY));
@@ -855,14 +855,14 @@ public class OrderService {
 
         String deliveryVehiclePart = "";
 
-        if(order.getDeliveryVehicleSelfID() == 0)
+        if(order.getDeliveryGuySelfID() == 0)
         {
             //deliveryVehiclePart = " " + Order.DELIVERY_GUY_SELF_ID + " = " + " " +   + " " + ",";
             //deliveryVehiclePart = " " + Order.DELIVERY_GUY_SELF_ID + " = " + " " + " " + ",";
 
         }else
         {
-            deliveryVehiclePart = " " + Order.DELIVERY_GUY_SELF_ID + " = " + " " + order.getDeliveryVehicleSelfID() + " " + ",";
+            deliveryVehiclePart = " " + Order.DELIVERY_GUY_SELF_ID + " = " + " " + order.getDeliveryGuySelfID() + " " + ",";
         }
 
 

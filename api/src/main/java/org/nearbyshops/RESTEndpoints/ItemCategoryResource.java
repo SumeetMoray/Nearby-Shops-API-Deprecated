@@ -24,6 +24,7 @@ import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Image;
 import org.nearbyshops.Model.ItemCategory;
 import org.nearbyshops.ModelEndPoints.ItemCategoryEndPoint;
+import org.nearbyshops.ModelEndPoints.ShopEndPoint;
 
 @Path("/v1/ItemCategory")
 public class ItemCategoryResource {
@@ -277,7 +278,7 @@ public class ItemCategoryResource {
 
 
 		List<ItemCategory> list = 
-				itemCategoryDAO.getItemCategories(
+				itemCategoryDAO.getItemCategoriesJoinRecursive(
 						shopID, parentID,parentIsNull,
 						latCenter,lonCenter,
 						deliveryRangeMin,
@@ -310,6 +311,65 @@ public class ItemCategoryResource {
 			}
 			
 	}
+
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/QuerySimple")
+	public Response getItemCategoriesQuerySimple(
+			@QueryParam("ParentID")Integer parentID,@QueryParam("IsDetached")Boolean parentIsNull,
+			@QueryParam("SortBy") String sortBy,
+			@QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset,
+			@QueryParam("metadata_only")Boolean metaonly
+	)
+	{
+
+		final int max_limit = 100;
+
+		if(limit!=null)
+		{
+			if(limit>=max_limit)
+			{
+				limit = max_limit;
+			}
+		}
+		else
+		{
+			limit = 30;
+		}
+
+
+		ItemCategoryEndPoint endPoint = itemCategoryDAO
+				.getItemCategoriesSimple(
+						parentID,parentIsNull,
+						sortBy,limit,offset);
+
+
+		endPoint.setLimit(limit);
+		endPoint.setMax_limit(max_limit);
+		endPoint.setOffset(offset);
+
+//		if(endPoint.getItemCount()==null)
+//		{
+//			endPoint.setItemCount(0);
+//		}
+
+
+//		try {
+//			Thread.sleep(500);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+
+
+
+		//Marker
+		return Response.status(Status.OK)
+				.entity(endPoint)
+				.build();
+	}
+
+
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -360,7 +420,7 @@ public class ItemCategoryResource {
 
 
 		if(metaonly==null || (!metaonly)) {
-			list = itemCategoryDAO.getItemCategories(
+			list = itemCategoryDAO.getItemCategoriesJoinRecursive(
 					shopID, parentID, parentIsNull,
 					latCenter, lonCenter,
 					deliveryRangeMin,
@@ -375,6 +435,16 @@ public class ItemCategoryResource {
 //		GenericEntity<List<ItemCategory>> listEntity = new GenericEntity<List<ItemCategory>>(list){
 //
 //		};
+
+
+//		try {
+//			Thread.sleep(500);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+
+
+
 
 
 		return Response.status(Status.OK)
