@@ -317,7 +317,9 @@ public class ItemCategoryResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/QuerySimple")
 	public Response getItemCategoriesQuerySimple(
-			@QueryParam("ParentID")Integer parentID,@QueryParam("IsDetached")Boolean parentIsNull,
+			@QueryParam("ParentID")Integer parentID,
+			@QueryParam("IsDetached")Boolean parentIsNull,
+			@QueryParam("SearchString") String searchString,
 			@QueryParam("SortBy") String sortBy,
 			@QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset,
 			@QueryParam("metadata_only")Boolean metaonly
@@ -341,7 +343,9 @@ public class ItemCategoryResource {
 
 		ItemCategoryEndPoint endPoint = itemCategoryDAO
 				.getItemCategoriesSimple(
-						parentID,parentIsNull,
+						parentID,
+						parentIsNull,
+						searchString,
 						sortBy,limit,offset);
 
 

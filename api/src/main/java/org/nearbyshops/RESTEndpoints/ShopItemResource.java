@@ -330,6 +330,7 @@ public class ShopItemResource {
 				isFilledCart,
 				isOutOfStock,
 				priceEqualsZero,
+				null,
 				sortBy,
 				limit,offset);
 
@@ -389,9 +390,11 @@ public class ShopItemResource {
 			@QueryParam("EndUserID") Integer endUserID,@QueryParam("IsFilledCart") Boolean isFilledCart,
 			@QueryParam("IsOutOfStock") Boolean isOutOfStock,@QueryParam("PriceEqualsZero")Boolean priceEqualsZero,
 			@QueryParam("MinPrice")Integer minPrice,@QueryParam("MaxPrice")Integer maxPrice,
+			@QueryParam("SearchString") String searchString,
 			@QueryParam("SortBy") String sortBy,
 			@QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset,
-			@QueryParam("metadata_only")Boolean metaonly
+			@QueryParam("metadata_only")Boolean metaonly,
+			@QueryParam("GetExtras")Boolean getExtras
 	)
 	{
 
@@ -422,27 +425,43 @@ public class ShopItemResource {
 		ShopItemEndPoint endPoint;
 
 
-		if(ShopID!=null && itemID == null)
+		if(getExtras!=null && getExtras)
 		{
-			endPoint = shopItemByShopDAO.getEndpointMetadata(
-					ItemCategoryID,
-					ShopID,
-					latCenter,lonCenter,
-					deliveryRangeMin,deliveryRangeMax,
-					proximity,endUserID,
-					isFilledCart,isOutOfStock,priceEqualsZero
-			);
-		}
-		else if(itemID !=null && ShopID==null)
-		{
-			endPoint = shopItemByItemDAO.getEndpointMetadata(
-					ItemCategoryID,
-					itemID,
-					latCenter,lonCenter,
-					deliveryRangeMin,deliveryRangeMax,
-					proximity,endUserID,
-					isFilledCart,isOutOfStock,priceEqualsZero
-			);
+
+			if(ShopID!=null && itemID == null)
+			{
+				endPoint = shopItemByShopDAO.getEndpointMetadata(
+						ItemCategoryID,
+						ShopID,
+						latCenter,lonCenter,
+						deliveryRangeMin,deliveryRangeMax,
+						proximity,endUserID,
+						isFilledCart,isOutOfStock,priceEqualsZero
+				);
+			}
+			else if(itemID !=null && ShopID==null)
+			{
+				endPoint = shopItemByItemDAO.getEndpointMetadata(
+						ItemCategoryID,
+						itemID,
+						latCenter,lonCenter,
+						deliveryRangeMin,deliveryRangeMax,
+						proximity,endUserID,
+						isFilledCart,isOutOfStock,priceEqualsZero
+				);
+
+			}
+			else
+			{
+				endPoint = shopItemDAO.getEndpointMetadata(
+						ItemCategoryID,
+						ShopID,itemID,
+						latCenter,lonCenter,
+						deliveryRangeMin,deliveryRangeMax,
+						proximity,endUserID,
+						isFilledCart,isOutOfStock,priceEqualsZero,
+						searchString);
+			}
 
 		}
 		else
@@ -453,8 +472,10 @@ public class ShopItemResource {
 					latCenter,lonCenter,
 					deliveryRangeMin,deliveryRangeMax,
 					proximity,endUserID,
-					isFilledCart,isOutOfStock,priceEqualsZero);
+					isFilledCart,isOutOfStock,priceEqualsZero,
+					searchString);
 		}
+
 
 
 
@@ -486,42 +507,64 @@ public class ShopItemResource {
 		if(metaonly==null || (!metaonly)) {
 
 
-			if(ShopID!=null && itemID == null)
+
+			if(getExtras!=null && getExtras)
 			{
 
-				shopItemsList = shopItemByShopDAO.getShopItems(
-						ItemCategoryID,
-						ShopID,
-						latCenter, lonCenter,
-						deliveryRangeMin,deliveryRangeMax,
-						proximity, endUserID,
-						isFilledCart,
-						isOutOfStock,
-						priceEqualsZero,
-						sortBy,
-						limit,offset
-				);
-			}
-			else if(itemID !=null && ShopID==null)
-			{
+				if(ShopID!=null && itemID == null)
+				{
 
-				shopItemsList = shopItemByItemDAO.getShopItems(
-						ItemCategoryID,
-						itemID,
-						latCenter, lonCenter,
-						deliveryRangeMin,deliveryRangeMax,
-						proximity, endUserID,
-						isFilledCart,
-						isOutOfStock,
-						priceEqualsZero,
-						sortBy,
-						limit,offset
-				);
+					shopItemsList = shopItemByShopDAO.getShopItems(
+							ItemCategoryID,
+							ShopID,
+							latCenter, lonCenter,
+							deliveryRangeMin,deliveryRangeMax,
+							proximity, endUserID,
+							isFilledCart,
+							isOutOfStock,
+							priceEqualsZero,
+							sortBy,
+							limit,offset
+					);
+				}
+				else if(itemID !=null && ShopID==null)
+				{
+
+					shopItemsList = shopItemByItemDAO.getShopItems(
+							ItemCategoryID,
+							itemID,
+							latCenter, lonCenter,
+							deliveryRangeMin,deliveryRangeMax,
+							proximity, endUserID,
+							isFilledCart,
+							isOutOfStock,
+							priceEqualsZero,
+							sortBy,
+							limit,offset
+					);
+
+				}
+				else
+				{
+
+					shopItemsList = shopItemDAO.getShopItems(
+							ItemCategoryID,
+							ShopID, itemID,
+							latCenter, lonCenter,
+							deliveryRangeMin,deliveryRangeMax,
+							proximity, endUserID,
+							isFilledCart,
+							isOutOfStock,
+							priceEqualsZero,
+							searchString,
+							sortBy,
+							limit,offset);
+
+				}
 
 			}
 			else
 			{
-
 				shopItemsList = shopItemDAO.getShopItems(
 						ItemCategoryID,
 						ShopID, itemID,
@@ -531,10 +574,12 @@ public class ShopItemResource {
 						isFilledCart,
 						isOutOfStock,
 						priceEqualsZero,
+						searchString,
 						sortBy,
 						limit,offset);
 
 			}
+
 
 
 

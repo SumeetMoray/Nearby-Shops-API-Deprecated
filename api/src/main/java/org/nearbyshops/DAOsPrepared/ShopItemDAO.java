@@ -5,7 +5,6 @@ import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.JDBCContract;
 import org.nearbyshops.Model.*;
 import org.nearbyshops.ModelEndPoints.ShopItemEndPoint;
-import org.nearbyshops.Utility.GeoLocation;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -404,11 +403,11 @@ public class ShopItemDAO {
 
 
 
-	GeoLocation center;
-
-	GeoLocation[] minMaxArray;
-	GeoLocation pointOne;
-	GeoLocation pointTwo;
+//	GeoLocation center;
+//
+//	GeoLocation[] minMaxArray;
+//	GeoLocation pointOne;
+//	GeoLocation pointTwo;
 
 
 
@@ -420,6 +419,7 @@ public ArrayList<ShopItem> getShopItems(
 											Double proximity,
 											Integer endUserID, Boolean isFilledCart,
 											Boolean isOutOfStock, Boolean priceEqualsZero,
+											String searchString,
 											String sortBy,
 											Integer limit, Integer offset
 
@@ -433,7 +433,7 @@ public ArrayList<ShopItem> getShopItems(
 		
 		
 		
-		String queryNormal = "SELECT * FROM " + ShopItem.TABLE_NAME;
+//		String queryNormal = "SELECT * FROM " + ShopItem.TABLE_NAME;
 
 
 			/*+ "6371 * acos(cos( radians("
@@ -507,14 +507,26 @@ public ArrayList<ShopItem> getShopItems(
 					+ ShopItem.SHOP_ID + " = " + shopID;
 
 
-			queryNormal = queryNormal + " WHERE "
-						+ ShopItem.SHOP_ID + " = " + shopID;
+//			queryNormal = queryNormal + " WHERE "
+//						+ ShopItem.SHOP_ID + " = " + shopID;
 
 			isFirst = false;
 		
 	}
-	
-	
+
+
+
+	if(searchString !=null)
+	{
+		String queryPartSearch = " ( " +Item.TABLE_NAME + "." + Item.ITEM_DESC +" ilike '%" + searchString + "%'"
+				+ " or " + Item.TABLE_NAME + "." + Item.ITEM_DESCRIPTION_LONG + " ilike '%" + searchString + "%'"
+				+ " or " + Item.TABLE_NAME + "." + Item.ITEM_NAME + " ilike '%" + searchString + "%'" + ") ";
+
+		queryJoin = queryJoin + " AND " + queryPartSearch;
+	}
+
+
+
 	if(itemID !=null)
 	{	
 	
@@ -524,18 +536,18 @@ public ArrayList<ShopItem> getShopItems(
 					+ ShopItem.ITEM_ID + " = " + itemID;
 
 
-		if(isFirst)
-		{
-			queryNormal = queryNormal + " WHERE "
-					+ ShopItem.ITEM_ID + " = " + itemID;
-
-			isFirst = false;
-
-		}else
-		{
-			queryNormal = queryNormal + " AND "
-					+ ShopItem.ITEM_ID + " = " + itemID;
-		}
+//		if(isFirst)
+//		{
+//			queryNormal = queryNormal + " WHERE "
+//					+ ShopItem.ITEM_ID + " = " + itemID;
+//
+//			isFirst = false;
+//
+//		}else
+//		{
+//			queryNormal = queryNormal + " AND "
+//					+ ShopItem.ITEM_ID + " = " + itemID;
+//		}
 
 	}
 
@@ -549,18 +561,18 @@ public ArrayList<ShopItem> getShopItems(
 				+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
 
 
-		if(isFirst)
-		{
-			queryNormal = queryNormal + " WHERE "
-					+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
-
-			isFirst = false;
-
-		}else
-		{
-			queryNormal = queryNormal + " AND "
-					+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
-		}
+//		if(isFirst)
+//		{
+//			queryNormal = queryNormal + " WHERE "
+//					+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
+//
+//			isFirst = false;
+//
+//		}else
+//		{
+//			queryNormal = queryNormal + " AND "
+//					+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
+//		}
 
 	}
 
@@ -572,19 +584,19 @@ public ArrayList<ShopItem> getShopItems(
 			queryJoin = queryJoin + " AND "
 					+ ShopItem.TABLE_NAME  + "." + ShopItem.ITEM_PRICE + " = " + 0;
 
-			if(isFirst)
-			{
-				queryNormal = queryNormal + " WHERE "
-						+ ShopItem.ITEM_PRICE + " = " + 0;
-
-				isFirst = false;
-
-			}else
-			{
-				queryNormal = queryNormal + " AND "
-						+ ShopItem.ITEM_PRICE + " = " + 0;
-
-			}
+//			if(isFirst)
+//			{
+//				queryNormal = queryNormal + " WHERE "
+//						+ ShopItem.ITEM_PRICE + " = " + 0;
+//
+//				isFirst = false;
+//
+//			}else
+//			{
+//				queryNormal = queryNormal + " AND "
+//						+ ShopItem.ITEM_PRICE + " = " + 0;
+//
+//			}
 
 		}
 
@@ -598,20 +610,20 @@ public ArrayList<ShopItem> getShopItems(
 			queryJoin = queryJoin + " AND "
 					+ ShopItem.TABLE_NAME  + "." + ShopItem.AVAILABLE_ITEM_QUANTITY + " = " + 0;
 
-			if(isFirst)
-			{
-				queryNormal = queryNormal + " WHERE "
-						+ ShopItem.AVAILABLE_ITEM_QUANTITY + " = " + 0;
-
-				isFirst = false;
-
-			}else
-			{
-				queryNormal = queryNormal + " AND "
-						+ ShopItem.AVAILABLE_ITEM_QUANTITY + " = " + 0;
-
-			}
-
+//			if(isFirst)
+//			{
+//				queryNormal = queryNormal + " WHERE "
+//						+ ShopItem.AVAILABLE_ITEM_QUANTITY + " = " + 0;
+//
+//				isFirst = false;
+//
+//			}else
+//			{
+//				queryNormal = queryNormal + " AND "
+//						+ ShopItem.AVAILABLE_ITEM_QUANTITY + " = " + 0;
+//
+//			}
+//
 		}
 
 	}
@@ -680,17 +692,17 @@ public ArrayList<ShopItem> getShopItems(
 
 
 
-		if(isFirst)
-		{
-			queryNormal = queryNormal + " WHERE ";
-
-			// reset the flag
-			isFirst = false;
-
-		}else
-		{
-			queryNormal = queryNormal + " AND ";
-		}
+//		if(isFirst)
+//		{
+//			queryNormal = queryNormal + " WHERE ";
+//
+//			 reset the flag
+//			isFirst = false;
+//
+//		}else
+//		{
+//			queryNormal = queryNormal + " AND ";
+//		}
 
 
 //		queryNormal = queryNormal + queryPartlatLonCenter;
@@ -716,17 +728,17 @@ public ArrayList<ShopItem> getShopItems(
 
 
 
-		if(isFirst)
-		{
-			queryNormal = queryNormal + " WHERE ";
-
-			// reset the flag
-			isFirst = false;
-
-		}else
-		{
-			queryNormal = queryNormal + " AND ";
-		}
+//		if(isFirst)
+//		{
+//			queryNormal = queryNormal + " WHERE ";
+//
+//			 reset the flag
+//			isFirst = false;
+//
+//		}else
+//		{
+//			queryNormal = queryNormal + " AND ";
+//		}
 
 
 //		queryNormal = queryNormal + queryPartDeliveryRange;
@@ -809,17 +821,17 @@ public ArrayList<ShopItem> getShopItems(
 				+ proximity ;
 
 
-		if(isFirst)
-		{
-			queryNormal = queryNormal + " WHERE ";
+//		if(isFirst)
+//		{
+//			queryNormal = queryNormal + " WHERE ";
 
 			// reset the flag
-			isFirst = false;
-
-		}else
-		{
-			queryNormal = queryNormal + " AND ";
-		}
+//			isFirst = false;
+//
+//		}else
+//		{
+//			queryNormal = queryNormal + " AND ";
+//		}
 
 
 
@@ -838,7 +850,7 @@ public ArrayList<ShopItem> getShopItems(
 		{
 			String queryPartSortBy = " ORDER BY " + sortBy;
 
-			queryNormal = queryNormal + queryPartSortBy;
+//			queryNormal = queryNormal + queryPartSortBy;
 			queryJoin = queryJoin + queryPartSortBy;
 		}
 	}
@@ -859,7 +871,7 @@ public ArrayList<ShopItem> getShopItems(
 			queryPartLimitOffset = " LIMIT " + limit + " " + " OFFSET " + 0;
 		}
 
-		queryNormal = queryNormal + queryPartLimitOffset;
+//		queryNormal = queryNormal + queryPartLimitOffset;
 		queryJoin = queryJoin + queryPartLimitOffset;
 	}
 
@@ -870,19 +882,21 @@ public ArrayList<ShopItem> getShopItems(
 			 */
 
 
-			if(itemCategoryID!=null || (latCenter!=null && lonCenter!=null))
-			{
+//			if(itemCategoryID!=null || (latCenter!=null && lonCenter!=null))
+//			{
+//
+//				query = queryJoin;
+//
+//				System.out.println("Query Join : "  + queryJoin);
+//
+//			} else
+//			{
+//
+//				query = queryNormal;
+//			}
 
-				query = queryJoin;
 
-		//		System.out.println("Query Join : "  + queryJoin);
-
-			} else
-			{
-
-				query = queryNormal;
-			}
-
+		query = queryJoin;
 
 		
 		
@@ -973,7 +987,8 @@ public ArrayList<ShopItem> getShopItems(
 			Double deliveryRangeMin, Double deliveryRangeMax,
 			Double proximity,
 			Integer endUserID, Boolean isFilledCart,
-			Boolean isOutOfStock, Boolean priceEqualsZero
+			Boolean isOutOfStock, Boolean priceEqualsZero,
+			String searchString
 
 	)
 	{
@@ -986,10 +1001,10 @@ public ArrayList<ShopItem> getShopItems(
 
 
 
-		String queryNormal = "SELECT " +
-								"count(*) as item_count" +
-								" FROM " + ShopItem.TABLE_NAME;
-
+//		String queryNormal = "SELECT " +
+//								"count(*) as item_count" +
+//								" FROM " + ShopItem.TABLE_NAME;
+//
 
 
 
@@ -1053,12 +1068,25 @@ public ArrayList<ShopItem> getShopItems(
 					+ ShopItem.SHOP_ID + " = " + shopID;
 
 
-			queryNormal = queryNormal + " WHERE "
-					+ ShopItem.SHOP_ID + " = " + shopID;
+//			queryNormal = queryNormal + " WHERE "
+//					+ ShopItem.SHOP_ID + " = " + shopID;
 
 			isFirst = false;
 
 		}
+
+
+
+		if(searchString !=null)
+		{
+			String queryPartSearch = " ( " +Item.TABLE_NAME + "." + Item.ITEM_DESC +" ilike '%" + searchString + "%'"
+					+ " or " + Item.TABLE_NAME + "." + Item.ITEM_DESCRIPTION_LONG + " ilike '%" + searchString + "%'"
+					+ " or " + Item.TABLE_NAME + "." + Item.ITEM_NAME + " ilike '%" + searchString + "%'" + ") ";
+
+
+			queryJoin = queryJoin + " AND " + queryPartSearch;
+		}
+
 
 
 		if(itemID !=null)
@@ -1070,18 +1098,18 @@ public ArrayList<ShopItem> getShopItems(
 					+ ShopItem.ITEM_ID + " = " + itemID;
 
 
-			if(isFirst)
-			{
-				queryNormal = queryNormal + " WHERE "
-						+ ShopItem.ITEM_ID + " = " + itemID;
-
-				isFirst = false;
-
-			}else
-			{
-				queryNormal = queryNormal + " AND "
-						+ ShopItem.ITEM_ID + " = " + itemID;
-			}
+//			if(isFirst)
+//			{
+//				queryNormal = queryNormal + " WHERE "
+//						+ ShopItem.ITEM_ID + " = " + itemID;
+//
+//				isFirst = false;
+//
+//			}else
+//			{
+//				queryNormal = queryNormal + " AND "
+//						+ ShopItem.ITEM_ID + " = " + itemID;
+//			}
 
 		}
 
@@ -1095,19 +1123,19 @@ public ArrayList<ShopItem> getShopItems(
 					+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
 
 
-			if(isFirst)
-			{
-				queryNormal = queryNormal + " WHERE "
-						+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
-
-				isFirst = false;
-
-			}else
-			{
-				queryNormal = queryNormal + " AND "
-						+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
-			}
-
+//			if(isFirst)
+//			{
+//				queryNormal = queryNormal + " WHERE "
+//						+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
+//
+//				isFirst = false;
+//
+//			}else
+//			{
+//				queryNormal = queryNormal + " AND "
+//						+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
+//			}
+//
 		}
 
 
@@ -1118,20 +1146,20 @@ public ArrayList<ShopItem> getShopItems(
 				queryJoin = queryJoin + " AND "
 						+ ShopItem.TABLE_NAME  + "." + ShopItem.ITEM_PRICE + " = " + 0;
 
-				if(isFirst)
-				{
-					queryNormal = queryNormal + " WHERE "
-							+ ShopItem.ITEM_PRICE + " = " + 0;
-
-					isFirst = false;
-
-				}else
-				{
-					queryNormal = queryNormal + " AND "
-							+ ShopItem.ITEM_PRICE + " = " + 0;
-
-				}
-
+//				if(isFirst)
+//				{
+//					queryNormal = queryNormal + " WHERE "
+//							+ ShopItem.ITEM_PRICE + " = " + 0;
+//
+//					isFirst = false;
+//
+//				}else
+//				{
+//					queryNormal = queryNormal + " AND "
+//							+ ShopItem.ITEM_PRICE + " = " + 0;
+//
+//				}
+//
 			}
 
 		}
@@ -1144,19 +1172,19 @@ public ArrayList<ShopItem> getShopItems(
 				queryJoin = queryJoin + " AND "
 						+ ShopItem.TABLE_NAME  + "." + ShopItem.AVAILABLE_ITEM_QUANTITY + " = " + 0;
 
-				if(isFirst)
-				{
-					queryNormal = queryNormal + " WHERE "
-							+ ShopItem.AVAILABLE_ITEM_QUANTITY + " = " + 0;
-
-					isFirst = false;
-
-				}else
-				{
-					queryNormal = queryNormal + " AND "
-							+ ShopItem.AVAILABLE_ITEM_QUANTITY + " = " + 0;
-
-				}
+//				if(isFirst)
+//				{
+//					queryNormal = queryNormal + " WHERE "
+//							+ ShopItem.AVAILABLE_ITEM_QUANTITY + " = " + 0;
+//
+//					isFirst = false;
+//
+//				}else
+//				{
+//					queryNormal = queryNormal + " AND "
+//							+ ShopItem.AVAILABLE_ITEM_QUANTITY + " = " + 0;
+//
+//				}
 
 			}
 
@@ -1200,17 +1228,17 @@ public ArrayList<ShopItem> getShopItems(
 
 
 
-			if(isFirst)
-			{
-				queryNormal = queryNormal + " WHERE ";
-
-				// reset the flag
-				isFirst = false;
-
-			}else
-			{
-				queryNormal = queryNormal + " AND ";
-			}
+//			if(isFirst)
+//			{
+//				queryNormal = queryNormal + " WHERE ";
+//
+//				 reset the flag
+//				isFirst = false;
+//
+//			}else
+//			{
+//				queryNormal = queryNormal + " AND ";
+//			}
 
 
 //		queryNormal = queryNormal + queryPartlatLonCenter;
@@ -1237,17 +1265,17 @@ public ArrayList<ShopItem> getShopItems(
 
 
 
-			if(isFirst)
-			{
-				queryNormal = queryNormal + " WHERE ";
+//			if(isFirst)
+//			{
+//				queryNormal = queryNormal + " WHERE ";
 
 				// reset the flag
-				isFirst = false;
+//				isFirst = false;
 
-			}else
-			{
-				queryNormal = queryNormal + " AND ";
-			}
+//			}else
+//			{
+//				queryNormal = queryNormal + " AND ";
+//			}
 
 
 //		queryNormal = queryNormal + queryPartDeliveryRange;
@@ -1289,17 +1317,17 @@ public ArrayList<ShopItem> getShopItems(
 					+ proximity ;
 
 
-			if(isFirst)
-			{
-				queryNormal = queryNormal + " WHERE ";
+//			if(isFirst)
+//			{
+//				queryNormal = queryNormal + " WHERE ";
 
 				// reset the flag
-				isFirst = false;
+//				isFirst = false;
 
-			}else
-			{
-				queryNormal = queryNormal + " AND ";
-			}
+//			}else
+//			{
+//				queryNormal = queryNormal + " AND ";
+//			}
 
 
 
@@ -1330,20 +1358,22 @@ public ArrayList<ShopItem> getShopItems(
 
 
 
-		if(itemCategoryID!=null || (latCenter!=null && lonCenter!=null))
-		{
-
-			query = queryJoin;
+//		if(itemCategoryID!=null || (latCenter!=null && lonCenter!=null))
+//		{
+//
+//			query = queryJoin;
 
 //			System.out.println("Query Join : "  + queryJoin);
 
 
-		} else
-		{
+//		} else
+//		{
+//
+//			query = queryNormal;
+//		}
 
-			query = queryNormal;
-		}
 
+		query = queryJoin;
 
 
 

@@ -512,7 +512,9 @@ public class ItemCategoryDAO {
 
 
 	public ItemCategoryEndPoint getItemCategoriesSimple(
-			Integer parentID, Boolean parentIsNull,
+			Integer parentID,
+			Boolean parentIsNull,
+			String searchString,
 			String sortBy,
 			Integer limit, Integer offset)
 	{
@@ -559,6 +561,7 @@ public class ItemCategoryDAO {
 			if(queryNormalFirst)
 			{
 				queryNormal = queryNormal + " WHERE " + queryNormalPart;
+				queryNormalFirst = false;
 
 			}else
 			{
@@ -566,6 +569,27 @@ public class ItemCategoryDAO {
 
 			}
 		}
+
+
+
+		if(searchString !=null)
+		{
+			String queryPartSearch = " ( " +ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT +" ilike '%" + searchString + "%'"
+					+ " or " + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_DESCRIPTION + " ilike '%" + searchString + "%'"
+					+ " or " + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_NAME + " ilike '%" + searchString + "%'" + ") ";
+
+
+			if(queryNormalFirst)
+			{
+				queryNormal = queryNormal + " WHERE " + queryPartSearch;
+				queryNormalFirst = false;
+			}
+			else
+			{
+				queryNormal = queryNormal + " AND " + queryPartSearch;
+			}
+		}
+
 
 
 

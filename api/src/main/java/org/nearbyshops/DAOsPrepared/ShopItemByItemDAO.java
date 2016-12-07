@@ -39,7 +39,7 @@ public class ShopItemByItemDAO {
 
 
 
-			String queryNormal = "SELECT * FROM " + ShopItem.TABLE_NAME;
+//			String queryNormal = "SELECT * FROM " + ShopItem.TABLE_NAME;
 
 
 
@@ -138,15 +138,15 @@ public class ShopItemByItemDAO {
 
 			if(isFirst)
 			{
-				queryNormal = queryNormal + " WHERE "
-						+ ShopItem.ITEM_ID + " = " + itemID;
+//				queryNormal = queryNormal + " WHERE "
+//						+ ShopItem.ITEM_ID + " = " + itemID;
 
 				isFirst = false;
 
 			}else
 			{
-				queryNormal = queryNormal + " AND "
-						+ ShopItem.ITEM_ID + " = " + itemID;
+//				queryNormal = queryNormal + " AND "
+//						+ ShopItem.ITEM_ID + " = " + itemID;
 			}
 
 		}
@@ -161,18 +161,18 @@ public class ShopItemByItemDAO {
 					+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
 
 
-			if(isFirst)
-			{
-				queryNormal = queryNormal + " WHERE "
-						+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
-
-				isFirst = false;
-
-			}else
-			{
-				queryNormal = queryNormal + " AND "
-						+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
-			}
+//			if(isFirst)
+//			{
+//				queryNormal = queryNormal + " WHERE "
+//						+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
+//
+//				isFirst = false;
+//
+//			}else
+//			{
+//				queryNormal = queryNormal + " AND "
+//						+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
+//			}
 
 		}
 
@@ -184,19 +184,19 @@ public class ShopItemByItemDAO {
 				queryJoin = queryJoin + " AND "
 						+ ShopItem.TABLE_NAME  + "." + ShopItem.ITEM_PRICE + " = " + 0;
 
-				if(isFirst)
-				{
-					queryNormal = queryNormal + " WHERE "
-							+ ShopItem.ITEM_PRICE + " = " + 0;
-
-					isFirst = false;
-
-				}else
-				{
-					queryNormal = queryNormal + " AND "
-							+ ShopItem.ITEM_PRICE + " = " + 0;
-
-				}
+//				if(isFirst)
+//				{
+//					queryNormal = queryNormal + " WHERE "
+//							+ ShopItem.ITEM_PRICE + " = " + 0;
+//
+//					isFirst = false;
+//
+//				}else
+//				{
+//					queryNormal = queryNormal + " AND "
+//							+ ShopItem.ITEM_PRICE + " = " + 0;
+//
+//				}
 
 			}
 
@@ -210,19 +210,19 @@ public class ShopItemByItemDAO {
 				queryJoin = queryJoin + " AND "
 						+ ShopItem.TABLE_NAME  + "." + ShopItem.AVAILABLE_ITEM_QUANTITY + " = " + 0;
 
-				if(isFirst)
-				{
-					queryNormal = queryNormal + " WHERE "
-							+ ShopItem.AVAILABLE_ITEM_QUANTITY + " = " + 0;
-
-					isFirst = false;
-
-				}else
-				{
-					queryNormal = queryNormal + " AND "
-							+ ShopItem.AVAILABLE_ITEM_QUANTITY + " = " + 0;
-
-				}
+//				if(isFirst)
+//				{
+//					queryNormal = queryNormal + " WHERE "
+//							+ ShopItem.AVAILABLE_ITEM_QUANTITY + " = " + 0;
+//
+//					isFirst = false;
+//
+//				}else
+//				{
+//					queryNormal = queryNormal + " AND "
+//							+ ShopItem.AVAILABLE_ITEM_QUANTITY + " = " + 0;
+//
+//				}
 
 			}
 
@@ -292,17 +292,17 @@ public class ShopItemByItemDAO {
 
 
 
-			if(isFirst)
-			{
-				queryNormal = queryNormal + " WHERE ";
-
-				// reset the flag
-				isFirst = false;
-
-			}else
-			{
-				queryNormal = queryNormal + " AND ";
-			}
+//			if(isFirst)
+//			{
+//				queryNormal = queryNormal + " WHERE ";
+//
+//				 reset the flag
+//				isFirst = false;
+//
+//			}else
+//			{
+//				queryNormal = queryNormal + " AND ";
+//			}
 
 
 	//		queryNormal = queryNormal + queryPartlatLonCenter;
@@ -328,17 +328,17 @@ public class ShopItemByItemDAO {
 
 
 
-			if(isFirst)
-			{
-				queryNormal = queryNormal + " WHERE ";
-
-				// reset the flag
-				isFirst = false;
-
-			}else
-			{
-				queryNormal = queryNormal + " AND ";
-			}
+//			if(isFirst)
+//			{
+//				queryNormal = queryNormal + " WHERE ";
+//
+//				 reset the flag
+//				isFirst = false;
+//
+//			}else
+//			{
+//				queryNormal = queryNormal + " AND ";
+//			}
 
 
 	//		queryNormal = queryNormal + queryPartDeliveryRange;
@@ -385,17 +385,17 @@ public class ShopItemByItemDAO {
 					+ proximity ;
 
 
-			if(isFirst)
-			{
-				queryNormal = queryNormal + " WHERE ";
+//			if(isFirst)
+//			{
+//				queryNormal = queryNormal + " WHERE ";
 
 				// reset the flag
-				isFirst = false;
+//				isFirst = false;
 
-			}else
-			{
-				queryNormal = queryNormal + " AND ";
-			}
+//			}else
+//			{
+//				queryNormal = queryNormal + " AND ";
+//			}
 
 
 
@@ -465,7 +465,7 @@ public class ShopItemByItemDAO {
 			{
 				String queryPartSortBy = " ORDER BY " + sortBy;
 
-				queryNormal = queryNormal + queryPartSortBy;
+//				queryNormal = queryNormal + queryPartSortBy;
 				queryJoin = queryJoin + queryPartSortBy;
 			}
 		}
@@ -486,7 +486,7 @@ public class ShopItemByItemDAO {
 				queryPartLimitOffset = " LIMIT " + limit + " " + " OFFSET " + 0;
 			}
 
-			queryNormal = queryNormal + queryPartLimitOffset;
+//			queryNormal = queryNormal + queryPartLimitOffset;
 			queryJoin = queryJoin + queryPartLimitOffset;
 		}
 
@@ -642,9 +642,9 @@ public class ShopItemByItemDAO {
 
 
 
-		String queryNormal = "SELECT " +
-								"count(*) as item_count" +
-								" FROM " + ShopItem.TABLE_NAME;
+//		String queryNormal = "SELECT " +
+//								"count(*) as item_count" +
+//								" FROM " + ShopItem.TABLE_NAME;
 
 
 
@@ -712,18 +712,18 @@ public class ShopItemByItemDAO {
 					+ ShopItem.ITEM_ID + " = " + itemID;
 
 
-			if(isFirst)
-			{
-				queryNormal = queryNormal + " WHERE "
-						+ ShopItem.ITEM_ID + " = " + itemID;
+//			if(isFirst)
+//			{
+//				queryNormal = queryNormal + " WHERE "
+//						+ ShopItem.ITEM_ID + " = " + itemID;
 
-				isFirst = false;
+//				isFirst = false;
 
-			}else
-			{
-				queryNormal = queryNormal + " AND "
-						+ ShopItem.ITEM_ID + " = " + itemID;
-			}
+//			}else
+//			{
+//				queryNormal = queryNormal + " AND "
+//						+ ShopItem.ITEM_ID + " = " + itemID;
+//			}
 
 		}
 
@@ -737,18 +737,18 @@ public class ShopItemByItemDAO {
 					+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
 
 
-			if(isFirst)
-			{
-				queryNormal = queryNormal + " WHERE "
-						+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
-
-				isFirst = false;
-
-			}else
-			{
-				queryNormal = queryNormal + " AND "
-						+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
-			}
+//			if(isFirst)
+//			{
+//				queryNormal = queryNormal + " WHERE "
+//						+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
+//
+//				isFirst = false;
+//
+//			}else
+//			{
+//				queryNormal = queryNormal + " AND "
+//						+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
+//			}
 
 		}
 
@@ -760,19 +760,19 @@ public class ShopItemByItemDAO {
 				queryJoin = queryJoin + " AND "
 						+ ShopItem.TABLE_NAME  + "." + ShopItem.ITEM_PRICE + " = " + 0;
 
-				if(isFirst)
-				{
-					queryNormal = queryNormal + " WHERE "
-							+ ShopItem.ITEM_PRICE + " = " + 0;
-
-					isFirst = false;
-
-				}else
-				{
-					queryNormal = queryNormal + " AND "
-							+ ShopItem.ITEM_PRICE + " = " + 0;
-
-				}
+//				if(isFirst)
+//				{
+//					queryNormal = queryNormal + " WHERE "
+//							+ ShopItem.ITEM_PRICE + " = " + 0;
+//
+//					isFirst = false;
+//
+//				}else
+//				{
+//					queryNormal = queryNormal + " AND "
+//							+ ShopItem.ITEM_PRICE + " = " + 0;
+//
+//				}
 
 			}
 
@@ -786,19 +786,19 @@ public class ShopItemByItemDAO {
 				queryJoin = queryJoin + " AND "
 						+ ShopItem.TABLE_NAME  + "." + ShopItem.AVAILABLE_ITEM_QUANTITY + " = " + 0;
 
-				if(isFirst)
-				{
-					queryNormal = queryNormal + " WHERE "
-							+ ShopItem.AVAILABLE_ITEM_QUANTITY + " = " + 0;
-
-					isFirst = false;
-
-				}else
-				{
-					queryNormal = queryNormal + " AND "
-							+ ShopItem.AVAILABLE_ITEM_QUANTITY + " = " + 0;
-
-				}
+//				if(isFirst)
+//				{
+//					queryNormal = queryNormal + " WHERE "
+//							+ ShopItem.AVAILABLE_ITEM_QUANTITY + " = " + 0;
+//
+//					isFirst = false;
+//
+//				}else
+//				{
+//					queryNormal = queryNormal + " AND "
+//							+ ShopItem.AVAILABLE_ITEM_QUANTITY + " = " + 0;
+//
+//				}
 
 			}
 
@@ -842,17 +842,17 @@ public class ShopItemByItemDAO {
 
 
 
-			if(isFirst)
-			{
-				queryNormal = queryNormal + " WHERE ";
-
-				// reset the flag
-				isFirst = false;
-
-			}else
-			{
-				queryNormal = queryNormal + " AND ";
-			}
+//			if(isFirst)
+//			{
+//				queryNormal = queryNormal + " WHERE ";
+//
+//				 reset the flag
+//				isFirst = false;
+//
+//			}else
+//			{
+//				queryNormal = queryNormal + " AND ";
+//			}
 
 
 //		queryNormal = queryNormal + queryPartlatLonCenter;
@@ -879,17 +879,17 @@ public class ShopItemByItemDAO {
 
 
 
-			if(isFirst)
-			{
-				queryNormal = queryNormal + " WHERE ";
-
+//			if(isFirst)
+//			{
+//				queryNormal = queryNormal + " WHERE ";
+//
 				// reset the flag
-				isFirst = false;
-
-			}else
-			{
-				queryNormal = queryNormal + " AND ";
-			}
+//				isFirst = false;
+//
+//			}else
+//			{
+//				queryNormal = queryNormal + " AND ";
+//			}
 
 
 //		queryNormal = queryNormal + queryPartDeliveryRange;
@@ -931,17 +931,17 @@ public class ShopItemByItemDAO {
 					+ proximity ;
 
 
-			if(isFirst)
-			{
-				queryNormal = queryNormal + " WHERE ";
+//			if(isFirst)
+//			{
+//				queryNormal = queryNormal + " WHERE ";
 
 				// reset the flag
-				isFirst = false;
+//				isFirst = false;
 
-			}else
-			{
-				queryNormal = queryNormal + " AND ";
-			}
+//			}else
+//			{
+//				queryNormal = queryNormal + " AND ";
+//			}
 
 
 
@@ -972,21 +972,23 @@ public class ShopItemByItemDAO {
 
 
 
-		if(itemCategoryID!=null || (latCenter!=null && lonCenter!=null))
-		{
+//		if(itemCategoryID!=null || (latCenter!=null && lonCenter!=null))
+//		{
 
-			query = queryJoin;
+//			query = queryJoin;
 
 //			System.out.println("Query Join : "  + queryJoin);
 
 
-		} else
-		{
+//		} else
+//		{
+//
+//			query = queryNormal;
+//		}
 
-			query = queryNormal;
-		}
 
 
+		query = queryJoin;
 
 
 		ShopItemEndPoint endPoint = new ShopItemEndPoint();

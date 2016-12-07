@@ -4,6 +4,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ItemCategory;
+import org.nearbyshops.Model.Shop;
 import org.nearbyshops.Model.ShopItem;
 import org.nearbyshops.ModelEndPoints.ItemEndPoint;
 import org.nearbyshops.ModelReviewItem.ItemReview;
@@ -39,6 +40,7 @@ public class ItemDAOJoinOuter {
 	public List<Item> getItems(
 					Integer itemCategoryID,
 					Boolean parentIsNull,
+					String searchString,
 					String sortBy,
 					Integer limit, Integer offset
 	) {
@@ -111,11 +113,32 @@ public class ItemDAOJoinOuter {
 //				queryNormal = queryNormal + " WHERE " + queryNormalPart;
 				queryJoin = queryJoin + " WHERE " + queryNormalPart;
 
+				isfirst = false;
+
 			}else
 			{
 //				queryNormal = queryNormal + " AND " + queryNormalPart;
 				queryJoin = queryJoin + " AND " + queryNormalPart;
 
+			}
+		}
+
+
+		if(searchString !=null)
+		{
+			String queryPartSearch = " ( " +Item.TABLE_NAME + "." + Item.ITEM_DESC +" ilike '%" + searchString + "%'"
+					+ " or " + Item.TABLE_NAME + "." + Item.ITEM_DESCRIPTION_LONG + " ilike '%" + searchString + "%'"
+					+ " or " + Item.TABLE_NAME + "." + Item.ITEM_NAME + " ilike '%" + searchString + "%'" + ") ";
+
+
+			if(isfirst)
+			{
+				queryJoin = queryJoin + " WHERE " + queryPartSearch;
+				isfirst = false;
+			}
+			else
+			{
+				queryJoin = queryJoin + " AND " + queryPartSearch;
 			}
 		}
 
@@ -297,7 +320,7 @@ public class ItemDAOJoinOuter {
 
 	public ItemEndPoint getEndPointMetadata(
 			Integer itemCategoryID,
-			Boolean parentIsNull)
+			Boolean parentIsNull,String searchString)
 	{
 
 
@@ -346,6 +369,7 @@ public class ItemDAOJoinOuter {
 			{
 //				queryNormal = queryNormal + " WHERE " + queryNormalPart;
 				queryJoin = queryJoin + " WHERE " + queryNormalPart;
+				isfirst = false;
 
 			}else
 			{
@@ -354,6 +378,26 @@ public class ItemDAOJoinOuter {
 
 			}
 		}
+
+
+		if(searchString !=null)
+		{
+			String queryPartSearch = " ( " +Item.TABLE_NAME + "." + Item.ITEM_DESC +" ilike '%" + searchString + "%'"
+					+ " or " + Item.TABLE_NAME + "." + Item.ITEM_DESCRIPTION_LONG + " ilike '%" + searchString + "%'"
+					+ " or " + Item.TABLE_NAME + "." + Item.ITEM_NAME + " ilike '%" + searchString + "%'" + ") ";
+
+
+			if(isfirst)
+			{
+				queryJoin = queryJoin + " WHERE " + queryPartSearch;
+				isfirst = false;
+			}
+			else
+			{
+				queryJoin = queryJoin + " AND " + queryPartSearch;
+			}
+		}
+
 
 
 

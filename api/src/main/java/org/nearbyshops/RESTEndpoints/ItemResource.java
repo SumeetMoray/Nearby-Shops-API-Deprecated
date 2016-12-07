@@ -392,6 +392,7 @@ public class ItemResource {
 	public Response getItems(
 			@QueryParam("ItemCategoryID")Integer itemCategoryID,
 			@QueryParam("IsDetached")Boolean parentIsNull,
+			@QueryParam("SearchString") String searchString,
 			@QueryParam("SortBy") String sortBy,
 			@QueryParam("Limit")Integer limit, @QueryParam("Offset")Integer offset,
 			@QueryParam("metadata_only")Boolean metaonly)
@@ -421,7 +422,7 @@ public class ItemResource {
 			set_offset = offset;
 		}
 
-		ItemEndPoint endPoint = itemDAOJoinOuter.getEndPointMetadata(itemCategoryID,parentIsNull);
+		ItemEndPoint endPoint = itemDAOJoinOuter.getEndPointMetadata(itemCategoryID,parentIsNull,searchString);
 
 		endPoint.setLimit(set_limit);
 		endPoint.setMax_limit(max_limit);
@@ -435,7 +436,7 @@ public class ItemResource {
 			list =
 					itemDAOJoinOuter.getItems(
 							itemCategoryID,
-							parentIsNull,
+							parentIsNull,searchString,
 							sortBy,set_limit,set_offset
 					);
 
@@ -504,7 +505,7 @@ public class ItemResource {
 					set_offset = offset;
 				}
 
-				ItemEndPoint endPoint = itemDAOJoinOuter.getEndPointMetadata(itemCategoryID,null);
+				ItemEndPoint endPoint = itemDAOJoinOuter.getEndPointMetadata(itemCategoryID,null,null);
 
 				endPoint.setLimit(set_limit);
 				endPoint.setMax_limit(max_limit);
@@ -517,7 +518,7 @@ public class ItemResource {
 
 					list =
 							itemDAOJoinOuter.getItems(
-									itemCategoryID,null,
+									itemCategoryID,null,null,
 									sortBy,set_limit,set_offset
 							);
 
