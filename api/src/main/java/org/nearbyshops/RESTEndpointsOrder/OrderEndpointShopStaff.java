@@ -69,7 +69,7 @@ public class OrderEndpointShopStaff {
 		if(Globals.accountApproved instanceof ShopAdmin)
 		{
 			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
-			Shop shop = Globals.shopDAO.getShopForShopAdmin(shopAdmin.getShopAdminID());
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
 
 			if(order.getShopID()!=shop.getShopID())
 			{
@@ -125,7 +125,7 @@ public class OrderEndpointShopStaff {
 		if(Globals.accountApproved instanceof ShopAdmin)
 		{
 			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
-			Shop shop = Globals.shopDAO.getShopForShopAdmin(shopAdmin.getShopAdminID());
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
 
 			if(order.getShopID()!=shop.getShopID())
 			{
@@ -185,7 +185,7 @@ public class OrderEndpointShopStaff {
 		if(Globals.accountApproved instanceof ShopAdmin)
 		{
 			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
-			Shop shop = Globals.shopDAO.getShopForShopAdmin(shopAdmin.getShopAdminID());
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
 
 
 			// verify the account of delivery guy being assigned
@@ -271,7 +271,7 @@ public class OrderEndpointShopStaff {
 		if(Globals.accountApproved instanceof ShopAdmin)
 		{
 			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
-			Shop shop = Globals.shopDAO.getShopForShopAdmin(shopAdmin.getShopAdminID());
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
 
 			if(order.getShopID()!=shop.getShopID())
 			{
@@ -330,7 +330,7 @@ public class OrderEndpointShopStaff {
 		if(Globals.accountApproved instanceof ShopAdmin)
 		{
 			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
-			Shop shop = Globals.shopDAO.getShopForShopAdmin(shopAdmin.getShopAdminID());
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
 
 			if(order.getShopID()!=shop.getShopID())
 			{
@@ -390,7 +390,7 @@ public class OrderEndpointShopStaff {
 		if(Globals.accountApproved instanceof ShopAdmin)
 		{
 			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
-			Shop shop = Globals.shopDAO.getShopForShopAdmin(shopAdmin.getShopAdminID());
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
 
 			if(order.getShopID()!=shop.getShopID())
 			{
@@ -453,7 +453,7 @@ public class OrderEndpointShopStaff {
 		if(Globals.accountApproved instanceof ShopAdmin)
 		{
 			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
-			Shop shop = Globals.shopDAO.getShopForShopAdmin(shopAdmin.getShopAdminID());
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
 
 			for(Order orderItem : ordersList)
 			{
@@ -522,7 +522,7 @@ public class OrderEndpointShopStaff {
 		if(Globals.accountApproved instanceof ShopAdmin)
 		{
 			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
-			Shop shop = Globals.shopDAO.getShopForShopAdmin(shopAdmin.getShopAdminID());
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
 
 			if(order.getShopID()!=shop.getShopID())
 			{
@@ -566,7 +566,7 @@ public class OrderEndpointShopStaff {
 		if(Globals.accountApproved instanceof ShopAdmin)
 		{
 			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
-			Shop shop = Globals.shopDAO.getShopForShopAdmin(shopAdmin.getShopAdminID());
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
 
 			if(order.getShopID()!=shop.getShopID())
 			{
@@ -623,7 +623,7 @@ public class OrderEndpointShopStaff {
 		if(Globals.accountApproved instanceof ShopAdmin)
 		{
 			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
-			Shop shop = Globals.shopDAO.getShopForShopAdmin(shopAdmin.getShopAdminID());
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
 
 			if(order.getShopID()!=shop.getShopID())
 			{
@@ -666,6 +666,9 @@ public class OrderEndpointShopStaff {
 
 		return null;
 	}
+
+
+
 
 
 

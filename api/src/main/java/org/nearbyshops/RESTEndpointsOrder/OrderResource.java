@@ -187,6 +187,9 @@ public class OrderResource {
 
 
 
+	//@QueryParam("GetDeliveryAddress")Boolean getDeliveryAddress,
+//	@QueryParam("GetStats")Boolean getStats,
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getOrders(@QueryParam("OrderID")Integer orderID,
@@ -198,9 +201,8 @@ public class OrderResource {
 							  @QueryParam("DeliveryGuyID")Integer deliveryGuyID,
 							  @QueryParam("PaymentsReceived") Boolean paymentsReceived,
 							  @QueryParam("DeliveryReceived") Boolean deliveryReceived,
-							  @QueryParam("GetDeliveryAddress")Boolean getDeliveryAddress,
-							  @QueryParam("GetStats")Boolean getStats,
 							  @QueryParam("latCenter")Double latCenter, @QueryParam("lonCenter")Double lonCenter,
+							  @QueryParam("PendingOrders") Boolean pendingOrders,
 							  @QueryParam("SortBy") String sortBy,
 							  @QueryParam("Limit")Integer limit, @QueryParam("Offset")Integer offset,
 							  @QueryParam("metadata_only")Boolean metaonly)
@@ -237,7 +239,7 @@ public class OrderResource {
 				endUserID,shopID, pickFromShop,
 				homeDeliveryStatus,pickFromShopStatus,
 				deliveryGuyID,
-				paymentsReceived,deliveryReceived,getDeliveryAddress
+				paymentsReceived,deliveryReceived,pendingOrders
 				);
 
 		endPoint.setLimit(set_limit);
@@ -256,7 +258,8 @@ public class OrderResource {
 							deliveryGuyID,
 							paymentsReceived,deliveryReceived,
 							latCenter,lonCenter,
-							sortBy,limit,offset,getDeliveryAddress,getStats);
+							pendingOrders,
+							sortBy,limit,offset);
 
 
 			/*

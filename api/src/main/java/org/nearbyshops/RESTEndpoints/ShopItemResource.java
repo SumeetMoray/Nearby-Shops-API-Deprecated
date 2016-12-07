@@ -3,6 +3,7 @@ package org.nearbyshops.RESTEndpoints;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -17,9 +18,12 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.nearbyshops.DAOsPrepared.*;
+import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
+import org.nearbyshops.Model.Shop;
 import org.nearbyshops.Model.ShopItem;
 import org.nearbyshops.ModelEndPoints.ShopItemEndPoint;
+import org.nearbyshops.ModelRoles.ShopAdmin;
 
 
 @Path("/v1/ShopItem")
@@ -39,14 +43,24 @@ public class ShopItemResource {
 	@PUT
 	@Path("/UpdateBulk")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN})
 	public Response updateShopItemBulk(List<ShopItem> itemList)
 	{
 		int rowCountSum = 0;
 
-		for(ShopItem shopItem : itemList)
+
+		if(Globals.accountApproved instanceof ShopAdmin)
 		{
-			rowCountSum = rowCountSum + shopItemDAO.updateShopItem(shopItem);
+			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
+
+			for(ShopItem shopItem : itemList)
+			{
+				shopItem.setShopID(shop.getShopID());
+				rowCountSum = rowCountSum + shopItemDAO.updateShopItem(shopItem);
+			}
 		}
+
 
 
 		if(rowCountSum ==  itemList.size())
@@ -81,14 +95,24 @@ public class ShopItemResource {
 	@POST
 	@Path("/CreateBulk")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN})
 	public Response createShopItemBulk(List<ShopItem> itemList)
 	{
 		int rowCountSum = 0;
 
-		for(ShopItem shopItem : itemList)
+		if(Globals.accountApproved instanceof ShopAdmin)
 		{
-			rowCountSum = rowCountSum + shopItemDAO.insertShopItem(shopItem);
+			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
+
+			for(ShopItem shopItem : itemList)
+			{
+				shopItem.setShopID(shop.getShopID());
+				rowCountSum = rowCountSum + shopItemDAO.insertShopItem(shopItem);
+			}
 		}
+
+
 
 //		rowCountSum = shopItemDAO.insertShopItemBulk(itemList);
 
@@ -121,10 +145,20 @@ public class ShopItemResource {
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN})
 	public Response saveShopItem(ShopItem shopItem)
 	{
-		int rowCount = shopItemDAO.insertShopItem(shopItem);
-		
+		int rowCount = 0;
+
+		if(Globals.accountApproved instanceof ShopAdmin)
+		{
+			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
+
+			shopItem.setShopID(shop.getShopID());
+			rowCount = shopItemDAO.insertShopItem(shopItem);
+		}
+
 		if(rowCount == 1)
 		{
 
@@ -147,14 +181,20 @@ public class ShopItemResource {
 
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN})
 	public Response updateShopItem(ShopItem shopItem)
 	{
-		//, @QueryParam("ShopID")int ShopID, @QueryParam("ItemID") int itemID
-		
-		//shopItem.setItemID(ShopID);
-		//shopItem.setItemID(itemID);
-		
-		int rowCount = shopItemDAO.updateShopItem(shopItem);
+
+		int rowCount = 0;
+
+		if(Globals.accountApproved instanceof ShopAdmin)
+		{
+			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
+
+			shopItem.setShopID(shop.getShopID());
+			rowCount = shopItemDAO.updateShopItem(shopItem);
+		}
 		
 		if(rowCount == 1)
 		{
@@ -177,9 +217,23 @@ public class ShopItemResource {
 	
 	
 	@DELETE
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN})
 	public Response deleteShopItem(@QueryParam("ShopID")int ShopID, @QueryParam("ItemID") int itemID)
-	{		
-	    int rowCount =	shopItemDAO.deleteShopItem(ShopID, itemID);
+	{
+		int rowCount = 0;
+
+
+		if(Globals.accountApproved instanceof ShopAdmin)
+		{
+			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
+
+			ShopID = shop.getShopID();
+			rowCount =	shopItemDAO.deleteShopItem(ShopID, itemID);
+		}
+
+
+
 		
 		if(rowCount == 1)
 		{
@@ -203,15 +257,25 @@ public class ShopItemResource {
 	@POST
 	@Path("/DeleteBulk")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN})
 	public Response deleteShopItemBulk(List<ShopItem> itemList)
 	{
 		int rowCountSum = 0;
 
-		for(ShopItem shopItem : itemList)
+		if(Globals.accountApproved instanceof ShopAdmin)
 		{
-			rowCountSum = rowCountSum + shopItemDAO
-					.deleteShopItem(shopItem.getShopID(),shopItem.getItemID());
+			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
+
+
+			for(ShopItem shopItem : itemList)
+			{
+				shopItem.setShopID(shop.getShopID());
+				rowCountSum = rowCountSum + shopItemDAO
+						.deleteShopItem(shopItem.getShopID(),shopItem.getItemID());
+			}
 		}
+
 
 
 		if(rowCountSum ==  itemList.size())

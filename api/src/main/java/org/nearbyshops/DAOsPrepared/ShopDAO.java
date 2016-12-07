@@ -698,6 +698,7 @@ public class ShopDAO {
 
 
 
+
 	public Shop getShopForShopAdmin(int shopAdminID)
 	{
 			String query = " SELECT "

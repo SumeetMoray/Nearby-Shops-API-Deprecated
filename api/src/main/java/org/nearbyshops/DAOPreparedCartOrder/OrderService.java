@@ -349,7 +349,11 @@ public class OrderService {
 
 
 
-    public ArrayList<Order> readOrders(Integer orderID, Integer endUserID, Integer shopID,
+    //    Boolean getDeliveryAddress,
+//    Boolean getStats
+
+    //Integer orderID, Integer endUserID,
+    public ArrayList<Order> readOrderPending( Integer shopID,
                                        Boolean pickFromShop,
                                        Integer homeDeliveryStatus,Integer pickFromShopStatus,
                                        Integer deliveryGuyID,
@@ -357,9 +361,359 @@ public class OrderService {
                                        Boolean deliveryReceived,
                                        Double latCenter, Double lonCenter,
                                        String sortBy,
-                                       Integer limit, Integer offset,
-                                       Boolean getDeliveryAddress,
-                                       Boolean getStats)
+                                       Integer limit, Integer offset)
+    {
+
+
+        String query = "SELECT "
+
+                + "6371 * acos( cos( radians("
+                + latCenter + ")) * cos( radians( " + DeliveryAddress.LATITUDE + ") ) * cos(radians( " + DeliveryAddress.LONGITUDE + " ) - radians("
+                + lonCenter + "))"
+                + " + sin( radians(" + latCenter + ")) * sin(radians( " + DeliveryAddress.LATITUDE + " ))) as distance" + ","
+
+                + Order.TABLE_NAME + "." + Order.ORDER_ID + ","
+                + Order.TABLE_NAME + "." + Order.DELIVERY_ADDRESS_ID + ","
+                + Order.TABLE_NAME + "." + Order.DATE_TIME_PLACED + ","
+
+                + Order.TABLE_NAME + "." + Order.DELIVERY_CHARGES + ","
+                + Order.TABLE_NAME + "." + Order.DELIVERY_RECEIVED + ","
+                + Order.TABLE_NAME + "." + Order.PAYMENT_RECEIVED + ","
+
+                + Order.TABLE_NAME + "." + Order.DELIVERY_GUY_SELF_ID + ","
+                + Order.TABLE_NAME + "." + Order.END_USER_ID + ","
+                + Order.TABLE_NAME + "." + Order.PICK_FROM_SHOP + ","
+
+                + Order.TABLE_NAME + "." + Order.SHOP_ID + ","
+                + Order.TABLE_NAME + "." + Order.STATUS_HOME_DELIVERY + ","
+                + Order.TABLE_NAME + "." + Order.STATUS_PICK_FROM_SHOP + ","
+
+                + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.END_USER_ID + ","
+                + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.CITY + ","
+                + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.DELIVERY_ADDRESS + ","
+
+                + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.ID + ","
+                + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.LANDMARK + ","
+                + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.NAME + ","
+
+                + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.LATITUDE + ","
+                + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.LONGITUDE + ","
+
+                + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.PHONE_NUMBER + ","
+                + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.PINCODE + ","
+
+//                + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.LATITUDE + ","
+//                + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.LONGITUDE + ","
+
+                + " count( " + OrderItem.ITEM_ID + " ) as item_count, "
+                + " sum( " + OrderItem.ITEM_PRICE_AT_ORDER + " * " + OrderItem.ITEM_QUANTITY + ") as item_total "
+                + " FROM " + Order.TABLE_NAME
+                + " LEFT OUTER JOIN " + OrderItem.TABLE_NAME + " ON (" + Order.TABLE_NAME + "." + Order.ORDER_ID + " = " + OrderItem.TABLE_NAME + "." + OrderItem.ORDER_ID + " ) "
+                + " LEFT OUTER JOIN " + DeliveryAddress.TABLE_NAME + " ON (" + Order.TABLE_NAME + "." + Order.DELIVERY_ADDRESS_ID + " = " + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.ID + ")";
+
+
+
+        boolean isFirst = true;
+
+
+        query = query + " WHERE "
+                + "( " + "(" + Order.STATUS_HOME_DELIVERY + " <= " + OrderStatusHomeDelivery.HANDOVER_ACCEPTED + ")"
+                + " OR "
+                + "((" + Order.STATUS_HOME_DELIVERY + " = " + OrderStatusHomeDelivery.PENDING_DELIVERY_ACCEPT_PENDING_PAYMENT + ")"
+                + " AND " + "((" + Order.PAYMENT_RECEIVED + " = " + " FALSE ) OR " + " (" + Order.DELIVERY_RECEIVED + " = " + " FALSE ))" + " )" + " )";
+
+
+
+        if(shopID != null)
+        {
+            if(isFirst)
+            {
+                query = query + " WHERE " + Order.SHOP_ID + " = " + shopID;
+
+                isFirst = false;
+
+            }else
+            {
+                query = query + " AND " + Order.SHOP_ID + " = " + shopID;
+            }
+
+        }
+
+
+        if(homeDeliveryStatus != null)
+        {
+            if(isFirst)
+            {
+                query = query + " WHERE " + Order.STATUS_HOME_DELIVERY + " = " + homeDeliveryStatus;
+
+                isFirst = false;
+
+            }else
+            {
+                query = query + " AND " + Order.STATUS_HOME_DELIVERY + " = " + homeDeliveryStatus;
+
+            }
+
+        }
+
+
+        if(pickFromShopStatus != null)
+        {
+            if(isFirst)
+            {
+                query = query + " WHERE " + Order.STATUS_PICK_FROM_SHOP + " = " + pickFromShopStatus;
+
+                isFirst = false;
+
+            }else
+            {
+                query = query + " AND " + Order.STATUS_PICK_FROM_SHOP + " = " + pickFromShopStatus;
+            }
+        }
+
+
+
+        if(pickFromShop != null)
+        {
+            if(isFirst)
+            {
+                query = query + " WHERE " + Order.PICK_FROM_SHOP + " = " + pickFromShop;
+
+                isFirst = false;
+
+            }else
+            {
+                query = query + " AND " + Order.PICK_FROM_SHOP + " = " + pickFromShop;
+            }
+
+        }
+
+
+
+        if(deliveryGuyID != null)
+        {
+            if(isFirst)
+            {
+                query = query + " WHERE " + Order.DELIVERY_GUY_SELF_ID + " = " + deliveryGuyID;
+
+                isFirst = false;
+
+            }else
+            {
+                query = query + " AND " + Order.DELIVERY_GUY_SELF_ID + " = " + deliveryGuyID;
+            }
+
+        }
+
+
+
+        if(paymentsReceived!=null)
+        {
+
+            if(isFirst)
+            {
+                query = query + " WHERE " + Order.PAYMENT_RECEIVED + " = " + paymentsReceived;
+
+                isFirst = false;
+
+            }else
+            {
+                query = query + " AND " + Order.PAYMENT_RECEIVED + " = " + paymentsReceived;
+            }
+
+        }
+
+
+
+        if(deliveryReceived!=null)
+        {
+
+            if(isFirst)
+            {
+                query = query + " WHERE " + Order.DELIVERY_RECEIVED + " = " + deliveryReceived;
+
+                isFirst = false;
+
+            }else
+            {
+                query = query + " AND " + Order.DELIVERY_RECEIVED + " = " + deliveryReceived;
+            }
+
+        }
+
+
+
+
+
+
+
+        // all the non-aggregate columns which are present in select must be present in group by also.
+        query = query
+                + " group by "
+                + Order.TABLE_NAME + "." + Order.ORDER_ID + ","
+                + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.ID ;
+
+
+
+        if(sortBy!=null)
+        {
+            if(!sortBy.equals(""))
+            {
+                String queryPartSortBy = " ORDER BY " + sortBy;
+
+                query = query + queryPartSortBy;
+            }
+        }
+
+
+
+        if(limit != null)
+        {
+
+            String queryPartLimitOffset = "";
+
+            if(offset>0)
+            {
+                queryPartLimitOffset = " LIMIT " + limit + " " + " OFFSET " + offset;
+
+            }else
+            {
+                queryPartLimitOffset = " LIMIT " + limit + " " + " OFFSET " + 0;
+            }
+
+            query = query + queryPartLimitOffset;
+        }
+
+
+
+
+        ArrayList<Order> ordersList = new ArrayList<Order>();
+
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet rs = null;
+
+        try {
+
+            connection = dataSource.getConnection();
+            statement = connection.createStatement();
+
+
+            rs = statement.executeQuery(query);
+
+            while(rs.next())
+            {
+                Order order = new Order();
+
+                order.setShopID((Integer)rs.getObject(Order.SHOP_ID));
+                order.setDeliveryCharges(rs.getInt(Order.DELIVERY_CHARGES));
+                order.setEndUserID(rs.getInt(Order.END_USER_ID));
+
+                order.setOrderID(rs.getInt(Order.ORDER_ID));
+                order.setPickFromShop(rs.getBoolean(Order.PICK_FROM_SHOP));
+                order.setDateTimePlaced(rs.getTimestamp(Order.DATE_TIME_PLACED));
+
+                order.setStatusHomeDelivery(rs.getInt(Order.STATUS_HOME_DELIVERY));
+                order.setStatusPickFromShop(rs.getInt(Order.STATUS_PICK_FROM_SHOP));
+                order.setDeliveryReceived(rs.getBoolean(Order.DELIVERY_RECEIVED));
+
+                order.setPaymentReceived(rs.getBoolean(Order.PAYMENT_RECEIVED));
+                order.setDeliveryAddressID((Integer) rs.getObject(Order.DELIVERY_ADDRESS_ID));
+                order.setDeliveryGuySelfID((Integer) rs.getObject(Order.DELIVERY_GUY_SELF_ID));
+
+
+                /*if(getDeliveryAddress!=null && getDeliveryAddress)
+                {*/
+
+                DeliveryAddress address = new DeliveryAddress();
+
+                address.setEndUserID(rs.getInt(DeliveryAddress.END_USER_ID));
+                address.setCity(rs.getString(DeliveryAddress.CITY));
+                address.setDeliveryAddress(rs.getString(DeliveryAddress.DELIVERY_ADDRESS));
+
+                address.setId(rs.getInt(DeliveryAddress.ID));
+                address.setLandmark(rs.getString(DeliveryAddress.LANDMARK));
+                address.setName(rs.getString(DeliveryAddress.NAME));
+
+                address.setPhoneNumber(rs.getLong(DeliveryAddress.PHONE_NUMBER));
+                address.setPincode(rs.getLong(DeliveryAddress.PINCODE));
+
+
+                address.setLatitude(rs.getDouble(DeliveryAddress.LATITUDE));
+                address.setLongitude(rs.getDouble(DeliveryAddress.LONGITUDE));
+                address.setRt_distance(rs.getDouble("distance"));
+
+                order.setDeliveryAddress(address);
+//                }
+
+
+                OrderStats orderStats = new OrderStats();
+                orderStats.setOrderID(rs.getInt("order_id"));
+                orderStats.setItemCount(rs.getInt("item_count"));
+                orderStats.setItemTotal(rs.getInt("item_total"));
+                order.setOrderStats(orderStats);
+
+
+                ordersList.add(order);
+            }
+
+
+
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+
+        finally
+
+        {
+
+            try {
+                if(rs!=null)
+                {rs.close();}
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            try {
+
+                if(statement!=null)
+                {statement.close();}
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            try {
+
+                if(connection!=null)
+                {connection.close();}
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+
+        return ordersList;
+    }
+
+
+
+    //    Boolean getDeliveryAddress,
+//    Boolean getStats
+    public ArrayList<Order> readOrders(Integer orderID, Integer endUserID, Integer shopID,
+                                       Boolean pickFromShop,
+                                       Integer homeDeliveryStatus,Integer pickFromShopStatus,
+                                       Integer deliveryGuyID,
+                                       Boolean paymentsReceived,
+                                       Boolean deliveryReceived,
+                                       Double latCenter, Double lonCenter,
+                                       Boolean pendingOrders,
+                                       String sortBy,
+                                       Integer limit, Integer offset)
     {
 
 
@@ -434,6 +788,30 @@ public class OrderService {
             }
 
         }
+
+
+
+
+        if(pendingOrders!=null)
+        {
+            String queryPartPending =
+                    "( " + "(" + Order.STATUS_HOME_DELIVERY + " <= " + OrderStatusHomeDelivery.HANDOVER_ACCEPTED + ")"
+                            + " OR "
+                            + "((" + Order.STATUS_HOME_DELIVERY + " = " + OrderStatusHomeDelivery.PENDING_DELIVERY_ACCEPT_PENDING_PAYMENT + ")"
+                            + " AND " + "((" + Order.PAYMENT_RECEIVED + " = " + " FALSE ) OR " + " (" + Order.DELIVERY_RECEIVED + " = " + " FALSE ))" + " )" + " )";
+
+            if(isFirst)
+            {
+                query = query + " WHERE " + queryPartPending;
+
+                isFirst = false;
+
+            }else
+            {
+                query = query + " AND " + queryPartPending;
+            }
+        }
+
 
 
 
@@ -723,7 +1101,8 @@ public class OrderService {
                                        Integer homeDeliveryStatus,Integer pickFromShopStatus,
                                        Integer deliveryGuyID,
                                        Boolean paymentsReceived,
-                                       Boolean deliveryReceived, Boolean getDeliveryAddress)
+                                       Boolean deliveryReceived,
+                                        Boolean pendingOrders)
     {
 
         String query = "SELECT " +
@@ -767,6 +1146,27 @@ public class OrderService {
 
             }
 
+        }
+
+
+        if(pendingOrders!=null)
+        {
+            String queryPartPending =
+                    "( " + "(" + Order.STATUS_HOME_DELIVERY + " <= " + OrderStatusHomeDelivery.HANDOVER_ACCEPTED + ")"
+                            + " OR "
+                            + "((" + Order.STATUS_HOME_DELIVERY + " = " + OrderStatusHomeDelivery.PENDING_DELIVERY_ACCEPT_PENDING_PAYMENT + ")"
+                            + " AND " + "((" + Order.PAYMENT_RECEIVED + " = " + " FALSE ) OR " + " (" + Order.DELIVERY_RECEIVED + " = " + " FALSE ))" + " )" + " )";
+
+            if(isFirst)
+            {
+                query = query + " WHERE " + queryPartPending;
+
+                isFirst = false;
+
+            }else
+            {
+                query = query + " AND " + queryPartPending;
+            }
         }
 
 

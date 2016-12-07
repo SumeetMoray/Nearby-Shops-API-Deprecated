@@ -259,7 +259,7 @@ public class OrderEndpointDeliveryGuySelf {
 				endUserID,shopID, pickFromShop,
 				homeDeliveryStatus,pickFromShopStatus,
 				deliveryGuyID,
-				paymentsReceived,deliveryReceived,getDeliveryAddress
+				paymentsReceived,deliveryReceived,null
 				);
 
 		endPoint.setLimit(set_limit);
@@ -278,7 +278,8 @@ public class OrderEndpointDeliveryGuySelf {
 							deliveryGuyID,
 							paymentsReceived,deliveryReceived,
 							latCenter,lonCenter,
-							sortBy,limit,offset,getDeliveryAddress,getStats);
+							null,
+							sortBy,limit,offset);
 
 
 			/*

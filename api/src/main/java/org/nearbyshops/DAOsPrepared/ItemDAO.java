@@ -8,9 +8,7 @@ import org.nearbyshops.Model.Shop;
 import org.nearbyshops.Model.ShopItem;
 import org.nearbyshops.ModelEndPoints.ItemEndPoint;
 import org.nearbyshops.ModelReviewItem.ItemReview;
-import org.nearbyshops.ModelReviewShop.ShopReview;
 import org.nearbyshops.ModelStats.ItemStats;
-import org.nearbyshops.Utility.GeoLocation;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -833,9 +831,8 @@ public class ItemDAO {
 	{
 		String query = "";
 		
-		String queryNormal = "SELECT * FROM " + Item.TABLE_NAME;
-		
-		
+//		String queryNormal = "SELECT * FROM " + Item.TABLE_NAME;
+
 		String queryJoin = "SELECT "
 				+ "min(" + ShopItem.ITEM_PRICE + ") as min_price" + ","
 				+ "max(" + ShopItem.ITEM_PRICE + ") as max_price" + ","
@@ -889,10 +886,10 @@ public class ItemDAO {
 			
 			//" WHERE ITEM_CATEGORY_ID = " + itemCategoryID
 			
-			queryNormal = queryNormal + " WHERE "
-					+ Item.TABLE_NAME
-					+ "."
-					+ Item.ITEM_CATEGORY_ID + " = " + itemCategoryID;
+//			queryNormal = queryNormal + " WHERE "
+//					+ Item.TABLE_NAME
+//					+ "."
+//					+ Item.ITEM_CATEGORY_ID + " = " + itemCategoryID;
 			
 		}
 
@@ -1084,7 +1081,7 @@ public class ItemDAO {
 			{
 				String queryPartSortBy = " ORDER BY " + sortBy;
 
-				queryNormal = queryNormal + queryPartSortBy;
+//				queryNormal = queryNormal + queryPartSortBy;
 				queryJoin = queryJoin + queryPartSortBy;
 			}
 		}
@@ -1106,7 +1103,7 @@ public class ItemDAO {
 			}
 
 
-			queryNormal = queryNormal + queryPartLimitOffset;
+//			queryNormal = queryNormal + queryPartLimitOffset;
 			queryJoin = queryJoin + queryPartLimitOffset;
 		}
 
@@ -1246,9 +1243,9 @@ public class ItemDAO {
 
 		String query = "";
 
-		String queryNormal = "SELECT "
-				+ "count( DISTINCT " + Item.ITEM_ID + ") as item_count" + ""
-				+ " FROM " + Item.TABLE_NAME;
+//		String queryNormal = "SELECT "
+//				+ "count( DISTINCT " + Item.ITEM_ID + ") as item_count" + ""
+//				+ " FROM " + Item.TABLE_NAME;
 
 
 		String queryJoin = "SELECT "
@@ -1293,10 +1290,10 @@ public class ItemDAO {
 
 			//" WHERE ITEM_CATEGORY_ID = " + itemCategoryID
 
-			queryNormal = queryNormal + " WHERE "
-					+ Item.TABLE_NAME
-					+ "."
-					+ Item.ITEM_CATEGORY_ID + " = " + itemCategoryID;
+//			queryNormal = queryNormal + " WHERE "
+//					+ Item.TABLE_NAME
+//					+ "."
+//					+ Item.ITEM_CATEGORY_ID + " = " + itemCategoryID;
 
 		}
 

@@ -37,7 +37,6 @@ public class ItemDAOJoinOuter {
 	//Integer shopID,
 
 	public List<Item> getItems(
-
 					Integer itemCategoryID,
 					Boolean parentIsNull,
 					String sortBy,
@@ -49,7 +48,7 @@ public class ItemDAOJoinOuter {
 
 		String query = "";
 		
-		String queryNormal = "SELECT * FROM " + Item.TABLE_NAME;
+//		String queryNormal = "SELECT * FROM " + Item.TABLE_NAME;
 		
 		
 		String queryJoin = "SELECT "
@@ -92,10 +91,10 @@ public class ItemDAOJoinOuter {
 			
 			//" WHERE ITEM_CATEGORY_ID = " + itemCategoryID
 			
-			queryNormal = queryNormal + " WHERE "
-					+ Item.TABLE_NAME
-					+ "."
-					+ Item.ITEM_CATEGORY_ID + " = " + itemCategoryID;
+//			queryNormal = queryNormal + " WHERE "
+//					+ Item.TABLE_NAME
+//					+ "."
+//					+ Item.ITEM_CATEGORY_ID + " = " + itemCategoryID;
 			
 		}
 
@@ -165,7 +164,7 @@ public class ItemDAOJoinOuter {
 			{
 				String queryPartSortBy = " ORDER BY " + sortBy;
 
-				queryNormal = queryNormal + queryPartSortBy;
+//				queryNormal = queryNormal + queryPartSortBy;
 				queryJoin = queryJoin + queryPartSortBy;
 			}
 		}
@@ -187,7 +186,7 @@ public class ItemDAOJoinOuter {
 			}
 
 
-			queryNormal = queryNormal + queryPartLimitOffset;
+//			queryNormal = queryNormal + queryPartLimitOffset;
 			queryJoin = queryJoin + queryPartLimitOffset;
 		}
 
