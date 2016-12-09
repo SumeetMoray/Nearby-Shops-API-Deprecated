@@ -53,7 +53,7 @@ public class ItemDAOJoinOuter {
 //		String queryNormal = "SELECT * FROM " + Item.TABLE_NAME;
 		
 		
-		String queryJoin = "SELECT "
+		String queryJoin = "SELECT DISTINCT "
 				+ "min(" + ShopItem.ITEM_PRICE + ") as min_price" + ","
 				+ "max(" + ShopItem.ITEM_PRICE + ") as max_price" + ","
 				+ "avg(" + ShopItem.ITEM_PRICE + ") as avg_price" + ","

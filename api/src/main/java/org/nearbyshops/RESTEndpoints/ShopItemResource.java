@@ -370,10 +370,73 @@ public class ShopItemResource {
 					.type(MediaType.APPLICATION_JSON)
 					.entity(list)
 					.build();
-		
-			
 		}
 	}
+
+
+
+
+
+	@GET
+	@Path("/ForShop")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getShopItemsForShop(
+			@QueryParam("ItemCategoryID")Integer ItemCategoryID,
+			@QueryParam("ShopID")Integer ShopID, @QueryParam("ItemID") Integer itemID,
+			@QueryParam("SearchString") String searchString,
+			@QueryParam("SortBy") String sortBy,
+			@QueryParam("Limit") Integer limit, @QueryParam("Offset") int offset
+	)
+	{
+
+//		if(Globals.accountApproved instanceof ShopAdmin)
+//		{
+//			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
+//			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
+//			ShopID = shop.getShopID();
+//		}
+
+
+		/*final int max_limit = 100;
+
+		if(limit!=null)
+		{
+			if(limit>=max_limit)
+			{
+				limit = max_limit;
+			}
+		}
+		else
+		{
+			limit = 30;
+		}*/
+
+
+		ShopItemEndPoint endPoint = shopItemDAO.getShopItemsForShop(
+				ItemCategoryID,ShopID,itemID,
+				searchString,
+				sortBy,limit,offset
+		);
+
+
+		endPoint.setLimit(limit);
+//		endPoint.setMax_limit(max_limit);
+		endPoint.setOffset(offset);
+
+
+		/*try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}*/
+
+		//Marker
+		return Response.status(Status.OK)
+				.entity(endPoint)
+				.build();
+	}
+
+
 
 
 
@@ -398,7 +461,22 @@ public class ShopItemResource {
 	)
 	{
 
-		int set_limit = 30;
+		final int max_limit = 100;
+
+		if(limit!=null)
+		{
+			if(limit>=max_limit)
+			{
+				limit = max_limit;
+			}
+		}
+		else
+		{
+			limit = 30;
+		}
+
+
+		/*int set_limit = 30;
 		int set_offset = 0;
 		final int max_limit = 100;
 
@@ -420,7 +498,9 @@ public class ShopItemResource {
 		if(offset!=null)
 		{
 			set_offset = offset;
-		}
+		}*/
+
+
 
 		ShopItemEndPoint endPoint;
 
@@ -436,7 +516,8 @@ public class ShopItemResource {
 						latCenter,lonCenter,
 						deliveryRangeMin,deliveryRangeMax,
 						proximity,endUserID,
-						isFilledCart,isOutOfStock,priceEqualsZero
+						isFilledCart,isOutOfStock,
+						priceEqualsZero, searchString
 				);
 			}
 			else if(itemID !=null && ShopID==null)
@@ -496,9 +577,9 @@ public class ShopItemResource {
 */
 
 
-		endPoint.setLimit(set_limit);
+		endPoint.setLimit(limit);
 		endPoint.setMax_limit(max_limit);
-		endPoint.setOffset(set_offset);
+		endPoint.setOffset(offset);
 
 
 		ArrayList<ShopItem> shopItemsList = null;
@@ -523,7 +604,7 @@ public class ShopItemResource {
 							isFilledCart,
 							isOutOfStock,
 							priceEqualsZero,
-							sortBy,
+							searchString,sortBy,
 							limit,offset
 					);
 				}

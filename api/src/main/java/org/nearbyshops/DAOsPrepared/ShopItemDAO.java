@@ -1443,4 +1443,202 @@ public ArrayList<ShopItem> getShopItems(
 
 
 
+
+
+//	Double latCenter, Double lonCenter,
+//	Double deliveryRangeMin, Double deliveryRangeMax,
+//	Double proximity,
+//  Integer endUserID, Boolean isFilledCart,
+//  Boolean isOutOfStock, Boolean priceEqualsZero,
+
+
+
+	public ShopItemEndPoint getShopItemsForShop(
+			Integer itemCategoryID,
+			Integer shopID, Integer itemID,
+			String searchString,
+			String sortBy,
+			Integer limit, Integer offset
+
+	)
+	{
+
+		String query = "";
+
+		String queryJoin = "SELECT "
+				+ "count(*) over() AS full_count " + ","
+				+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + ","
+				+ ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID + ""
+
+				+ " FROM " + ShopItem.TABLE_NAME + "," + Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
+				+ " WHERE " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "=" + Item.TABLE_NAME + "." + Item.ITEM_ID
+				+ " AND " + Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "=" + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
+
+
+
+		if(shopID !=null)
+		{
+			queryJoin = queryJoin
+					+ " AND " + ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID + " = " + shopID;
+		}
+
+
+
+		if(searchString !=null)
+		{
+			String queryPartSearch = " ( " +Item.TABLE_NAME + "." + Item.ITEM_DESC +" ilike '%" + searchString + "%'"
+					+ " or " + Item.TABLE_NAME + "." + Item.ITEM_DESCRIPTION_LONG + " ilike '%" + searchString + "%'"
+					+ " or " + Item.TABLE_NAME + "." + Item.ITEM_NAME + " ilike '%" + searchString + "%'" + ") ";
+
+			queryJoin = queryJoin + " AND " + queryPartSearch;
+		}
+
+
+
+		if(itemID !=null) {
+
+			queryJoin = queryJoin + " AND "
+					+ ShopItem.TABLE_NAME
+					+ "."
+					+ ShopItem.ITEM_ID + " = " + itemID;
+
+		}
+
+
+		if(itemCategoryID !=null)
+		{
+
+			queryJoin = queryJoin + " AND "
+					+ ItemCategory.TABLE_NAME
+					+ "."
+					+ ItemCategory.ITEM_CATEGORY_ID + " = " + itemCategoryID;
+
+		}
+
+
+
+	/*
+			Applying Filters
+	 */
+
+
+
+		if(sortBy!=null)
+		{
+			if(!sortBy.equals(""))
+			{
+				String queryPartSortBy = " ORDER BY " + sortBy;
+
+//			queryNormal = queryNormal + queryPartSortBy;
+				queryJoin = queryJoin + queryPartSortBy;
+			}
+		}
+
+
+
+		if(limit !=null)
+		{
+
+			String queryPartLimitOffset = "";
+
+			if(offset !=null)
+			{
+				queryPartLimitOffset = " LIMIT " + limit + " " + " OFFSET " + offset;
+
+			}else
+			{
+				queryPartLimitOffset = " LIMIT " + limit + " " + " OFFSET " + 0;
+			}
+
+//		queryNormal = queryNormal + queryPartLimitOffset;
+			queryJoin = queryJoin + queryPartLimitOffset;
+		}
+
+
+
+			/*
+					Applying Filters Ends
+			 */
+
+
+		query = queryJoin;
+
+
+
+
+		ShopItemEndPoint endPoint = new ShopItemEndPoint();
+
+		ArrayList<ShopItem> shopItemList = new ArrayList<ShopItem>();
+
+
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet rs = null;
+
+		try {
+
+
+			connection = dataSource.getConnection();
+			statement = connection.createStatement();
+
+			rs = statement.executeQuery(query);
+
+			while(rs.next())
+			{
+
+				ShopItem shopItem = new ShopItem();
+				shopItem.setShopID(rs.getInt(ShopItem.SHOP_ID));
+				shopItem.setItemID(rs.getInt(ShopItem.ITEM_ID));
+
+				endPoint.setItemCount(rs.getInt("full_count"));
+
+				shopItemList.add(shopItem);
+
+			}
+
+			endPoint.setResults(shopItemList);
+
+			System.out.println("Total ShopItems queried = " + shopItemList.size());
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+		finally
+
+		{
+
+			try {
+				if(rs!=null)
+				{rs.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(statement!=null)
+				{statement.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(connection!=null)
+				{connection.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+
+		return endPoint;
+	}
+
 }

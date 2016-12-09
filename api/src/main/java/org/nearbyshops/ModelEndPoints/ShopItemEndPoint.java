@@ -10,18 +10,18 @@ import java.util.ArrayList;
  */
 public class ShopItemEndPoint {
 
-    Integer itemCount;
+    int itemCount;
     Integer offset;
     Integer limit;
     Integer max_limit;
     ArrayList<ShopItem> results;
 
 
-    public Integer getItemCount() {
+    public int getItemCount() {
         return itemCount;
     }
 
-    public void setItemCount(Integer itemCount) {
+    public void setItemCount(int itemCount) {
         this.itemCount = itemCount;
     }
 
@@ -41,6 +41,13 @@ public class ShopItemEndPoint {
         this.limit = limit;
     }
 
+    public Integer getMax_limit() {
+        return max_limit;
+    }
+
+    public void setMax_limit(Integer max_limit) {
+        this.max_limit = max_limit;
+    }
 
     public ArrayList<ShopItem> getResults() {
         return results;
@@ -48,13 +55,5 @@ public class ShopItemEndPoint {
 
     public void setResults(ArrayList<ShopItem> results) {
         this.results = results;
-    }
-
-    public Integer getMax_limit() {
-        return max_limit;
-    }
-
-    public void setMax_limit(Integer max_limit) {
-        this.max_limit = max_limit;
     }
 }
