@@ -37,8 +37,8 @@ public class Staff {
     public static final String CREATE_UPDATE_ITEM_CATEGORY = "CREATE_UPDATE_ITEM_CATEGORY";
     public static final String CREATE_UPDATE_ITEMS = "CREATE_UPDATE_ITEMS";
 
-    public static final String APPROVE_ITEM_CATEGORY_SUBMISSIONS = "APPROVE_ITEM_CATEGORY_SUBMISSIONS";
-    public static final String APPROVE_ITEM_SUBMISSIONS = "APPROVE_ITEM_SUBMISSIONS";
+//    public static final String APPROVE_ITEM_CATEGORY_SUBMISSIONS = "APPROVE_ITEM_CATEGORY_SUBMISSIONS";
+//    public static final String APPROVE_ITEM_SUBMISSIONS = "APPROVE_ITEM_SUBMISSIONS";
 
     public static final String APPROVE_SHOP_ADMIN_ACCOUNTS = "APPROVE_SHOP_ADMIN_ACCOUNTS";
     public static final String APPROVE_SHOPS = "APPROVE_SHOPS";
@@ -54,63 +54,55 @@ public class Staff {
     public static final String createTableStaffPostgres =
             "CREATE TABLE IF NOT EXISTS " + Staff.TABLE_NAME + "("
             + " " + Staff.STAFF_ID + " SERIAL PRIMARY KEY,"
+
+            + " " + Staff.STAFF_NAME + " text,"
             + " " + Staff.USER_NAME + " text UNIQUE NOT NULL,"
             + " " + Staff.PASSWORD + " text NOT NULL,"
 
-            + " " + Staff.DESIGNATION + " text,"
+                  + Staff.ABOUT + " text,"
+                  + Staff.PROFILE_IMAGE_URL + " text,"
 
             + " " + Staff.PHONE_NUMBER + " text,"
+            + " " + Staff.DESIGNATION + " text,"
+            + " " + Staff.IS_ENABLED + " boolean NOT NULL,"
+            + " " + Staff.ACCOUNT_PRIVATE + " boolean,"
+
 
             + " " + Staff.GOVERNMENT_ID_NAME + " text,"
             + " " + Staff.GOVERNMENT_ID_NUMBER + " text,"
             + " " + Staff.TIMESTAMP_CREATED + " timestamp with time zone NOT NULL DEFAULT now(),"
 
-                    + Staff.ABOUT + " text,"
-                    + Staff.PROFILE_IMAGE_URL + " text,"
-
-            + " " + Staff.IS_ENABLED + " boolean NOT NULL,"
-
-            + " " + Staff.ACCOUNT_PRIVATE + " boolean,"
-
             + " " + Staff.CREATE_UPDATE_ITEM_CATEGORY + " boolean ,"
             + " " + Staff.CREATE_UPDATE_ITEMS + " boolean ,"
-
-            + " " + Staff.APPROVE_ITEM_CATEGORY_SUBMISSIONS + " boolean ,"
-            + " " + Staff.APPROVE_ITEM_SUBMISSIONS + " boolean ,"
-
             + " " + Staff.APPROVE_SHOP_ADMIN_ACCOUNTS + " boolean ,"
             + " " + Staff.APPROVE_SHOPS + " boolean ,"
-            + " " + Staff.APPROVE_END_USER_ACCOUNTS + " boolean ,"
-
-            + " " + Staff.STAFF_NAME + " text"
-                    + ")";
+            + " " + Staff.APPROVE_END_USER_ACCOUNTS + " boolean " + ")";
 
 
     
     // Instance Variables
     private int staffID;
+
     private String staffName;
     private String username;
     private String password;
-    private String designation;
+
+    private String about;
+    private String profileImageURL;
+
     private String phone;
+    private String designation;
+
+    private Boolean isEnabled;
+    private boolean accountPrivate;
+
     private String govtIDName;
     private String govtIDNumber;
     private Timestamp timestampCreated;
-    private String about;
-    private String profileImageURL;
-    private Boolean isEnabled;
-
-    // privacy fields
-    private boolean accountPrivate;
 
     // permission fields
     private boolean createUpdateItemCategory;
     private boolean createUpdateItems;
-
-    private boolean approveItemCategorySubmissions;
-    private boolean approveItemSubmissions;
-
     private boolean approveShopAdminAccounts;
     private boolean approveShops;
     private boolean approveEndUserAccounts;
@@ -142,22 +134,6 @@ public class Staff {
 
     public void setCreateUpdateItems(boolean createUpdateItems) {
         this.createUpdateItems = createUpdateItems;
-    }
-
-    public boolean isApproveItemCategorySubmissions() {
-        return approveItemCategorySubmissions;
-    }
-
-    public void setApproveItemCategorySubmissions(boolean approveItemCategorySubmissions) {
-        this.approveItemCategorySubmissions = approveItemCategorySubmissions;
-    }
-
-    public boolean isApproveItemSubmissions() {
-        return approveItemSubmissions;
-    }
-
-    public void setApproveItemSubmissions(boolean approveItemSubmissions) {
-        this.approveItemSubmissions = approveItemSubmissions;
     }
 
     public boolean isApproveShopAdminAccounts() {

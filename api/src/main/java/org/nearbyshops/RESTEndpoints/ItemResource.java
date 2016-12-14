@@ -537,6 +537,7 @@ public class ItemResource {
 
 
 
+/*
 	@GET
 	@Path("/{ItemID}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -564,6 +565,7 @@ public class ItemResource {
 			
 		}
 	}
+*/
 
 
 

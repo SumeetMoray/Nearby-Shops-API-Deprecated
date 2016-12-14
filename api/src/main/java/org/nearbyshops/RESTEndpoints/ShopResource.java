@@ -7,6 +7,10 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +26,7 @@ import org.nearbyshops.DAOsPrepared.ShopDAO;
 import org.nearbyshops.Globals.APIErrors;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.Model.Image;
-import org.nearbyshops.Model.Shop;
+import org.nearbyshops.Model.*;
 import org.nearbyshops.ModelEndPoints.ShopEndPoint;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
 import org.nearbyshops.ModelRoles.Endpoints.ShopAdminEndPoint;
@@ -48,7 +51,7 @@ public class ShopResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN,GlobalConstants.ROLE_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN})
 	public Response saveShop(Shop shop)
 	{
 
@@ -227,9 +230,10 @@ public class ShopResource {
 	{
 		if(Globals.accountApproved instanceof ShopAdmin)
 		{
-			if(shopID != ((ShopAdmin) Globals.accountApproved).getShopID())
-			{
+			Shop shop = Globals.shopDAO.getShopForShopAdmin(((ShopAdmin) Globals.accountApproved).getShopAdminID());
 
+			if(shopID != shop.getShopID())
+			{
 				// update by wrong account . Throw an Exception
 				Response responseError = Response.status(Status.FORBIDDEN)
 						.entity(new ErrorNBSAPI(403, APIErrors.DELETE_BY_WRONG_SHOP_OWNER))
@@ -375,6 +379,65 @@ public class ShopResource {
 
 
 
+
+//	@QueryParam("SearchString") String searchString,
+//	@QueryParam("SortBy") String sortBy,
+//	@QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset,
+
+	@GET
+	@Path("/ForShopFilters")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getShopForFilters(
+			@QueryParam("latCenter")Double latCenter, @QueryParam("lonCenter")Double lonCenter,
+			@QueryParam("deliveryRangeMax")Double deliveryRangeMax,
+			@QueryParam("deliveryRangeMin")Double deliveryRangeMin,
+			@QueryParam("proximity")Double proximity,
+			@QueryParam("metadata_only")Boolean metaonly
+	)
+	{
+
+
+
+		final int max_limit = 100;
+
+//		if(limit!=null)
+//		{
+//			if(limit>=max_limit)
+//			{
+//				limit = max_limit;
+//			}
+//		}
+//		else
+//		{
+//			limit = 30;
+//		}
+
+
+
+		ShopEndPoint endPoint = shopDAO.getEndPointMetadataFilterShops(latCenter,lonCenter,deliveryRangeMin,deliveryRangeMax,proximity);
+
+//		ShopEndPoint endPoint = new ShopEndPoint();
+
+		endPoint.setLimit(0);
+		endPoint.setMax_limit(max_limit);
+		endPoint.setOffset(0);
+
+		endPoint.setResults(shopDAO.getShopsForShopFiltersPrepared(latCenter,lonCenter, deliveryRangeMin,deliveryRangeMax, proximity));
+
+
+		/*try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}*/
+
+
+
+		//Marker
+		return Response.status(Status.OK)
+				.entity(endPoint)
+				.build();
+	}
 
 
 

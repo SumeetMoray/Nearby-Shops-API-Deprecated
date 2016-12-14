@@ -135,7 +135,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
             }else if(role.equals(GlobalConstants.ROLE_STAFF))
             {
-                Staff staff = staffDAOPrepared.checkStaff(null,username,password);
+                Staff staff = staffDAOPrepared.checkStaff(username,password);
 
                 if(staff!=null)
                 {
@@ -278,7 +278,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
                         throw new ForbiddenException("Permission denied !",response);
                     }
-                    if(shopAdmin.getEnabled())
+                    else
                     {
                         return shopAdmin;
                     }

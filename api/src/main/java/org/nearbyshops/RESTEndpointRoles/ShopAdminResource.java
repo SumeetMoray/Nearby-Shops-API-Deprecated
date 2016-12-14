@@ -223,30 +223,6 @@ public class ShopAdminResource {
 									 @QueryParam("metadata_only")Boolean metaonly)
 	{
 
-//		int set_limit = 30;
-//		int set_offset = 0;
-
-
-
-//		if(limit!= null) {
-//
-//			if (limit >= max_limit) {
-//
-//				set_limit = max_limit;
-//			}
-//			else
-//			{
-//
-//				set_limit = limit;
-//			}
-//
-//		}
-//
-//		if(offset!=null)
-//		{
-//			set_offset = offset;
-//		}
-
 
 		final int max_limit = 100;
 
@@ -296,80 +272,54 @@ public class ShopAdminResource {
 		return Response.status(Status.OK)
 				.entity(endPoint)
 				.build();
-
-
-		//--------------------------------------------
-//		List<ShopAdmin> shopAdminList = shopAdminDAO.getShopAdmin(enabled,waitlisted);
-//
-//		GenericEntity<List<ShopAdmin>> listEntity = new GenericEntity<List<ShopAdmin>>(shopAdminList){
-//
-//		};
-//
-//
-//		if(shopAdminList.size()<=0)
-//		{
-//
-//			return Response.status(Status.NO_CONTENT)
-//					.entity(listEntity)
-//					.build();
-//
-//		}else
-//		{
-//
-//			return Response.status(Status.OK)
-//					.entity(listEntity)
-//					.build();
-//		}
-
 	}
 	
 
 
-
-	@GET
-	@Path("/{ShopAdminID}")
-	@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN_DISABLED,GlobalConstants.ROLE_ADMIN})
-	public Response getShopAdmin(@PathParam("ShopAdminID")int shopAdminID)
-	{
-
-		// Shop Admin is forbidden to view the account details of another account.
-		if(Globals.accountApproved instanceof ShopAdmin)
-		{
-			if(shopAdminID != ((ShopAdmin) Globals.accountApproved).getShopAdminID())
-			{
-				// update by wrong account . Throw an Exception
-				Response responseError = Response.status(Status.FORBIDDEN)
-						.entity(new ErrorNBSAPI(403, APIErrors.UPDATE_BY_WRONG_USER))
-						.build();
-
-				throw new ForbiddenException(APIErrors.UPDATE_BY_WRONG_USER,responseError);
-			}
-		}
-
-
-
-		ShopAdmin shopAdmin = shopAdminDAO.getShopAdmin(shopAdminID);
-		
-		if(shopAdmin != null)
-		{
-
-			return Response.status(Status.OK)
-			.entity(shopAdmin)
-			.build();
-			
-		} else 
-		{
-
-			return Response.status(Status.NO_CONTENT)
-					.entity(shopAdmin)
-					.build();
-			
-		}
-		
-	}
-
-
+//
+//	@GET
+//	@Path("/{ShopAdminID}")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN_DISABLED,GlobalConstants.ROLE_ADMIN})
+//	public Response getShopAdmin(@PathParam("ShopAdminID")int shopAdminID)
+//	{
+//
+//		// Shop Admin is forbidden to view the account details of another account.
+//		if(Globals.accountApproved instanceof ShopAdmin)
+//		{
+//			if(shopAdminID != ((ShopAdmin) Globals.accountApproved).getShopAdminID())
+//			{
+//				// update by wrong account . Throw an Exception
+//				Response responseError = Response.status(Status.FORBIDDEN)
+//						.entity(new ErrorNBSAPI(403, APIErrors.UPDATE_BY_WRONG_USER))
+//						.build();
+//
+//				throw new ForbiddenException(APIErrors.UPDATE_BY_WRONG_USER,responseError);
+//			}
+//		}
+//
+//
+//
+//		ShopAdmin shopAdmin = shopAdminDAO.getShopAdmin(shopAdminID);
+//
+//		if(shopAdmin != null)
+//		{
+//
+//			return Response.status(Status.OK)
+//			.entity(shopAdmin)
+//			.build();
+//
+//		} else
+//		{
+//
+//			return Response.status(Status.NO_CONTENT)
+//					.build();
+//
+//		}
+//
+//	}
+//
+//
 
 
 	@GET
@@ -392,7 +342,6 @@ public class ShopAdminResource {
 			return Response.status(Status.NO_CONTENT)
 					.build();
 		}
-
 	}
 
 
@@ -403,14 +352,13 @@ public class ShopAdminResource {
 	@Path("Login")
 	@Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN_DISABLED})
-	public Response getShopAdminLogin(@Context HttpHeaders header)
+	public Response getShopAdminLogin()
 	{
 
 		ShopAdmin shopAdmin = null;
 
 		if(Globals.accountApproved instanceof ShopAdmin)
 		{
-//			deliveryGuySelf = (DeliveryGuySelf) Globals.accountApproved;
 			shopAdmin = shopAdminDAO
 					.getShopAdmin(((ShopAdmin) Globals.accountApproved).getShopAdminID());
 		}
@@ -602,8 +550,5 @@ public class ShopAdminResource {
 
 		return response;
 	}
-
-
-
 
 }

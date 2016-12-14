@@ -166,7 +166,7 @@ public class AuthenticationFilterBackup implements ContainerRequestFilter {
 
             }else if(role.equals(GlobalConstants.ROLE_STAFF))
             {
-                Staff staff = staffDAOPrepared.checkStaff(null,username,password);
+                Staff staff = staffDAOPrepared.checkStaff(username,password);
 
                 if(staff!=null && staff.getEnabled())
                 {

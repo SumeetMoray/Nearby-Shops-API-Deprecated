@@ -77,24 +77,17 @@ public class ShopItemByItemDAO {
 					+ Shop.TABLE_NAME + "." + Shop.SHORT_DESCRIPTION + ","
 					+ Shop.TABLE_NAME + "." + Shop.LONG_DESCRIPTION + ","
 					+ Shop.TABLE_NAME + "." + Shop.IS_OPEN + ","
+					+ Shop.TABLE_NAME + "." + Shop.LOGO_IMAGE_PATH + ","
 					+ Shop.TABLE_NAME + "." + Shop.TIMESTAMP_CREATED + ""
 
 
-					+ " FROM "
-					+ ShopReview.TABLE_NAME  + " RIGHT OUTER JOIN " + Shop.TABLE_NAME
-					+ " ON ("
-					+ ShopReview.TABLE_NAME + "." + ShopReview.SHOP_ID
-					+ " = " + Shop.TABLE_NAME + "." + Shop.SHOP_ID + ")"
-
-					+ ","+ ShopItem.TABLE_NAME + ","
-					+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
-
-					+ " WHERE "
-					+ Shop.TABLE_NAME + "." + Shop.SHOP_ID + "=" + ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
-					+ " AND "
-					+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "=" + Item.TABLE_NAME + "." + Item.ITEM_ID
-					+ " AND "
-					+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "=" + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
+					+ " FROM " + ShopReview.TABLE_NAME
+					+ " RIGHT OUTER JOIN " + Shop.TABLE_NAME
+					+ " ON (" + ShopReview.TABLE_NAME + "." + ShopReview.SHOP_ID + " = " + Shop.TABLE_NAME + "." + Shop.SHOP_ID + ")"
+					+ ","+ ShopItem.TABLE_NAME + "," + Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
+					+ " WHERE " + Shop.TABLE_NAME + "." + Shop.SHOP_ID + "=" + ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
+					+ " AND " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "=" + Item.TABLE_NAME + "." + Item.ITEM_ID
+					+ " AND " + Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "=" + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
 
 
 
@@ -555,6 +548,7 @@ public class ShopItemByItemDAO {
 					shop.setLonCenter(rs.getFloat(Shop.LON_CENTER));
 					shop.setDeliveryCharges(rs.getFloat(Shop.DELIVERY_CHARGES));
 
+					shop.setLogoImagePath(rs.getString(Shop.LOGO_IMAGE_PATH));
 					shop.setShopAddress(rs.getString(Shop.SHOP_ADDRESS));
 					shop.setCity(rs.getString(Shop.CITY));
 					shop.setPincode(rs.getLong(Shop.PINCODE));

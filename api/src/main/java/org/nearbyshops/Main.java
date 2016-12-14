@@ -290,7 +290,7 @@ public class Main implements ActionListener {
 			String insertItemCategory = "";
 
 			// The root ItemCategory has id 1. If the root category does not exist then insert it.
-			if(Globals.itemCategoryDAO.getItemCategory(1) == null)
+			if(Globals.itemCategoryDAO.checkRoot(1) == null)
 			{
 
 				insertItemCategory = "INSERT INTO "

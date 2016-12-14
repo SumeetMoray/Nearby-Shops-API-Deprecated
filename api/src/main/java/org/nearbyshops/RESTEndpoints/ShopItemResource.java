@@ -30,8 +30,8 @@ import org.nearbyshops.ModelRoles.ShopAdmin;
 public class ShopItemResource {
 
 
-	private ItemDAO itemDAO = Globals.itemDAO;
-	private ShopDAO shopDAO = Globals.shopDAO;
+//	private ItemDAO itemDAO = Globals.itemDAO;
+//	private ShopDAO shopDAO = Globals.shopDAO;
 
 
 	private ShopItemByShopDAO shopItemByShopDAO = Globals.shopItemByShopDAO;
@@ -302,11 +302,14 @@ public class ShopItemResource {
 		return null;
 	}
 	
-	
+/*
+
+*/
 /*
 	@GET
 	@Path("/Deprecated")
-	@Produces(MediaType.APPLICATION_JSON)*/
+	@Produces(MediaType.APPLICATION_JSON)*//*
+
 	public Response getShopItems(
 			@QueryParam("ItemCategoryID")Integer ItemCategoryID,
 			@QueryParam("ShopID")Integer ShopID, @QueryParam("ItemID") Integer itemID,
@@ -344,7 +347,7 @@ public class ShopItemResource {
 
 			if(itemID == null)
 			{
-				shopItem.setItem(itemDAO.getItem(shopItem.getItemID()));
+//				shopItem.setItem(itemDAO.getItem(shopItem.getItemID()));
 			}
 
 		}
@@ -374,6 +377,7 @@ public class ShopItemResource {
 	}
 
 
+*/
 
 
 
@@ -388,14 +392,6 @@ public class ShopItemResource {
 			@QueryParam("Limit") Integer limit, @QueryParam("Offset") int offset
 	)
 	{
-
-//		if(Globals.accountApproved instanceof ShopAdmin)
-//		{
-//			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
-//			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
-//			ShopID = shop.getShopID();
-//		}
-
 
 		/*final int max_limit = 100;
 
@@ -476,32 +472,6 @@ public class ShopItemResource {
 		}
 
 
-		/*int set_limit = 30;
-		int set_offset = 0;
-		final int max_limit = 100;
-
-
-		if(limit!= null) {
-
-			if (limit >= max_limit) {
-
-				set_limit = max_limit;
-			}
-			else
-			{
-
-				set_limit = limit;
-			}
-
-		}
-
-		if(offset!=null)
-		{
-			set_offset = offset;
-		}*/
-
-
-
 		ShopItemEndPoint endPoint;
 
 
@@ -556,25 +526,6 @@ public class ShopItemResource {
 					isFilledCart,isOutOfStock,priceEqualsZero,
 					searchString);
 		}
-
-
-
-
-		/*if(itemID!=null && ShopID==null)
-		{
-
-		}
-
-		if(itemID==null && ShopID == null)
-		{
-
-		}
-
-		if(ShopID!=null && itemID !=null)
-		{
-
-		}
-*/
 
 
 		endPoint.setLimit(limit);
@@ -661,36 +612,14 @@ public class ShopItemResource {
 
 			}
 
-
-
-
-/*
-			for(ShopItem shopItem: shopItemsList)
-			{
-				if(ShopID == null)
-				{
-					shopItem.setShop(shopDAO.getShop(shopItem.getItemID(),latCenter,lonCenter));
-				}
-
-				if(itemID == null)
-				{
-					shopItem.setItem(itemDAO.getItem(shopItem.getItemID()));
-				}
-
-			}
-*/
-
-
 			endPoint.setResults(shopItemsList);
 		}
 
-/*
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-*/
+//		try {
+//			Thread.sleep(1000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 
 
 

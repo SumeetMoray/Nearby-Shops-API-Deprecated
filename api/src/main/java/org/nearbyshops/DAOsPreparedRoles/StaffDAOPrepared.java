@@ -34,22 +34,30 @@ public class StaffDAOPrepared {
 				+ Staff.TABLE_NAME
 				+ "("
 
+				+ Staff.STAFF_NAME + ","
 				+ Staff.USER_NAME + ","
 				+ Staff.PASSWORD + ","
-
-				+ Staff.DESIGNATION + ","
-				+ Staff.PHONE_NUMBER + ","
-				+ Staff.GOVERNMENT_ID_NAME + ","
-				+ Staff.GOVERNMENT_ID_NUMBER + ","
 
 				+ Staff.ABOUT + ","
 				+ Staff.PROFILE_IMAGE_URL + ","
 
+				+ Staff.PHONE_NUMBER + ","
+				+ Staff.DESIGNATION + ","
 				+ Staff.IS_ENABLED + ","
+				+ Staff.ACCOUNT_PRIVATE + ","
 
-				+ Staff.STAFF_NAME
+				+ Staff.GOVERNMENT_ID_NAME + ","
+				+ Staff.GOVERNMENT_ID_NUMBER + ","
 
-				+ ") VALUES(?,?, ?,?,?,?, ?,?, ?,?)";
+				+ Staff.CREATE_UPDATE_ITEM_CATEGORY + ","
+				+ Staff.CREATE_UPDATE_ITEMS + ","
+				+ Staff.APPROVE_SHOP_ADMIN_ACCOUNTS + ","
+				+ Staff.APPROVE_SHOPS + ","
+				+ Staff.APPROVE_END_USER_ACCOUNTS + ""
+
+
+
+				+ ") VALUES(?,?,? ,?,? ,?,?,?,? ,?,? ,?,?,?,?,?)";
 
 		try {
 
@@ -57,23 +65,29 @@ public class StaffDAOPrepared {
 
 			statement = connection.prepareStatement(insert, PreparedStatement.RETURN_GENERATED_KEYS);
 
+			int i = 0;
+			statement.setString(++i, staff.getStaffName());
+			statement.setString(++i, staff.getUsername());
+			statement.setString(++i, staff.getPassword());
 
-			statement.setString(1, staff.getUsername());
-			statement.setString(2, staff.getPassword());
+			statement.setString(++i,staff.getAbout());
+			statement.setString(++i,staff.getProfileImageURL());
 
-			statement.setString(3,staff.getDesignation());
-			statement.setString(4,staff.getPhone());
-			statement.setString(5,staff.getGovtIDName());
-			statement.setString(6,staff.getGovtIDNumber());
+			statement.setString(++i,staff.getPhone());
+			statement.setString(++i,staff.getDesignation());
+			statement.setObject(++i,staff.getEnabled());
+			statement.setObject(++i,staff.isAccountPrivate());
 
-			statement.setString(7,staff.getAbout());
-			statement.setString(8,staff.getProfileImageURL());
+			statement.setString(++i,staff.getGovtIDName());
+			statement.setString(++i,staff.getGovtIDNumber());
 
-			statement.setObject(9,staff.getEnabled());
-//			statement.setObject(10,staff.getWaitlisted());
-			statement.setString(10, staff.getStaffName());
 
-//			statement.setInt(11, staff.getStaffID());
+			statement.setObject(++i,staff.isCreateUpdateItemCategory());
+			statement.setObject(++i,staff.isCreateUpdateItems());
+			statement.setObject(++i,staff.isApproveShopAdminAccounts());
+			statement.setObject(++i,staff.isApproveShops());
+			statement.setObject(++i,staff.isApproveEndUserAccounts());
+
 
 			rowIdOfInsertedRow = statement.executeUpdate();
 
@@ -122,20 +136,41 @@ public class StaffDAOPrepared {
 		String updateStatement = "UPDATE " + Staff.TABLE_NAME
 				+ " SET "
 
-				+ Staff.USER_NAME + " =?,"
-				+ Staff.PASSWORD + " =?,"
+				+ Staff.STAFF_NAME + "=?,"
+				+ Staff.USER_NAME + "=?,"
+				+ Staff.PASSWORD + "=?,"
 
-				+ Staff.DESIGNATION + " =?,"
-				+ Staff.PHONE_NUMBER + " =?,"
-				+ Staff.GOVERNMENT_ID_NAME + " =?,"
-				+ Staff.GOVERNMENT_ID_NUMBER + " =?,"
+				+ Staff.ABOUT + "=?,"
+				+ Staff.PROFILE_IMAGE_URL + "=?,"
 
-				+ Staff.ABOUT + " =?,"
-				+ Staff.PROFILE_IMAGE_URL + " =?,"
+				+ Staff.PHONE_NUMBER + "=?,"
+				+ Staff.DESIGNATION + "=?,"
+				+ Staff.IS_ENABLED + "=?,"
+				+ Staff.ACCOUNT_PRIVATE + "=?,"
 
-				+ Staff.IS_ENABLED + " =?,"
-//				+ Staff.IS_WAITLISTED + " =?,"
-				+ Staff.STAFF_NAME + " =?"
+				+ Staff.GOVERNMENT_ID_NAME + "=?,"
+				+ Staff.GOVERNMENT_ID_NUMBER + "=?,"
+
+				+ Staff.CREATE_UPDATE_ITEM_CATEGORY + "=?,"
+				+ Staff.CREATE_UPDATE_ITEMS + "=?,"
+				+ Staff.APPROVE_SHOP_ADMIN_ACCOUNTS + "=?,"
+				+ Staff.APPROVE_SHOPS + "=?,"
+				+ Staff.APPROVE_END_USER_ACCOUNTS + "=?"
+
+
+//				+ Staff.USER_NAME + " =?,"
+//				+ Staff.PASSWORD + " =?,"
+//
+//				+ Staff.DESIGNATION + " =?,"
+//				+ Staff.PHONE_NUMBER + " =?,"
+//				+ Staff.GOVERNMENT_ID_NAME + " =?,"
+//				+ Staff.GOVERNMENT_ID_NUMBER + " =?,"
+//
+//				+ Staff.ABOUT + " =?,"
+//				+ Staff.PROFILE_IMAGE_URL + " =?,"
+//
+//				+ Staff.IS_ENABLED + " =?,"
+//				+ Staff.STAFF_NAME + " =?"
 
 				+ " WHERE " + Staff.STAFF_ID + " = ?";
 
@@ -148,22 +183,30 @@ public class StaffDAOPrepared {
 			connection = dataSource.getConnection();
 			statement = connection.prepareStatement(updateStatement, PreparedStatement.RETURN_GENERATED_KEYS);
 
-			statement.setString(1, staff.getUsername());
-			statement.setString(2, staff.getPassword());
+			int i = 0;
+			statement.setString(++i, staff.getStaffName());
+			statement.setString(++i, staff.getUsername());
+			statement.setString(++i, staff.getPassword());
 
-			statement.setString(3,staff.getDesignation());
-			statement.setString(4,staff.getPhone());
-			statement.setString(5,staff.getGovtIDName());
-			statement.setString(6,staff.getGovtIDNumber());
+			statement.setString(++i,staff.getAbout());
+			statement.setString(++i,staff.getProfileImageURL());
 
-			statement.setString(7,staff.getAbout());
-			statement.setString(8,staff.getProfileImageURL());
+			statement.setString(++i,staff.getPhone());
+			statement.setString(++i,staff.getDesignation());
+			statement.setObject(++i,staff.getEnabled());
+			statement.setObject(++i,staff.isAccountPrivate());
 
-			statement.setObject(9,staff.getEnabled());
-//			statement.setObject(10,staff.getWaitlisted());
-			statement.setString(10, staff.getStaffName());
+			statement.setString(++i,staff.getGovtIDName());
+			statement.setString(++i,staff.getGovtIDNumber());
 
-			statement.setInt(11, staff.getStaffID());
+
+			statement.setObject(++i,staff.isCreateUpdateItemCategory());
+			statement.setObject(++i,staff.isCreateUpdateItems());
+			statement.setObject(++i,staff.isApproveShopAdminAccounts());
+			statement.setObject(++i,staff.isApproveShops());
+			statement.setObject(++i,staff.isApproveEndUserAccounts());
+
+			statement.setObject(++i,staff.getStaffID());
 
 			updatedRows = statement.executeUpdate();
 
@@ -211,20 +254,27 @@ public class StaffDAOPrepared {
 		String updateStatement = "UPDATE " + Staff.TABLE_NAME
 				+ " SET "
 
-				+ Staff.USER_NAME + " =?,"
-				+ Staff.PASSWORD + " =?,"
 
-				+ Staff.DESIGNATION + " =?,"
-				+ Staff.PHONE_NUMBER + " =?,"
-				+ Staff.GOVERNMENT_ID_NAME + " =?,"
-				+ Staff.GOVERNMENT_ID_NUMBER + " =?,"
+				+ Staff.STAFF_NAME + "=?,"
+				+ Staff.USER_NAME + "=?,"
+				+ Staff.PASSWORD + "=?,"
 
-				+ Staff.ABOUT + " =?,"
-				+ Staff.PROFILE_IMAGE_URL + " =?,"
+				+ Staff.ABOUT + "=?,"
+				+ Staff.PROFILE_IMAGE_URL + "=?,"
 
-//				+ Staff.IS_ENABLED + " =?,"
-//				+ Staff.IS_WAITLISTED + " =?,"
-				+ Staff.STAFF_NAME + " =?"
+				+ Staff.PHONE_NUMBER + "=?,"
+				+ Staff.DESIGNATION + "=?,"
+//				+ Staff.IS_ENABLED + "=?,"
+//				+ Staff.ACCOUNT_PRIVATE + "=?,"
+
+				+ Staff.GOVERNMENT_ID_NAME + "=?,"
+				+ Staff.GOVERNMENT_ID_NUMBER + "=?"
+
+//				+ Staff.CREATE_UPDATE_ITEM_CATEGORY + "=?,"
+//				+ Staff.CREATE_UPDATE_ITEMS + "=?,"
+//				+ Staff.APPROVE_SHOP_ADMIN_ACCOUNTS + "=?,"
+//				+ Staff.APPROVE_SHOPS + "=?,"
+//				+ Staff.APPROVE_END_USER_ACCOUNTS + "=?"
 
 				+ " WHERE " + Staff.STAFF_ID + " = ?";
 
@@ -237,22 +287,31 @@ public class StaffDAOPrepared {
 			connection = dataSource.getConnection();
 			statement = connection.prepareStatement(updateStatement, PreparedStatement.RETURN_GENERATED_KEYS);
 
-			statement.setString(1, staff.getUsername());
-			statement.setString(2, staff.getPassword());
 
-			statement.setString(3,staff.getDesignation());
-			statement.setString(4,staff.getPhone());
-			statement.setString(5,staff.getGovtIDName());
-			statement.setString(6,staff.getGovtIDNumber());
+			int i = 0;
+			statement.setString(++i, staff.getStaffName());
+			statement.setString(++i, staff.getUsername());
+			statement.setString(++i, staff.getPassword());
 
-			statement.setString(7,staff.getAbout());
-			statement.setString(8,staff.getProfileImageURL());
+			statement.setString(++i,staff.getAbout());
+			statement.setString(++i,staff.getProfileImageURL());
 
-//			statement.setObject(9,staff.getEnabled());
-//			statement.setObject(10,staff.getWaitlisted());
-			statement.setString(9, staff.getStaffName());
+			statement.setString(++i,staff.getPhone());
+			statement.setString(++i,staff.getDesignation());
+//			statement.setObject(++i,staff.getEnabled());
+//			statement.setObject(++i,staff.isAccountPrivate());
 
-			statement.setInt(10, staff.getStaffID());
+			statement.setString(++i,staff.getGovtIDName());
+			statement.setString(++i,staff.getGovtIDNumber());
+
+
+//			statement.setObject(++i,staff.isCreateUpdateItemCategory());
+//			statement.setObject(++i,staff.isCreateUpdateItems());
+//			statement.setObject(++i,staff.isApproveShopAdminAccounts());
+//			statement.setObject(++i,staff.isApproveShops());
+//			statement.setObject(++i,staff.isApproveEndUserAccounts());
+
+			statement.setObject(++i,staff.getStaffID());
 
 			updatedRows = statement.executeUpdate();
 
@@ -350,28 +409,35 @@ public class StaffDAOPrepared {
 	}
 
 
-	public ArrayList<Staff> getStaff(Boolean isEnabled) {
+	public ArrayList<Staff> getStaffForAdmin(Boolean isEnabled) {
 
 
-		boolean isFirst = true;
+//		boolean isFirst = true;
 
 		String query = "SELECT "
+
 				+ Staff.STAFF_ID + ","
+				+ Staff.STAFF_NAME + ","
 				+ Staff.USER_NAME + ","
 				+ Staff.PASSWORD + ","
-
-				+ Staff.DESIGNATION + ","
-				+ Staff.PHONE_NUMBER + ","
-				+ Staff.GOVERNMENT_ID_NAME + ","
-				+ Staff.GOVERNMENT_ID_NUMBER + ","
-				+ Staff.TIMESTAMP_CREATED + ","
 
 				+ Staff.ABOUT + ","
 				+ Staff.PROFILE_IMAGE_URL + ","
 
+				+ Staff.PHONE_NUMBER + ","
+				+ Staff.DESIGNATION + ","
 				+ Staff.IS_ENABLED + ","
-//				+ Staff.IS_WAITLISTED + ","
-				+ Staff.STAFF_NAME +
+				+ Staff.ACCOUNT_PRIVATE + ","
+
+				+ Staff.GOVERNMENT_ID_NAME + ","
+				+ Staff.GOVERNMENT_ID_NUMBER + ","
+				+ Staff.TIMESTAMP_CREATED + ","
+
+				+ Staff.CREATE_UPDATE_ITEM_CATEGORY + ","
+				+ Staff.CREATE_UPDATE_ITEMS + ","
+				+ Staff.APPROVE_SHOP_ADMIN_ACCOUNTS + ","
+				+ Staff.APPROVE_SHOPS + ","
+				+ Staff.APPROVE_END_USER_ACCOUNTS + "" +
 
 				" FROM " + Staff.TABLE_NAME;
 
@@ -379,49 +445,63 @@ public class StaffDAOPrepared {
 
 		if(isEnabled !=null)
 		{
-			query = query + " WHERE " + Staff.IS_ENABLED + " = "  + isEnabled;
+			query = query + " WHERE " + Staff.IS_ENABLED + " = ?";
 
-			isFirst = false;
+//			isFirst = false;
 		}
 
 
 
-		logMessage(query);
+//		logMessage(query);
 
 		ArrayList<Staff> staffList = new ArrayList<Staff>();
 
 
 		Connection connection = null;
-		Statement statement = null;
+		PreparedStatement statement = null;
 		ResultSet rs = null;
 
 		try {
 
 			connection = dataSource.getConnection();
-			statement = connection.createStatement();
+			statement = connection.prepareStatement(query);
 
-			rs = statement.executeQuery(query);
+			if(isEnabled!=null)
+			{
+				int i = 0;
+				statement.setObject(++i,isEnabled);
+			}
+
+
+			rs = statement.executeQuery();
 
 			while (rs.next()) {
 
 				Staff staff = new Staff();
 
 				staff.setStaffID(rs.getInt(Staff.STAFF_ID));
+				staff.setStaffName(rs.getString(Staff.STAFF_NAME));
 				staff.setUsername(rs.getString(Staff.USER_NAME));
 				staff.setPassword(rs.getString(Staff.PASSWORD));
-
-				staff.setDesignation(rs.getString(Staff.DESIGNATION));
-				staff.setPhone(rs.getString(Staff.PHONE_NUMBER));
-				staff.setGovtIDName(rs.getString(Staff.GOVERNMENT_ID_NAME));
-				staff.setGovtIDNumber(rs.getString(Staff.GOVERNMENT_ID_NUMBER));
-				staff.setTimestampCreated(rs.getTimestamp(Staff.TIMESTAMP_CREATED));
 
 				staff.setAbout(rs.getString(Staff.ABOUT));
 				staff.setProfileImageURL(rs.getString(Staff.PROFILE_IMAGE_URL));
 
+
+				staff.setPhone(rs.getString(Staff.PHONE_NUMBER));
+				staff.setDesignation(rs.getString(Staff.DESIGNATION));
 				staff.setEnabled(rs.getBoolean(Staff.IS_ENABLED));
-//				staff.setWaitlisted(rs.getBoolean(Staff.IS_WAITLISTED));
-				staff.setStaffName(rs.getString(Staff.STAFF_NAME));
+				staff.setAccountPrivate(rs.getBoolean(Staff.ACCOUNT_PRIVATE));
+
+				staff.setGovtIDName(rs.getString(Staff.GOVERNMENT_ID_NAME));
+				staff.setGovtIDNumber(rs.getString(Staff.GOVERNMENT_ID_NUMBER));
+				staff.setTimestampCreated(rs.getTimestamp(Staff.TIMESTAMP_CREATED));
+
+				staff.setCreateUpdateItemCategory(rs.getBoolean(Staff.CREATE_UPDATE_ITEM_CATEGORY));
+				staff.setCreateUpdateItems(rs.getBoolean(Staff.CREATE_UPDATE_ITEMS));
+				staff.setApproveShopAdminAccounts(rs.getBoolean(Staff.APPROVE_SHOP_ADMIN_ACCOUNTS));
+				staff.setApproveShops(rs.getBoolean(Staff.APPROVE_SHOPS));
+				staff.setApproveEndUserAccounts(rs.getBoolean(Staff.APPROVE_END_USER_ACCOUNTS));
 
 				staffList.add(staff);
 			}
@@ -471,32 +551,38 @@ public class StaffDAOPrepared {
 	}
 
 
-	public Staff getStaff(int staffID) {
+	public Staff getStaffForSelf(int staffID) {
 
 		String query = "SELECT "
+
 				+ Staff.STAFF_ID + ","
+				+ Staff.STAFF_NAME + ","
 				+ Staff.USER_NAME + ","
 				+ Staff.PASSWORD + ","
-
-				+ Staff.DESIGNATION + ","
-				+ Staff.PHONE_NUMBER + ","
-				+ Staff.GOVERNMENT_ID_NAME + ","
-				+ Staff.GOVERNMENT_ID_NUMBER + ","
-				+ Staff.TIMESTAMP_CREATED + ","
 
 				+ Staff.ABOUT + ","
 				+ Staff.PROFILE_IMAGE_URL + ","
 
+				+ Staff.PHONE_NUMBER + ","
+				+ Staff.DESIGNATION + ","
 				+ Staff.IS_ENABLED + ","
-//				+ Staff.IS_WAITLISTED + ","
-				+ Staff.STAFF_NAME +
+				+ Staff.ACCOUNT_PRIVATE + ","
 
-				" FROM " + Staff.TABLE_NAME
+				+ Staff.GOVERNMENT_ID_NAME + ","
+				+ Staff.GOVERNMENT_ID_NUMBER + ","
+				+ Staff.TIMESTAMP_CREATED + ""
 
-				+ " WHERE " + Staff.STAFF_ID + " = " + staffID;
+//				+ Staff.CREATE_UPDATE_ITEM_CATEGORY + ","
+//				+ Staff.CREATE_UPDATE_ITEMS + ","
+//				+ Staff.APPROVE_SHOP_ADMIN_ACCOUNTS + ","
+//				+ Staff.APPROVE_SHOPS + ","
+//				+ Staff.APPROVE_END_USER_ACCOUNTS + "" +
+
+				+ " FROM " + Staff.TABLE_NAME
+				+ " WHERE " + Staff.STAFF_ID + " = ?";
 
 		Connection connection = null;
-		Statement statement = null;
+		PreparedStatement statement = null;
 		ResultSet rs = null;
 
 
@@ -506,31 +592,40 @@ public class StaffDAOPrepared {
 		try {
 
 			connection = dataSource.getConnection();
-			statement = connection.createStatement();
+			statement = connection.prepareStatement(query);
 
-			rs = statement.executeQuery(query);
+			statement.setObject(1,staffID);
+
+			rs = statement.executeQuery();
 
 			while (rs.next()) {
 
 				staff = new Staff();
+
+
 				staff.setStaffID(rs.getInt(Staff.STAFF_ID));
+				staff.setStaffName(rs.getString(Staff.STAFF_NAME));
 				staff.setUsername(rs.getString(Staff.USER_NAME));
 				staff.setPassword(rs.getString(Staff.PASSWORD));
-
-
-				staff.setDesignation(rs.getString(Staff.DESIGNATION));
-				staff.setPhone(rs.getString(Staff.PHONE_NUMBER));
-				staff.setGovtIDName(rs.getString(Staff.GOVERNMENT_ID_NAME));
-				staff.setGovtIDNumber(rs.getString(Staff.GOVERNMENT_ID_NUMBER));
-				staff.setTimestampCreated(rs.getTimestamp(Staff.TIMESTAMP_CREATED));
 
 				staff.setAbout(rs.getString(Staff.ABOUT));
 				staff.setProfileImageURL(rs.getString(Staff.PROFILE_IMAGE_URL));
 
-				staff.setEnabled(rs.getBoolean(Staff.IS_ENABLED));
-//				staff.setWaitlisted(rs.getBoolean(Staff.IS_WAITLISTED));
-				staff.setStaffName(rs.getString(Staff.STAFF_NAME));
 
+				staff.setPhone(rs.getString(Staff.PHONE_NUMBER));
+				staff.setDesignation(rs.getString(Staff.DESIGNATION));
+				staff.setEnabled(rs.getBoolean(Staff.IS_ENABLED));
+				staff.setAccountPrivate(rs.getBoolean(Staff.ACCOUNT_PRIVATE));
+
+				staff.setGovtIDName(rs.getString(Staff.GOVERNMENT_ID_NAME));
+				staff.setGovtIDNumber(rs.getString(Staff.GOVERNMENT_ID_NUMBER));
+				staff.setTimestampCreated(rs.getTimestamp(Staff.TIMESTAMP_CREATED));
+
+//				staff.setCreateUpdateItemCategory(rs.getBoolean(Staff.CREATE_UPDATE_ITEM_CATEGORY));
+//				staff.setCreateUpdateItems(rs.getBoolean(Staff.CREATE_UPDATE_ITEMS));
+//				staff.setApproveShopAdminAccounts(rs.getBoolean(Staff.APPROVE_SHOP_ADMIN_ACCOUNTS));
+//				staff.setApproveShops(rs.getBoolean(Staff.APPROVE_SHOPS));
+//				staff.setApproveEndUserAccounts(rs.getBoolean(Staff.APPROVE_END_USER_ACCOUNTS));
 			}
 
 
@@ -584,21 +679,26 @@ public class StaffDAOPrepared {
 
 		String query = "SELECT " + Staff.USER_NAME
 				+ " FROM " + Staff.TABLE_NAME
-				+ " WHERE " + Staff.USER_NAME + " = '" + username + "'";
+				+ " WHERE " + Staff.USER_NAME + " = ?";
 
 		Connection connection = null;
-		Statement statement = null;
+		PreparedStatement statement = null;
 		ResultSet rs = null;
 
-//		System.out.println(query);
+		System.out.println("Checked Username : " + username);
 
 //		ShopAdmin shopAdmin = null;
+
+
 
 		try {
 
 			connection = dataSource.getConnection();
-			statement = connection.createStatement();
-			rs = statement.executeQuery(query);
+			statement = connection.prepareStatement(query);
+
+			statement.setObject(1,username);
+
+			rs = statement.executeQuery();
 
 
 			while(rs.next())
@@ -654,7 +754,7 @@ public class StaffDAOPrepared {
 
 
 
-	public Staff checkStaff(Integer staffID,String username, String password)
+	public Staff checkStaff(String username, String password)
 	{
 
 
@@ -667,36 +767,36 @@ public class StaffDAOPrepared {
 						+ Staff.STAFF_ID + ","
 						+ Staff.USER_NAME + ","
 						+ Staff.PASSWORD + ","
-						+ Staff.IS_ENABLED  +
+						+ Staff.IS_ENABLED  + ","
+
+						+ Staff.CREATE_UPDATE_ITEM_CATEGORY + ","
+						+ Staff.CREATE_UPDATE_ITEMS + ","
+						+ Staff.APPROVE_SHOP_ADMIN_ACCOUNTS + ","
+						+ Staff.APPROVE_SHOPS + ","
+						+ Staff.APPROVE_END_USER_ACCOUNTS + "" +
+
 						" FROM " + Staff.TABLE_NAME;
 
-		if(staffID!=null)
-		{
-			query = query + " WHERE " + Staff.STAFF_ID + " = " + staffID;
-
-			isFirst = false;
-		}
+//		if(staffID!=null)
+//		{
+//			query = query + " WHERE " + Staff.STAFF_ID + " = " + staffID;
+//
+//			isFirst = false;
+//		}
 
 		if(username!=null)
 		{
-			String queryPartUsername = Staff.USER_NAME + " = '" + username + "'";
+			String queryPartUsername = Staff.USER_NAME + " = ?";
 
-			if(isFirst)
-			{
-				query = query + " WHERE " + queryPartUsername;
+			query = query + " WHERE " + queryPartUsername;
 
-				isFirst = false;
-			}
-			else
-			{
-				query = query + " AND " + queryPartUsername;
-			}
+			isFirst = false;
 		}
 
 
 		if(password!=null)
 		{
-			String queryPartPassword = Staff.PASSWORD + " = '" + password + "'";
+			String queryPartPassword = Staff.PASSWORD + " = ?";
 
 			if(isFirst)
 			{
@@ -713,7 +813,7 @@ public class StaffDAOPrepared {
 
 
 		Connection connection = null;
-		Statement statement = null;
+		PreparedStatement statement = null;
 		ResultSet rs = null;
 
 
@@ -723,26 +823,37 @@ public class StaffDAOPrepared {
 		try {
 
 			connection = dataSource.getConnection();
-			statement = connection.createStatement();
+			statement = connection.prepareStatement(query);
 
-			rs = statement.executeQuery(query);
+			int i = 0;
+
+			if(username!=null)
+			{
+				statement.setObject(++i,username);
+			}
+
+			if(password!=null)
+			{
+				statement.setObject(++i,password);
+			}
+
+
+			rs = statement.executeQuery();
 
 			while(rs.next())
 			{
 				staff = new Staff();
 
 				staff.setStaffID(rs.getInt(Staff.STAFF_ID));
-//				staff.setStaffName(rs.getString(Staff.STAFF_NAME));
-
 				staff.setUsername(rs.getString(Staff.USER_NAME));
 				staff.setPassword(rs.getString(Staff.PASSWORD));
-
-
-//				staff.setAbout(rs.getString(Staff.ABOUT));
-//				staff.setProfileImageURL(rs.getString(Staff.PROFILE_IMAGE_URL));
-
 				staff.setEnabled(rs.getBoolean(Staff.IS_ENABLED));
-//				staff.setWaitlisted(rs.getBoolean(Staff.IS_WAITLISTED));
+
+				staff.setCreateUpdateItemCategory(rs.getBoolean(Staff.CREATE_UPDATE_ITEM_CATEGORY));
+				staff.setCreateUpdateItems(rs.getBoolean(Staff.CREATE_UPDATE_ITEMS));
+				staff.setApproveShopAdminAccounts(rs.getBoolean(Staff.APPROVE_SHOP_ADMIN_ACCOUNTS));
+				staff.setApproveShops(rs.getBoolean(Staff.APPROVE_SHOPS));
+				staff.setApproveEndUserAccounts(rs.getBoolean(Staff.APPROVE_END_USER_ACCOUNTS));
 
 			}
 

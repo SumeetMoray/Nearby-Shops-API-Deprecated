@@ -74,28 +74,12 @@ public class ShopItemByShopDAO {
 					+  "count( DISTINCT " + ItemReview.TABLE_NAME + "." + ItemReview.END_USER_ID + ") as rating_count" + ","
 					+  "(avg(" + ItemReview.TABLE_NAME + "." + ItemReview.RATING + ")* count( DISTINCT " + ItemReview.TABLE_NAME + "." + ItemReview.END_USER_ID + ") ) as popularity" + ""
 
-					+ " FROM "
-					+ Shop.TABLE_NAME  + "," + ShopItem.TABLE_NAME + ","
+					+ " FROM " + Shop.TABLE_NAME  + "," + ShopItem.TABLE_NAME + "," + ItemReview.TABLE_NAME
+					+ " RIGHT OUTER JOIN " + Item.TABLE_NAME + " ON (" + ItemReview.TABLE_NAME + "." + ItemReview.ITEM_ID + " = " + Item.TABLE_NAME + "." + Item.ITEM_ID + ")" + "," + ItemCategory.TABLE_NAME
+					+ " WHERE " + Shop.TABLE_NAME + "." + Shop.SHOP_ID + "=" + ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
+					+ " AND " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "=" + Item.TABLE_NAME + "." + Item.ITEM_ID
+					+ " AND " + Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "=" + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
 
-					+ ItemReview.TABLE_NAME  + " RIGHT OUTER JOIN " + Item.TABLE_NAME
-
-					+ " ON (" + ItemReview.TABLE_NAME + "." + ItemReview.ITEM_ID
-					+ " = " + Item.TABLE_NAME + "." + Item.ITEM_ID + ")" + ","
-
-					+ ItemCategory.TABLE_NAME
-
-					+ " WHERE "
-					+ Shop.TABLE_NAME + "." + Shop.SHOP_ID
-					+ "="
-					+ ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
-					+ " AND "
-					+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID
-					+ "="
-					+ Item.TABLE_NAME + "." + Item.ITEM_ID
-					+ " AND "
-					+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID
-					+ "="
-					+ ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
 
 
 

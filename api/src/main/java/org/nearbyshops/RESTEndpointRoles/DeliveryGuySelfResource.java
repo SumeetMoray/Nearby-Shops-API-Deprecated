@@ -250,7 +250,7 @@ public class DeliveryGuySelfResource {
 
 			DeliveryGuySelf deliveryGuySelfTwo = deliveryGuySelfDAO.readDeliveryGuySelf(deliveryGuyID);
 
-			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(((ShopAdmin)Globals.accountApproved).getShopID());
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(((ShopAdmin)Globals.accountApproved).getShopAdminID());
 
 			if(deliveryGuySelfTwo.getShopID() != shop.getShopID())
 			{

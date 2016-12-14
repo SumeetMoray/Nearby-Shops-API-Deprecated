@@ -342,7 +342,7 @@ public class ItemCategoryResource {
 
 
 		ItemCategoryEndPoint endPoint = itemCategoryDAO
-				.getItemCategoriesSimple(
+				.getItemCategoriesSimplePrepared(
 						parentID,
 						parentIsNull,
 						searchString,
@@ -459,12 +459,12 @@ public class ItemCategoryResource {
 
 
 
-	@GET
+	/*@GET
 	@Path("/{itemCategoryID}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getItemCategory(@PathParam("itemCategoryID")Integer itemCategoryID)
+	public Response checkRoot(@PathParam("itemCategoryID")Integer itemCategoryID)
 	{	
-		ItemCategory itemCategory = itemCategoryDAO.getItemCategory(itemCategoryID);
+		ItemCategory itemCategory = itemCategoryDAO.checkRoot(itemCategoryID);
 		
 		if(itemCategory!= null)
 		{
@@ -480,7 +480,7 @@ public class ItemCategoryResource {
 					.build();
 			
 		}
-	}
+	}*/
 
 
 
@@ -653,8 +653,6 @@ public class ItemCategoryResource {
 
 		return response;
 	}
-
-
 
 
 }

@@ -20,7 +20,7 @@ public class ShopAdmin {
     // column Names
     public static final String SHOP_ADMIN_ID = "SHOP_ADMIN_ID";
     public static final String NAME = "NAME";
-    public static final String SHOP_ID = "SHOP_ID";
+//    public static final String SHOP_ID = "SHOP_ID";
 
     public static final String USERNAME = "USERNAME";
     public static final String PASSWORD = "PASSWORD";
@@ -28,19 +28,16 @@ public class ShopAdmin {
     public static final String ABOUT = "ABOUT";
     public static final String PROFILE_IMAGE_URL = "PROFILE_IMAGE_URL";
     public static final String PHONE_NUMBER = "PHONE_NUMBER";
-
-    // to be Implemented
     public static final String DESIGNATION = "DESIGNATION";
-//    public static final String ADMIN_ENABLED = "ADMIN_ENABLED";
-//    public static final String ADMIN_WAITLISTED = "ADMIN_WAITLISTED";
 
     // to be Implemented
     public static final String IS_ENABLED = "IS_ENABLED";
     public static final String IS_WAITLISTED = "IS_WAITLISTED";
 
+    public static final String ACCOUNT_PRIVATE = "ACCOUNT_PRIVATE";
+
     public static final String GOVERNMENT_ID_NUMBER = "GOVERNMENT_ID_NUMBER";
     public static final String GOVERNMENT_ID_NAME = "GOVERNMENT_ID_NAME";
-
     public static final String TIMESTAMP_CREATED = "TIMESTAMP_CREATED";
 
 
@@ -79,7 +76,7 @@ public class ShopAdmin {
 
     private int shopAdminID;
     private String name;
-    private Integer shopID;
+//    private Integer shopID;
 
     private String username;
     private String password;
@@ -112,14 +109,6 @@ public class ShopAdmin {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Integer getShopID() {
-        return shopID;
-    }
-
-    public void setShopID(Integer shopID) {
-        this.shopID = shopID;
     }
 
     public String getUsername() {

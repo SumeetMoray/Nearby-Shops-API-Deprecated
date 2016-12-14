@@ -212,7 +212,7 @@ public class StaffResource {
 	public Response getStaff(@QueryParam("IsEnabled") Boolean isEnabled)
 	{
 
-		List<Staff> list = daoPrepared.getStaff(isEnabled);
+		List<Staff> list = daoPrepared.getStaffForAdmin(isEnabled);
 
 		GenericEntity<List<Staff>> listEntity = new GenericEntity<List<Staff>>(list){
 			
@@ -240,10 +240,10 @@ public class StaffResource {
 	@Path("/{staffID}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed({GlobalConstants.ROLE_ADMIN})
-	public Response getStaff(@PathParam("staffID")int staffID)
+	public Response getStaffForSelf(@PathParam("staffID")int staffID)
 	{
 
-		Staff staff = daoPrepared.getStaff(staffID);
+		Staff staff = daoPrepared.getStaffForSelf(staffID);
 		
 		if(staff != null)
 		{
@@ -303,7 +303,7 @@ public class StaffResource {
 
 		if(Globals.accountApproved instanceof Staff)
 		{
-			staff = Globals.staffDAOPrepared.getStaff(((Staff) Globals.accountApproved).getStaffID());
+			staff = Globals.staffDAOPrepared.getStaffForSelf(((Staff) Globals.accountApproved).getStaffID());
 		}
 
 
@@ -450,7 +450,7 @@ public class StaffResource {
 	@POST
 	@Path("/Image")
 	@Consumes({MediaType.APPLICATION_OCTET_STREAM})
-	@RolesAllowed({GlobalConstants.ROLE_DELIVERY_GUY_SELF,GlobalConstants.ROLE_SHOP_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_ADMIN})
 	public Response uploadImage(InputStream in, @HeaderParam("Content-Length") long fileSize,
 								@QueryParam("PreviousImageName") String previousImageName
 	) throws Exception
@@ -569,7 +569,7 @@ public class StaffResource {
 
 	@DELETE
 	@Path("/Image/{name}")
-	@RolesAllowed({GlobalConstants.ROLE_DELIVERY_GUY_SELF,GlobalConstants.ROLE_SHOP_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
 	public Response deleteImageFile(@PathParam("name")String fileName)
 	{
 

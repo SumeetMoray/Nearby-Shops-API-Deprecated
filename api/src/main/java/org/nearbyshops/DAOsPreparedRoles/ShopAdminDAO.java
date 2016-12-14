@@ -311,67 +311,6 @@ public class ShopAdminDAO {
 
 	}
 
-	public int updateShopID(ShopAdmin shopAdmin)
-	{
-		// Shop Admin is not allowed to update Enabled or Waitlisted fields they are reserved for Service Level Admins only.
-
-		String updateStatement = "UPDATE " + ShopAdmin.TABLE_NAME
-				+ " SET "
-				+ ShopAdmin.SHOP_ID + " =?"
-				+ " WHERE " + ShopAdmin.SHOP_ADMIN_ID + " = ?";
-
-		Connection connection = null;
-		PreparedStatement statement = null;
-		int updatedRows = -1;
-
-		try {
-
-			connection = dataSource.getConnection();
-			statement = connection.prepareStatement(updateStatement);
-
-			statement.setObject(1,shopAdmin.getShopID());
-			statement.setObject(2,shopAdmin.getShopAdminID());
-
-			updatedRows = statement.executeUpdate();
-
-
-			System.out.println("Total rows updated: " + updatedRows);
-
-			//conn.close();
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		finally
-
-		{
-
-			try {
-
-				if(statement!=null)
-				{statement.close();}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			try {
-
-				if(connection!=null)
-				{connection.close();}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		return updatedRows;
-
-	}
-	
-
-
 	public int deleteShopAdmin(int shopAdminID)
 	{
 		

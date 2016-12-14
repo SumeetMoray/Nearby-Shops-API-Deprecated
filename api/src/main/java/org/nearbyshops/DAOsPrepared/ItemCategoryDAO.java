@@ -510,6 +510,270 @@ public class ItemCategoryDAO {
 	}
 
 
+	public ItemCategoryEndPoint getItemCategoriesSimplePrepared(
+			Integer parentID,
+			Boolean parentIsNull,
+			String searchString,
+			String sortBy,
+			Integer limit, Integer offset)
+	{
+
+		boolean queryNormalFirst = true;
+
+
+		String queryNormal = "SELECT "
+
+				+ "count(" + ItemCategory.ITEM_CATEGORY_ID + ") over() AS full_count " + ","
+				+ ItemCategory.ITEM_CATEGORY_ID + ","
+				+ ItemCategory.PARENT_CATEGORY_ID + ","
+				+ ItemCategory.IMAGE_PATH + ","
+				+ ItemCategory.ITEM_CATEGORY_DESCRIPTION + ","
+
+				+ ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT + ","
+				+ ItemCategory.IS_ABSTRACT + ","
+
+				+ ItemCategory.IS_LEAF_NODE + ","
+				+ ItemCategory.ITEM_CATEGORY_NAME +
+
+				" FROM " + ItemCategory.TABLE_NAME;
+
+
+
+
+
+
+		if(parentID!=null)
+		{
+			queryNormal = queryNormal + " WHERE "
+					+ ItemCategory.PARENT_CATEGORY_ID + " = ?";
+
+			queryNormalFirst = false;
+		}
+
+
+
+		if(parentIsNull!=null&& parentIsNull)
+		{
+
+			String queryNormalPart = ItemCategory.PARENT_CATEGORY_ID + " IS NULL";
+
+			if(queryNormalFirst)
+			{
+				queryNormal = queryNormal + " WHERE " + queryNormalPart;
+				queryNormalFirst = false;
+
+			}else
+			{
+				queryNormal = queryNormal + " AND " + queryNormalPart;
+
+			}
+		}
+
+
+
+		if(searchString !=null)
+		{
+			String queryPartSearch = " ( " +ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT +" ilike ? "
+					+ " or " + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_DESCRIPTION + " ilike ?"
+					+ " or " + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_NAME + " ilike ? ) ";
+
+
+//			String queryPartSearch = " ( " +ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT +" ilike '%" + searchString + "%'"
+//					+ " or " + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_DESCRIPTION + " ilike '%" + searchString + "%'"
+//					+ " or " + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_NAME + " ilike '%" + searchString + "%'" + ") ";
+
+
+			if(queryNormalFirst)
+			{
+				queryNormal = queryNormal + " WHERE " + queryPartSearch;
+				queryNormalFirst = false;
+			}
+			else
+			{
+				queryNormal = queryNormal + " AND " + queryPartSearch;
+			}
+		}
+
+
+
+
+
+		if(sortBy!=null)
+		{
+			if(!sortBy.equals(""))
+			{
+				String queryPartSortBy = " ORDER BY " + sortBy;
+
+				queryNormal = queryNormal + queryPartSortBy;
+			}
+		}
+
+
+
+		if(limit !=null)
+		{
+
+			String queryPartLimitOffset = "";
+
+			queryPartLimitOffset = " LIMIT ? OFFSET ? ";
+
+
+//			if(offset!=null)
+//			{
+//				queryPartLimitOffset = " LIMIT ?  OFFSET ? ";
+//
+//			}else
+//			{
+//				queryPartLimitOffset = " LIMIT ? OFFSET ? ";
+//			}
+
+
+			queryNormal = queryNormal + queryPartLimitOffset;
+		}
+
+
+
+
+		ArrayList<ItemCategory> itemCategoryList = new ArrayList<ItemCategory>();
+
+		ItemCategoryEndPoint endPoint = new ItemCategoryEndPoint();
+
+
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+
+		boolean rootRemoved = false;
+
+		try {
+
+			connection = dataSource.getConnection();
+
+			statement = connection.prepareStatement(queryNormal);
+
+
+			// set placeholders
+			int i = 0;
+			if(parentID!=null)
+			{
+				statement.setObject(++i,parentID);
+			}
+
+			if(searchString!=null)
+			{
+				statement.setString(++i,"%" + searchString + "%");
+				statement.setString(++i,"%" + searchString + "%");
+				statement.setString(++i,"%" + searchString + "%");
+			}
+
+
+//			if(sortBy!=null)
+//			{
+//				statement.setString(++i,sortBy);
+//			}
+
+			if(limit!=null)
+			{
+				if(offset==null)
+				{
+					offset = 0;
+				}
+
+				statement.setObject(++i,limit);
+				statement.setObject(++i,offset);
+			}
+
+
+
+			rs = statement.executeQuery();
+
+			while(rs.next())
+			{
+				ItemCategory itemCategory = new ItemCategory();
+
+				itemCategory.setItemCategoryID(rs.getInt(ItemCategory.ITEM_CATEGORY_ID));
+
+				if(itemCategory.getItemCategoryID()==1)
+				{
+					rootRemoved=true;
+					continue;
+				}
+
+				itemCategory.setParentCategoryID(rs.getInt(ItemCategory.PARENT_CATEGORY_ID));
+				itemCategory.setIsLeafNode(rs.getBoolean(ItemCategory.IS_LEAF_NODE));
+				itemCategory.setImagePath(rs.getString(ItemCategory.IMAGE_PATH));
+				itemCategory.setCategoryName(rs.getString(ItemCategory.ITEM_CATEGORY_NAME));
+
+				itemCategory.setisAbstractNode(rs.getBoolean(ItemCategory.IS_ABSTRACT));
+				itemCategory.setDescriptionShort(rs.getString(ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT));
+
+				itemCategory.setCategoryDescription(rs.getString(ItemCategory.ITEM_CATEGORY_DESCRIPTION));
+
+				endPoint.setItemCount(rs.getInt("full_count"));
+
+
+				itemCategoryList.add(itemCategory);
+			}
+
+
+
+			if(rootRemoved && endPoint.getItemCount()!=0)
+			{
+				endPoint.setItemCount(endPoint.getItemCount()-1);
+			}
+
+			System.out.println("Total itemCategories queried " + itemCategoryList.size());
+
+
+			endPoint.setResults(itemCategoryList);
+
+		}
+
+
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+		finally
+
+		{
+
+			try {
+				if(rs!=null)
+				{rs.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(statement!=null)
+				{statement.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(connection!=null)
+				{connection.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+
+		return endPoint;
+	}
+
+
+
+
 
 	public ItemCategoryEndPoint getItemCategoriesSimple(
 			Integer parentID,
@@ -750,6 +1014,8 @@ public class ItemCategoryDAO {
 	}
 
 
+
+
 	
 	
 	public ArrayList<ItemCategory> getItemCategoriesJoinRecursive(
@@ -869,7 +1135,7 @@ public class ItemCategoryDAO {
 
 
 
-		if(deliveryRangeMax !=null || deliveryRangeMin != null)
+		if(deliveryRangeMax !=null && deliveryRangeMin != null)
 		{
 
 			// apply delivery range filter
@@ -1264,7 +1530,7 @@ public class ItemCategoryDAO {
 
 
 
-		if(deliveryRangeMax !=null || deliveryRangeMin != null)
+		if(deliveryRangeMax !=null && deliveryRangeMin != null)
 		{
 
 			// apply delivery range filter
@@ -1591,17 +1857,19 @@ public class ItemCategoryDAO {
 
 
 
-	public ItemCategory getItemCategory(int itemCategoryID)
+
+
+	public ItemCategory checkRoot(int itemCategoryID)
 	{
 		
-		String query = "SELECT * FROM " 
-				+ ItemCategory.TABLE_NAME
-				+ " WHERE " +  ItemCategory.ITEM_CATEGORY_ID +  "= " + itemCategoryID;
-		
+		String query = "SELECT " + ItemCategory.ITEM_CATEGORY_ID
+					+ " FROM " + ItemCategory.TABLE_NAME
+					+ " WHERE " +  ItemCategory.ITEM_CATEGORY_ID +  "= ?";
+
 		
 		
 		Connection connection = null;
-		Statement statement = null;
+		PreparedStatement statement = null;
 		ResultSet rs = null;
 		
 		
@@ -1610,23 +1878,16 @@ public class ItemCategoryDAO {
 		try {
 			
 			connection = dataSource.getConnection();
-			statement = connection.createStatement();
-			
-			rs = statement.executeQuery(query);
+			statement = connection.prepareStatement(query);
+
+			statement.setObject(1,itemCategoryID);
+
+			rs = statement.executeQuery();
 			
 			while(rs.next())
 			{
 				itemCategory = new ItemCategory();
 				itemCategory.setItemCategoryID(rs.getInt(ItemCategory.ITEM_CATEGORY_ID));
-				itemCategory.setCategoryName(rs.getString(ItemCategory.ITEM_CATEGORY_NAME));
-				itemCategory.setCategoryDescription(rs.getString(ItemCategory.ITEM_CATEGORY_DESCRIPTION));
-				itemCategory.setParentCategoryID(rs.getInt(ItemCategory.PARENT_CATEGORY_ID));
-				itemCategory.setIsLeafNode(rs.getBoolean(ItemCategory.IS_LEAF_NODE));
-
-				itemCategory.setisAbstractNode(rs.getBoolean(ItemCategory.IS_ABSTRACT));
-				itemCategory.setDescriptionShort(rs.getString(ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT));
-
-				itemCategory.setImagePath(rs.getString(ItemCategory.IMAGE_PATH));
 			}
 			
 			
