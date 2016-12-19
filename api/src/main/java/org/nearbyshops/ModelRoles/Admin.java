@@ -1,5 +1,7 @@
 package org.nearbyshops.ModelRoles;
 
+import java.sql.Timestamp;
+
 /**
  * Created by sumeet on 29/5/16.
  */
@@ -11,6 +13,7 @@ public class Admin {
     // Column names for Distributor
 
     public static final String ADMIN_ID = "ID";
+
     public static final String ADMIN_NAME = "ADMIN_NAME";
     public static final String USER_NAME = "USER_NAME";
     public static final String PASSWORD = "PASSWORD";
@@ -18,29 +21,87 @@ public class Admin {
     public static final String ABOUT = "ABOUT";
     public static final String PROFILE_IMAGE_URL = "PROFILE_IMAGE_URL";
 
+    public static final String PHONE_NUMBER = "PHONE_NUMBER";
+    public static final String DESIGNATION = "DESIGNATION";
+    // privacy
+    // private accounts will be hidden from public displays in the end user app
+    public static final String ACCOUNT_PRIVATE = "ACCOUNT_PRIVATE";
+    public static final String TIMESTAMP_CREATED = "TIMESTAMP_CREATED";
+
 
     // Create Table CurrentServiceConfiguration Provider
     public static final String createTableAdminPostgres =
+
             "CREATE TABLE IF NOT EXISTS " + Admin.TABLE_NAME + "("
+
             + " " + Admin.ADMIN_ID + " SERIAL PRIMARY KEY,"
             + " " + Admin.USER_NAME + " text UNIQUE NOT NULL,"
             + " " + Admin.PASSWORD + " text NOT NULL,"
             + " " + Admin.ADMIN_NAME + " text,"
 
-                    + " " + Admin.ABOUT + " text,"
-                    + " " + Admin.PROFILE_IMAGE_URL + " text"
-                    + ")";
+            + " " + Admin.ABOUT + " text,"
+            + " " + Admin.PROFILE_IMAGE_URL + " text,"
+
+            + " " + Admin.PHONE_NUMBER + " text,"
+            + " " + Admin.DESIGNATION + " text,"
+
+            + " " + Admin.ACCOUNT_PRIVATE + " boolean,"
+            + " " + Admin.TIMESTAMP_CREATED + " timestamp with time zone NOT NULL DEFAULT now() " + ")";
 
 
 
     // Instance Variables
     private int adminID;
-    private String administratorName;
     private String username;
     private String password;
+    private String administratorName;
+
     private String about;
     private String profileImageURL;
 
+    private String phone;
+    private String designation;
+
+    private boolean accountPrivate;
+    private Timestamp timestampCreated;
+
+
+
+
+
+
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getDesignation() {
+        return designation;
+    }
+
+    public void setDesignation(String designation) {
+        this.designation = designation;
+    }
+
+    public boolean isAccountPrivate() {
+        return accountPrivate;
+    }
+
+    public void setAccountPrivate(boolean accountPrivate) {
+        this.accountPrivate = accountPrivate;
+    }
+
+    public Timestamp getTimestampCreated() {
+        return timestampCreated;
+    }
+
+    public void setTimestampCreated(Timestamp timestampCreated) {
+        this.timestampCreated = timestampCreated;
+    }
 
     public String getAbout() {
         return about;

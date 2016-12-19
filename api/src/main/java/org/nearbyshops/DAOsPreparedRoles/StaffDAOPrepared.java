@@ -570,13 +570,13 @@ public class StaffDAOPrepared {
 
 				+ Staff.GOVERNMENT_ID_NAME + ","
 				+ Staff.GOVERNMENT_ID_NUMBER + ","
-				+ Staff.TIMESTAMP_CREATED + ""
+				+ Staff.TIMESTAMP_CREATED + ","
 
-//				+ Staff.CREATE_UPDATE_ITEM_CATEGORY + ","
-//				+ Staff.CREATE_UPDATE_ITEMS + ","
-//				+ Staff.APPROVE_SHOP_ADMIN_ACCOUNTS + ","
-//				+ Staff.APPROVE_SHOPS + ","
-//				+ Staff.APPROVE_END_USER_ACCOUNTS + "" +
+				+ Staff.CREATE_UPDATE_ITEM_CATEGORY + ","
+				+ Staff.CREATE_UPDATE_ITEMS + ","
+				+ Staff.APPROVE_SHOP_ADMIN_ACCOUNTS + ","
+				+ Staff.APPROVE_SHOPS + ","
+				+ Staff.APPROVE_END_USER_ACCOUNTS + ""
 
 				+ " FROM " + Staff.TABLE_NAME
 				+ " WHERE " + Staff.STAFF_ID + " = ?";
@@ -621,11 +621,11 @@ public class StaffDAOPrepared {
 				staff.setGovtIDNumber(rs.getString(Staff.GOVERNMENT_ID_NUMBER));
 				staff.setTimestampCreated(rs.getTimestamp(Staff.TIMESTAMP_CREATED));
 
-//				staff.setCreateUpdateItemCategory(rs.getBoolean(Staff.CREATE_UPDATE_ITEM_CATEGORY));
-//				staff.setCreateUpdateItems(rs.getBoolean(Staff.CREATE_UPDATE_ITEMS));
-//				staff.setApproveShopAdminAccounts(rs.getBoolean(Staff.APPROVE_SHOP_ADMIN_ACCOUNTS));
-//				staff.setApproveShops(rs.getBoolean(Staff.APPROVE_SHOPS));
-//				staff.setApproveEndUserAccounts(rs.getBoolean(Staff.APPROVE_END_USER_ACCOUNTS));
+				staff.setCreateUpdateItemCategory(rs.getBoolean(Staff.CREATE_UPDATE_ITEM_CATEGORY));
+				staff.setCreateUpdateItems(rs.getBoolean(Staff.CREATE_UPDATE_ITEMS));
+				staff.setApproveShopAdminAccounts(rs.getBoolean(Staff.APPROVE_SHOP_ADMIN_ACCOUNTS));
+				staff.setApproveShops(rs.getBoolean(Staff.APPROVE_SHOPS));
+				staff.setApproveEndUserAccounts(rs.getBoolean(Staff.APPROVE_END_USER_ACCOUNTS));
 			}
 
 
@@ -809,7 +809,7 @@ public class StaffDAOPrepared {
 		}
 
 
-		logMessage(query);
+//		logMessage(query);
 
 
 		Connection connection = null;

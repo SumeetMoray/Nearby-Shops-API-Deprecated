@@ -1,6 +1,8 @@
 package org.nearbyshops;
 
 import org.nearbyshops.DAOsPreparedRoles.*;
+import org.nearbyshops.DAOsPreparedRoles.Deprecated.DistributorDAOPrepared;
+import org.nearbyshops.DAOsPreparedRoles.Deprecated.DistributorStaffDAOPrepared;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
@@ -158,7 +160,7 @@ public class AuthenticationFilterBackup implements ContainerRequestFilter {
             if(role.equals(GlobalConstants.ROLE_ADMIN))
             {
 
-                if(adminDAOPrepared.checkAdmin(null,username,password)!=null)
+                if(adminDAOPrepared.checkAdmin(username,password)!=null)
                 {
                     isAllowed = true;
                     return isAllowed;

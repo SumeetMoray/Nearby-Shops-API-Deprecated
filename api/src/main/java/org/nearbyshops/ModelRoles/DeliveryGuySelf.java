@@ -22,23 +22,27 @@ public class DeliveryGuySelf {
     public static final String ABOUT = "ABOUT";
     public static final String PROFILE_IMAGE_URL = "PROFILE_IMAGE_URL";
     public static final String PHONE_NUMBER = "PHONE_NUMBER";
-
     public static final String DESIGNATION = "DESIGNATION";
+
     public static final String CURRENT_LATITUDE = "CURRENT_LATITUDE";
     public static final String CURRENT_LONGITUDE = "CURRENT_LONGITUDE";
-
 
     // to be Implemented
     public static final String IS_ENABLED = "IS_ENABLED";
     public static final String IS_WAITLISTED = "IS_WAITLISTED";
 
+    public static final String ACCOUNT_PRIVATE = "ACCOUNT_PRIVATE";
+
+    public static final String GOVERNMENT_ID_NUMBER = "GOVERNMENT_ID_NUMBER";
+    public static final String GOVERNMENT_ID_NAME = "GOVERNMENT_ID_NAME";
+    public static final String TIMESTAMP_CREATED = "TIMESTAMP_CREATED";
 
 
     // create table statement
     public static final String createtableDeliveryGuySelfPostgres = "CREATE TABLE IF NOT EXISTS " + DeliveryGuySelf.TABLE_NAME + "("
             + " " + DeliveryGuySelf.ID + " SERIAL PRIMARY KEY,"
             + " " + DeliveryGuySelf.NAME + " text,"
-            + " " + DeliveryGuySelf.SHOP_ID + " INT,"
+            + " " + DeliveryGuySelf.SHOP_ID + " INT NOT NULL,"
             + " " + DeliveryGuySelf.USERNAME + " text UNIQUE,"
             + " " + DeliveryGuySelf.PASSWORD + " text,"
 

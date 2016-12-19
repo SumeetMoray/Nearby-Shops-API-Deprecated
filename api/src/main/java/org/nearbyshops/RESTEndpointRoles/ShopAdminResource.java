@@ -2,18 +2,15 @@ package org.nearbyshops.RESTEndpointRoles;
 
 import net.coobird.thumbnailator.Thumbnails;
 import org.nearbyshops.DAOsPrepared.ShopDAO;
-import org.nearbyshops.DAOsPreparedRoles.DeliveryGuySelfDAO;
 import org.nearbyshops.DAOsPreparedRoles.ShopAdminDAO;
 import org.nearbyshops.Globals.APIErrors;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Image;
-import org.nearbyshops.Model.Shop;
-import org.nearbyshops.ModelEndPoints.ShopEndPoint;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
-import org.nearbyshops.ModelRoles.DeliveryGuySelf;
 import org.nearbyshops.ModelRoles.Endpoints.ShopAdminEndPoint;
 import org.nearbyshops.ModelRoles.ShopAdmin;
+import org.nearbyshops.ModelRoles.Staff;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
@@ -27,7 +24,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.List;
 
 
 @Path("/ShopAdmin")
@@ -86,11 +82,23 @@ public class ShopAdminResource {
 	@PUT
 	@Path("/{ShopAdminID}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
 	public Response updateShopAdmin(@PathParam("ShopAdminID")int shopAdminID, ShopAdmin shopAdmin)
 	{
 
 		// the endpoint for updating ShopAdmin profile by the admin
+
+		if(Globals.accountApproved instanceof Staff) {
+			// checking permission
+			Staff staff = (Staff) Globals.accountApproved;
+			if (!staff.isApproveShopAdminAccounts())
+			{
+				// the staff member doesnt have persmission to post Item Category
+				throw new ForbiddenException("Not Permitted");
+			}
+		}
+
+
 
 		shopAdmin.setShopAdminID(shopAdminID);
 
@@ -168,9 +176,20 @@ public class ShopAdminResource {
 
 	@DELETE
 	@Path("/{ShopAdminID}")
-	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN_DISABLED,GlobalConstants.ROLE_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN_DISABLED,GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
 	public Response deleteShopAdmin(@PathParam("ShopAdminID")int shopAdminID)
 	{
+
+		if(Globals.accountApproved instanceof Staff) {
+			// checking permission
+			Staff staff = (Staff) Globals.accountApproved;
+			if (!staff.isApproveShopAdminAccounts())
+			{
+				// the staff member doesnt have persmission to post Item Category
+				throw new ForbiddenException("Not Permitted");
+			}
+		}
+
 
 		if(Globals.accountApproved instanceof ShopAdmin)
 		{
@@ -214,7 +233,7 @@ public class ShopAdminResource {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
 	public Response getShopAdminList(@QueryParam("Enabled")Boolean enabled,
 									 @QueryParam("Waitlisted") Boolean waitlisted,
 									 @QueryParam("SearchString") String searchString,
@@ -222,6 +241,18 @@ public class ShopAdminResource {
 									 @QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset,
 									 @QueryParam("metadata_only")Boolean metaonly)
 	{
+
+
+		if(Globals.accountApproved instanceof Staff) {
+			// checking permission
+			Staff staff = (Staff) Globals.accountApproved;
+			if (!staff.isApproveShopAdminAccounts())
+			{
+				// the staff member doesnt have persmission to post Item Category
+				throw new ForbiddenException("Not Permitted");
+			}
+		}
+
 
 
 		final int max_limit = 100;
@@ -300,7 +331,7 @@ public class ShopAdminResource {
 //
 //
 //
-//		ShopAdmin shopAdmin = shopAdminDAO.getShopAdmin(shopAdminID);
+//		ShopAdmin shopAdmin = shopStaffDAOPrepared.getShopAdmin(shopAdminID);
 //
 //		if(shopAdmin != null)
 //		{
@@ -394,7 +425,7 @@ public class ShopAdminResource {
 	@POST
 	@Path("/Image")
 	@Consumes({MediaType.APPLICATION_OCTET_STREAM})
-	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN_DISABLED,GlobalConstants.ROLE_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN_DISABLED})
 	public Response uploadImage(InputStream in, @HeaderParam("Content-Length") long fileSize,
 							 @QueryParam("PreviousImageName") String previousImageName
 	) throws Exception
@@ -512,7 +543,7 @@ public class ShopAdminResource {
 
 	@DELETE
 	@Path("/Image/{name}")
-	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN_DISABLED,GlobalConstants.ROLE_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN_DISABLED})
 	public Response deleteImageFile(@PathParam("name")String fileName)
 	{
 

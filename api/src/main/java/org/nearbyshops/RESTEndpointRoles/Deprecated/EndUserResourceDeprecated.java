@@ -1,4 +1,4 @@
-package org.nearbyshops.RESTEndpointRoles;
+package org.nearbyshops.RESTEndpointRoles.Deprecated;
 
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.ModelRoles.EndUser;
@@ -13,10 +13,10 @@ import java.util.List;
 
 
 //@Path("/EndUser")
-public class EndUserResource_ {
+public class EndUserResourceDeprecated {
 
 
-	public EndUserResource_() {
+	public EndUserResourceDeprecated() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

@@ -28,6 +28,7 @@ import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Image;
 import org.nearbyshops.Model.Item;
 import org.nearbyshops.ModelEndPoints.ItemEndPoint;
+import org.nearbyshops.ModelRoles.Staff;
 
 
 @Path("/v1/Item")
@@ -41,8 +42,23 @@ public class ItemResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
-	public Response saveItem(@Valid Item item)
-	{	
+	public Response saveItem(Item item)
+	{
+
+		if(Globals.accountApproved instanceof Staff) {
+
+			// checking permission
+			Staff staff = (Staff) Globals.accountApproved;
+
+			if (!staff.isCreateUpdateItems())
+			{
+				// the staff member doesnt have persmission to post Item Category
+
+				throw new ForbiddenException("Not Permitted");
+			}
+		}
+
+
 		int idOfInsertedRow = itemDAO.saveItem(item);
 		
 		item.setItemID(idOfInsertedRow);
@@ -75,6 +91,19 @@ public class ItemResource {
 	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
 	public Response changeParent(Item item, @PathParam("ItemID")int itemID)
 	{
+
+
+		if(Globals.accountApproved instanceof Staff) {
+
+			Staff staff = (Staff) Globals.accountApproved;
+
+			if (!staff.isCreateUpdateItems())
+			{
+				// the staff member doesnt have persmission to post Item Category
+
+				throw new ForbiddenException("Not Permitted");
+			}
+		}
 
 		item.setItemID(itemID);
 
@@ -109,6 +138,20 @@ public class ItemResource {
 	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
 	public Response changeParentBulk(List<Item> itemList)
 	{
+
+
+		if(Globals.accountApproved instanceof Staff) {
+
+			Staff staff = (Staff) Globals.accountApproved;
+
+			if (!staff.isCreateUpdateItems())
+			{
+				// the staff member doesnt have persmission to post Item Category
+
+				throw new ForbiddenException("Not Permitted");
+			}
+		}
+
 		int rowCountSum = 0;
 
 //		for(Item item : itemList)
@@ -150,6 +193,18 @@ public class ItemResource {
 	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
 	public Response updateItem(Item item, @PathParam("ItemID")int itemID)
 	{
+
+
+		if(Globals.accountApproved instanceof Staff) {
+
+			Staff staff = (Staff) Globals.accountApproved;
+
+			if (!staff.isCreateUpdateItems())
+			{
+				// the staff member doesnt have persmission to post Item Category
+				throw new ForbiddenException("Not Permitted");
+			}
+		}
 			
 		item.setItemID(itemID);
 	
@@ -184,6 +239,18 @@ public class ItemResource {
 	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
 	public Response updateItemBulk(List<Item> itemList)
 	{
+
+		if(Globals.accountApproved instanceof Staff) {
+
+			// checking permission
+			Staff staff = (Staff) Globals.accountApproved;
+			if (!staff.isCreateUpdateItems())
+			{
+				// the staff member doesnt have persmission to post Item Category
+				throw new ForbiddenException("Not Permitted");
+			}
+		}
+
 		int rowCountSum = 0;
 
 //		for(Item item : itemList)
@@ -224,6 +291,17 @@ public class ItemResource {
 	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
 	public Response deleteItem(@PathParam("ItemID")int itemID)
 	{
+
+		if(Globals.accountApproved instanceof Staff) {
+
+			// checking permission
+			Staff staff = (Staff) Globals.accountApproved;
+			if (!staff.isCreateUpdateItems())
+			{
+				// the staff member doesnt have persmission to post Item Category
+				throw new ForbiddenException("Not Permitted");
+			}
+		}
 		
 		int rowCount = itemDAO.deleteItem(itemID);
 		
@@ -580,11 +658,22 @@ public class ItemResource {
 	@POST
 	@Path("/Image")
 	@Consumes({MediaType.APPLICATION_OCTET_STREAM})
-	@RolesAllowed({GlobalConstants.ROLE_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
 	public Response uploadImage(InputStream in, @HeaderParam("Content-Length") long fileSize,
 								@QueryParam("PreviousImageName") String previousImageName
 	) throws Exception
 	{
+
+		if(Globals.accountApproved instanceof Staff)
+		{
+			// checking permission
+			Staff staff = (Staff) Globals.accountApproved;
+			if (!staff.isCreateUpdateItems())
+			{
+				// the staff member doesnt have persmission to post Item Category
+				throw new ForbiddenException("Not Permitted");
+			}
+		}
 
 
 		if(previousImageName!=null)
@@ -699,14 +788,23 @@ public class ItemResource {
 
 	@DELETE
 	@Path("/Image/{name}")
-	@RolesAllowed({GlobalConstants.ROLE_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
 	public Response deleteImageFile(@PathParam("name")String fileName)
 	{
 
+		if(Globals.accountApproved instanceof Staff) {
+			// checking permission
+			Staff staff = (Staff) Globals.accountApproved;
+			if (!staff.isCreateUpdateItems())
+			{
+				// the staff member doesnt have persmission to post Item Category
+				throw new ForbiddenException("Not Permitted");
+			}
+		}
+
+
 		boolean deleteStatus = false;
-
 		Response response;
-
 		System.out.println("Filename: " + fileName);
 
 		try {

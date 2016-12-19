@@ -652,6 +652,9 @@ public class ItemCategoryDAO {
 			statement = connection.prepareStatement(queryNormal);
 
 
+
+
+
 			// set placeholders
 			int i = 0;
 			if(parentID!=null)
@@ -715,6 +718,12 @@ public class ItemCategoryDAO {
 				itemCategoryList.add(itemCategory);
 			}
 
+
+
+			// cast to the pg extension interface
+			org.postgresql.PGStatement pgstmt = statement.unwrap(org.postgresql.PGStatement.class);
+			boolean usingServerPrepare = pgstmt.isUseServerPrepare();
+			System.out.println("Used server side: " + usingServerPrepare + " | Prepare threshold : " + pgstmt.getPrepareThreshold());
 
 
 			if(rootRemoved && endPoint.getItemCount()!=0)

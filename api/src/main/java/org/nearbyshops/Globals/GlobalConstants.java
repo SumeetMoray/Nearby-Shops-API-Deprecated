@@ -59,15 +59,19 @@ public class GlobalConstants {
     // Constants for the Roles in the Application
 
     public static final String ROLE_ADMIN = "ADMIN";
+
+    public static final String ROLE_STAFF_DISABLED = "STAFF_DISABLED";
     public static final String ROLE_STAFF = "STAFF";
 
-    public static final String ROLE_DISTRIBUTOR = "DISTRIBUTOR";
+//    public static final String ROLE_DISTRIBUTOR = "DISTRIBUTOR";
 
-
+    public static final String ROLE_SHOP_STAFF_DISABLED = "SHOP_STAFF_DISABLED";
     public static final String ROLE_SHOP_STAFF = "SHOP_STAFF";
+
     public static final String ROLE_DELIVERY_GUY_SELF = "ROLE_DELIVERY_GUY_SELF";
-    public static final String ROLE_SHOP_ADMIN = "ROLE_SHOP_ADMIN";
+
     public static final String ROLE_SHOP_ADMIN_DISABLED = "ROLE_SHOP_ADMIN_DISABLED";
+    public static final String ROLE_SHOP_ADMIN = "ROLE_SHOP_ADMIN";
 
     public static final String ROLE_END_USER = "END_USER";
 

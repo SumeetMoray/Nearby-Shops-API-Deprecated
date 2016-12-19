@@ -17,6 +17,8 @@ import org.nearbyshops.DAOPreparedSettings.SettingsDAOPrepared;
 import org.nearbyshops.BackupDAOsTwo.EndUserService;
 import org.nearbyshops.DAOsPreparedRoles.*;
 import org.nearbyshops.DAOsPrepared.*;
+import org.nearbyshops.DAOsPreparedRoles.Deprecated.DistributorDAOPrepared;
+import org.nearbyshops.DAOsPreparedRoles.Deprecated.DistributorStaffDAOPrepared;
 import org.nearbyshops.JDBCContract;
 
 import javax.ws.rs.core.MediaType;
@@ -64,6 +66,7 @@ public class Globals {
 	public static ShopItemByItemDAO shopItemByItemDAO = new ShopItemByItemDAO();
 
 	public static ShopAdminDAO shopAdminDAO = new ShopAdminDAO();
+	public static ShopStaffDAOPrepared shopStaffDAOPrepared = new ShopStaffDAOPrepared();
 
 	// security
 	public static ForbiddenOperationsDAO forbiddenOperationsDAO = new ForbiddenOperationsDAO();

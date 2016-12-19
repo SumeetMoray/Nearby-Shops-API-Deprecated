@@ -25,6 +25,7 @@ import org.nearbyshops.Model.Image;
 import org.nearbyshops.Model.ItemCategory;
 import org.nearbyshops.ModelEndPoints.ItemCategoryEndPoint;
 import org.nearbyshops.ModelEndPoints.ShopEndPoint;
+import org.nearbyshops.ModelRoles.Staff;
 
 @Path("/v1/ItemCategory")
 public class ItemCategoryResource {
@@ -43,14 +44,27 @@ public class ItemCategoryResource {
 	@POST	
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
 	public Response saveItemCategory(ItemCategory itemCategory)
 	{
+
+		if(Globals.accountApproved instanceof Staff) {
+
+			Staff staff = (Staff) Globals.accountApproved;
+
+			if (!staff.isCreateUpdateItemCategory())
+			{
+				// the staff member doesnt have persmission to post Item Category
+
+				throw new ForbiddenException("Not Permitted");
+			}
+		}
+
+
+
 		System.out.println(itemCategory.getCategoryName() + " | " + itemCategory.getCategoryDescription());
 	
 		int idOfInsertedRow = itemCategoryDAO.saveItemCategory(itemCategory);
-		
-		
 		itemCategory.setItemCategoryID(idOfInsertedRow);
 		
 		
@@ -79,12 +93,24 @@ public class ItemCategoryResource {
 	@DELETE
 	@Path("/{ItemCategoryID}")
 	@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
 	public Response deleteItemCategory(@PathParam("ItemCategoryID")int itemCategoryID)
 	{
 
-		String message = "";
+		if(Globals.accountApproved instanceof Staff) {
 
+			Staff staff = (Staff) Globals.accountApproved;
+
+			if (!staff.isCreateUpdateItemCategory())
+			{
+				// the staff member doesnt have persmission to post Item Category
+
+				throw new ForbiddenException("Not Permitted");
+			}
+		}
+
+
+		String message = "";
 
 		int rowCount = itemCategoryDAO.deleteItemCategory(itemCategoryID);
 
@@ -116,9 +142,24 @@ public class ItemCategoryResource {
 	@PUT
 	@Path("/ChangeParent/{ItemCategoryID}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
 	public Response changeParent(@PathParam("ItemCategoryID")int itemCategoryID, ItemCategory itemCategory)
 	{
+		if(Globals.accountApproved instanceof Staff) {
+
+			Staff staff = (Staff) Globals.accountApproved;
+
+			if (!staff.isCreateUpdateItemCategory())
+			{
+				// the staff member doesnt have persmission to post Item Category
+
+				throw new ForbiddenException("Not Permitted");
+			}
+		}
+
+
+
+
 		itemCategory.setItemCategoryID(itemCategoryID);
 
 		System.out.println("ItemCategoryID: " + itemCategoryID + " " + itemCategory.getCategoryName()
@@ -149,9 +190,22 @@ public class ItemCategoryResource {
 	@PUT
 	@Path("/ChangeParent")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
 	public Response changeParentBulk(List<ItemCategory> itemCategoryList)
 	{
+		if(Globals.accountApproved instanceof Staff) {
+
+			Staff staff = (Staff) Globals.accountApproved;
+
+			if (!staff.isCreateUpdateItemCategory())
+			{
+				// the staff member doesnt have persmission to post Item Category
+
+				throw new ForbiddenException("Not Permitted");
+			}
+		}
+
+
 		int rowCountSum = 0;
 
 //		for(ItemCategory itemCategory : itemCategoryList)
@@ -193,9 +247,26 @@ public class ItemCategoryResource {
 	@PUT
 	@Path("/{ItemCategoryID}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
 	public Response updateItemCategory(@PathParam("ItemCategoryID")int itemCategoryID, ItemCategory itemCategory)
 	{
+
+
+		if(Globals.accountApproved instanceof Staff) {
+
+			Staff staff = (Staff) Globals.accountApproved;
+
+			if (!staff.isCreateUpdateItemCategory())
+			{
+				// the staff member doesnt have persmission to post Item Category
+
+				throw new ForbiddenException("Not Permitted");
+			}
+		}
+
+
+
+
 		itemCategory.setItemCategoryID(itemCategoryID);
 
 		System.out.println("ItemCategoryID: " + itemCategoryID + " " + itemCategory.getCategoryName()
@@ -225,9 +296,22 @@ public class ItemCategoryResource {
 
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
 	public Response updateItemCategoryBulk(List<ItemCategory> itemCategoryList)
 	{
+
+		if(Globals.accountApproved instanceof Staff) {
+
+			Staff staff = (Staff) Globals.accountApproved;
+
+			if (!staff.isCreateUpdateItemCategory())
+			{
+				// the staff member doesnt have persmission to post Item Category
+
+				throw new ForbiddenException("Not Permitted");
+			}
+		}
+
 		int rowCountSum = 0;
 
 		for(ItemCategory itemCategory : itemCategoryList)
@@ -262,55 +346,55 @@ public class ItemCategoryResource {
 
 
 
-	@GET
-	@Path("/Deprecated")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getItemCategories(
-			@QueryParam("ShopID")Integer shopID,
-			@QueryParam("ParentID")Integer parentID,@QueryParam("IsDetached")Boolean parentIsNull,
-			@QueryParam("latCenter")Double latCenter,@QueryParam("lonCenter")Double lonCenter,
-			@QueryParam("deliveryRangeMax")Double deliveryRangeMax,
-			@QueryParam("deliveryRangeMin")Double deliveryRangeMin,
-			@QueryParam("proximity")Double proximity,
-			@QueryParam("SortBy") String sortBy,
-			@QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset)
-	{
-
-
-		List<ItemCategory> list = 
-				itemCategoryDAO.getItemCategoriesJoinRecursive(
-						shopID, parentID,parentIsNull,
-						latCenter,lonCenter,
-						deliveryRangeMin,
-						deliveryRangeMax,
-						proximity,
-						sortBy,
-						limit,offset);
-		
-		
-		GenericEntity<List<ItemCategory>> listEntity = new GenericEntity<List<ItemCategory>>(list){
-			
-			};
-		
-			
-			if(list.size()<=0)
-			{
-				Response response = Response.status(Status.NO_CONTENT)
-						.entity(listEntity)
-						.build();
-				
-				return response;
-				
-			}else
-			{
-				Response response = Response.status(Status.OK)
-						.entity(listEntity)
-						.build();
-				
-				return response;
-			}
-			
-	}
+//	@GET
+//	@Path("/Deprecated")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public Response getItemCategories(
+//			@QueryParam("ShopID")Integer shopID,
+//			@QueryParam("ParentID")Integer parentID,@QueryParam("IsDetached")Boolean parentIsNull,
+//			@QueryParam("latCenter")Double latCenter,@QueryParam("lonCenter")Double lonCenter,
+//			@QueryParam("deliveryRangeMax")Double deliveryRangeMax,
+//			@QueryParam("deliveryRangeMin")Double deliveryRangeMin,
+//			@QueryParam("proximity")Double proximity,
+//			@QueryParam("SortBy") String sortBy,
+//			@QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset)
+//	{
+//
+//
+//		List<ItemCategory> list =
+//				itemCategoryDAO.getItemCategoriesJoinRecursive(
+//						shopID, parentID,parentIsNull,
+//						latCenter,lonCenter,
+//						deliveryRangeMin,
+//						deliveryRangeMax,
+//						proximity,
+//						sortBy,
+//						limit,offset);
+//
+//
+//		GenericEntity<List<ItemCategory>> listEntity = new GenericEntity<List<ItemCategory>>(list){
+//
+//			};
+//
+//
+//			if(list.size()<=0)
+//			{
+//				Response response = Response.status(Status.NO_CONTENT)
+//						.entity(listEntity)
+//						.build();
+//
+//				return response;
+//
+//			}else
+//			{
+//				Response response = Response.status(Status.OK)
+//						.entity(listEntity)
+//						.build();
+//
+//				return response;
+//			}
+//
+//	}
 
 
 	@GET
@@ -494,12 +578,23 @@ public class ItemCategoryResource {
 	@POST
 	@Path("/Image")
 	@Consumes({MediaType.APPLICATION_OCTET_STREAM})
-	@RolesAllowed({GlobalConstants.ROLE_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
 	public Response uploadImage(InputStream in, @HeaderParam("Content-Length") long fileSize,
 								@QueryParam("PreviousImageName") String previousImageName
 	) throws Exception
 	{
 
+		if(Globals.accountApproved instanceof Staff) {
+
+			Staff staff = (Staff) Globals.accountApproved;
+
+			if (!staff.isCreateUpdateItemCategory())
+			{
+				// the staff member doesnt have persmission to post Item Category
+
+				throw new ForbiddenException("Not Permitted");
+			}
+		}
 
 		if(previousImageName!=null)
 		{
@@ -615,9 +710,21 @@ public class ItemCategoryResource {
 
 	@DELETE
 	@Path("/Image/{name}")
-	@RolesAllowed({GlobalConstants.ROLE_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_ADMIN, GlobalConstants.ROLE_STAFF})
 	public Response deleteImageFile(@PathParam("name")String fileName)
 	{
+
+		if(Globals.accountApproved instanceof Staff) {
+
+			Staff staff = (Staff) Globals.accountApproved;
+
+			if (!staff.isCreateUpdateItemCategory())
+			{
+				// the staff member doesnt have persmission to post Item Category
+
+				throw new ForbiddenException("Not Permitted");
+			}
+		}
 
 		boolean deleteStatus = false;
 

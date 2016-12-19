@@ -20,7 +20,6 @@ import org.nearbyshops.ModelReviewShop.FavouriteShop;
 import org.nearbyshops.ModelReviewShop.ShopReview;
 import org.nearbyshops.ModelReviewShop.ShopReviewThanks;
 import org.nearbyshops.ModelRoles.*;
-import org.nearbyshops.ModelRoles.Deprecated.DistributorStaff;
 import org.nearbyshops.ModelSecurity.ForbiddenOperations;
 import org.nearbyshops.ModelSettings.ServiceConfiguration;
 import org.nearbyshops.ModelSettings.Settings;
@@ -224,9 +223,11 @@ public class Main implements ActionListener {
 
 //			statement.executeUpdate(Distributor.createTableDistributorPostgres);
 
-			statement.executeUpdate(DistributorStaff.createTableDistributorStaffPostgres);
+//			statement.executeUpdate(DistributorStaff.createTableDistributorStaffPostgres);
 			statement.executeUpdate(Shop.createTableShopPostgres);
 			statement.executeUpdate(ShopAdmin.createtableShopAdminPostgres);
+			statement.executeUpdate(DeliveryGuySelf.createtableDeliveryGuySelfPostgres);
+			statement.executeUpdate(ShopStaff.createTableShopStaffPostgres);
 
 			statement.executeUpdate(ShopItem.createTableShopItemPostgres);
 			statement.executeUpdate(EndUser.createTableEndUserPostgres);
@@ -236,7 +237,6 @@ public class Main implements ActionListener {
 			statement.executeUpdate(Staff.createTableStaffPostgres);
 
 			statement.executeUpdate(DeliveryAddress.createTableDeliveryAddressPostgres);
-			statement.executeUpdate(DeliveryGuySelf.createtableDeliveryGuySelfPostgres);
 
 			statement.executeUpdate(Order.createTableOrderPostgres);
 			statement.executeUpdate(OrderItem.createtableOrderItemPostgres);
@@ -271,7 +271,7 @@ public class Main implements ActionListener {
 
 			// Insert the default administrator if it does not exit
 
-			if(Globals.adminDAOPrepared.getAdmin().size()==0)
+			if(Globals.adminDAOPrepared.getAdmin(1)==null)
 			{
 				Admin defaultAdmin = new Admin();
 
@@ -279,7 +279,7 @@ public class Main implements ActionListener {
 				defaultAdmin.setUsername("username");
 				defaultAdmin.setAdministratorName("default name");
 
-				Globals.adminDAOPrepared.saveAdmin(defaultAdmin);
+				Globals.adminDAOPrepared.saveDefaultAdmin(defaultAdmin);
 			}
 
 

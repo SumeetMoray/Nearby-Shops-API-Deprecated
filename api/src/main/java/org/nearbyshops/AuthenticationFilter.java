@@ -1,6 +1,7 @@
 package org.nearbyshops;
 
 import org.nearbyshops.DAOsPreparedRoles.*;
+import org.nearbyshops.DAOsPreparedRoles.Deprecated.DistributorStaffDAOPrepared;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
@@ -31,10 +32,12 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     private AdminDAOPrepared adminDAOPrepared = Globals.adminDAOPrepared;
     private StaffDAOPrepared staffDAOPrepared = Globals.staffDAOPrepared;
 //    private DistributorDAOPrepared distributorDAOPrepared = Globals.distributorDAOPrepared;
-    private DistributorStaffDAOPrepared distributorStaffDAO = Globals.distributorStaffDAOPrepared;
+//    private DistributorStaffDAOPrepared distributorStaffDAO = Globals.distributorStaffDAOPrepared;
     private DeliveryGuySelfDAO deliveryGuySelfDAO = Globals.deliveryGuySelfDAO;
     private EndUserDAOPrepared endUserDAOPrepared = Globals.endUserDAOPrepared;
     private ShopAdminDAO shopAdminDAO = Globals.shopAdminDAO;
+    private ShopStaffDAOPrepared shopStaffDAO = Globals.shopStaffDAOPrepared;
+
 
 
     @Context
@@ -126,14 +129,23 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             if(role.equals(GlobalConstants.ROLE_ADMIN))
             {
 
-                Admin admin = adminDAOPrepared.checkAdmin(null,username,password);
+                Admin admin = adminDAOPrepared.checkAdmin(username,password);
                 if(admin != null)
                 {
                     return admin;
                 }
+            }
+            else if(role.equals(GlobalConstants.ROLE_STAFF_DISABLED))
+            {
+                Staff staff = staffDAOPrepared.checkStaff(username,password);
 
+                if(staff!=null )
+                {
+                    return staff;
+                }
 
-            }else if(role.equals(GlobalConstants.ROLE_STAFF))
+            }
+            else if(role.equals(GlobalConstants.ROLE_STAFF))
             {
                 Staff staff = staffDAOPrepared.checkStaff(username,password);
 
@@ -157,45 +169,25 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
 
             }
-
-            /*else if(role.equals(GlobalConstants.ROLE_DISTRIBUTOR))
+            else if(role.equals(GlobalConstants.ROLE_SHOP_STAFF_DISABLED))
             {
+                ShopStaff shopStaff = shopStaffDAO.checkShopStaff(username,password);
 
-                Distributor distributor = distributorDAOPrepared.checkDistributor(null,username,password);
-                // Distributor account exist and is enabled
-
-//                System.out.println(distributor.getDistributorID());
-
-                if(distributor!=null)
+                if(shopStaff!=null )
                 {
-                    if(distributor.getEnabled())
-                    {
-                        return distributor;
-                    }
-                    elseFixed Group By clauses in Shop and ShopItem and Item endpoints
-                    {
-
-                        Response response = Response.status(403)
-                                .entity(new ErrorNBSAPI(403, "Your account is disabled. Contact administrator to know more !"))
-                                .build();
-
-                        throw new ForbiddenException("Username or password is Incorrect !",response);
-
-                    }
+                    return shopStaff;
                 }
 
-            }*/
-
-            else if (role.equals(GlobalConstants.ROLE_SHOP_STAFF))
+            }
+            else if(role.equals(GlobalConstants.ROLE_SHOP_STAFF))
             {
+                ShopStaff shopStaff = shopStaffDAO.checkShopStaff(username,password);
 
-                DistributorStaff distributorStaff = distributorStaffDAO.checkDistributor(null,username,password);
-                // Distributor account exist and is enabled
-                if(distributorStaff!=null )
+                if(shopStaff!=null)
                 {
-                    if(distributorStaff.getEnabled())
+                    if(shopStaff.getEnabled())
                     {
-                        return distributorStaff;
+                        return shopStaff;
                     }
                     else
                     {
@@ -208,6 +200,8 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
                     }
                 }
+
+
             }
             else if(role.equals(GlobalConstants.ROLE_END_USER))
             {

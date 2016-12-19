@@ -1,12 +1,17 @@
 package org.nearbyshops.RESTEndpointRoles;
 
 import net.coobird.thumbnailator.Thumbnails;
+import org.nearbyshops.DAOsPrepared.ShopDAO;
+import org.nearbyshops.DAOsPreparedRoles.ShopStaffDAOPrepared;
 import org.nearbyshops.DAOsPreparedRoles.StaffDAOPrepared;
 import org.nearbyshops.Globals.APIErrors;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Image;
+import org.nearbyshops.Model.Shop;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
+import org.nearbyshops.ModelRoles.ShopAdmin;
+import org.nearbyshops.ModelRoles.ShopStaff;
 import org.nearbyshops.ModelRoles.Staff;
 
 import javax.annotation.security.RolesAllowed;
@@ -25,13 +30,14 @@ import java.util.List;
 import static org.nearbyshops.Globals.Globals.staffDAOPrepared;
 
 
-@Path("/v1/Staff")
-public class StaffResource {
+@Path("/v1/ShopStaff")
+public class ShopStaffResource {
 
 
-	private StaffDAOPrepared daoPrepared = Globals.staffDAOPrepared;
+	private ShopStaffDAOPrepared daoPrepared = Globals.shopStaffDAOPrepared;
+	private ShopDAO shopDAO = Globals.shopDAO;
 
-	public StaffResource() {
+	public ShopStaffResource() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -40,17 +46,29 @@ public class StaffResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed(GlobalConstants.ROLE_ADMIN)
-	public Response createStaff(Staff staff)
+	@RolesAllowed(GlobalConstants.ROLE_SHOP_ADMIN)
+	public Response createShopStaff(ShopStaff shopStaff)
 	{
 
 //		staff.setEnabled(true);
 //		staff.setWaitlisted(false);
 
+		if(Globals.accountApproved instanceof ShopAdmin)
+		{
+			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
+			Shop shop = shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
+			shopStaff.setShopID(shop.getShopID());
+		}
+		else
+		{
+			throw new ForbiddenException("Not Permitted !");
+		}
 
-		int idOfInsertedRow = daoPrepared.saveStaff(staff);
 
-		staff.setStaffID(idOfInsertedRow);
+
+		int idOfInsertedRow = daoPrepared.saveShopStaff(shopStaff);
+
+		shopStaff.setStaffID(idOfInsertedRow);
 
 		if(idOfInsertedRow >=1)
 		{
@@ -58,7 +76,7 @@ public class StaffResource {
 
 			return Response.status(Status.CREATED)
 					.location(URI.create("/api/staff/" + idOfInsertedRow))
-					.entity(staff)
+					.entity(shopStaff)
 					.build();
 			
 		}else if(idOfInsertedRow <=0)
@@ -76,18 +94,30 @@ public class StaffResource {
 
 
 
+//	@Path("/{StaffID}")
+	//@PathParam("StaffID")int staffID,
 	
 	@PUT
-	@Path("/{StaffID}")
+	@Path("/UpdateByShopAdmin")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_ADMIN})
-	public Response updateSTAFF(@PathParam("StaffID")int staffID,
-								Staff staff)
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN})
+	public Response updateSTAFF(ShopStaff shopStaff)
 	{
+		if(Globals.accountApproved instanceof ShopAdmin)
+		{
+			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
+			Shop shop = shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
+			shopStaff.setShopID(shop.getShopID());
 
-		staff.setStaffID(staffID);
+//			if(shopStaff.getShopID()!=shop.getShopID())
+//			{
+//				// an attempt to update the shop which shop admin does not own
+//				throw new ForbiddenException("Not permitted !");
+//			}
+		}
 
-		int rowCount = daoPrepared.updateStaff(staff);
+
+		int rowCount = daoPrepared.updateShopStaff(shopStaff);
 
 		if(rowCount >= 1)
 		{
@@ -110,28 +140,25 @@ public class StaffResource {
 
 
 	@PUT
-	@Path("/UpdateBySelf/{StaffID}")
+	@Path("/UpdateBySelf")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_STAFF_DISABLED})
-	public Response updateBySelf(@PathParam("StaffID")int staffID, Staff staff)
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_STAFF_DISABLED})
+	public Response updateBySelf(ShopStaff staff)
 	{
+		//@Path("/UpdateBySelf/{StaffID}")
 
-//		@Context HttpHeaders headers
-
-		staff.setStaffID(staffID);
-
-		if(Globals.accountApproved instanceof Staff)
+		if(Globals.accountApproved instanceof ShopStaff)
 		{
-			if(((Staff) Globals.accountApproved).getStaffID()!=staffID)
-			{
-				// an atempt to update the account of other staff member. Which is not permitted !
-				Response responseError = Response.status(Status.FORBIDDEN)
-						.entity(new ErrorNBSAPI(403, APIErrors.UPDATE_BY_WRONG_USER))
-						.build();
+			ShopStaff shopStaff = (ShopStaff) Globals.accountApproved;
 
-				throw new ForbiddenException(APIErrors.UPDATE_BY_WRONG_USER,responseError);
+			if(shopStaff.getStaffID()!=staff.getStaffID())
+			{
+				throw new ForbiddenException("Not Permitted !");
 			}
+
+			staff.setShopID(shopStaff.getShopID());
 		}
+
 
 
 		int rowCount = daoPrepared.updateStaffBySelf(staff);
@@ -160,16 +187,31 @@ public class StaffResource {
 	@DELETE
 	@Path("/{StaffID}")
 	//@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF_DISABLED})
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN,GlobalConstants.ROLE_SHOP_STAFF_DISABLED})
 	public Response deleteStaff(@PathParam("StaffID")int staffID)
 	{
 		//		@Context HttpHeaders headers
 
 
-
-		if(Globals.accountApproved instanceof Staff)
+		if(Globals.accountApproved instanceof ShopAdmin)
 		{
-			if(((Staff) Globals.accountApproved).getStaffID()!=staffID)
+
+			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
+			Shop shop = shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
+
+			ShopStaff shopStaff = daoPrepared.getShopIDforShopStaff(staffID);
+
+			if(shopStaff.getShopID()!=shop.getShopID())
+			{
+				// an attempt to update the staff member who does not belong to the shop you own
+				throw new ForbiddenException("Not permitted. An attempt to update the staff member who does not belong to the shop you own !");
+			}
+		}
+
+
+		if(Globals.accountApproved instanceof ShopStaff)
+		{
+			if(((ShopStaff) Globals.accountApproved).getStaffID()!=staffID)
 			{
 				// an attempt to delete the account of other staff member. Which is not permitted !
 				Response responseError = Response.status(Status.FORBIDDEN)
@@ -181,8 +223,7 @@ public class StaffResource {
 		}
 
 
-
-		int rowCount = daoPrepared.deleteStaff(staffID);
+		int rowCount = daoPrepared.deleteShopStaff(staffID);
 		
 		
 		if(rowCount>=1)
@@ -207,32 +248,37 @@ public class StaffResource {
 	
 	
 	@GET
+	@Path("/ForShopAdmin")
 	@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed(GlobalConstants.ROLE_ADMIN)
-	public Response getStaff(@QueryParam("IsEnabled") Boolean isEnabled)
+	@RolesAllowed(GlobalConstants.ROLE_SHOP_ADMIN)
+	public Response getShopStaff(@QueryParam("IsEnabled") Boolean isEnabled)
 	{
-
-		List<Staff> list = daoPrepared.getStaffForAdmin(isEnabled);
-
-		GenericEntity<List<Staff>> listEntity = new GenericEntity<List<Staff>>(list){
-			
-		};
-	
-		
-		if(list.size()<=0)
+		if(Globals.accountApproved instanceof ShopAdmin)
 		{
+			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
+			Shop shop = shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
 
-			return Response.status(Status.NO_CONTENT)
-					.build();
-			
-		}else
-		{
+			List<ShopStaff> list = daoPrepared.getShopStaffForShopAdmin(isEnabled,shop.getShopID());
 
-			return Response.status(Status.OK)
-					.entity(listEntity)
-					.build();
+			GenericEntity<List<ShopStaff>> listEntity = new GenericEntity<List<ShopStaff>>(list){
+			};
+
+
+			if(list.size()<=0)
+			{
+				return Response.status(Status.NO_CONTENT)
+						.build();
+			}else
+			{
+				return Response.status(Status.OK)
+						.entity(listEntity)
+						.build();
+			}
 		}
-		
+		else
+		{
+			throw new ForbiddenException("Not Permitted ! ");
+		}
 	}
 	
 	
@@ -269,12 +315,12 @@ public class StaffResource {
 	@GET
 	@Path("/CheckUsernameExists/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getCart(@PathParam("username")String username)
+	public Response checkUsername(@PathParam("username")String username)
 	{
 		// Roles allowed not used for this method due to performance and effeciency requirements. Also
 		// this endpoint doesnt required to be secured as it does not expose any confidential information
 
-		boolean result = staffDAOPrepared.checkUsernameExists(username);
+		boolean result = daoPrepared.checkUsernameExists(username);
 
 		if(result)
 		{
@@ -295,17 +341,16 @@ public class StaffResource {
 	@Path("Login")
 	@Produces(MediaType.APPLICATION_JSON)
 	@RolesAllowed({GlobalConstants.ROLE_STAFF_DISABLED})
-	public Response getStaffLogin(@Context HttpHeaders header)
+	public Response getStaffLogin()
 	{
 
+		ShopStaff staff = null;
 
-		Staff staff = null;
-
-		if(Globals.accountApproved instanceof Staff)
+		if(Globals.accountApproved instanceof ShopStaff)
 		{
-			staff = Globals.staffDAOPrepared.getStaffForSelf(((Staff) Globals.accountApproved).getStaffID());
+			ShopStaff shopStaff = (ShopStaff) Globals.accountApproved;
+			staff = daoPrepared.getShopStaffForSelf(shopStaff.getStaffID());
 		}
-
 
 		if(staff != null)
 		{
@@ -322,120 +367,7 @@ public class StaffResource {
 
 		}
 
-
-
-/*
-		//Get request headers
-		final MultivaluedMap<String, String> headers = header.getRequestHeaders();
-
-		//Fetch authorization header
-		final List<String> authorization = headers.get(AUTHORIZATION_PROPERTY);
-
-		//If no authorization information present; block access
-		if (authorization == null || authorization.isEmpty()) {
-
-			Response response = Response.status(Status.UNAUTHORIZED)
-					.entity(new ErrorNBSAPI(401, APIErrors.UPDATE_BY_WRONG_USER))
-					.build();
-
-			throw new NotAuthorizedException(response);
-		}
-
-		//Get encoded username and password
-
-		final String encodedUserPassword = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
-
-		//Decode username and password
-		String usernameAndPassword = new String(Base64.decode(encodedUserPassword.getBytes()));
-
-		System.out.println("Username:Password" + usernameAndPassword);
-
-		//Split username and password tokens
-		final StringTokenizer tokenizer = new StringTokenizer(usernameAndPassword, ":");
-		final String username = tokenizer.nextToken();
-		final String password = tokenizer.nextToken();
-
-		Staff staff = daoPrepared.checkStaff(null,username,password);
-
-		if(staff!= null)
-		{
-			staff.setPassword(null);
-
-			Response response;
-
-			response = Response.status(Status.OK)
-					.entity(staff)
-					.build();
-
-			return response;
-
-		} else
-		{
-			return Response.status(Status.UNAUTHORIZED)
-					.build();
-		}*/
-
 	}
-
-
-	
-
-
-	/*private static final String AUTHENTICATION_SCHEME = "Basic";
-	private static final String AUTHORIZATION_PROPERTY = "Authorization";
-
-	private boolean verifyStaffAccount(HttpHeaders header, int staffID)
-	{
-
-		boolean result = true;
-
-
-		//Get request headers
-		final MultivaluedMap<String, String> headers = header.getRequestHeaders();
-
-		//Fetch authorization header
-		final List<String> authorization = headers.get(AUTHORIZATION_PROPERTY);
-
-		//If no authorization information present; block access
-		if (authorization == null || authorization.isEmpty()) {
-//                requestContext.abortWith(ACCESS_DENIED);
-
-			return false;
-		}
-
-		//Get encoded username and password
-		final String encodedUserPassword = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
-
-		//Decode username and password
-		String usernameAndPassword = new String(Base64.decode(encodedUserPassword.getBytes()));
-
-		System.out.println("Username:Password" + usernameAndPassword);
-
-		//Split username and password tokens
-		final StringTokenizer tokenizer = new StringTokenizer(usernameAndPassword, ":");
-		final String username = tokenizer.nextToken();
-		final String password = tokenizer.nextToken();
-
-
-		Staff staff = daoPrepared.checkStaff(null,username,password);
-		// Distributor account exist and is enabled
-		if(staff!=null && staff.getEnabled())
-		{
-			// If code enters here implies that distributor account is used for update. So we need to check if
-			// the distributor is same as the one authorized.
-
-			if(staff.getStaffID()!=staffID)
-			{
-				// the user doing an update is not the same as the user whose profile is being updated so has to
-				// stop this operation, and should throw an unauthorized exception in this situation.
-				return false;
-			}
-		}
-
-		return true;
-	}
-	*/
-
 
 
 
@@ -443,14 +375,14 @@ public class StaffResource {
 
 	// Image MEthods
 
-	private static final java.nio.file.Path BASE_DIR = Paths.get("./images/Staff");
+	private static final java.nio.file.Path BASE_DIR = Paths.get("./images/ShopStaff");
 	private static final double MAX_IMAGE_SIZE_MB = 2;
 
 
 	@POST
 	@Path("/Image")
 	@Consumes({MediaType.APPLICATION_OCTET_STREAM})
-	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF_DISABLED})
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN,GlobalConstants.ROLE_SHOP_STAFF_DISABLED})
 	public Response uploadImage(InputStream in, @HeaderParam("Content-Length") long fileSize,
 								@QueryParam("PreviousImageName") String previousImageName
 	) throws Exception
@@ -569,7 +501,7 @@ public class StaffResource {
 
 	@DELETE
 	@Path("/Image/{name}")
-	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF_DISABLED})
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN,GlobalConstants.ROLE_SHOP_STAFF_DISABLED})
 	public Response deleteImageFile(@PathParam("name")String fileName)
 	{
 

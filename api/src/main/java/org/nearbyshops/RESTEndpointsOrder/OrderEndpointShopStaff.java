@@ -82,9 +82,7 @@ public class OrderEndpointShopStaff {
 		if(order.getStatusHomeDelivery()== OrderStatusHomeDelivery.ORDER_PLACED)
 		{
 			order.setStatusHomeDelivery(OrderStatusHomeDelivery.ORDER_CONFIRMED);
-
 			int rowCount = Globals.orderService.updateStatusHomeDelivery(order);
-
 
 			if(rowCount >= 1)
 			{
@@ -672,9 +670,6 @@ public class OrderEndpointShopStaff {
 
 
 
-
-
-
 	// Permissions : General
 	// Submit Item Categories
 	// Submit Items
@@ -682,15 +677,14 @@ public class OrderEndpointShopStaff {
 	// Update Stock
 
 	// Permissions : Home Delivery Inventory
-	// 0. Cancel Order
-	// 1. Confirm Orders
-	// 2. Set Orders Packed
+	// 0. Cancel Order's
+	// 1. Confirm Order's
+	// 2. Set Order's Packed
 	// 3. Handover to Delivery
 	// 4. Mark Order Delivered
 	// 5. Payment Received | Collect Payments from Delivery Guy
-	// 6. Accept Return | Cancelled By Shop
+	// 6. Accept Return's | Cancelled By Shop
 
 	// 7. Accept Return | Returned by Delivery Guy | Not required
-
 
 }

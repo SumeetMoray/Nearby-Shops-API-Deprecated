@@ -401,6 +401,4 @@ public class CountOver {
         return endPoint;
     }
 
-
-
 }

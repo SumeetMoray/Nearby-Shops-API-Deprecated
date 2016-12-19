@@ -1,4 +1,4 @@
-package org.nearbyshops.DAOsPreparedRoles;
+package org.nearbyshops.DAOsPreparedRoles.Deprecated;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.Globals.Globals;

@@ -72,13 +72,12 @@ public class OrderEndpointEndUser {
 		}
 		else
 		{
-			Response response = Response.status(Status.NOT_MODIFIED)
-					.entity(null)
-					.build();
 
 			//Response.status(Status.CREATED).location(arg0)
 
-			return response;
+			return Response.status(Status.NOT_MODIFIED)
+					.entity(null)
+					.build();
 		}
 
 	}
@@ -132,19 +131,17 @@ public class OrderEndpointEndUser {
 
 		if(rowCount <= 0)
 		{
-			Response response = Response.status(Status.NOT_MODIFIED)
+
+			return Response.status(Status.NOT_MODIFIED)
 					.entity(null)
 					.build();
-
-			return response;
 		}
 		else if(rowCount >= ordersList.size())
 		{
-			Response response = Response.status(Status.OK)
+
+			return Response.status(Status.OK)
 					.entity(null)
 					.build();
-
-			return response;
 		}
 
 
@@ -206,6 +203,8 @@ public class OrderEndpointEndUser {
 
 		return null;
 	}
+
+
 
 
 
@@ -345,20 +344,16 @@ public class OrderEndpointEndUser {
 
 		if(order != null)
 		{
-			Response response = Response.status(Status.OK)
+
+			return Response.status(Status.OK)
 					.entity(order)
 					.build();
-
-			return response;
 
 		} else
 		{
 
-			Response response = Response.status(Status.NO_CONTENT)
-					.entity(order)
+			return Response.status(Status.NO_CONTENT)
 					.build();
-
-			return response;
 
 		}
 

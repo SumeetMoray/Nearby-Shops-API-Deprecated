@@ -31,6 +31,7 @@ import org.nearbyshops.ModelEndPoints.ShopEndPoint;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
 import org.nearbyshops.ModelRoles.Endpoints.ShopAdminEndPoint;
 import org.nearbyshops.ModelRoles.ShopAdmin;
+import org.nearbyshops.ModelRoles.Staff;
 import org.nearbyshops.Utility.GeoLocation;
 
 
@@ -108,9 +109,21 @@ public class ShopResource {
 	@PUT
 	@Path("/UpdateByAdmin/{ShopID}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
 	public Response updateShop(Shop shop, @PathParam("ShopID")int ShopID)
 	{
+
+
+		if(Globals.accountApproved instanceof Staff) {
+			// checking permission
+			Staff staff = (Staff) Globals.accountApproved;
+			if (!staff.isApproveShops())
+			{
+				// the staff member doesnt have persmission to post Item Category
+				throw new ForbiddenException("Not Permitted");
+			}
+		}
+
 
 		// generate bounding coordinates for the shop based on its center and delivery range
 //		center = GeoLocation.fromDegrees(shop.getLatCenter(),shop.getLonCenter());
@@ -130,19 +143,17 @@ public class ShopResource {
 		
 		if(rowCount >= 1)
 		{
-			Response response = Response.status(Status.OK)
+
+			return Response.status(Status.OK)
 					.entity(null)
 					.build();
-			
-			return response;
 		}
 		if(rowCount <= 0)
 		{
-			Response response = Response.status(Status.NOT_MODIFIED)
+
+			return Response.status(Status.NOT_MODIFIED)
 					.entity(null)
 					.build();
-			
-			return response;
 		}
 
 		return null;
@@ -225,9 +236,10 @@ public class ShopResource {
 	
 	@DELETE
 	@Path("/{ShopID}")
-	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN,GlobalConstants.ROLE_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN,GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
 	public Response deleteShop(@PathParam("ShopID")int shopID)
 	{
+
 		if(Globals.accountApproved instanceof ShopAdmin)
 		{
 			Shop shop = Globals.shopDAO.getShopForShopAdmin(((ShopAdmin) Globals.accountApproved).getShopAdminID());
@@ -242,6 +254,17 @@ public class ShopResource {
 				throw new ForbiddenException(APIErrors.DELETE_BY_WRONG_SHOP_OWNER,responseError);
 			}
 
+		}
+
+
+		if(Globals.accountApproved instanceof Staff) {
+			// checking permission
+			Staff staff = (Staff) Globals.accountApproved;
+			if (!staff.isApproveShops())
+			{
+				// the staff member doesnt have persmission to post Item Category
+				throw new ForbiddenException("Not Permitted");
+			}
 		}
 
 		
@@ -273,46 +296,46 @@ public class ShopResource {
 //	@GET
 //	@Path("/Deprecated")
 //	@Produces(MediaType.APPLICATION_JSON)
-	public Response getShops(@QueryParam("DistributorID")Integer distributorID,
-							 @QueryParam("LeafNodeItemCategoryID")Integer itemCategoryID,
-							 @QueryParam("latCenter")Double latCenter, @QueryParam("lonCenter")Double lonCenter,
-							 @QueryParam("deliveryRangeMax")Double deliveryRangeMax,
-							 @QueryParam("deliveryRangeMin")Double deliveryRangeMin,
-							 @QueryParam("proximity")Double proximity,
-							 @QueryParam("SearchString") String searchString,
-							 @QueryParam("SortBy") String sortBy,
-							 @QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset)
-	{
-		
-		List<Shop> list = shopDAO.getShopListQueryJoin(
-				itemCategoryID,
-				latCenter, lonCenter,
-				deliveryRangeMin,deliveryRangeMax,
-				proximity,searchString,sortBy,limit,offset
-		);
-				
-		
-		GenericEntity<List<Shop>> listEntity = new GenericEntity<List<Shop>>(list){
-			
-			};
-		
-			
-			if(list.size()<=0)
-			{
-
-				return Response.status(Status.NO_CONTENT)
-						.entity(listEntity)
-						.build();
-				
-			}else
-			{
-
-				return Response.status(Status.OK)
-						.entity(listEntity)
-						.build();
-			}
-	
-	}
+//	public Response getShops(@QueryParam("DistributorID")Integer distributorID,
+//							 @QueryParam("LeafNodeItemCategoryID")Integer itemCategoryID,
+//							 @QueryParam("latCenter")Double latCenter, @QueryParam("lonCenter")Double lonCenter,
+//							 @QueryParam("deliveryRangeMax")Double deliveryRangeMax,
+//							 @QueryParam("deliveryRangeMin")Double deliveryRangeMin,
+//							 @QueryParam("proximity")Double proximity,
+//							 @QueryParam("SearchString") String searchString,
+//							 @QueryParam("SortBy") String sortBy,
+//							 @QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset)
+//	{
+//
+//		List<Shop> list = shopDAO.getShopListQueryJoin(
+//				itemCategoryID,
+//				latCenter, lonCenter,
+//				deliveryRangeMin,deliveryRangeMax,
+//				proximity,searchString,sortBy,limit,offset
+//		);
+//
+//
+//		GenericEntity<List<Shop>> listEntity = new GenericEntity<List<Shop>>(list){
+//
+//			};
+//
+//
+//			if(list.size()<=0)
+//			{
+//
+//				return Response.status(Status.NO_CONTENT)
+//						.entity(listEntity)
+//						.build();
+//
+//			}else
+//			{
+//
+//				return Response.status(Status.OK)
+//						.entity(listEntity)
+//						.build();
+//			}
+//
+//	}
 
 
 
@@ -443,7 +466,7 @@ public class ShopResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getShopItems(
+	public Response getShops(
 			@QueryParam("LeafNodeItemCategoryID")Integer itemCategoryID,
 			@QueryParam("latCenter")Double latCenter, @QueryParam("lonCenter")Double lonCenter,
 			@QueryParam("deliveryRangeMax")Double deliveryRangeMax,
@@ -679,7 +702,7 @@ public class ShopResource {
 	@POST
 	@Path("/Image")
 	@Consumes({MediaType.APPLICATION_OCTET_STREAM})
-	@RolesAllowed({GlobalConstants.ROLE_DELIVERY_GUY_SELF,GlobalConstants.ROLE_SHOP_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN})
 	public Response uploadImage(InputStream in, @HeaderParam("Content-Length") long fileSize,
 								@QueryParam("PreviousImageName") String previousImageName
 	) throws Exception
@@ -798,7 +821,7 @@ public class ShopResource {
 
 	@DELETE
 	@Path("/Image/{name}")
-	@RolesAllowed({GlobalConstants.ROLE_DELIVERY_GUY_SELF,GlobalConstants.ROLE_SHOP_ADMIN})
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN})
 	public Response deleteImageFile(@PathParam("name")String fileName)
 	{
 

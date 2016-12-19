@@ -65,27 +65,23 @@ public class ShopItemResource {
 
 		if(rowCountSum ==  itemList.size())
 		{
-			Response response = Response.status(Status.OK)
+
+			return Response.status(Status.OK)
 					.entity(null)
 					.build();
-
-			return response;
 		}
 		else if( rowCountSum < itemList.size() && rowCountSum > 0)
 		{
-			Response response = Response.status(Status.PARTIAL_CONTENT)
+
+			return Response.status(Status.PARTIAL_CONTENT)
 					.entity(null)
 					.build();
-
-			return response;
 		}
 		else if(rowCountSum == 0 ) {
 
-			Response response = Response.status(Status.NOT_MODIFIED)
+			return Response.status(Status.NOT_MODIFIED)
 					.entity(null)
 					.build();
-
-			return response;
 		}
 
 		return null;
@@ -174,7 +170,7 @@ public class ShopItemResource {
 					.build();
 		}
 
-		
+
 		return null;
 	}
 	
@@ -231,7 +227,6 @@ public class ShopItemResource {
 			ShopID = shop.getShopID();
 			rowCount =	shopItemDAO.deleteShopItem(ShopID, itemID);
 		}
-
 
 
 		
