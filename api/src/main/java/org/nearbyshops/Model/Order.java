@@ -17,7 +17,6 @@ public class Order {
     public static final String TABLE_NAME = "CUSTOMER_ORDER";
 
     // Column names for Distributor
-
     public static final String ORDER_ID = "ORDER_ID";
     public static final String END_USER_ID = "END_USER_ID"; // foreign Key
     public static final String SHOP_ID = "SHOP_ID"; // foreign Key

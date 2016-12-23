@@ -794,11 +794,26 @@ public class OrderService {
 
         if(pendingOrders!=null)
         {
-            String queryPartPending =
-                    "( " + "(" + Order.STATUS_HOME_DELIVERY + " <= " + OrderStatusHomeDelivery.HANDOVER_ACCEPTED + ")"
-                            + " OR "
-                            + "((" + Order.STATUS_HOME_DELIVERY + " = " + OrderStatusHomeDelivery.PENDING_DELIVERY_ACCEPT_PENDING_PAYMENT + ")"
-                            + " AND " + "((" + Order.PAYMENT_RECEIVED + " = " + " FALSE ) OR " + " (" + Order.DELIVERY_RECEIVED + " = " + " FALSE ))" + " )" + " )";
+            String queryPartPending = "";
+
+
+            if(pendingOrders)
+            {
+                queryPartPending =
+                        "( " + "(" + Order.STATUS_HOME_DELIVERY + " <= " + OrderStatusHomeDelivery.HANDOVER_ACCEPTED + ")"
+                                + " OR "
+                                + "((" + Order.STATUS_HOME_DELIVERY + " = " + OrderStatusHomeDelivery.PENDING_DELIVERY_ACCEPT_PENDING_PAYMENT + ")"
+                                + " AND " + "((" + Order.PAYMENT_RECEIVED + " = " + " FALSE ) OR " + " (" + Order.DELIVERY_RECEIVED + " = " + " FALSE ))" + " )" + " )";
+
+            }
+            else
+            {
+                queryPartPending =
+                        "( " + "((" + Order.STATUS_HOME_DELIVERY + " = " + OrderStatusHomeDelivery.PENDING_DELIVERY_ACCEPT_PENDING_PAYMENT + ")"
+                                + " AND " + "((" + Order.PAYMENT_RECEIVED + " = " + " TRUE ) AND " + " (" + Order.DELIVERY_RECEIVED + " = " + " TRUE ))" + " )" + " )";
+
+            }
+
 
             if(isFirst)
             {
@@ -965,7 +980,7 @@ public class OrderService {
 
             String queryPartLimitOffset = "";
 
-            if(offset>0)
+            if(offset!=null)
             {
                 queryPartLimitOffset = " LIMIT " + limit + " " + " OFFSET " + offset;
 
@@ -1151,11 +1166,26 @@ public class OrderService {
 
         if(pendingOrders!=null)
         {
-            String queryPartPending =
-                    "( " + "(" + Order.STATUS_HOME_DELIVERY + " <= " + OrderStatusHomeDelivery.HANDOVER_ACCEPTED + ")"
-                            + " OR "
-                            + "((" + Order.STATUS_HOME_DELIVERY + " = " + OrderStatusHomeDelivery.PENDING_DELIVERY_ACCEPT_PENDING_PAYMENT + ")"
-                            + " AND " + "((" + Order.PAYMENT_RECEIVED + " = " + " FALSE ) OR " + " (" + Order.DELIVERY_RECEIVED + " = " + " FALSE ))" + " )" + " )";
+            String queryPartPending = "";
+
+
+            if(pendingOrders)
+            {
+                queryPartPending =
+                        "( " + "(" + Order.STATUS_HOME_DELIVERY + " <= " + OrderStatusHomeDelivery.HANDOVER_ACCEPTED + ")"
+                                + " OR "
+                                + "((" + Order.STATUS_HOME_DELIVERY + " = " + OrderStatusHomeDelivery.PENDING_DELIVERY_ACCEPT_PENDING_PAYMENT + ")"
+                                + " AND " + "((" + Order.PAYMENT_RECEIVED + " = " + " FALSE ) OR " + " (" + Order.DELIVERY_RECEIVED + " = " + " FALSE ))" + " )" + " )";
+
+            }
+            else
+            {
+                queryPartPending =
+                        "( " + "((" + Order.STATUS_HOME_DELIVERY + " = " + OrderStatusHomeDelivery.PENDING_DELIVERY_ACCEPT_PENDING_PAYMENT + ")"
+                                + " AND " + "((" + Order.PAYMENT_RECEIVED + " = " + " TRUE ) AND " + " (" + Order.DELIVERY_RECEIVED + " = " + " TRUE ))" + " )" + " )";
+
+            }
+
 
             if(isFirst)
             {
@@ -1168,6 +1198,7 @@ public class OrderService {
                 query = query + " AND " + queryPartPending;
             }
         }
+
 
 
         if(orderID!=null)

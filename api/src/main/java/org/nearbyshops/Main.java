@@ -1,4 +1,4 @@
-	package org.nearbyshops;
+package org.nearbyshops;
 
 
 import org.glassfish.grizzly.http.server.HttpServer;
@@ -43,6 +43,7 @@ import javax.swing.JFrame;
  *
  */
 
+
 public class Main implements ActionListener {
     // Base URI the Grizzly HTTP server will listen on
 	
@@ -61,17 +62,20 @@ public class Main implements ActionListener {
         // create a resource config that scans for JAX-RS resources and providers
         // in org.sumeet.restsamples.Sample package
         final ResourceConfig rc = new ResourceConfig();
+
+//		rc.register(new DependencyBinder());
 		rc.packages(true,"org.nearbyshops");
 
 		// Now you can expect validation errors to be sent to the client.
-    	rc.property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true);
+//    	rc.property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true);
 				// @ValidateOnExecution annotations on subclasses won't cause errors.
-		rc.property(ServerProperties.BV_DISABLE_VALIDATE_ON_EXECUTABLE_OVERRIDE_CHECK, true);
+//		rc.property(ServerProperties.BV_DISABLE_VALIDATE_ON_EXECUTABLE_OVERRIDE_CHECK, true);
 
 		rc.register(GSONJersey.class);
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
+
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }
 
@@ -154,8 +158,8 @@ public class Main implements ActionListener {
 		try {
 
 			conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres"
-					, JDBCContract.CURRENT_USERNAME
-					, JDBCContract.CURRENT_PASSWORD);
+					,JDBCContract.CURRENT_USERNAME
+					,JDBCContract.CURRENT_PASSWORD);
 
 			stmt = conn.createStatement();
 
@@ -198,7 +202,6 @@ public class Main implements ActionListener {
 			}
 		}
 
-
 	}
 	
 	
@@ -221,9 +224,6 @@ public class Main implements ActionListener {
 			statement.executeUpdate(ItemCategory.createTableItemCategoryPostgres);
 			statement.executeUpdate(Item.createTableItemPostgres);
 
-//			statement.executeUpdate(Distributor.createTableDistributorPostgres);
-
-//			statement.executeUpdate(DistributorStaff.createTableDistributorStaffPostgres);
 			statement.executeUpdate(Shop.createTableShopPostgres);
 			statement.executeUpdate(ShopAdmin.createtableShopAdminPostgres);
 			statement.executeUpdate(DeliveryGuySelf.createtableDeliveryGuySelfPostgres);
@@ -318,6 +318,7 @@ public class Main implements ActionListener {
 
 			// Insert Default Settings
 			SettingsDAOPrepared settingsDAO = Globals.settingsDAOPrepared;
+
 			if(settingsDAO.getServiceConfiguration()==null){
 				settingsDAO.saveSettings(settingsDAO.getDefaultConfiguration());
 			}
@@ -391,9 +392,9 @@ public class Main implements ActionListener {
 				}
 			}
 		}
-		
-		
 	}
+
+
 	
 }
 

@@ -11,6 +11,7 @@ import org.nearbyshops.ModelEndPoints.OrderEndPoint;
 import org.nearbyshops.ModelOrderStatus.OrderStatusHomeDelivery;
 import org.nearbyshops.ModelRoles.DeliveryGuySelf;
 import org.nearbyshops.ModelRoles.ShopAdmin;
+import org.nearbyshops.ModelRoles.ShopStaff;
 import org.nearbyshops.ModelSecurity.ForbiddenOperations;
 
 import javax.annotation.security.RolesAllowed;
@@ -22,7 +23,6 @@ import javax.ws.rs.core.Response.Status;
 import java.util.List;
 
 
-@Singleton
 @Path("/Order/ShopStaff")
 public class OrderEndpointShopStaff {
 
@@ -66,10 +66,14 @@ public class OrderEndpointShopStaff {
 	{
 		Order order = Globals.orderService.readStatusHomeDelivery(orderID);
 
+		System.out.println("Set Confirmed : ShopID : Order : " + order.getShopID());
+
 		if(Globals.accountApproved instanceof ShopAdmin)
 		{
 			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
 			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
+
+			System.out.println("ShopID : Order : " + order.getShopID() + "ShopID : Shop : " + shop.getShopID());
 
 			if(order.getShopID()!=shop.getShopID())
 			{
@@ -667,6 +671,117 @@ public class OrderEndpointShopStaff {
 
 
 
+
+
+
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN,GlobalConstants.ROLE_SHOP_STAFF})
+	public Response getOrders(@QueryParam("OrderID")Integer orderID,
+							  @QueryParam("EndUserID")Integer endUserID,
+							  @QueryParam("ShopID")Integer shopID,
+							  @QueryParam("PickFromShop") Boolean pickFromShop,
+							  @QueryParam("StatusHomeDelivery")Integer homeDeliveryStatus,
+							  @QueryParam("StatusPickFromShopStatus")Integer pickFromShopStatus,
+							  @QueryParam("DeliveryGuyID")Integer deliveryGuyID,
+							  @QueryParam("PaymentsReceived") Boolean paymentsReceived,
+							  @QueryParam("DeliveryReceived") Boolean deliveryReceived,
+							  @QueryParam("latCenter")Double latCenter, @QueryParam("lonCenter")Double lonCenter,
+							  @QueryParam("PendingOrders") Boolean pendingOrders,
+							  @QueryParam("SortBy") String sortBy,
+							  @QueryParam("Limit")Integer limit, @QueryParam("Offset")Integer offset,
+							  @QueryParam("metadata_only")Boolean metaonly)
+
+	{
+
+		// *********************** second Implementation
+
+		if(Globals.accountApproved instanceof ShopAdmin)
+		{
+			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
+			shopID = shop.getShopID();
+		}
+		else if(Globals.accountApproved instanceof ShopStaff)
+		{
+			shopID = ((ShopStaff) Globals.accountApproved).getShopID();
+		}
+		else
+		{
+			throw new ForbiddenException("Not Permitted !");
+		}
+
+
+
+		final int max_limit = 100;
+
+		if(limit!=null)
+		{
+			if(limit>=max_limit)
+			{
+				limit = max_limit;
+			}
+		}
+		else
+		{
+			limit = 30;
+		}
+
+
+		if(offset==null)
+		{
+			offset = 0;
+		}
+
+
+		OrderEndPoint endPoint = Globals.orderService.endPointMetaDataOrders(orderID,
+				endUserID,shopID, pickFromShop,
+				homeDeliveryStatus,pickFromShopStatus,
+				deliveryGuyID,
+				paymentsReceived,deliveryReceived,pendingOrders
+		);
+
+		endPoint.setLimit(limit);
+		endPoint.setMax_limit(max_limit);
+		endPoint.setOffset(offset);
+
+		List<Order> list = null;
+
+
+		if(metaonly==null || (!metaonly)) {
+
+			list =
+					Globals.orderService.readOrders(orderID,
+							endUserID,shopID, pickFromShop,
+							homeDeliveryStatus,pickFromShopStatus,
+							deliveryGuyID,
+							paymentsReceived,deliveryReceived,
+							latCenter,lonCenter,
+							pendingOrders,
+							sortBy,limit,offset);
+
+
+			endPoint.setResults(list);
+		}
+
+
+/*
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+*/
+
+		//Marker
+
+		return Response.status(Status.OK)
+				.entity(endPoint)
+				.build();
+
+
+	}
 
 
 

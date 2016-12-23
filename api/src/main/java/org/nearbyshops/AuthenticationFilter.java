@@ -39,7 +39,6 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     private ShopStaffDAOPrepared shopStaffDAO = Globals.shopStaffDAOPrepared;
 
 
-
     @Context
     private ResourceInfo resourceInfo;
 
@@ -200,8 +199,6 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
                     }
                 }
-
-
             }
             else if(role.equals(GlobalConstants.ROLE_END_USER))
             {
@@ -245,9 +242,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                     }
 
                 }
-
             }
-
             else if(role.equals(GlobalConstants.ROLE_SHOP_ADMIN_DISABLED))
             {
                 ShopAdmin shopAdmin = shopAdminDAO.checkShopAdmin(username,password);

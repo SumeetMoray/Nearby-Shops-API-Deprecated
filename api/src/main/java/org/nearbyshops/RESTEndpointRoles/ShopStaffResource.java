@@ -1,6 +1,7 @@
 package org.nearbyshops.RESTEndpointRoles;
 
 import net.coobird.thumbnailator.Thumbnails;
+import org.jvnet.hk2.annotations.Service;
 import org.nearbyshops.DAOsPrepared.ShopDAO;
 import org.nearbyshops.DAOsPreparedRoles.ShopStaffDAOPrepared;
 import org.nearbyshops.DAOsPreparedRoles.StaffDAOPrepared;
@@ -15,6 +16,7 @@ import org.nearbyshops.ModelRoles.ShopStaff;
 import org.nearbyshops.ModelRoles.Staff;
 
 import javax.annotation.security.RolesAllowed;
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
@@ -31,11 +33,19 @@ import static org.nearbyshops.Globals.Globals.staffDAOPrepared;
 
 
 @Path("/v1/ShopStaff")
+@Service
 public class ShopStaffResource {
-
 
 	private ShopStaffDAOPrepared daoPrepared = Globals.shopStaffDAOPrepared;
 	private ShopDAO shopDAO = Globals.shopDAO;
+
+
+//	@Inject
+//	private ShopStaffDAOPrepared daoPrepared;
+
+//	@Inject
+//	ShopDAO shopDAO;
+
 
 	public ShopStaffResource() {
 		super();
@@ -340,7 +350,7 @@ public class ShopStaffResource {
 	@GET
 	@Path("Login")
 	@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_STAFF_DISABLED})
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_STAFF_DISABLED})
 	public Response getStaffLogin()
 	{
 
@@ -359,7 +369,8 @@ public class ShopStaffResource {
 					.entity(staff)
 					.build();
 
-		} else
+		}
+		else
 		{
 
 			return Response.status(Status.UNAUTHORIZED)

@@ -2,8 +2,6 @@ package org.nearbyshops.DAOsPreparedRoles;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.ModelRoles.DeliveryGuySelf;
-import org.nearbyshops.ModelRoles.ShopAdmin;
 import org.nearbyshops.ModelRoles.Staff;
 
 import java.sql.*;
@@ -12,16 +10,13 @@ import java.util.ArrayList;
 
 public class StaffDAOPrepared {
 
-
 	private HikariDataSource dataSource = Globals.getDataSource();
-
 
 	@Override
 	protected void finalize() throws Throwable {
 		// TODO Auto-generated method stub
 		super.finalize();
 	}
-
 
 
 	public int saveStaff(Staff staff) {
