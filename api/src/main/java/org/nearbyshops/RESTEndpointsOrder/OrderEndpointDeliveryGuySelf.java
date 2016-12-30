@@ -3,10 +3,17 @@ package org.nearbyshops.RESTEndpointsOrder;
 import org.glassfish.jersey.media.sse.EventOutput;
 import org.glassfish.jersey.media.sse.SseBroadcaster;
 import org.glassfish.jersey.media.sse.SseFeature;
+import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Order;
+import org.nearbyshops.Model.Shop;
 import org.nearbyshops.ModelEndPoints.OrderEndPoint;
+import org.nearbyshops.ModelOrderStatus.OrderStatusHomeDelivery;
+import org.nearbyshops.ModelRoles.DeliveryGuySelf;
+import org.nearbyshops.ModelRoles.ShopAdmin;
+import org.nearbyshops.ModelRoles.ShopStaff;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Singleton;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -26,138 +33,122 @@ public class OrderEndpointDeliveryGuySelf {
 	}
 
 
-	@GET
-	@Path("/Notifications/{ShopID}")
-	@Produces(SseFeature.SERVER_SENT_EVENTS)
-	public EventOutput listenToBroadcast(@PathParam("ShopID")int shopID) {
-		final EventOutput eventOutput = new EventOutput();
+//	@GET
+//	@Path("/Notifications/{ShopID}")
+//	@Produces(SseFeature.SERVER_SENT_EVENTS)
+//	public EventOutput listenToBroadcast(@PathParam("ShopID")int shopID) {
+//		final EventOutput eventOutput = new EventOutput();
+//
+//		if(Globals.broadcasterMap.get(shopID)!=null)
+//		{
+//			SseBroadcaster broadcasterOne = Globals.broadcasterMap.get(shopID);
+//			broadcasterOne.add(eventOutput);
+//		}
+//		else
+//		{
+//			SseBroadcaster broadcasterTwo = new SseBroadcaster();
+//			broadcasterTwo.add(eventOutput);
+//			Globals.broadcasterMap.put(shopID,broadcasterTwo);
+//		}
+//
+//		return eventOutput;
+//	}
 
-		if(Globals.broadcasterMap.get(shopID)!=null)
-		{
-			SseBroadcaster broadcasterOne = Globals.broadcasterMap.get(shopID);
-			broadcasterOne.add(eventOutput);
-		}
-		else
-		{
-			SseBroadcaster broadcasterTwo = new SseBroadcaster();
-			broadcasterTwo.add(eventOutput);
-			Globals.broadcasterMap.put(shopID,broadcasterTwo);
-		}
-
-		return eventOutput;
-	}
-
-
-
-
-
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response createOrder(Order order, @QueryParam("CartID") int cartID)
-	{
-
-		Order orderResult = Globals.orderService.placeOrder(order,cartID);
-
-
-		if(orderResult!=null)
-		{
-
-			Globals.broadcastMessage(String.valueOf(orderResult.getOrderID()) + "Has been received !",order.getShopID());
-
-			return Response.status(Status.CREATED)
-					.entity(orderResult)
-					.build();
-
-		}
-		else
-		{
-			Response response = Response.status(Status.NOT_MODIFIED)
-					.entity(null)
-					.build();
-
-			//Response.status(Status.CREATED).location(arg0)
-
-			return response;
-		}
-
-	}
 
 
 	@PUT
-	@Path("/{OrderID}")
+	@Path("/AcceptOrder/{OrderID}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateOrder(@PathParam("OrderID")int orderID, Order order)
+	@RolesAllowed({GlobalConstants.ROLE_DELIVERY_GUY_SELF})
+	public Response acceptOrder(@PathParam("OrderID")int orderID)
 	{
+		Order order = Globals.orderService.readStatusHomeDelivery(orderID);
 
-		order.setOrderID(orderID);
+		System.out.println("Accept Order : ShopID : Order : " + order.getShopID());
 
-		int rowCount = Globals.orderService.updateOrder(order);
-
-
-		if(rowCount >= 1)
+		if(Globals.accountApproved instanceof DeliveryGuySelf)
 		{
+			DeliveryGuySelf deliveryGuySelf = (DeliveryGuySelf) Globals.accountApproved;
 
-			return Response.status(Status.OK)
-					.entity(null)
-					.build();
+			if(deliveryGuySelf.getShopID()!=order.getShopID())
+			{
+				// An attempt to update an order for shop you do not own
+				throw new ForbiddenException("An attempt to update order for shop you do not own !");
+			}
+
+			if(order.getDeliveryGuySelfID() != deliveryGuySelf.getDeliveryGuyID())
+			{
+				throw new ForbiddenException("An attempt to update order for shop you do not own !");
+			}
+
 		}
-		if(rowCount <= 0)
+		else
 		{
-
-			return Response.status(Status.NOT_MODIFIED)
-					.entity(null)
-					.build();
-		}
-
-
-		return null;
-	}
-
-
-	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateOrderBulk(List<Order> ordersList)
-	{
-
-		int rowCount = 0;
-
-		for(Order orderItem: ordersList)
-		{
-			rowCount = rowCount + Globals.orderService.updateOrder(orderItem);
+			throw new ForbiddenException("Not Permitted !");
 		}
 
 
-
-
-		if(rowCount <= 0)
+		if(order.getStatusHomeDelivery()== OrderStatusHomeDelivery.PENDING_HANDOVER)
 		{
-			Response response = Response.status(Status.NOT_MODIFIED)
-					.entity(null)
-					.build();
+			order.setStatusHomeDelivery(OrderStatusHomeDelivery.HANDOVER_ACCEPTED);
+			int rowCount = Globals.orderService.updateStatusHomeDelivery(order);
 
-			return response;
+			if(rowCount >= 1)
+			{
+
+				return Response.status(Status.OK)
+						.build();
+			}
+			if(rowCount <= 0)
+			{
+
+				return Response.status(Status.NOT_MODIFIED)
+						.build();
+			}
+
 		}
-		else if(rowCount >= ordersList.size())
+		else
 		{
-			Response response = Response.status(Status.OK)
-					.entity(null)
-					.build();
-
-			return response;
+			throw new ForbiddenException("Invalid operation !");
 		}
-
 
 		return null;
 	}
 
 
 
-	// requires authentication by the Distributor
+
+
 	@PUT
-	@Path("/ReturnOrder/{OrderID}")
-	public Response returnOrder(@PathParam("OrderID")int orderID)
+	@Path("/ReturnPackage/{OrderID}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_DELIVERY_GUY_SELF})
+	public Response returnOrderPackage(@PathParam("OrderID")int orderID)
 	{
+		Order order = Globals.orderService.readStatusHomeDelivery(orderID);
+
+		System.out.println("Return Order : ShopID : Order : " + order.getShopID());
+
+		if(Globals.accountApproved instanceof DeliveryGuySelf)
+		{
+			DeliveryGuySelf deliveryGuySelf = (DeliveryGuySelf) Globals.accountApproved;
+
+			if(deliveryGuySelf.getShopID()!=order.getShopID())
+			{
+				// An attempt to update an order for shop you do not own
+				throw new ForbiddenException("An attempt to update order for shop you do not own !");
+			}
+			else if(order.getDeliveryGuySelfID() != deliveryGuySelf.getDeliveryGuyID())
+			{
+				throw new ForbiddenException("An attempt to update order for shop you do not own !");
+			}
+
+		}
+		else
+		{
+			throw new ForbiddenException("Not Permitted !");
+		}
+
 
 		int rowCount = Globals.orderService.returnOrderByDeliveryGuy(orderID);
 
@@ -165,52 +156,83 @@ public class OrderEndpointDeliveryGuySelf {
 		{
 
 			return Response.status(Status.OK)
-					.entity(null)
 					.build();
 		}
 		if(rowCount <= 0)
 		{
 
 			return Response.status(Status.NOT_MODIFIED)
-					.entity(null)
 					.build();
 		}
+
 
 		return null;
 	}
 
 
 
-	// requires authentication by the Distributor
 	@PUT
-	@Path("/CancelByShop/{OrderID}")
-	public Response cancelledByShop(@PathParam("OrderID")int orderID)
+	@Path("/HandoverToUser/{OrderID}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_DELIVERY_GUY_SELF})
+	public Response handoverToUser(@PathParam("OrderID")int orderID)
 	{
+		Order order = Globals.orderService.readStatusHomeDelivery(orderID);
 
-		int rowCount = Globals.orderService.orderCancelledByShop(orderID);
+		System.out.println("Handover Order : ShopID : Order : " + order.getShopID());
 
-		if(rowCount >= 1)
+		if(Globals.accountApproved instanceof DeliveryGuySelf)
 		{
+			DeliveryGuySelf deliveryGuySelf = (DeliveryGuySelf) Globals.accountApproved;
 
-			return Response.status(Status.OK)
-					.entity(null)
-					.build();
+			if(deliveryGuySelf.getShopID()!=order.getShopID())
+			{
+				// An attempt to update an order for shop you do not own
+				throw new ForbiddenException("An attempt to update order for shop you do not own !");
+			}
+			else if(order.getDeliveryGuySelfID() != deliveryGuySelf.getDeliveryGuyID())
+			{
+				throw new ForbiddenException("An attempt to update order for shop you do not own !");
+			}
+
 		}
-		if(rowCount <= 0)
+		else
 		{
+			throw new ForbiddenException("Not Permitted !");
+		}
 
-			return Response.status(Status.NOT_MODIFIED)
-					.entity(null)
-					.build();
+
+		if(order.getStatusHomeDelivery() == OrderStatusHomeDelivery.HANDOVER_ACCEPTED) {
+
+			order.setStatusHomeDelivery(OrderStatusHomeDelivery.PENDING_DELIVERY_ACCEPT_PENDING_PAYMENT);
+
+			int rowCount = Globals.orderService.updateStatusHomeDelivery(order);
+
+			if (rowCount >= 1) {
+				return Response.status(Status.OK)
+						.build();
+			}
+			if (rowCount <= 0) {
+				return Response.status(Status.NOT_MODIFIED)
+						.build();
+			}
+
+		}
+		else
+		{
+			throw new ForbiddenException("Invalid operation !");
 		}
 
 		return null;
 	}
+
+
 
 
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_STAFF,GlobalConstants.ROLE_SHOP_ADMIN,GlobalConstants.ROLE_DELIVERY_GUY_SELF})
 	public Response getOrders(@QueryParam("OrderID")Integer orderID,
 							  @QueryParam("EndUserID")Integer endUserID,
 							  @QueryParam("ShopID")Integer shopID,
@@ -220,9 +242,8 @@ public class OrderEndpointDeliveryGuySelf {
 							  @QueryParam("DeliveryGuyID")Integer deliveryGuyID,
 							  @QueryParam("PaymentsReceived") Boolean paymentsReceived,
 							  @QueryParam("DeliveryReceived") Boolean deliveryReceived,
-							  @QueryParam("GetDeliveryAddress")Boolean getDeliveryAddress,
-							  @QueryParam("GetStats")Boolean getStats,
 							  @QueryParam("latCenter")Double latCenter, @QueryParam("lonCenter")Double lonCenter,
+							  @QueryParam("PendingOrders") Boolean pendingOrders,
 							  @QueryParam("SortBy") String sortBy,
 							  @QueryParam("Limit")Integer limit, @QueryParam("Offset")Integer offset,
 							  @QueryParam("metadata_only")Boolean metaonly)
@@ -231,40 +252,81 @@ public class OrderEndpointDeliveryGuySelf {
 
 		// *********************** second Implementation
 
-		int set_limit = 30;
-		int set_offset = 0;
+
+
+		if(Globals.accountApproved instanceof ShopAdmin)
+		{
+			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
+			shopID = shop.getShopID();
+
+			DeliveryGuySelf deliveryGuySelf = Globals.deliveryGuySelfDAO.getShopIDForDeliveryGuy(deliveryGuyID);
+
+			if(deliveryGuySelf.getShopID()!=shop.getShopID())
+			{
+				throw new ForbiddenException("Not Permitted !");
+			}
+
+			System.out.println("Shop Admin Approved !");
+		}
+		else if(Globals.accountApproved instanceof ShopStaff)
+		{
+			shopID = ((ShopStaff) Globals.accountApproved).getShopID();
+
+			DeliveryGuySelf deliveryGuySelf = Globals.deliveryGuySelfDAO.getShopIDForDeliveryGuy(deliveryGuyID);
+
+			if(deliveryGuySelf.getShopID()!=shopID)
+			{
+				throw new ForbiddenException("Not Permitted !");
+			}
+
+			System.out.println("Shop Staff Approved !");
+
+		}
+		else if(Globals.accountApproved instanceof DeliveryGuySelf)
+		{
+			shopID = ((DeliveryGuySelf) Globals.accountApproved).getShopID();
+			deliveryGuyID = ((DeliveryGuySelf) Globals.accountApproved).getDeliveryGuyID();
+
+			System.out.println("Delivery Guy Approved !");
+		}
+		else
+		{
+			throw new ForbiddenException("Not Permitted !");
+		}
+
+
 		final int max_limit = 100;
 
-		if(limit!= null)
+		if(limit!=null)
 		{
-
-			if (limit >= max_limit) {
-
-				set_limit = max_limit;
-			}
-			else
+			if(limit>=max_limit)
 			{
-
-				set_limit = limit;
+				limit = max_limit;
 			}
-
 		}
-
-		if(offset!=null)
+		else
 		{
-			set_offset = offset;
+			limit = 30;
 		}
+
+
+		if(offset==null)
+		{
+			offset = 0;
+		}
+
 
 		OrderEndPoint endPoint = Globals.orderService.endPointMetaDataOrders(orderID,
 				endUserID,shopID, pickFromShop,
 				homeDeliveryStatus,pickFromShopStatus,
 				deliveryGuyID,
-				paymentsReceived,deliveryReceived,null
-				);
+				paymentsReceived,deliveryReceived,pendingOrders
+		);
 
-		endPoint.setLimit(set_limit);
+		endPoint.setLimit(limit);
 		endPoint.setMax_limit(max_limit);
-		endPoint.setOffset(set_offset);
+		endPoint.setOffset(offset);
 
 		List<Order> list = null;
 
@@ -278,36 +340,8 @@ public class OrderEndpointDeliveryGuySelf {
 							deliveryGuyID,
 							paymentsReceived,deliveryReceived,
 							latCenter,lonCenter,
-							null,
+							pendingOrders,
 							sortBy,limit,offset);
-
-
-			/*
-
-			if(getDeliveryAddress!=null && getDeliveryAddress)
-			{
-				for(Order order: list)
-				{
-					order.setDeliveryAddress(
-							Globals.deliveryAddressService
-									.readAddress(order.getDeliveryAddressID())
-					);
-				}
-
-			}
-*/
-
-/*
-
-			if(getStats!=null && getStats) {
-
-				for (Order order : list) {
-
-					order.setOrderStats(Globals.orderItemService.getOrderStats(order.getOrderID()));
-				}
-
-			}
-*/
 
 
 			endPoint.setResults(list);
@@ -327,74 +361,49 @@ public class OrderEndpointDeliveryGuySelf {
 		return Response.status(Status.OK)
 				.entity(endPoint)
 				.build();
-
-
 	}
 
 
 
 
 
-	@GET
-	@Path("/{OrderID}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getOrder(@PathParam("OrderID")int orderID)
-	{
 
-		Order order = Globals.orderService.readOrder(orderID);
 
-		if(order != null)
-		{
-			Response response = Response.status(Status.OK)
-					.entity(order)
-					.build();
-
-			return response;
-
-		} else
-		{
-
-			Response response = Response.status(Status.NO_CONTENT)
-					.entity(order)
-					.build();
-
-			return response;
-
-		}
-
-	}
+	//############################# CODE ENDS HERE ############################################
 
 
 
 
-/*
-	@GET
-	@Path("/Stats/{OrderID}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getOrderStats(@PathParam("OrderID")int orderID)
-	{
 
-		OrderStats orderStats = Globals.orderItemService.getOrderStats(orderID);
 
-		if(orderStats != null)
-		{
-			Response response = Response.status(Status.OK)
-					.entity(orderStats)
-					.build();
 
-			return response;
+//	// requires authentication by the Distributor
+//	@PUT
+//	@Path("/ReturnOrder/{OrderID}")
+//	public Response returnOrder(@PathParam("OrderID")int orderID)
+//	{
+//
+//		int rowCount = Globals.orderService.returnOrderByDeliveryGuy(orderID);
+//
+//		if(rowCount >= 1)
+//		{
+//
+//			return Response.status(Status.OK)
+//					.entity(null)
+//					.build();
+//		}
+//		if(rowCount <= 0)
+//		{
+//
+//			return Response.status(Status.NOT_MODIFIED)
+//					.entity(null)
+//					.build();
+//		}
+//
+//		return null;
+//	}
+//
 
-		} else
-		{
 
-			Response response = Response.status(Status.NO_CONTENT)
-					.entity(orderStats)
-					.build();
-
-			return response;
-
-		}
-
-	}*/
 
 }

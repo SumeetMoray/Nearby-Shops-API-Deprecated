@@ -10,7 +10,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
-import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
@@ -19,7 +18,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import jdk.nashorn.internal.objects.Global;
 import net.coobird.thumbnailator.Thumbnails;
 import org.nearbyshops.DAOsPrepared.ItemDAO;
 import org.nearbyshops.DAOsPrepared.ItemDAOJoinOuter;

@@ -148,7 +148,7 @@ public class EndUserService {
 	public int deleteEndUser(int endUserID)
 	{
 		
-		String deleteStatement = "DELETE FROM " + EndUser.TABLE_NAME + " WHERE ID = "
+		String deleteStatement = "DELETE FROM " + EndUser.TABLE_NAME + " WHERE DELIVERY_GUY_SELF_ID = "
 				+ endUserID;
 		
 		
@@ -283,7 +283,7 @@ public class EndUserService {
 	{
 		
 		String query = "SELECT * FROM " + EndUser.TABLE_NAME
-						+ " WHERE ID = " + endUserID;
+						+ " WHERE DELIVERY_GUY_SELF_ID = " + endUserID;
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -364,7 +364,7 @@ public class EndUserService {
 		if(endUserID!=null)
 		{
 			query = "SELECT * FROM " + EndUser.TABLE_NAME
-					+ " WHERE ID = " + endUserID;
+					+ " WHERE DELIVERY_GUY_SELF_ID = " + endUserID;
 
 		}
 

@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 /**
  * Created by sumeet on 19/6/16.
  */
-public class ServiceConfiguration {
+public class ServiceConfigurationGlobal {
 
 
     // Table Name
@@ -39,6 +39,12 @@ public class ServiceConfiguration {
     public static final String LON_CENTER = "LON_CENTER";
 
     public static final String SERVICE_RANGE = "SERVICE_RANGE";
+//    public static final String SHOP_DELIVERY_RANGE_MAX = "SHOP_DELIVERY_RANGE_MAX";
+
+    // to be taken out to global Service Configuration
+    public static final String IS_OFFICIAL_SERVICE_PROVIDER = "IS_OFFICIAL_SERVICE_PROVIDER";
+    public static final String IS_VERIFIED = "IS_VERIFIED";
+    public static final String SERVICE_URL = "SERVICE_URL";
 
     public static final String CREATED = "CREATED";
     public static final String UPDATED = "UPDATED";
@@ -55,41 +61,41 @@ public class ServiceConfiguration {
 
     // Create Table Statement
     public static final String createTableServiceConfigurationPostgres
-            = "CREATE TABLE IF NOT EXISTS " + ServiceConfiguration.TABLE_NAME + "("
-            + " " + ServiceConfiguration.SERVICE_CONFIGURATION_ID + " SERIAL PRIMARY KEY,"
+            = "CREATE TABLE IF NOT EXISTS " + ServiceConfigurationGlobal.TABLE_NAME + "("
+            + " " + ServiceConfigurationGlobal.SERVICE_CONFIGURATION_ID + " SERIAL PRIMARY KEY,"
 
 //            + " " + ServiceConfiguration.IMAGE_PATH + " text,"
-            + " " + ServiceConfiguration.LOGO_IMAGE_PATH + " text,"
-            + " " + ServiceConfiguration.BACKDROP_IMAGE_PATH + " text,"
+            + " " + ServiceConfigurationGlobal.LOGO_IMAGE_PATH + " text,"
+            + " " + ServiceConfigurationGlobal.BACKDROP_IMAGE_PATH + " text,"
 
-            + " " + ServiceConfiguration.SERVICE_NAME + " text,"
-            + " " + ServiceConfiguration.HELPLINE_NUMBER + " text,"
+            + " " + ServiceConfigurationGlobal.SERVICE_NAME + " text,"
+            + " " + ServiceConfigurationGlobal.HELPLINE_NUMBER + " text,"
 
-            + " " + ServiceConfiguration.ADDRESS + " text,"
-            + " " + ServiceConfiguration.CITY + " text,"
-            + " " + ServiceConfiguration.PINCODE + " BIGINT,"
-            + " " + ServiceConfiguration.LANDMARK + " text,"
-            + " " + ServiceConfiguration.STATE + " text,"
-            + " " + ServiceConfiguration.COUNTRY + " text,"
+            + " " + ServiceConfigurationGlobal.ADDRESS + " text,"
+            + " " + ServiceConfigurationGlobal.CITY + " text,"
+            + " " + ServiceConfigurationGlobal.PINCODE + " BIGINT,"
+            + " " + ServiceConfigurationGlobal.LANDMARK + " text,"
+            + " " + ServiceConfigurationGlobal.STATE + " text,"
+            + " " + ServiceConfigurationGlobal.COUNTRY + " text,"
 
-            + " " + ServiceConfiguration.ISO_COUNTRY_CODE + " text,"
-            + " " + ServiceConfiguration.ISO_LANGUAGE_CODE + " text,"
-            + " " + ServiceConfiguration.ISO_CURRENCY_CODE + " text,"
+            + " " + ServiceConfigurationGlobal.ISO_COUNTRY_CODE + " text,"
+            + " " + ServiceConfigurationGlobal.ISO_LANGUAGE_CODE + " text,"
+            + " " + ServiceConfigurationGlobal.ISO_CURRENCY_CODE + " text,"
 
-            + " " + ServiceConfiguration.SERVICE_TYPE + " INT,"
-            + " " + ServiceConfiguration.SERVICE_LEVEL + " INT,"
+            + " " + ServiceConfigurationGlobal.SERVICE_TYPE + " INT,"
+            + " " + ServiceConfigurationGlobal.SERVICE_LEVEL + " INT,"
 
-            + " " + ServiceConfiguration.LAT_CENTER + " FLOAT,"
-            + " " + ServiceConfiguration.LON_CENTER + " FLOAT,"
-            + " " + ServiceConfiguration.SERVICE_RANGE + " FLOAT,"
+            + " " + ServiceConfigurationGlobal.LAT_CENTER + " FLOAT,"
+            + " " + ServiceConfigurationGlobal.LON_CENTER + " FLOAT,"
+            + " " + ServiceConfigurationGlobal.SERVICE_RANGE + " FLOAT,"
 
 //            + " " + ServiceConfiguration.LAT_MAX + " FLOAT,"
 //            + " " + ServiceConfiguration.LON_MAX + " FLOAT,"
 //            + " " + ServiceConfiguration.LAT_MIN + " FLOAT,"
 //            + " " + ServiceConfiguration.LON_MIN + " FLOAT,"
 
-            + " " + ServiceConfiguration.UPDATED + " timestamp with time zone,"
-            + " " + ServiceConfiguration.CREATED + " timestamp with time zone NOT NULL DEFAULT now()"
+            + " " + ServiceConfigurationGlobal.UPDATED + " timestamp with time zone,"
+            + " " + ServiceConfigurationGlobal.CREATED + " timestamp with time zone NOT NULL DEFAULT now()"
             + ")";
 
 

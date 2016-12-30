@@ -1332,7 +1332,7 @@ public class ItemService {
 				item.setDateTimeCreated(rs.getTimestamp(Item.DATE_TIME_CREATED));
 				item.setQuantityUnit(rs.getString(Item.QUANTITY_UNIT));
 			
-				System.out.println("Get Item by ID : " + item.getItemID());
+				System.out.println("Get Item by DELIVERY_GUY_SELF_ID : " + item.getItemID());
 			}
 			
 			//System.out.println("Total itemCategories queried " + itemCategoryList.size());	

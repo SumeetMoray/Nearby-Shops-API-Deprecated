@@ -98,7 +98,7 @@ public class DistributorService {
 				+ " SET "
 				+ Distributor.DISTRIBUTOR_NAME + " = " + "'" + distributor.getDistributorName() + "'" + ","
 				+ Distributor.PASSWORD + " = " + "'" + distributor.getPassword() + "'"
-				+ " WHERE ID = "
+				+ " WHERE DELIVERY_GUY_SELF_ID = "
 				+ distributor.getDistributorID();
 		
 		Connection conn = null;
@@ -154,7 +154,7 @@ public class DistributorService {
 	public int deleteDistributor(int distributorID)
 	{
 		
-		String deleteStatement = "DELETE FROM " + Distributor.TABLE_NAME + " WHERE ID = "
+		String deleteStatement = "DELETE FROM " + Distributor.TABLE_NAME + " WHERE DELIVERY_GUY_SELF_ID = "
 				+ distributorID;
 		
 		
@@ -293,7 +293,7 @@ public class DistributorService {
 	{
 		
 		String query = "SELECT * FROM " + Distributor.TABLE_NAME
-						+ " WHERE ID = " + distributorID;
+						+ " WHERE DELIVERY_GUY_SELF_ID = " + distributorID;
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -370,7 +370,7 @@ public class DistributorService {
 		if(distributorID!=null)
 		{
 			query = "SELECT * FROM " + Distributor.TABLE_NAME
-					+ " WHERE ID = " + distributorID;
+					+ " WHERE DELIVERY_GUY_SELF_ID = " + distributorID;
 
 		}
 

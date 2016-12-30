@@ -1,12 +1,10 @@
 package org.nearbyshops;
 
 import org.nearbyshops.DAOsPreparedRoles.*;
-import org.nearbyshops.DAOsPreparedRoles.Deprecated.DistributorStaffDAOPrepared;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
 import org.nearbyshops.ModelRoles.*;
-import org.nearbyshops.ModelRoles.Deprecated.DistributorStaff;
 
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.RolesAllowed;

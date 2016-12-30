@@ -20,8 +20,9 @@ public class ShopAdmin {
     // column Names
     public static final String SHOP_ADMIN_ID = "SHOP_ADMIN_ID";
     public static final String NAME = "NAME";
+//    public static final String SHOP_ID = "SHOP_ID";
 
-//    public static final String USERNAME = "USERNAME";
+    public static final String USERNAME = "USERNAME";
     public static final String PASSWORD = "PASSWORD";
 
     public static final String ABOUT = "ABOUT";
@@ -44,9 +45,12 @@ public class ShopAdmin {
     // create table statement
     public static final String createtableShopAdminPostgres
             = "CREATE TABLE IF NOT EXISTS " + ShopAdmin.TABLE_NAME + "("
-            + " " + ShopAdmin.SHOP_ADMIN_ID + " INT UNIQUE NOT NULL,"
+            + " " + ShopAdmin.SHOP_ADMIN_ID + " SERIAL PRIMARY KEY,"
 
             + " " + ShopAdmin.NAME + " text,"
+//            + " " + ShopAdmin.SHOP_ID + " INT UNIQUE,"
+
+            + " " + ShopAdmin.USERNAME + " text UNIQUE NOT NULL,"
             + " " + ShopAdmin.PASSWORD + " text NOT NULL,"
 
             + " " + ShopAdmin.ABOUT + " text,"
@@ -60,9 +64,11 @@ public class ShopAdmin {
             + " " + ShopAdmin.TIMESTAMP_CREATED + " timestamp with time zone NOT NULL DEFAULT now(),"
 
             + " " + ShopAdmin.IS_ENABLED + " boolean NOT NULL,"
-            + " " + ShopAdmin.IS_WAITLISTED + " boolean NOT NULL,"
-            + " FOREIGN KEY(" + ShopAdmin.SHOP_ADMIN_ID +") REFERENCES " + Usernames.TABLE_NAME + "(" + Usernames.USER_ID + ")"
+            + " " + ShopAdmin.IS_WAITLISTED + " boolean NOT NULL"
+
+//            + " FOREIGN KEY(" + ShopAdmin.SHOP_ID +") REFERENCES " + Shop.TABLE_NAME + "(" + Shop.SHOP_ID + ")"
             + ")";
+
 
 
 

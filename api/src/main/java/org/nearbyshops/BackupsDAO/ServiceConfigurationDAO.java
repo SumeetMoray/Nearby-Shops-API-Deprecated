@@ -32,7 +32,7 @@ public class ServiceConfigurationDAO {
 				+ ServiceConfiguration.TABLE_NAME
 				+ "("
 
-				+ ServiceConfiguration.IMAGE_PATH + ","
+//				+ ServiceConfiguration.IMAGE_PATH + ","
 				+ ServiceConfiguration.LOGO_IMAGE_PATH + ","
 				+ ServiceConfiguration.BACKDROP_IMAGE_PATH + ","
 
@@ -56,16 +56,16 @@ public class ServiceConfigurationDAO {
 				+ ServiceConfiguration.LON_CENTER + ","
 				+ ServiceConfiguration.SERVICE_RANGE + ","
 
-				+ ServiceConfiguration.LAT_MAX + ","
-				+ ServiceConfiguration.LON_MAX + ","
-				+ ServiceConfiguration.LAT_MIN + ","
-				+ ServiceConfiguration.LON_MIN + ","
+//				+ ServiceConfiguration.LAT_MAX + ","
+//				+ ServiceConfiguration.LON_MAX + ","
+//				+ ServiceConfiguration.LAT_MIN + ","
+//				+ ServiceConfiguration.LON_MIN + ","
 
 				+ ServiceConfiguration.UPDATED + ","
 
 				+ " ) VALUES ( "
 
-				+ "'" + serviceConfiguration.getImagePath()	+ "',"
+//				+ "'" + serviceConfiguration.getImagePath()	+ "',"
 				+ "'" + serviceConfiguration.getLogoImagePath()	+ "',"
 				+ "'" + serviceConfiguration.getBackdropImagePath()	+ "',"
 
@@ -89,11 +89,11 @@ public class ServiceConfigurationDAO {
 				+ "" + serviceConfiguration.getLonCenter()	+ ","
 				+ "" + serviceConfiguration.getServiceRange()	+ ","
 
-				+ "" + serviceConfiguration.getLatMax()	+ ","
-
-				+ "" + serviceConfiguration.getLonMax()	+ ","
-				+ "" + serviceConfiguration.getLatMin()	+ ","
-				+ "" + serviceConfiguration.getLonMin()	+ ","
+//				+ "" + serviceConfiguration.getLatMax()	+ ","
+//
+//				+ "" + serviceConfiguration.getLonMax()	+ ","
+//				+ "" + serviceConfiguration.getLatMin()	+ ","
+//				+ "" + serviceConfiguration.getLonMin()	+ ","
 
 				+ "'" + "now()"	+ "',"
 				+ ")";
@@ -158,7 +158,7 @@ public class ServiceConfigurationDAO {
 
 				+ " SET "
 
-				+ ServiceConfiguration.IMAGE_PATH + " = " + "'" + serviceConfiguration.getImagePath() + "'" + ","
+//				+ ServiceConfiguration.IMAGE_PATH + " = " + "'" + serviceConfiguration.getImagePath() + "'" + ","
 				+ ServiceConfiguration.LOGO_IMAGE_PATH + " = " + "'" + serviceConfiguration.getLogoImagePath() + "'" + ","
 				+ ServiceConfiguration.BACKDROP_IMAGE_PATH + " = " + "'" + serviceConfiguration.getBackdropImagePath() + "'" + ","
 
@@ -182,11 +182,11 @@ public class ServiceConfigurationDAO {
 				+ ServiceConfiguration.LON_CENTER + " = " + "" + serviceConfiguration.getLonCenter() + "" + ","
 				+ ServiceConfiguration.SERVICE_RANGE + " = " + "" + serviceConfiguration.getServiceRange() + "" + ","
 
-				+ ServiceConfiguration.LAT_MAX + " = " + "" + serviceConfiguration.getLatMax() + "" + ","
-
-				+ ServiceConfiguration.LON_MAX + " = " + "" + serviceConfiguration.getLonMax() + "" + ","
-				+ ServiceConfiguration.LAT_MIN + " = " + "" + serviceConfiguration.getLatMin() + "" + ","
-				+ ServiceConfiguration.LON_MIN + " = " + "" + serviceConfiguration.getLonMin() + "" + ","
+//				+ ServiceConfiguration.LAT_MAX + " = " + "" + serviceConfiguration.getLatMax() + "" + ","
+//
+//				+ ServiceConfiguration.LON_MAX + " = " + "" + serviceConfiguration.getLonMax() + "" + ","
+//				+ ServiceConfiguration.LAT_MIN + " = " + "" + serviceConfiguration.getLatMin() + "" + ","
+//				+ ServiceConfiguration.LON_MIN + " = " + "" + serviceConfiguration.getLonMin() + "" + ","
 
 				+ ServiceConfiguration.UPDATED + " = " + "'" + "now()" + "'" + ","
 
@@ -463,7 +463,7 @@ public class ServiceConfigurationDAO {
 				serviceConfiguration.setRt_distance(rs.getDouble("distance"));
 
 				serviceConfiguration.setServiceID(rs.getInt(ServiceConfiguration.SERVICE_CONFIGURATION_ID));
-				serviceConfiguration.setImagePath(rs.getString(ServiceConfiguration.IMAGE_PATH));
+//				serviceConfiguration.setImagePath(rs.getString(ServiceConfiguration.IMAGE_PATH));
 				serviceConfiguration.setLogoImagePath(rs.getString(ServiceConfiguration.LOGO_IMAGE_PATH));
 
 				serviceConfiguration.setBackdropImagePath(rs.getString(ServiceConfiguration.BACKDROP_IMAGE_PATH));
@@ -488,11 +488,11 @@ public class ServiceConfigurationDAO {
 
 				serviceConfiguration.setServiceRange(rs.getInt(ServiceConfiguration.SERVICE_RANGE));
 
-				serviceConfiguration.setLatMax(rs.getDouble(ServiceConfiguration.LAT_MAX));
-				serviceConfiguration.setLonMax(rs.getDouble(ServiceConfiguration.LON_MAX));
-				serviceConfiguration.setLatMin(rs.getDouble(ServiceConfiguration.LAT_MIN));
-
-				serviceConfiguration.setLonMin(rs.getDouble(ServiceConfiguration.LON_MIN));
+//				serviceConfiguration.setLatMax(rs.getDouble(ServiceConfiguration.LAT_MAX));
+//				serviceConfiguration.setLonMax(rs.getDouble(ServiceConfiguration.LON_MAX));
+//				serviceConfiguration.setLatMin(rs.getDouble(ServiceConfiguration.LAT_MIN));
+//
+//				serviceConfiguration.setLonMin(rs.getDouble(ServiceConfiguration.LON_MIN));
 
 				serviceConfiguration.setCreated(rs.getTimestamp(ServiceConfiguration.CREATED));
 				serviceConfiguration.setUpdated(rs.getTimestamp(ServiceConfiguration.UPDATED));
@@ -577,7 +577,7 @@ public class ServiceConfigurationDAO {
 				serviceConfiguration = new ServiceConfiguration();
 
 				serviceConfiguration.setServiceID(rs.getInt(ServiceConfiguration.SERVICE_CONFIGURATION_ID));
-				serviceConfiguration.setImagePath(rs.getString(ServiceConfiguration.IMAGE_PATH));
+//				serviceConfiguration.setImagePath(rs.getString(ServiceConfiguration.IMAGE_PATH));
 				serviceConfiguration.setLogoImagePath(rs.getString(ServiceConfiguration.LOGO_IMAGE_PATH));
 
 				serviceConfiguration.setBackdropImagePath(rs.getString(ServiceConfiguration.BACKDROP_IMAGE_PATH));
@@ -602,11 +602,11 @@ public class ServiceConfigurationDAO {
 
 				serviceConfiguration.setServiceRange(rs.getInt(ServiceConfiguration.SERVICE_RANGE));
 
-				serviceConfiguration.setLatMax(rs.getDouble(ServiceConfiguration.LAT_MAX));
-				serviceConfiguration.setLonMax(rs.getDouble(ServiceConfiguration.LON_MAX));
-				serviceConfiguration.setLatMin(rs.getDouble(ServiceConfiguration.LAT_MIN));
-
-				serviceConfiguration.setLonMin(rs.getDouble(ServiceConfiguration.LON_MIN));
+//				serviceConfiguration.setLatMax(rs.getDouble(ServiceConfiguration.LAT_MAX));
+//				serviceConfiguration.setLonMax(rs.getDouble(ServiceConfiguration.LON_MAX));
+//				serviceConfiguration.setLatMin(rs.getDouble(ServiceConfiguration.LAT_MIN));
+//
+//				serviceConfiguration.setLonMin(rs.getDouble(ServiceConfiguration.LON_MIN));
 
 				serviceConfiguration.setCreated(rs.getTimestamp(ServiceConfiguration.CREATED));
 				serviceConfiguration.setUpdated(rs.getTimestamp(ServiceConfiguration.UPDATED));

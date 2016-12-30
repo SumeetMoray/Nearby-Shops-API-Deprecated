@@ -4,16 +4,13 @@ import org.nearbyshops.DAOsPreparedRoles.AdminDAOPrepared;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.ModelRoles.Admin;
-import org.nearbyshops.ModelRoles.Staff;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import java.net.URI;
+import java.util.List;
 
 
 @Path("/v1/Admin")
@@ -77,16 +74,17 @@ public class AdminResource {
 		{
 			Admin adminApproved = (Admin) Globals.accountApproved;
 
-			Admin admin = Globals.adminDAOPrepared.getAdmin(adminApproved.getAdminID());
+			List<Admin> admin = Globals.adminDAOPrepared.getAdmin(adminApproved.getUsername(),null);
 
-			if(admin != null)
+			if(admin.size()==1)
 			{
 
 				return Response.status(Status.OK)
-						.entity(admin)
+						.entity(admin.get(0))
 						.build();
 
-			} else
+			}
+			else
 			{
 
 				return Response.status(Status.UNAUTHORIZED)

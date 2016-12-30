@@ -15,7 +15,7 @@ public class DerbyQueries {
         System.out.println("Into the create table");
 
         String query2 = "CREATE TABLE ITEM_CATEGORY("
-                + " ID INT PRIMARY KEY "
+                + " DELIVERY_GUY_SELF_ID INT PRIMARY KEY "
                 + "GENERATED ALWAYS AS IDENTITY"
                 + "(START WITH 1, INCREMENT BY 1),"
                 + " ITEM_CATEGORY_NAME VARCHAR(40),"
@@ -55,7 +55,7 @@ public class DerbyQueries {
                 + " ITEM_IMAGE_URL VARCHAR(100),"
                 + " ITEM_BRAND_NAME VARCHAR(100),"
                 + " ITEM_CATEGORY_ID INT,"
-                + " FOREIGN KEY(ITEM_CATEGORY_ID) REFERENCES ITEM_CATEGORY(ID))";
+                + " FOREIGN KEY(ITEM_CATEGORY_ID) REFERENCES ITEM_CATEGORY(DELIVERY_GUY_SELF_ID))";
 
         String createTableItemDerby = "CREATE TABLE "
                 + ItemContract.TABLE_NAME + "("
@@ -66,7 +66,7 @@ public class DerbyQueries {
                 + " " + ItemContract.ITEM_DESC + " VARCHAR(500),"
                 + " " + ItemContract.ITEM_IMAGE_URL + " VARCHAR(100),"
                 + " " + ItemContract.ITEM_CATEGORY_ID + " INT,"
-                + " FOREIGN KEY(" + ItemContract.ITEM_CATEGORY_ID +") REFERENCES ITEM_CATEGORY(ID))";
+                + " FOREIGN KEY(" + ItemContract.ITEM_CATEGORY_ID +") REFERENCES ITEM_CATEGORY(DELIVERY_GUY_SELF_ID))";
 
 
         //}
@@ -113,7 +113,7 @@ public class DerbyQueries {
                 + " " + ShopContract.DELIVERY_CHARGES + " FLOAT,"
                 + " " + ShopContract.DISTRIBUTOR_ID + " INT,"
                 + " " + ShopContract.IMAGE_PATH + " VARCHAR(60),"
-                + " FOREIGN KEY(" + ShopContract.DISTRIBUTOR_ID +") REFERENCES DISTRIBUTOR(ID))";
+                + " FOREIGN KEY(" + ShopContract.DISTRIBUTOR_ID +") REFERENCES DISTRIBUTOR(DELIVERY_GUY_SELF_ID))";
 
 
 

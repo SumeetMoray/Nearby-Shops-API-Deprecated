@@ -1,6 +1,8 @@
 package org.nearbyshops.Model;
 
 
+import org.nearbyshops.ModelRoles.ShopAdmin;
+
 import java.sql.Timestamp;
 
 public class Shop {
@@ -116,7 +118,8 @@ public class Shop {
 
 			+ " " + Shop.TIMESTAMP_CREATED + " timestamp with time zone NOT NULL DEFAULT now(),"
 			+ " " + Shop.IS_OPEN + " boolean ,"
-			+ " " + Shop.SHOP_ADMIN_ID + " INT UNIQUE NOT NULL "
+			+ " " + Shop.SHOP_ADMIN_ID + " INT UNIQUE NOT NULL ,"
+			+ " FOREIGN KEY(" + Shop.SHOP_ADMIN_ID +") REFERENCES " + ShopAdmin.TABLE_NAME + "(" + ShopAdmin.SHOP_ADMIN_ID + ")"
 			+ ")" ;
 
 //			+ " FOREIGN KEY(" + Shop.DISTRIBUTOR_ID +") REFERENCES " + Distributor.TABLE_NAME + "(" + Distributor.DISTRIBUTOR_ID + ")"

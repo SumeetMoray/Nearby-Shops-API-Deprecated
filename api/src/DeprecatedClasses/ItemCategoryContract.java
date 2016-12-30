@@ -8,7 +8,7 @@ public class ItemCategoryContract {
 	public static final String TABLE_NAME = "ITEM_CATEGORY";
 	
 	// Column Names
-	public static final String ITEM_CATEGORY_ID = "ID";
+	public static final String ITEM_CATEGORY_ID = "DELIVERY_GUY_SELF_ID";
 	public static final String ITEM_CATEGORY_NAME = "ITEM_CATEGORY_NAME";
 	public static final String ITEM_CATEGORY_DESCRIPTION = "ITEM_CATEGORY_DESC";
 	public static final String PARENT_CATEGORY_ID = "PARENT_CATEGORY_ID";

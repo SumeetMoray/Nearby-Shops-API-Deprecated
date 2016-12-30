@@ -385,7 +385,6 @@ public class ShopAdminResource {
 	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN_DISABLED})
 	public Response getShopAdminLogin()
 	{
-
 		ShopAdmin shopAdmin = null;
 
 		if(Globals.accountApproved instanceof ShopAdmin)

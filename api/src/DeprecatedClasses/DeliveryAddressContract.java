@@ -10,7 +10,7 @@ public class DeliveryAddressContract {
     public static final String TABLE_NAME = "DELIVERY_ADDRESS";
 
     // column Names
-    public static final String ID = "ID";
+    public static final String ID = "DELIVERY_GUY_SELF_ID";
     public static final String NAME = "DISTRIBUTOR_NAME";
     public static final String PHONE_NUMBER = "PHONE_NUMBER";
 

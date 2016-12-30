@@ -26,7 +26,7 @@ public class ForbiddenOperations {
     public static final String STAFF_ID = "STAFF_ID"; // foreign key
     public static final String SHOP_ADMIN_ID = "SHOP_ADMIN_ID"; // foreign key
     public static final String SHOP_STAFF_ID = "SHOP_STAFF_ID"; // foreign key
-    public static final String DELIVERY_GUY_SELF_ID = "DELIVERY_GUY_SELF_ID"; // foreign key
+    public static final String DELIVERY_GUY_SELF_ID_REF = "DELIVERY_GUY_SELF_ID_REF"; // foreign key
     public static final String END_USER_ID = "END_USER_ID"; // foreign key
 
     public static final String ACTIVITY_INFO = "ACTIVITY_INFO";
@@ -76,13 +76,13 @@ public class ForbiddenOperations {
             + " " + ForbiddenOperations.STAFF_ID + " INT,"
             + " " + ForbiddenOperations.SHOP_ADMIN_ID + " INT,"
             + " " + ForbiddenOperations.SHOP_STAFF_ID + " INT,"
-            + " " + ForbiddenOperations.DELIVERY_GUY_SELF_ID + " INT,"
+            + " " + ForbiddenOperations.DELIVERY_GUY_SELF_ID_REF + " INT,"
             + " " + ForbiddenOperations.END_USER_ID + " INT,"
 
             + " FOREIGN KEY(" + ForbiddenOperations.ADMIN_ID +") REFERENCES " + Admin.TABLE_NAME + "(" + Admin.ADMIN_ID + "),"
             + " FOREIGN KEY(" + ForbiddenOperations.STAFF_ID +") REFERENCES " + Staff.TABLE_NAME + "(" + Staff.STAFF_ID + "),"
             + " FOREIGN KEY(" + ForbiddenOperations.SHOP_ADMIN_ID +") REFERENCES " + ShopAdmin.TABLE_NAME + "(" + ShopAdmin.SHOP_ADMIN_ID + "),"
-            + " FOREIGN KEY(" + ForbiddenOperations.DELIVERY_GUY_SELF_ID +") REFERENCES " + DeliveryGuySelf.TABLE_NAME + "(" + DeliveryGuySelf.ID + "),"
+            + " FOREIGN KEY(" + ForbiddenOperations.DELIVERY_GUY_SELF_ID_REF +") REFERENCES " + DeliveryGuySelf.TABLE_NAME + "(" + DeliveryGuySelf.DELIVERY_GUY_SELF_ID + "),"
             + " FOREIGN KEY(" + ForbiddenOperations.END_USER_ID +") REFERENCES " + EndUser.TABLE_NAME + "(" + EndUser.END_USER_ID + ")"
             + ")";
 

@@ -14,9 +14,9 @@ public class ShopStaff {
 
     // Column names for Distributor
 
-    public static final String STAFF_ID = "STAFF_ID";
+    public static final String STAFF_ID = "DELIVERY_GUY_SELF_ID";
     public static final String STAFF_NAME = "STAFF_NAME";
-//    public static final String USER_NAME = "USER_NAME";
+    public static final String USER_NAME = "USER_NAME";
     public static final String PASSWORD = "PASSWORD";
 
     public static final String SHOP_ID = "SHOP_ID";
@@ -58,10 +58,10 @@ public class ShopStaff {
     // Create Table CurrentServiceConfiguration Provider
     public static final String createTableShopStaffPostgres =
             "CREATE TABLE IF NOT EXISTS " + ShopStaff.TABLE_NAME + "("
-            + " " + ShopStaff.STAFF_ID + " INT UNIQUE NOT NULL,"
+            + " " + ShopStaff.STAFF_ID + " SERIAL PRIMARY KEY,"
 
             + " " + ShopStaff.STAFF_NAME + " text,"
-//            + " " + ShopStaff.USER_NAME + " text UNIQUE NOT NULL,"
+            + " " + ShopStaff.USER_NAME + " text UNIQUE NOT NULL,"
             + " " + ShopStaff.PASSWORD + " text NOT NULL,"
 
                   + ShopStaff.SHOP_ID + " INT NOT NULL,"
@@ -90,8 +90,7 @@ public class ShopStaff {
             + " " + ShopStaff.ACCEPT_PAYMENTS_FROM_DELIVERY + " boolean ,"
             + " " + ShopStaff.ACCEPT_RETURNS + " boolean ,"
 
-            + " FOREIGN KEY(" + ShopStaff.SHOP_ID +") REFERENCES " + Shop.TABLE_NAME + "(" + Shop.SHOP_ID + "),"
-            + " FOREIGN KEY(" + ShopStaff.STAFF_ID +") REFERENCES " + Usernames.TABLE_NAME + "(" + Usernames.USER_ID + ")"
+            + " FOREIGN KEY(" + ShopStaff.SHOP_ID +") REFERENCES " + Shop.TABLE_NAME + "(" + Shop.SHOP_ID + ")"
             + ")";
 
 

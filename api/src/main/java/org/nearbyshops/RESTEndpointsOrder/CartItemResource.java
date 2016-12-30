@@ -35,7 +35,7 @@ public class CartItemResource {
 	{
 
 
-		System.out.println("End User ID : " + endUserID + " ShopID : " + shopID);
+		System.out.println("End User DELIVERY_GUY_SELF_ID : " + endUserID + " ShopID : " + shopID);
 
 		if(endUserID>0 && shopID>0)
 		{

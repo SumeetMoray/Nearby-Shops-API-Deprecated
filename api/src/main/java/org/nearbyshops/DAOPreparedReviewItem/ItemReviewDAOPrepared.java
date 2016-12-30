@@ -697,7 +697,7 @@ public class ItemReviewDAOPrepared {
                     itemReview.setReviewTitle(rs.getString(ItemReview.REVIEW_TITLE));
                     itemReview.setReviewDate(rs.getTimestamp(ItemReview.REVIEW_DATE));
 
-                    System.out.println("Get BookReview by ID : " + itemReview.getItemID());
+                    System.out.println("Get BookReview by DELIVERY_GUY_SELF_ID : " + itemReview.getItemID());
                 }
 
                 //System.out.println("Total itemCategories queried " + itemCategoryList.size());
@@ -788,7 +788,7 @@ public class ItemReviewDAOPrepared {
 
                     rowList.add(row);
 
-//                    System.out.println("Get BookReview by ID : " + shopReview.getItemID());
+//                    System.out.println("Get BookReview by DELIVERY_GUY_SELF_ID : " + shopReview.getItemID());
                 }
 
                 //System.out.println("Total itemCategories queried " + itemCategoryList.size());

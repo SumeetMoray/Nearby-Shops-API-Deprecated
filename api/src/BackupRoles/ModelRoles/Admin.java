@@ -12,10 +12,10 @@ public class Admin {
 
     // Column names for Distributor
 
-    public static final String ADMIN_ID = "ADMIN_ID";
+    public static final String ADMIN_ID = "ID";
 
     public static final String ADMIN_NAME = "ADMIN_NAME";
-//    public static final String USER_NAME = "USER_NAME";
+    public static final String USER_NAME = "USER_NAME";
     public static final String PASSWORD = "PASSWORD";
 
     public static final String ABOUT = "ABOUT";
@@ -34,8 +34,8 @@ public class Admin {
 
             "CREATE TABLE IF NOT EXISTS " + Admin.TABLE_NAME + "("
 
-            + " " + Admin.ADMIN_ID + " INT UNIQUE NOT NULL,"
-//            + " " + Admin.USER_NAME + " text UNIQUE NOT NULL,"
+            + " " + Admin.ADMIN_ID + " SERIAL PRIMARY KEY,"
+            + " " + Admin.USER_NAME + " text UNIQUE NOT NULL,"
             + " " + Admin.PASSWORD + " text NOT NULL,"
             + " " + Admin.ADMIN_NAME + " text,"
 
@@ -46,9 +46,7 @@ public class Admin {
             + " " + Admin.DESIGNATION + " text,"
 
             + " " + Admin.ACCOUNT_PRIVATE + " boolean,"
-            + " " + Admin.TIMESTAMP_CREATED + " timestamp with time zone NOT NULL DEFAULT now(),"
-            + " FOREIGN KEY(" + Admin.ADMIN_ID +") REFERENCES " + Usernames.TABLE_NAME + "(" + Usernames.USER_ID + ")"
-            + ")";
+            + " " + Admin.TIMESTAMP_CREATED + " timestamp with time zone NOT NULL DEFAULT now() " + ")";
 
 
 
@@ -69,54 +67,74 @@ public class Admin {
 
 
 
+
+
+
+
     public String getPhone() {
         return phone;
     }
+
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
     public String getDesignation() {
         return designation;
     }
+
     public void setDesignation(String designation) {
         this.designation = designation;
     }
+
     public boolean isAccountPrivate() {
         return accountPrivate;
     }
+
     public void setAccountPrivate(boolean accountPrivate) {
         this.accountPrivate = accountPrivate;
     }
+
     public Timestamp getTimestampCreated() {
         return timestampCreated;
     }
+
     public void setTimestampCreated(Timestamp timestampCreated) {
         this.timestampCreated = timestampCreated;
     }
+
     public String getAbout() {
         return about;
     }
+
     public void setAbout(String about) {
         this.about = about;
     }
+
     public String getProfileImageURL() {
         return profileImageURL;
     }
+
     public void setProfileImageURL(String profileImageURL) {
         this.profileImageURL = profileImageURL;
     }
+
     public String getPassword() {
         return password;
     }
+
     public void setPassword(String password) {
         this.password = password;
     }
+
     public String getUsername() {
         return username;
     }
+
     public void setUsername(String username) {
         this.username = username;
     }
+
     // Getter and Setters
     public int getAdminID() {
         return adminID;

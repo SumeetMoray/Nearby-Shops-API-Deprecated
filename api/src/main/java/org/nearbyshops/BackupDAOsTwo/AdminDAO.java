@@ -89,7 +89,7 @@ public class AdminDAO {
 		String updateStatement = "UPDATE " + Admin.TABLE_NAME
 				+ " SET " + Admin.ADMIN_NAME + " = "
 				+ "'" + admin.getAdministratorName() + "'"
-				+ " WHERE ID = "
+				+ " WHERE DELIVERY_GUY_SELF_ID = "
 				+ admin.getAdminID();
 		
 		Connection conn = null;
@@ -145,7 +145,7 @@ public class AdminDAO {
 	public int deleteServiceProvider(int serviceProviderID)
 	{
 		
-		String deleteStatement = "DELETE FROM " + Admin.TABLE_NAME + " WHERE ID = "
+		String deleteStatement = "DELETE FROM " + Admin.TABLE_NAME + " WHERE DELIVERY_GUY_SELF_ID = "
 				+ serviceProviderID;
 		
 		

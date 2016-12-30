@@ -650,7 +650,7 @@ public class EndUserDAOPrepared {
 	{
 		
 		String query = "SELECT * FROM " + EndUser.TABLE_NAME
-						+ " WHERE ID = " + EndUserID;
+						+ " WHERE DELIVERY_GUY_SELF_ID = " + EndUserID;
 		
 		Connection connection = null;
 		Statement statement = null;
@@ -738,7 +738,7 @@ public class EndUserDAOPrepared {
 		if(distributorID!=null)
 		{
 			query = "SELECT * FROM " + Distributor.TABLE_NAME
-					+ " WHERE ID = " + distributorID;
+					+ " WHERE DELIVERY_GUY_SELF_ID = " + distributorID;
 
 		}
 

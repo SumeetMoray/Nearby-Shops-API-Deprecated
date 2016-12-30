@@ -303,7 +303,7 @@ public class ItemCategoryService {
 	public int deleteItemCategory(int itemCategoryID)
 	{
 		
-		String deleteStatement = "DELETE FROM ITEM_CATEGORY WHERE ID = " 
+		String deleteStatement = "DELETE FROM ITEM_CATEGORY WHERE DELIVERY_GUY_SELF_ID = "
 				+ itemCategoryID;
 		
 		

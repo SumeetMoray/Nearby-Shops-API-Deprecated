@@ -3,7 +3,6 @@ package org.nearbyshops;
 
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
-import org.glassfish.jersey.server.ServerProperties;
 
 
 import org.glassfish.jersey.server.ResourceConfig;
@@ -221,6 +220,8 @@ public class Main implements ActionListener {
 			statement = connection.createStatement();
 
 
+			statement.executeUpdate(Usernames.createTableUsernamesPostgres);
+
 			statement.executeUpdate(ItemCategory.createTableItemCategoryPostgres);
 			statement.executeUpdate(Item.createTableItemPostgres);
 
@@ -271,7 +272,7 @@ public class Main implements ActionListener {
 
 			// Insert the default administrator if it does not exit
 
-			if(Globals.adminDAOPrepared.getAdmin(1)==null)
+			if(Globals.adminDAOPrepared.getAdmin(null,null).size()<=0)
 			{
 				Admin defaultAdmin = new Admin();
 
@@ -285,7 +286,7 @@ public class Main implements ActionListener {
 
 
 
-			// Insert the root category whose ID is 1
+			// Insert the root category whose DELIVERY_GUY_SELF_ID is 1
 
 			String insertItemCategory = "";
 

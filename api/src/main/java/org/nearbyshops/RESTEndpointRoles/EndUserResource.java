@@ -447,7 +447,7 @@ public class EndUserResource {
 
 //	@GET
 //	@Path("/Validate")
-	/*public Response validateDistributor(@QueryParam("Password")String password,@QueryParam("Username")String userName,@QueryParam("ID")Integer id)
+	/*public Response validateDistributor(@QueryParam("Password")String password,@QueryParam("Username")String userName,@QueryParam("DELIVERY_GUY_SELF_ID")Integer id)
 	{
 
 		boolean isValid = false;

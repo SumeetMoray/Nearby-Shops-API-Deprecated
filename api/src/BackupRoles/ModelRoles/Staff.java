@@ -1,4 +1,4 @@
-package org.nearbyshops.ModelRoles;
+package org.nearbyshops.ModelRoles.BackupConventional;
 
 import java.sql.Timestamp;
 
@@ -12,9 +12,9 @@ public class Staff {
 
     // Column names for Distributor
 
-    public static final String STAFF_ID = "STAFF_ID";
+    public static final String STAFF_ID = "DELIVERY_GUY_SELF_ID";
     public static final String STAFF_NAME = "STAFF_NAME";
-//    public static final String USER_NAME = "USER_NAME";
+    public static final String USER_NAME = "USER_NAME";
     public static final String PASSWORD = "PASSWORD";
 
     public static final String ABOUT = "ABOUT";
@@ -49,15 +49,14 @@ public class Staff {
 
 
 
-    //SERIAL PRIMARY KEY
 
     // Create Table CurrentServiceConfiguration Provider
     public static final String createTableStaffPostgres =
             "CREATE TABLE IF NOT EXISTS " + Staff.TABLE_NAME + "("
-            + " " + Staff.STAFF_ID + " INT UNIQUE NOT NULL,"
+            + " " + Staff.STAFF_ID + " SERIAL PRIMARY KEY,"
 
             + " " + Staff.STAFF_NAME + " text,"
-//            + " " + Staff.USER_NAME + " text UNIQUE NOT NULL,"
+            + " " + Staff.USER_NAME + " text UNIQUE NOT NULL,"
             + " " + Staff.PASSWORD + " text NOT NULL,"
 
                   + Staff.ABOUT + " text,"
@@ -77,14 +76,12 @@ public class Staff {
             + " " + Staff.CREATE_UPDATE_ITEMS + " boolean ,"
             + " " + Staff.APPROVE_SHOP_ADMIN_ACCOUNTS + " boolean ,"
             + " " + Staff.APPROVE_SHOPS + " boolean ,"
-            + " " + Staff.APPROVE_END_USER_ACCOUNTS + " boolean ,"
-            + " FOREIGN KEY(" + Staff.STAFF_ID +") REFERENCES " + Usernames.TABLE_NAME + "(" + Usernames.USER_ID + ")"
-            + ")";
+            + " " + Staff.APPROVE_END_USER_ACCOUNTS + " boolean " + ")";
 
 
     
     // Instance Variables
-    private int userID;
+    private int staffID;
 
     private String staffName;
     private String username;
@@ -245,12 +242,12 @@ public class Staff {
         this.username = username;
     }
 
-    public int getUserID() {
-        return userID;
+    public int getStaffID() {
+        return staffID;
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
+    public void setStaffID(int staffID) {
+        this.staffID = staffID;
     }
 
     public String getStaffName() {

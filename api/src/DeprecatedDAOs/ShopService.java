@@ -568,7 +568,7 @@ public class ShopService {
 
 		if(itemCategoryID != null)
 		{
-			// filter shops by Item Category ID
+			// filter shops by Item Category DELIVERY_GUY_SELF_ID
 			queryJoin = queryJoin + " AND "
 					+ ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID
 					+ " = "
@@ -941,7 +941,7 @@ public class ShopService {
 
 		if(itemCategoryID != null)
 		{
-			// filter shops by Item Category ID
+			// filter shops by Item Category DELIVERY_GUY_SELF_ID
 			queryJoin = queryJoin + " AND "
 					+ ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID
 					+ " = "

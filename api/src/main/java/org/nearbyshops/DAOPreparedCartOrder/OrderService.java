@@ -1132,7 +1132,7 @@ public class OrderService {
             String addressJoin = " INNER JOIN "
                     + DeliveryAddress.TABLE_NAME
                     + " ON (" + Order.TABLE_NAME + "." + Order.DELIVERY_ADDRESS_ID
-                    + " = " + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.ID + ")";
+                    + " = " + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.DELIVERY_GUY_SELF_ID + ")";
 
             query = query + addressJoin;
         }*/
@@ -1478,7 +1478,7 @@ public class OrderService {
                 + Order.DELIVERY_RECEIVED + ","
 //                + Order.PAYMENT_RECEIVED + ","
 
-//                + Order.DELIVERY_GUY_SELF_ID + ","
+                + Order.DELIVERY_GUY_SELF_ID + ","
 //                + Order.END_USER_ID + ","
 //                + Order.PICK_FROM_SHOP + ","
 
@@ -1523,7 +1523,7 @@ public class OrderService {
 //                order.setPaymentReceived(rs.getBoolean(Order.PAYMENT_RECEIVED));
 //
 //               order.setDeliveryAddressID((Integer) rs.getObject(Order.DELIVERY_ADDRESS_ID));
-//                order.setDeliveryGuySelfID((Integer) rs.getObject(Order.DELIVERY_GUY_SELF_ID));
+                order.setDeliveryGuySelfID((Integer) rs.getObject(Order.DELIVERY_GUY_SELF_ID));
             }
 
 
@@ -1876,6 +1876,10 @@ public class OrderService {
             else if(status == 5)
             {
                 order.setStatusHomeDelivery(OrderStatusHomeDelivery.CANCELLED_BY_SHOP_RETURN_PENDING);
+            }
+            else
+            {
+                return 0;
             }
 
             return updateStatusHomeDelivery(order);

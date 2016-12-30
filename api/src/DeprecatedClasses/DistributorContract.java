@@ -7,7 +7,7 @@ public class DistributorContract {
 	
 	// Column names for Distributor
 	
-	public static final String DISTRIBUTOR_ID = "ID";
+	public static final String DISTRIBUTOR_ID = "DELIVERY_GUY_SELF_ID";
 	public static final String DISTRIBUTOR_NAME = "DISTRIBUTOR_NAME";
 
 	public static final String DISTRIBUTOR_PASSWORD = "PASSWORD";

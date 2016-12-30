@@ -50,7 +50,7 @@ public class StaffResource {
 
 		int idOfInsertedRow = daoPrepared.saveStaff(staff);
 
-		staff.setStaffID(idOfInsertedRow);
+		staff.setUserID(idOfInsertedRow);
 
 		if(idOfInsertedRow >=1)
 		{
@@ -85,7 +85,7 @@ public class StaffResource {
 								Staff staff)
 	{
 
-		staff.setStaffID(staffID);
+		staff.setUserID(staffID);
 
 		int rowCount = daoPrepared.updateStaff(staff);
 
@@ -118,11 +118,11 @@ public class StaffResource {
 
 //		@Context HttpHeaders headers
 
-		staff.setStaffID(staffID);
+		staff.setUserID(staffID);
 
 		if(Globals.accountApproved instanceof Staff)
 		{
-			if(((Staff) Globals.accountApproved).getStaffID()!=staffID)
+			if(((Staff) Globals.accountApproved).getUserID()!=staffID)
 			{
 				// an atempt to update the account of other staff member. Which is not permitted !
 				Response responseError = Response.status(Status.FORBIDDEN)
@@ -169,7 +169,7 @@ public class StaffResource {
 
 		if(Globals.accountApproved instanceof Staff)
 		{
-			if(((Staff) Globals.accountApproved).getStaffID()!=staffID)
+			if(((Staff) Globals.accountApproved).getUserID()!=staffID)
 			{
 				// an attempt to delete the account of other staff member. Which is not permitted !
 				Response responseError = Response.status(Status.FORBIDDEN)
@@ -303,7 +303,7 @@ public class StaffResource {
 
 		if(Globals.accountApproved instanceof Staff)
 		{
-			staff = Globals.staffDAOPrepared.getStaffForSelf(((Staff) Globals.accountApproved).getStaffID());
+			staff = Globals.staffDAOPrepared.getStaffForSelf(((Staff) Globals.accountApproved).getUserID());
 		}
 
 
@@ -424,7 +424,7 @@ public class StaffResource {
 			// If code enters here implies that distributor account is used for update. So we need to check if
 			// the distributor is same as the one authorized.
 
-			if(staff.getStaffID()!=staffID)
+			if(staff.getUserID()!=staffID)
 			{
 				// the user doing an update is not the same as the user whose profile is being updated so has to
 				// stop this operation, and should throw an unauthorized exception in this situation.

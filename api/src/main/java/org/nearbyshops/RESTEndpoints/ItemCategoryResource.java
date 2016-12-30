@@ -12,7 +12,6 @@ import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -24,7 +23,6 @@ import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Image;
 import org.nearbyshops.Model.ItemCategory;
 import org.nearbyshops.ModelEndPoints.ItemCategoryEndPoint;
-import org.nearbyshops.ModelEndPoints.ShopEndPoint;
 import org.nearbyshops.ModelRoles.Staff;
 
 @Path("/v1/ItemCategory")
@@ -163,7 +161,7 @@ public class ItemCategoryResource {
 		itemCategory.setItemCategoryID(itemCategoryID);
 
 		System.out.println("ItemCategoryID: " + itemCategoryID + " " + itemCategory.getCategoryName()
-				+ " " + itemCategory.getCategoryDescription() + " Parent ID : " +  itemCategory.getParentCategoryID());
+				+ " " + itemCategory.getCategoryDescription() + " Parent DELIVERY_GUY_SELF_ID : " +  itemCategory.getParentCategoryID());
 
 		int rowCount = itemCategoryDAO.changeParent(itemCategory);
 
@@ -270,7 +268,7 @@ public class ItemCategoryResource {
 		itemCategory.setItemCategoryID(itemCategoryID);
 
 		System.out.println("ItemCategoryID: " + itemCategoryID + " " + itemCategory.getCategoryName()
-				+ " " + itemCategory.getCategoryDescription() + " Parent ID : " +  itemCategory.getParentCategoryID());
+				+ " " + itemCategory.getCategoryDescription() + " Parent DELIVERY_GUY_SELF_ID : " +  itemCategory.getParentCategoryID());
 
 		int rowCount = itemCategoryDAO.updateItemCategory(itemCategory);
 

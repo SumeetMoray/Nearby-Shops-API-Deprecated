@@ -106,11 +106,13 @@ public class Globals {
 	public static Map<Integer,SseBroadcaster> broadcasterMap = new HashMap<>();
 
 	public static String broadcastMessage(String message, int shopID) {
+
 		OutboundEvent.Builder eventBuilder = new OutboundEvent.Builder();
-		OutboundEvent event = eventBuilder.name("message")
+		OutboundEvent event = eventBuilder.name("Order Received !")
 				.mediaType(MediaType.TEXT_PLAIN_TYPE)
 				.data(String.class, message)
 				.build();
+
 
 		if(broadcasterMap.get(shopID)!=null)
 		{
@@ -119,6 +121,7 @@ public class Globals {
 
 		return "Message '" + message + "' has been broadcast.";
 	}
+
 
 
 

@@ -4,7 +4,6 @@ import net.coobird.thumbnailator.Thumbnails;
 import org.jvnet.hk2.annotations.Service;
 import org.nearbyshops.DAOsPrepared.ShopDAO;
 import org.nearbyshops.DAOsPreparedRoles.ShopStaffDAOPrepared;
-import org.nearbyshops.DAOsPreparedRoles.StaffDAOPrepared;
 import org.nearbyshops.Globals.APIErrors;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
@@ -13,10 +12,8 @@ import org.nearbyshops.Model.Shop;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
 import org.nearbyshops.ModelRoles.ShopAdmin;
 import org.nearbyshops.ModelRoles.ShopStaff;
-import org.nearbyshops.ModelRoles.Staff;
 
 import javax.annotation.security.RolesAllowed;
-import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
@@ -28,8 +25,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
-
-import static org.nearbyshops.Globals.Globals.staffDAOPrepared;
 
 
 @Path("/v1/ShopStaff")

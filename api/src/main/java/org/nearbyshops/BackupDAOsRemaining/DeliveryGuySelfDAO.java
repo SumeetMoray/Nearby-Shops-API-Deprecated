@@ -98,7 +98,7 @@ public class DeliveryGuySelfDAO {
 				+ " SET "
 				+ DeliveryGuySelf.NAME + " = "  + "'" + deliveryGuySelf.getName() + "'"  + ","
 				+ DeliveryGuySelf.SHOP_ID + " = "  + " " + deliveryGuySelf.getShopID() + " "  + ""
-				+ " WHERE " + DeliveryGuySelf.ID + " = " + deliveryGuySelf.getDeliveryGuyID();
+				+ " WHERE " + DeliveryGuySelf.DELIVERY_GUY_SELF_ID + " = " + deliveryGuySelf.getDeliveryGuyID();
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -154,7 +154,7 @@ public class DeliveryGuySelfDAO {
 	{
 		
 		String deleteStatement = "DELETE FROM " + DeliveryGuySelf.TABLE_NAME
-				+ " WHERE " + DeliveryGuySelf.ID + " = " + vehicleID;
+				+ " WHERE " + DeliveryGuySelf.DELIVERY_GUY_SELF_ID + " = " + vehicleID;
 		
 		
 		Connection conn= null;
@@ -263,7 +263,7 @@ public class DeliveryGuySelfDAO {
 
 				DeliveryGuySelf deliveryGuySelf = new DeliveryGuySelf();
 
-				deliveryGuySelf.setDeliveryGuyID(rs.getInt(DeliveryGuySelf.ID));
+				deliveryGuySelf.setDeliveryGuyID(rs.getInt(DeliveryGuySelf.DELIVERY_GUY_SELF_ID));
 				deliveryGuySelf.setShopID(rs.getInt(DeliveryGuySelf.SHOP_ID));
 				deliveryGuySelf.setName(rs.getString(DeliveryGuySelf.NAME));
 
@@ -319,7 +319,7 @@ public class DeliveryGuySelfDAO {
 	{
 		
 		String query = "SELECT * FROM " + DeliveryGuySelf.TABLE_NAME
-						+ " WHERE " + DeliveryGuySelf.ID + " = " + vehicleID;
+						+ " WHERE " + DeliveryGuySelf.DELIVERY_GUY_SELF_ID + " = " + vehicleID;
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -343,7 +343,7 @@ public class DeliveryGuySelfDAO {
 
 				deliveryGuySelf.setName(rs.getString(DeliveryGuySelf.NAME));
 				deliveryGuySelf.setShopID(rs.getInt(DeliveryGuySelf.SHOP_ID));
-				deliveryGuySelf.setDeliveryGuyID(rs.getInt(DeliveryGuySelf.ID));
+				deliveryGuySelf.setDeliveryGuyID(rs.getInt(DeliveryGuySelf.DELIVERY_GUY_SELF_ID));
 
 			}
 			

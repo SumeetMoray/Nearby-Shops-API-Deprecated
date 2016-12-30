@@ -1,6 +1,7 @@
 package org.nearbyshops.ModelRoles;
 
 import org.nearbyshops.Model.Shop;
+import org.nearbyshops.ModelDelivery.DeliveryAddress;
 
 /**
  * Created by sumeet on 14/6/16.
@@ -11,11 +12,11 @@ public class DeliveryGuySelf {
     public static final String TABLE_NAME = "DELIVERY_GUY_SELF";
 
     // column Names
-    public static final String DELIVERY_GUY_SELF_ID = "DELIVERY_GUY_SELF_ID";
+    public static final String ID = "DELIVERY_GUY_SELF_ID";
     public static final String NAME = "NAME";
     public static final String SHOP_ID = "SHOP_ID";
 
-//    public static final String USERNAME = "USERNAME";
+    public static final String USERNAME = "USERNAME";
     public static final String PASSWORD = "PASSWORD";
 
     public static final String ABOUT = "ABOUT";
@@ -38,12 +39,11 @@ public class DeliveryGuySelf {
 
 
     // create table statement
-    public static final String createtableDeliveryGuySelfPostgres =
-            "CREATE TABLE IF NOT EXISTS " + DeliveryGuySelf.TABLE_NAME + "("
-            + " " + DeliveryGuySelf.DELIVERY_GUY_SELF_ID + " INT UNIQUE NOT NULL,"
+    public static final String createtableDeliveryGuySelfPostgres = "CREATE TABLE IF NOT EXISTS " + DeliveryGuySelf.TABLE_NAME + "("
+            + " " + DeliveryGuySelf.ID + " SERIAL PRIMARY KEY,"
             + " " + DeliveryGuySelf.NAME + " text,"
             + " " + DeliveryGuySelf.SHOP_ID + " INT NOT NULL,"
-//            + " " + DeliveryGuySelf.USERNAME + " text UNIQUE,"
+            + " " + DeliveryGuySelf.USERNAME + " text UNIQUE,"
             + " " + DeliveryGuySelf.PASSWORD + " text,"
 
             + " " + DeliveryGuySelf.ABOUT + " text,"
@@ -57,8 +57,7 @@ public class DeliveryGuySelf {
             + " " + DeliveryGuySelf.IS_ENABLED + " boolean,"
             + " " + DeliveryGuySelf.IS_WAITLISTED + " boolean,"
 
-            + " FOREIGN KEY(" + DeliveryGuySelf.SHOP_ID +") REFERENCES " + Shop.TABLE_NAME + "(" + Shop.SHOP_ID + "),"
-            + " FOREIGN KEY(" + DeliveryGuySelf.DELIVERY_GUY_SELF_ID +") REFERENCES " + Usernames.TABLE_NAME + "(" + Usernames.USER_ID + ")"
+            + " FOREIGN KEY(" + DeliveryGuySelf.SHOP_ID +") REFERENCES " + Shop.TABLE_NAME + "(" + Shop.SHOP_ID + ")"
             + ")";
 
 

@@ -322,7 +322,7 @@ public class DistributorStaffDAOPrepared {
 	{
 		
 		String query = "SELECT * FROM " + DistributorStaff.TABLE_NAME
-						+ " WHERE ID = " + distributorID;
+						+ " WHERE DELIVERY_GUY_SELF_ID = " + distributorID;
 		
 		Connection connection = null;
 		Statement statement = null;
@@ -406,7 +406,7 @@ public class DistributorStaffDAOPrepared {
 		if(distributorID!=null)
 		{
 			query = "SELECT * FROM " + Distributor.TABLE_NAME
-					+ " WHERE ID = " + distributorID;
+					+ " WHERE DELIVERY_GUY_SELF_ID = " + distributorID;
 
 		}
 
