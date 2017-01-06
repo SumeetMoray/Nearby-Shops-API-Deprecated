@@ -36,21 +36,18 @@ public class OrderItemResource {
 
 		if(rowCount == 1)
 		{
-			
-			
-			Response response = Response.status(Status.CREATED)
+
+
+			return Response.status(Status.CREATED)
 					.entity(null)
 					.build();
-			
-			return response;
 			
 		}else if(rowCount <= 0)
 		{
-			Response response = Response.status(Status.NOT_MODIFIED)
+
+			return Response.status(Status.NOT_MODIFIED)
 					.entity(null)
 					.build();
-			
-			return response;
 		}
 
 		return null;

@@ -50,19 +50,17 @@ public class CartStatsResource {
 		
 		if(cartStats.size()<=0)
 		{
-			Response response = Response.status(Status.NO_CONTENT)
+
+			return Response.status(Status.NO_CONTENT)
 					.entity(listEntity)
 					.build();
-			
-			return response;
 			
 		}else
 		{
-			Response response = Response.status(Status.OK)
+
+			return Response.status(Status.OK)
 					.entity(listEntity)
 					.build();
-			
-			return response;
 		}
 
 	}

@@ -21,6 +21,8 @@
         </dependencies>
     </dependencyManagement>
 
+
+
     <dependencies>
 <!--
         <dependency>
@@ -179,14 +181,25 @@
             <artifactId>thumbnailator</artifactId>
             <version>0.4.8</version>
         </dependency>
+
+
+
+        <!--// ok http dependency-->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>3.5.0</version>
+        </dependency>
+
+
+
+
     </dependencies>
 
 
 
     <build>
         <plugins>
-        
-        
 		    <plugin>
 		      <groupId>org.apache.maven.plugins</groupId>
 		      <artifactId>maven-shade-plugin</artifactId>

@@ -42,7 +42,10 @@ public class Item {
 			+ " " + Item.IS_ENABLED + " boolean,"
 			+ " " + Item.IS_WAITLISTED + " boolean,"
 			+ " " + Item.DATE_TIME_CREATED + "  timestamp with time zone NOT NULL DEFAULT now(),"
-			+ " FOREIGN KEY(" + Item.ITEM_CATEGORY_ID +") REFERENCES ITEM_CATEGORY(ID))";
+			+ " FOREIGN KEY(" + Item.ITEM_CATEGORY_ID +") REFERENCES " + ItemCategory.TABLE_NAME + "(" + ItemCategory.ITEM_CATEGORY_ID + ")"
+			+ ")";
+
+//			+ " FOREIGN KEY(" + Item.ITEM_CATEGORY_ID +") REFERENCES ITEM_CATEGORY(ID))";
 
 
 	// Instance Variables
@@ -76,6 +79,16 @@ public class Item {
 
 	private Float rt_rating_avg;
 	private Float rt_rating_count;
+	private String rt_gidb_service_url;
+
+
+	public String getRt_gidb_service_url() {
+		return rt_gidb_service_url;
+	}
+
+	public void setRt_gidb_service_url(String rt_gidb_service_url) {
+		this.rt_gidb_service_url = rt_gidb_service_url;
+	}
 
 	public Float getRt_rating_avg() {
 		return rt_rating_avg;

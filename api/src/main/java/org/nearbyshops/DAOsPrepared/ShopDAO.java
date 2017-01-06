@@ -2443,6 +2443,7 @@ public class ShopDAO {
 					+ Shop.LON_CENTER + ") - radians("
 					+ lonCenter + "))" + " + sin( radians(" + latCenter + ")) * sin(radians(" + Shop.LAT_CENTER + "))))" + " as distance ,"
 
+
 					+ Shop.TABLE_NAME + "." + Shop.SHOP_ID + ","
 					+ Shop.TABLE_NAME + "." + Shop.SHOP_NAME + ","
 					+ Shop.TABLE_NAME + "." + Shop.LON_CENTER + ","
@@ -2460,6 +2461,7 @@ public class ShopDAO {
 					+ Shop.TABLE_NAME + "." + Shop.SHORT_DESCRIPTION + ","
 					+ Shop.TABLE_NAME + "." + Shop.LONG_DESCRIPTION + ","
 					+ Shop.TABLE_NAME + "." + Shop.IS_OPEN + ","
+					+ Shop.TABLE_NAME + "." + Shop.LOGO_IMAGE_PATH + ","
 					+ Shop.TABLE_NAME + "." + Shop.TIMESTAMP_CREATED + ","
 
 					+  "avg(" + ShopReview.TABLE_NAME + "." + ShopReview.RATING + ") as avg_rating" + ","
@@ -2551,6 +2553,7 @@ public class ShopDAO {
 
 				shop.setDeliveryRange(rs.getDouble(Shop.DELIVERY_RANGE));
 
+				shop.setLogoImagePath(rs.getString(Shop.LOGO_IMAGE_PATH));
 				shop.setShopAddress(rs.getString(Shop.SHOP_ADDRESS));
 				shop.setCity(rs.getString(Shop.CITY));
 				shop.setPincode(rs.getLong(Shop.PINCODE));

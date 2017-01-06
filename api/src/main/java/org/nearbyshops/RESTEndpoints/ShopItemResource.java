@@ -211,6 +211,7 @@ public class ShopItemResource {
 	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN,GlobalConstants.ROLE_SHOP_STAFF})
 	public Response updateShopItem(ShopItem shopItem)
 	{
+		System.out.println("Inside Resource Method !");
 
 		int rowCount = 0;
 

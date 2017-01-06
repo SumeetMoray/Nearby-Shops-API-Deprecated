@@ -1,5 +1,7 @@
 package org.nearbyshops.DAOPreparedCartOrder;
 
+import com.zaxxer.hikari.HikariDataSource;
+import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.JDBCContract;
 import org.nearbyshops.Model.Cart;
 import org.nearbyshops.Model.CartItem;
@@ -16,10 +18,11 @@ import java.util.List;
 public class CartStatsDAO {
 
 
+    private HikariDataSource dataSource = Globals.getDataSource();
+
+
     public List<CartStats> getCartStats(int endUserID, Integer cartID, Integer shopID)
     {
-
-
 
         /*
 
@@ -30,54 +33,16 @@ public class CartStatsDAO {
          */
 
 
-        String query = "select sum(" +
-                CartItem.ITEM_QUANTITY +
-
-                "*" +
-                ShopItem.ITEM_PRICE +
-
-                ") as Cart_Total,count(" +
-
-                CartItem.TABLE_NAME + "." + CartItem.ITEM_ID +
-
-                ") as Items_In_Cart," +
-
-                Cart.TABLE_NAME + "." +Cart.SHOP_ID + ","
-
-                + Cart.TABLE_NAME + "." + Cart.CART_ID  +
-
-                " from " +
-
-                ShopItem.TABLE_NAME +
-                ", " +
-                Cart.TABLE_NAME +
-                ", " +
-                CartItem.TABLE_NAME +
-                " " +
-                "where " +
-                Cart.TABLE_NAME + "." + Cart.CART_ID +
-                " = " +
-                CartItem.TABLE_NAME + "." + CartItem.CART_ID +
-
-                " and " +
-
-                "shop_item.shop_id" +
-
-                " = " +
-
-                "cart.shop_id " +
-
-                "and " +
-
-                "shop_item.item_id" +
-
-                " = " +
-
-                "cart_item.item_id "
-
-                + "and " + "end_user_id = " +
-
-                endUserID ;
+        String query =  " select " +
+                        " sum(" + CartItem.ITEM_QUANTITY + "*" + ShopItem.ITEM_PRICE + ") as Cart_Total," +
+                        " count(" + CartItem.TABLE_NAME + "." + CartItem.ITEM_ID + ") as Items_In_Cart," +
+                        Cart.TABLE_NAME + "." + Cart.SHOP_ID + "," +
+                        Cart.TABLE_NAME + "." + Cart.CART_ID  +
+                        " from " + ShopItem.TABLE_NAME + "," + Cart.TABLE_NAME + "," + CartItem.TABLE_NAME + " " +
+                        " where " + Cart.TABLE_NAME + "." + Cart.CART_ID + " = " + CartItem.TABLE_NAME + "." + CartItem.CART_ID +
+                        " and " + "shop_item.shop_id" + " = " + "cart.shop_id " +
+                        " and " + "shop_item.item_id" + " = " + "cart_item.item_id " +
+                        " and " + "end_user_id = " + endUserID ;
 
 
 
@@ -95,23 +60,14 @@ public class CartStatsDAO {
         }
 
 
-
-
-
-
-
-
         String groupByQueryPart =  " group by " +
-
                                     " cart.shop_id," + Cart.TABLE_NAME + "." + Cart.CART_ID;
-
-
 
         query = query + groupByQueryPart;
 
 
-        Connection conn = null;
-        Statement stmt = null;
+        Connection connection = null;
+        Statement statement = null;
         ResultSet rs = null;
 
 
@@ -119,12 +75,12 @@ public class CartStatsDAO {
 
         try {
 
-            conn = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
-                    JDBCContract.CURRENT_USERNAME,JDBCContract.CURRENT_PASSWORD);
+//            DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL,
+//                    JDBCContract.CURRENT_USERNAME,JDBCContract.CURRENT_PASSWORD)
 
-            stmt = conn.createStatement();
-
-            rs = stmt.executeQuery(query);
+            connection = dataSource.getConnection();
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
 
             while(rs.next())
             {
@@ -160,8 +116,8 @@ public class CartStatsDAO {
 
             try {
 
-                if(stmt!=null)
-                {stmt.close();}
+                if(statement!=null)
+                {statement.close();}
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -169,8 +125,8 @@ public class CartStatsDAO {
 
             try {
 
-                if(conn!=null)
-                {conn.close();}
+                if(connection!=null)
+                {connection.close();}
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

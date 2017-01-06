@@ -37,7 +37,7 @@ public class ItemCategoryDAO {
 	{
 		
 		int rowCount = 0;	
-		Connection conn = null;
+		Connection connection = null;
 //		Statement stmt = null;
 		PreparedStatement statement = null;
 
@@ -65,18 +65,19 @@ public class ItemCategoryDAO {
 		
 		try {
 			
-			conn = dataSource.getConnection();
-			statement = conn.prepareStatement(insertItemCategory,PreparedStatement.RETURN_GENERATED_KEYS);
+			connection = dataSource.getConnection();
+			statement = connection.prepareStatement(insertItemCategory,PreparedStatement.RETURN_GENERATED_KEYS);
 
-			statement.setString(1,itemCategory.getCategoryName());
-			statement.setString(2,itemCategory.getCategoryDescription());
-			statement.setInt(3,itemCategory.getParentCategoryID());
+			int i = 0;
+			statement.setString(++i,itemCategory.getCategoryName());
+			statement.setString(++i,itemCategory.getCategoryDescription());
+			statement.setInt(++i,itemCategory.getParentCategoryID());
 
-			statement.setString(4,itemCategory.getImagePath());
-			statement.setString(5,itemCategory.getDescriptionShort());
-			statement.setBoolean(6,itemCategory.getisAbstractNode());
+			statement.setString(++i,itemCategory.getImagePath());
+			statement.setString(++i,itemCategory.getDescriptionShort());
+			statement.setBoolean(++i,itemCategory.getisAbstractNode());
 
-			statement.setBoolean(7,itemCategory.getIsLeafNode());
+			statement.setBoolean(++i,itemCategory.getIsLeafNode());
 
 
 			rowCount = statement.executeUpdate();
@@ -108,8 +109,8 @@ public class ItemCategoryDAO {
 			
 			try {
 				
-				if(conn!=null)
-				{conn.close();}
+				if(connection!=null)
+				{connection.close();}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -407,16 +408,17 @@ public class ItemCategoryDAO {
 			connection = dataSource.getConnection();
 			statement = connection.prepareStatement(updateStatement);
 
-			statement.setString(1,itemCategory.getCategoryName());
-			statement.setString(2,itemCategory.getCategoryDescription());
-			statement.setString(3,itemCategory.getImagePath());
+			int i = 0;
+			statement.setString(++i,itemCategory.getCategoryName());
+			statement.setString(++i,itemCategory.getCategoryDescription());
+			statement.setString(++i,itemCategory.getImagePath());
 
-			statement.setObject(4,itemCategory.getParentCategoryID());
-			statement.setString(5,itemCategory.getDescriptionShort());
-			statement.setBoolean(6,itemCategory.getisAbstractNode());
+			statement.setObject(++i,itemCategory.getParentCategoryID());
+			statement.setString(++i,itemCategory.getDescriptionShort());
+			statement.setBoolean(++i,itemCategory.getisAbstractNode());
 
-			statement.setBoolean(7,itemCategory.getIsLeafNode());
-			statement.setInt(8,itemCategory.getItemCategoryID());
+			statement.setBoolean(++i,itemCategory.getIsLeafNode());
+			statement.setInt(++i,itemCategory.getItemCategoryID());
 
 			rowCount = statement.executeUpdate();
 
@@ -1069,21 +1071,10 @@ public class ItemCategoryDAO {
 				+ ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_NAME
 				
 				
-				+ " FROM " 
-				+ Shop.TABLE_NAME  + "," + ShopItem.TABLE_NAME + ","
-				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
-				+ " WHERE " 
-				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID
-				+ "="
-				+ ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
-				+ " AND "
-				+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID
-				+ "="
-				+ Item.TABLE_NAME + "." + Item.ITEM_ID
-				+ " AND "
-				+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID
-				+ "="
-				+ ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
+				+ " FROM " + Shop.TABLE_NAME  + "," + ShopItem.TABLE_NAME + "," + Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
+				+ " WHERE " + Shop.TABLE_NAME + "." + Shop.SHOP_ID + "=" + ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
+				+ " AND " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "=" + Item.TABLE_NAME + "." + Item.ITEM_ID
+				+ " AND " + Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "=" + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
 		
 		
 

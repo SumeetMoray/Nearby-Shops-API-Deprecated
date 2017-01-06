@@ -21,12 +21,6 @@ public class ItemDAOJoinOuter {
 
 	private HikariDataSource dataSource = Globals.getDataSource();
 
-//	private GeoLocation center;
-//	private GeoLocation[] minMaxArray;
-//	private GeoLocation pointOne;
-//	private GeoLocation pointTwo;
-
-
 	@Override
 	protected void finalize() throws Throwable {
 		// TODO Auto-generated method stub
