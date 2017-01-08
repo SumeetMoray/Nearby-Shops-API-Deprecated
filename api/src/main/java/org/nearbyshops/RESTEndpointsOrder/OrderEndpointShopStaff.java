@@ -221,7 +221,7 @@ public class OrderEndpointShopStaff {
 		Shop shop = null;
 
 //		order.setDeliveryGuySelfID(orderReceived.getDeliveryGuySelfID());
-		DeliveryGuySelf deliveryGuySelf = Globals.deliveryGuySelfDAO.readDeliveryGuySelf(deliveryGuyID);
+		DeliveryGuySelf deliveryGuySelf = Globals.deliveryGuySelfDAO.getShopIDForDeliveryGuy(deliveryGuyID);
 
 		if(Globals.accountApproved instanceof ShopAdmin) {
 			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;

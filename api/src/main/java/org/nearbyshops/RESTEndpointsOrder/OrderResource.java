@@ -22,10 +22,10 @@ import java.util.List;
 
 @Singleton
 @Path("/Order")
-public class OrderResource_Closed {
+public class OrderResource {
 
 
-	public OrderResource_Closed() {
+	public OrderResource() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

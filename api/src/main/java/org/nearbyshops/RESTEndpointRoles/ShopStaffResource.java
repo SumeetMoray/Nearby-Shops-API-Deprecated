@@ -285,7 +285,35 @@ public class ShopStaffResource {
 			throw new ForbiddenException("Not Permitted ! ");
 		}
 	}
-	
+
+
+
+	@GET
+	@Path("/ForPublic")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getShopStaffPublic(@QueryParam("ShopID")Integer shopID)
+	{
+
+		List<ShopStaff> list = daoPrepared.getShopStaffForPublic(shopID);
+
+		GenericEntity<List<ShopStaff>> listEntity = new GenericEntity<List<ShopStaff>>(list){
+		};
+
+
+		if(list.size()<=0)
+		{
+			return Response.status(Status.NO_CONTENT)
+					.build();
+		}else
+		{
+			return Response.status(Status.OK)
+					.entity(listEntity)
+					.build();
+		}
+
+	}
+
+
 	
 	/*@GET
 	@Path("/{staffID}")

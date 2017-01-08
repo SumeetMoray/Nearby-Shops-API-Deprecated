@@ -102,7 +102,7 @@ public class ShopAdminResource {
 
 		shopAdmin.setShopAdminID(shopAdminID);
 
-		int rowCount = shopAdminDAO.updateShopAdmin(shopAdmin);
+		int rowCount = shopAdminDAO.updateForAccountApproval(shopAdmin);
 
 		if(rowCount >= 1)
 		{
@@ -292,7 +292,7 @@ public class ShopAdminResource {
 		if(metaonly==null || (!metaonly)) {
 
 
-			shopAdminList = shopAdminDAO.getShopAdmin(enabled,waitlisted,searchString,sortBy,
+			shopAdminList = shopAdminDAO.getShopAdminForApproval(enabled,waitlisted,searchString,sortBy,
 					limit,offset);
 
 			endPoint.setResults(shopAdminList);
@@ -304,7 +304,73 @@ public class ShopAdminResource {
 				.entity(endPoint)
 				.build();
 	}
-	
+
+
+
+	@GET
+	@Path("/ForPublic")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getShopAdminPublic(@QueryParam("ShopID")Integer shopID,
+									   @QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset)
+	{
+
+		final int max_limit = 100;
+
+		if(limit!=null)
+		{
+			if(limit>=max_limit)
+			{
+				limit = max_limit;
+			}
+		}
+		else
+		{
+			limit = 30;
+		}
+
+
+
+
+//		ShopAdminEndPoint endPoint = shopAdminDAO.getEndpointMetadata(enabled,waitlisted,searchString);
+
+		ShopAdminEndPoint endPoint = shopAdminDAO.getShopAdminPublic(shopID,null,null,
+				limit,offset);
+
+
+		endPoint.setLimit(limit);
+		endPoint.setMax_limit(max_limit);
+		if(offset!=null)
+		{
+			endPoint.setOffset(offset);
+		}
+
+
+
+
+//		ArrayList<ShopAdmin> shopAdminList = null;
+
+
+		/*try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}*/
+
+
+
+//
+//		if(metaonly==null || (!metaonly)) {
+//
+//			endPoint.setResults(shopAdminList);
+//		}
+
+
+		//Marker
+		return Response.status(Status.OK)
+				.entity(endPoint)
+				.build();
+	}
+
 
 
 //
@@ -390,7 +456,7 @@ public class ShopAdminResource {
 		if(Globals.accountApproved instanceof ShopAdmin)
 		{
 			shopAdmin = shopAdminDAO
-					.getShopAdmin(((ShopAdmin) Globals.accountApproved).getShopAdminID());
+					.getShopAdminForLogin(((ShopAdmin) Globals.accountApproved).getShopAdminID());
 		}
 
 

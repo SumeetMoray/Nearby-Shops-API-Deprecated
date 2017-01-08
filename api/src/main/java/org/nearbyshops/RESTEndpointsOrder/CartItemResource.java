@@ -69,21 +69,18 @@ public class CartItemResource {
 
 		if(rowCount == 1)
 		{
-			
-			
-			Response response = Response.status(Status.CREATED)
+
+
+			return Response.status(Status.CREATED)
 					.entity(null)
 					.build();
-			
-			return response;
 			
 		}else if(rowCount <= 0)
 		{
-			Response response = Response.status(Status.NOT_MODIFIED)
+
+			return Response.status(Status.NOT_MODIFIED)
 					.entity(null)
 					.build();
-			
-			return response;
 		}
 
 		return null;
@@ -139,11 +136,10 @@ public class CartItemResource {
 		}
 		if(rowCount == 0)
 		{
-			Response response = Response.status(Status.NOT_MODIFIED)
+
+			return Response.status(Status.NOT_MODIFIED)
 					.entity(null)
 					.build();
-			
-			return response;
 		}
 
 
@@ -193,20 +189,17 @@ public class CartItemResource {
 			}
 
 
-			Response response = Response.status(Status.OK)
+			return Response.status(Status.OK)
 					.entity(null)
 					.build();
-			
-			return response;
 		}
 		
 		if(rowCount == 0)
 		{
-			Response response = Response.status(Status.NOT_MODIFIED)
+
+			return Response.status(Status.NOT_MODIFIED)
 					.entity(null)
 					.build();
-			
-			return response;
 		}
 		
 		
@@ -281,19 +274,17 @@ public class CartItemResource {
 		
 		if(cartList.size()<=0)
 		{
-			Response response = Response.status(Status.NO_CONTENT)
+
+			return Response.status(Status.NO_CONTENT)
 					.entity(listEntity)
 					.build();
-			
-			return response;
 			
 		}else
 		{
-			Response response = Response.status(Status.OK)
+
+			return Response.status(Status.OK)
 					.entity(listEntity)
 					.build();
-			
-			return response;
 		}
 		
 	}

@@ -85,7 +85,7 @@ public class DeliveryGuySelfResource {
 
 
 
-		int idOfInsertedRow = Globals.deliveryGuySelfDAO.saveDeliveryVehicleSelf(deliveryGuySelf);
+		int idOfInsertedRow = Globals.deliveryGuySelfDAO.saveForShopAdmin(deliveryGuySelf);
 
 		deliveryGuySelf.setDeliveryGuyID(idOfInsertedRow);
 
@@ -148,7 +148,7 @@ public class DeliveryGuySelfResource {
 			// get Shop Object
 			// Shop shop = shopDAO.getShop(deliveryGuySelf.getShopID(),null,null);
 
-			DeliveryGuySelf deliveryGuySelfTwo = deliveryGuySelfDAO.readDeliveryGuySelf(deliveryGuyID);
+			DeliveryGuySelf deliveryGuySelfTwo = deliveryGuySelfDAO.getShopIDForDeliveryGuy(deliveryGuyID);
 			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(((ShopAdmin)Globals.accountApproved).getShopAdminID());
 
 			if(deliveryGuySelfTwo.getShopID() != shop.getShopID())
@@ -166,7 +166,7 @@ public class DeliveryGuySelfResource {
 
 
 
-		int rowCount = Globals.deliveryGuySelfDAO.updateDeliveryGuySelf(deliveryGuySelf);
+		int rowCount = Globals.deliveryGuySelfDAO.updateForShopAdmin(deliveryGuySelf);
 
 		if(rowCount >= 1)
 		{
@@ -248,7 +248,7 @@ public class DeliveryGuySelfResource {
 		if(Globals.accountApproved instanceof ShopAdmin)
 		{
 
-			DeliveryGuySelf deliveryGuySelfTwo = deliveryGuySelfDAO.readDeliveryGuySelf(deliveryGuyID);
+			DeliveryGuySelf deliveryGuySelfTwo = deliveryGuySelfDAO.getShopIDForDeliveryGuy(deliveryGuyID);
 
 			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(((ShopAdmin)Globals.accountApproved).getShopAdminID());
 
@@ -323,7 +323,7 @@ public class DeliveryGuySelfResource {
 		}
 
 
-		List<DeliveryGuySelf> vehicleSelfList = Globals.deliveryGuySelfDAO.readDeliveryVehicleSelf(shopID,isEnabled);
+		List<DeliveryGuySelf> vehicleSelfList = Globals.deliveryGuySelfDAO.readForShopAdmin(shopID,isEnabled);
 		GenericEntity<List<DeliveryGuySelf>> listEntity = new GenericEntity<List<DeliveryGuySelf>>(vehicleSelfList){
 
 		};
@@ -346,49 +346,49 @@ public class DeliveryGuySelfResource {
 	}
 	
 	
-	@GET
-	@Path("/{DeliveryGuyID}")
-	@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_DELIVERY_GUY_SELF})
-	public Response getDeliveryGuy(@PathParam("DeliveryGuyID")int deliveryGuyID)
-	{
-
-		// Delivery Guy can view only his account not the account of others
-		if(Globals.accountApproved instanceof DeliveryGuySelf)
-		{
-			if(deliveryGuyID != ((DeliveryGuySelf) Globals.accountApproved).getDeliveryGuyID());
-			{
-				// update by wrong account . Throw an Exception
-				Response responseError = Response.status(Status.FORBIDDEN)
-						.entity(new ErrorNBSAPI(403, APIErrors.ACCESS_FORBIDDEN))
-						.build();
-
-				throw new ForbiddenException(APIErrors.ACCESS_FORBIDDEN,responseError);
-
-			}
-		}
-
-
-
-		DeliveryGuySelf vehicleSelf = Globals.deliveryGuySelfDAO.readDeliveryGuySelf(deliveryGuyID);
-		
-		if(vehicleSelf != null)
-		{
-
-			return Response.status(Status.OK)
-			.entity(vehicleSelf)
-			.build();
-			
-		} else 
-		{
-
-			return Response.status(Status.NO_CONTENT)
-					.entity(vehicleSelf)
-					.build();
-			
-		}
-		
-	}
+//	@GET
+//	@Path("/{DeliveryGuyID}")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	@RolesAllowed({GlobalConstants.ROLE_DELIVERY_GUY_SELF})
+//	public Response getDeliveryGuy(@PathParam("DeliveryGuyID")int deliveryGuyID)
+//	{
+//
+//		// Delivery Guy can view only his account not the account of others
+//		if(Globals.accountApproved instanceof DeliveryGuySelf)
+//		{
+//			if(deliveryGuyID != ((DeliveryGuySelf) Globals.accountApproved).getDeliveryGuyID());
+//			{
+//				// update by wrong account . Throw an Exception
+//				Response responseError = Response.status(Status.FORBIDDEN)
+//						.entity(new ErrorNBSAPI(403, APIErrors.ACCESS_FORBIDDEN))
+//						.build();
+//
+//				throw new ForbiddenException(APIErrors.ACCESS_FORBIDDEN,responseError);
+//
+//			}
+//		}
+//
+//
+//
+//		DeliveryGuySelf vehicleSelf = Globals.deliveryGuySelfDAO.readDeliveryGuySelf(deliveryGuyID);
+//
+//		if(vehicleSelf != null)
+//		{
+//
+//			return Response.status(Status.OK)
+//			.entity(vehicleSelf)
+//			.build();
+//
+//		} else
+//		{
+//
+//			return Response.status(Status.NO_CONTENT)
+//					.entity(vehicleSelf)
+//					.build();
+//
+//		}
+//
+//	}
 
 
 
@@ -430,7 +430,7 @@ public class DeliveryGuySelfResource {
 		{
 //			deliveryGuySelf = (DeliveryGuySelf) Globals.accountApproved;
 			deliveryGuySelf = deliveryGuySelfDAO
-					.readDeliveryGuySelf(((DeliveryGuySelf) Globals.accountApproved).getDeliveryGuyID());
+					.readForLogin(((DeliveryGuySelf) Globals.accountApproved).getDeliveryGuyID());
 		}
 
 

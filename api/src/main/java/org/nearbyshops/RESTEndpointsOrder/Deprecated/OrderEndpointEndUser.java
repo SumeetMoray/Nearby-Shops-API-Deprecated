@@ -1,4 +1,4 @@
-package org.nearbyshops.RESTEndpointsOrder;
+package org.nearbyshops.RESTEndpointsOrder.Deprecated;
 
 import org.glassfish.jersey.media.sse.EventOutput;
 import org.glassfish.jersey.media.sse.SseBroadcaster;
@@ -15,8 +15,8 @@ import javax.ws.rs.core.Response.Status;
 import java.util.List;
 
 
-@Singleton
-@Path("/Order/EndUser")
+//@Singleton
+//@Path("/Order/EndUser")
 public class OrderEndpointEndUser {
 
 

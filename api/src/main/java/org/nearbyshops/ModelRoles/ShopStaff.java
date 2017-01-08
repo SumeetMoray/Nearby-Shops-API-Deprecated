@@ -74,7 +74,6 @@ public class ShopStaff {
             + " " + ShopStaff.IS_ENABLED + " boolean NOT NULL,"
             + " " + ShopStaff.ACCOUNT_PRIVATE + " boolean,"
 
-
             + " " + ShopStaff.GOVERNMENT_ID_NAME + " text,"
             + " " + ShopStaff.GOVERNMENT_ID_NUMBER + " text,"
             + " " + ShopStaff.TIMESTAMP_CREATED + " timestamp with time zone NOT NULL DEFAULT now(),"

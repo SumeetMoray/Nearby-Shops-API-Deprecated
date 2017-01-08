@@ -1,10 +1,13 @@
 package org.nearbyshops;
 
 
-import org.glassfish.grizzly.http.server.HttpServer;
+//import org.eclipse.jetty.server.Server;
+//import org.glassfish.grizzly.http.server.HttpServer;
+//import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
+
+
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
-
-
+//import org.glassfish.jersey.jetty.JettyHttpContainerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.nearbyshops.DAOPreparedSettings.SettingsDAOPrepared;
 import org.nearbyshops.Globals.GlobalConstants;
@@ -36,28 +39,31 @@ import java.sql.Statement;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.ws.rs.core.UriBuilder;
 
-    /**
+/**
  * Main class.
  *
  */
 
 
-public class Main implements ActionListener {
+public class Main {
     // Base URI the Grizzly HTTP server will listen on
 	
 	//"http://localhost:8080/myapp/"
     public static final String BASE_URI = "http://0.0.0.0:5000/api";
+
+//	public static final String BASE_URI_2 = "http://0.0.0.0/api";
     
-    private HttpServer server_;
+//    private Server server_;
     
-    private boolean isServerStart = false;
+//    private boolean isServerStart = false;
     
     /**
      * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
      * @return Grizzly HTTP server.
      */
-    public static HttpServer startServer() {
+    public static void startServer() {
         // create a resource config that scans for JAX-RS resources and providers
         // in org.sumeet.restsamples.Sample package
         final ResourceConfig rc = new ResourceConfig();
@@ -75,7 +81,13 @@ public class Main implements ActionListener {
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
 
-        return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
+//		URI baseUri = UriBuilder.fromUri("http://0.0.0.0/").port(5000).build();
+
+//		URI baseUri = UriBuilder.fromPath(BASE_URI).build();
+//		return JettyHttpContainerFactory.createServer(baseUri, rc);
+
+		GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
+//        return ;
     }
 
     /**
@@ -84,71 +96,63 @@ public class Main implements ActionListener {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        
+
+
+		createDB();
+		createTables();
+
+		startServer();
+
+	}
+
     	//server = startServer();
-    	Main main = new Main();
+//    	Main main = new Main();
     	//main.go();
     	//main.hibernateTest();
     	
-    	main.start();
+//    	start();
     	//main.isServerStart = true;
 
-    }
-    
-    public void go()
-    {
 
-        JFrame frame = new JFrame();
-        
-        JButton button = new JButton("Start/Stop Server");
-        JButton buttontwo = new JButton("Stop Server");
-        
-        button.addActionListener(this);
-        
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().add(BorderLayout.NORTH,button);
-        frame.getContentPane().add(BorderLayout.SOUTH, buttontwo);
-        frame.setSize(300, 300);
-        frame.setVisible(true);
-    
-    }
+
+
+
+//
+//    public void go()
+//    {
+//
+//        JFrame frame = new JFrame();
+//
+//        JButton button = new JButton("Start/Stop Server");
+//        JButton buttontwo = new JButton("Stop Server");
+//
+//        button.addActionListener(this);
+//
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.getContentPane().add(BorderLayout.NORTH,button);
+//        frame.getContentPane().add(BorderLayout.SOUTH, buttontwo);
+//        frame.setSize(300, 300);
+//        frame.setVisible(true);
+//
+//    }
     
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		if(isServerStart == true)
-        {
-        	stopServer();
-        }else if(isServerStart == false)
-        {
-        	start();
-        }
-	}
+//	@Override
+//	public void actionPerformed(ActionEvent e) {
+//		// TODO Auto-generated method stub
+//		if(isServerStart == true)
+//        {
+//        	stopServer();
+//        }else if(isServerStart == false)
+//        {
+//        	start();
+//        }
+//	}
+//
 	
 	
-	
-	public void start()
-	{
-		
-		server_ = startServer();
-        System.out.println(String.format("Jersey app started with WADL available at "
-                + "\nHit enter to stop it...", BASE_URI));
-        //System.in.read();
-        isServerStart = true;
 
-		createDB();
-        createTables();
-
-	}
-
-	public void stopServer()
-	{
-		server_.stop();
-		isServerStart = false;
-	}
-
-	public void createDB()
+	public static void createDB()
 	{
 
 		Connection conn = null;
@@ -205,7 +209,7 @@ public class Main implements ActionListener {
 	
 	
 	
-	private void createTables()
+	private static void createTables()
 	{
 		
 		Connection connection = null;

@@ -816,6 +816,182 @@ public class ShopStaffDAOPrepared {
 	}
 
 
+	public ArrayList<ShopStaff> getShopStaffForPublic(Integer shopID) {
+
+
+		boolean isFirst = true;
+
+		String query = "SELECT "
+
+				+ ShopStaff.STAFF_ID + ","
+				+ ShopStaff.STAFF_NAME + ","
+//				+ Usernames.USERNAME + ","
+//				+ ShopStaff.PASSWORD + ","
+
+				+ ShopStaff.SHOP_ID + ","
+
+				+ ShopStaff.ABOUT + ","
+				+ ShopStaff.PROFILE_IMAGE_URL + ","
+
+				+ ShopStaff.PHONE_NUMBER + ","
+				+ ShopStaff.DESIGNATION + ","
+//				+ ShopStaff.IS_ENABLED + ","
+//				+ ShopStaff.ACCOUNT_PRIVATE + ","
+
+				+ ShopStaff.GOVERNMENT_ID_NAME + ","
+				+ ShopStaff.GOVERNMENT_ID_NUMBER + ","
+				+ ShopStaff.TIMESTAMP_CREATED + ""
+
+//				+ ShopStaff.ADD_REMOVE_ITEMS_FROM_SHOP + ","
+//				+ ShopStaff.UPDATE_STOCK + ","
+
+//				+ ShopStaff.CANCEL_ORDERS + ","
+//				+ ShopStaff.CONFIRM_ORDERS + ","
+//				+ ShopStaff.SET_ORDERS_PACKED + ","
+//				+ ShopStaff.HANDOVER_TO_DELIVERY + ","
+//				+ ShopStaff.MARK_ORDERS_DELIVERED + ","
+//				+ ShopStaff.ACCEPT_PAYMENTS_FROM_DELIVERY + ","
+//				+ ShopStaff.ACCEPT_RETURNS + ""
+
+				+ " FROM " + ShopStaff.TABLE_NAME
+				+ " INNER JOIN " + Usernames.TABLE_NAME + " ON (" + ShopStaff.STAFF_ID + " = " + Usernames.USER_ID + ")"
+				+ " WHERE " + ShopStaff.IS_ENABLED + " = true "
+				+ " AND " + ShopStaff.ACCOUNT_PRIVATE + " = false ";
+
+
+
+//
+//		if(isEnabled !=null)
+//		{
+//			query = query + " WHERE " + ShopStaff.IS_ENABLED + " = ?";
+//
+//			isFirst = false;
+//		}
+
+
+
+		if(shopID !=null)
+		{
+
+			String queryPart = ShopStaff.SHOP_ID + " = ?";
+
+			query = query + " AND " + queryPart;
+
+			isFirst = false;
+		}
+
+
+
+//		logMessage(query);
+
+		ArrayList<ShopStaff> shopStaffList = new ArrayList<ShopStaff>();
+
+
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+
+		try {
+
+			connection = dataSource.getConnection();
+			statement = connection.prepareStatement(query);
+
+			int i = 0;
+//
+//			if(isEnabled!=null)
+//			{
+//				statement.setObject(++i,isEnabled);
+//			}
+
+			if(shopID!=null)
+			{
+				statement.setObject(++i,shopID);
+			}
+
+
+			rs = statement.executeQuery();
+
+			while (rs.next()) {
+
+				ShopStaff shopStaff = new ShopStaff();
+
+				shopStaff.setStaffID(rs.getInt(ShopStaff.STAFF_ID));
+				shopStaff.setStaffName(rs.getString(ShopStaff.STAFF_NAME));
+//				shopStaff.setUsername(rs.getString(Usernames.USERNAME));
+//				shopStaff.setPassword(rs.getString(ShopStaff.PASSWORD));
+
+				shopStaff.setShopID(rs.getInt(ShopStaff.SHOP_ID));
+
+				shopStaff.setAbout(rs.getString(ShopStaff.ABOUT));
+				shopStaff.setProfileImageURL(rs.getString(ShopStaff.PROFILE_IMAGE_URL));
+
+				shopStaff.setPhone(rs.getString(ShopStaff.PHONE_NUMBER));
+				shopStaff.setDesignation(rs.getString(ShopStaff.DESIGNATION));
+//				shopStaff.setEnabled(rs.getBoolean(ShopStaff.IS_ENABLED));
+//				shopStaff.setAccountPrivate(rs.getBoolean(ShopStaff.ACCOUNT_PRIVATE));
+
+				shopStaff.setGovtIDName(rs.getString(ShopStaff.GOVERNMENT_ID_NAME));
+				shopStaff.setGovtIDNumber(rs.getString(ShopStaff.GOVERNMENT_ID_NUMBER));
+				shopStaff.setTimestampCreated(rs.getTimestamp(ShopStaff.TIMESTAMP_CREATED));
+
+//				shopStaff.setAddRemoveItemsFromShop(rs.getBoolean(ShopStaff.ADD_REMOVE_ITEMS_FROM_SHOP));
+//				shopStaff.setUpdateStock(rs.getBoolean(ShopStaff.UPDATE_STOCK));
+
+//				shopStaff.setCancelOrders(rs.getBoolean(ShopStaff.CANCEL_ORDERS));
+//				shopStaff.setConfirmOrders(rs.getBoolean(ShopStaff.CONFIRM_ORDERS));
+//				shopStaff.setSetOrdersPacked(rs.getBoolean(ShopStaff.SET_ORDERS_PACKED));
+//				shopStaff.setHandoverToDelivery(rs.getBoolean(ShopStaff.HANDOVER_TO_DELIVERY));
+//				shopStaff.setMarkOrdersDelivered(rs.getBoolean(ShopStaff.MARK_ORDERS_DELIVERED));
+//				shopStaff.setAcceptPaymentsFromDelivery(rs.getBoolean(ShopStaff.ACCEPT_PAYMENTS_FROM_DELIVERY));
+//				shopStaff.setAcceptReturns(rs.getBoolean(ShopStaff.ACCEPT_RETURNS));
+
+				shopStaffList.add(shopStaff);
+			}
+
+
+			logMessage("Staff List Size : " + String.valueOf(shopStaffList.size()));
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally
+
+		{
+
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if (statement != null) {
+					statement.close();
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return shopStaffList;
+	}
+
+
 
 
 	public ShopStaff getShopIDforShopStaff(int shopStaffID) {

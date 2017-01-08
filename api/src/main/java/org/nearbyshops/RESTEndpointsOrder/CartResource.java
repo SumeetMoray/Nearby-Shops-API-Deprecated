@@ -34,24 +34,21 @@ public class CartResource {
 
 		if(idOfInsertedRow >=1)
 		{
-			
-			
-			Response response = Response.status(Status.CREATED)
+
+
+			return Response.status(Status.CREATED)
 					.location(URI.create("/api/Cart/" + idOfInsertedRow))
 					.entity(cart)
 					.build();
 			
-			return response;
-			
 		}else if(idOfInsertedRow <=0)
 		{
-			Response response = Response.status(Status.NOT_MODIFIED)
-					.entity(null)
-					.build();
-			
+
 			//Response.status(Status.CREATED).location(arg0)
 			
-			return response;
+			return Response.status(Status.NOT_MODIFIED)
+					.entity(null)
+					.build();
 		}
 		
 		return null;
@@ -72,19 +69,17 @@ public class CartResource {
 
 		if(rowCount >= 1)
 		{
-			Response response = Response.status(Status.OK)
+
+			return Response.status(Status.OK)
 					.entity(null)
 					.build();
-			
-			return response;
 		}
 		if(rowCount == 0)
 		{
-			Response response = Response.status(Status.NOT_MODIFIED)
+
+			return Response.status(Status.NOT_MODIFIED)
 					.entity(null)
 					.build();
-			
-			return response;
 		}
 
 
@@ -102,20 +97,18 @@ public class CartResource {
 		
 		if(rowCount>=1)
 		{
-			Response response = Response.status(Status.OK)
+
+			return Response.status(Status.OK)
 					.entity(null)
 					.build();
-			
-			return response;
 		}
 		
 		if(rowCount == 0)
 		{
-			Response response = Response.status(Status.NOT_MODIFIED)
+
+			return Response.status(Status.NOT_MODIFIED)
 					.entity(null)
 					.build();
-			
-			return response;
 		}
 		
 		
@@ -138,19 +131,17 @@ public class CartResource {
 		
 		if(cartList.size()<=0)
 		{
-			Response response = Response.status(Status.NO_CONTENT)
+
+			return Response.status(Status.NO_CONTENT)
 					.entity(listEntity)
 					.build();
-			
-			return response;
 			
 		}else
 		{
-			Response response = Response.status(Status.OK)
+
+			return Response.status(Status.OK)
 					.entity(listEntity)
 					.build();
-			
-			return response;
 		}
 		
 	}
@@ -166,20 +157,16 @@ public class CartResource {
 		
 		if(cart != null)
 		{
-			Response response = Response.status(Status.OK)
+
+			return Response.status(Status.OK)
 			.entity(cart)
 			.build();
 			
-			return response;
-			
 		} else 
 		{
-			
-			Response response = Response.status(Status.NO_CONTENT)
-					.entity(cart)
+
+			return Response.status(Status.NO_CONTENT)
 					.build();
-			
-			return response;
 			
 		}
 		

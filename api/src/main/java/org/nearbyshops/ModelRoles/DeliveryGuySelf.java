@@ -2,6 +2,8 @@ package org.nearbyshops.ModelRoles;
 
 import org.nearbyshops.Model.Shop;
 
+import java.sql.Timestamp;
+
 /**
  * Created by sumeet on 14/6/16.
  */
@@ -57,6 +59,12 @@ public class DeliveryGuySelf {
             + " " + DeliveryGuySelf.IS_ENABLED + " boolean,"
             + " " + DeliveryGuySelf.IS_WAITLISTED + " boolean,"
 
+            + " " + DeliveryGuySelf.ACCOUNT_PRIVATE + " boolean,"
+
+            + " " + DeliveryGuySelf.GOVERNMENT_ID_NAME + " text,"
+            + " " + DeliveryGuySelf.GOVERNMENT_ID_NUMBER + " text,"
+            + " " + DeliveryGuySelf.TIMESTAMP_CREATED + " timestamp with time zone NOT NULL DEFAULT now(),"
+
             + " FOREIGN KEY(" + DeliveryGuySelf.SHOP_ID +") REFERENCES " + Shop.TABLE_NAME + "(" + Shop.SHOP_ID + "),"
             + " FOREIGN KEY(" + DeliveryGuySelf.DELIVERY_GUY_SELF_ID +") REFERENCES " + Usernames.TABLE_NAME + "(" + Usernames.USER_ID + ")"
             + ")";
@@ -74,18 +82,51 @@ public class DeliveryGuySelf {
     private String about;
     private String profileImageURL;
     private String phoneNumber;
-
-    private Boolean isEnabled;
-    private Boolean isWaitlisted;
+    private String designation;
 
     private Double currentLatitude;
     private Double currentLongitude;
 
-    private String designation;
+    private Boolean isEnabled;
+    private Boolean isWaitlisted;
 
+    private boolean accountPrivate;
 
+    private String govtIDName;
+    private String govtIDNumber;
+    private Timestamp timestampCreated;
 
+    public boolean isAccountPrivate() {
+        return accountPrivate;
+    }
 
+    public void setAccountPrivate(boolean accountPrivate) {
+        this.accountPrivate = accountPrivate;
+    }
+
+    public String getGovtIDName() {
+        return govtIDName;
+    }
+
+    public void setGovtIDName(String govtIDName) {
+        this.govtIDName = govtIDName;
+    }
+
+    public String getGovtIDNumber() {
+        return govtIDNumber;
+    }
+
+    public void setGovtIDNumber(String govtIDNumber) {
+        this.govtIDNumber = govtIDNumber;
+    }
+
+    public Timestamp getTimestampCreated() {
+        return timestampCreated;
+    }
+
+    public void setTimestampCreated(Timestamp timestampCreated) {
+        this.timestampCreated = timestampCreated;
+    }
 
     public Double getCurrentLatitude() {
         return currentLatitude;

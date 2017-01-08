@@ -5,7 +5,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 
 import org.nearbyshops.Main;
-import org.glassfish.grizzly.http.server.HttpServer;
+//import org.glassfish.grizzly.http.server.HttpServer;
 
 import org.junit.After;
 import org.junit.Before;
@@ -16,13 +16,13 @@ import static org.junit.Assert.assertEquals;
 
 public class MyResourceTest {
 
-    private HttpServer server;
+//    private HttpServer server;
     private WebTarget target;
 
     @Before
     public void setUp() throws Exception {
         // start the server
-        server = Main.startServer();
+//        server = Main.startServer();
         // create the client
         Client c = ClientBuilder.newClient();
 
@@ -37,7 +37,7 @@ public class MyResourceTest {
 
     @After
     public void tearDown() throws Exception {
-        server.stop();
+//        server.stop();
     }
 
     /**

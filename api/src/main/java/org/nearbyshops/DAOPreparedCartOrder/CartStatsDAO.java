@@ -5,7 +5,9 @@ import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.JDBCContract;
 import org.nearbyshops.Model.Cart;
 import org.nearbyshops.Model.CartItem;
+import org.nearbyshops.Model.Shop;
 import org.nearbyshops.Model.ShopItem;
+import org.nearbyshops.ModelRoles.EndUser;
 import org.nearbyshops.ModelStats.CartStats;
 
 import java.sql.*;
@@ -33,7 +35,7 @@ public class CartStatsDAO {
          */
 
 
-        String query =  " select " +
+        String queryTwo =  " select " +
                         " sum(" + CartItem.ITEM_QUANTITY + "*" + ShopItem.ITEM_PRICE + ") as Cart_Total," +
                         " count(" + CartItem.TABLE_NAME + "." + CartItem.ITEM_ID + ") as Items_In_Cart," +
                         Cart.TABLE_NAME + "." + Cart.SHOP_ID + "," +
@@ -43,6 +45,20 @@ public class CartStatsDAO {
                         " and " + "shop_item.shop_id" + " = " + "cart.shop_id " +
                         " and " + "shop_item.item_id" + " = " + "cart_item.item_id " +
                         " and " + "end_user_id = " + endUserID ;
+
+
+        String query =  " select " +
+                    " sum(" + CartItem.ITEM_QUANTITY + "*" + ShopItem.ITEM_PRICE + ") as Cart_Total," +
+                    " count(" + CartItem.TABLE_NAME + "." + CartItem.ITEM_ID + ") as Items_In_Cart," +
+                    Cart.TABLE_NAME + "." + Cart.SHOP_ID + "," +
+                    Cart.TABLE_NAME + "." + Cart.CART_ID  +
+                    " from " + ShopItem.TABLE_NAME +
+                    " INNER JOIN " + Cart.TABLE_NAME + " ON ( " + Cart.TABLE_NAME + "." + Cart.SHOP_ID + " = "  + ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID + " )" +
+                    " INNER JOIN " + CartItem.TABLE_NAME + " ON ( " + Cart.TABLE_NAME + "." + Cart.CART_ID + " = " + CartItem.TABLE_NAME + "."  + CartItem.CART_ID + ")" +
+//                    " INNER JOIN " + ShopItem.TABLE_NAME + " ON ( " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + " = " + CartItem.TABLE_NAME + "." + CartItem.ITEM_ID + ")" +
+                    " where "
+                    + " ( " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + " = " + CartItem.TABLE_NAME + "." + CartItem.ITEM_ID + " ) "
+                    + " and " + Cart.END_USER_ID + " = " + endUserID ;
 
 
 
@@ -87,7 +103,7 @@ public class CartStatsDAO {
                 CartStats cartStats = new CartStats();
 
                 cartStats.setCartID(rs.getInt(Cart.CART_ID));
-                cartStats.setShopID(rs.getInt("shop_id"));
+                cartStats.setShopID(rs.getInt(Cart.SHOP_ID));
                 cartStats.setItemsInCart(rs.getInt("items_in_cart"));
                 cartStats.setCart_Total(rs.getDouble("cart_total"));
 

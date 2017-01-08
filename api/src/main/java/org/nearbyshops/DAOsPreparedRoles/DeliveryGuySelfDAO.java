@@ -23,7 +23,7 @@ public class DeliveryGuySelfDAO {
 	}
 
 
-	public int saveDeliveryVehicleSelf(DeliveryGuySelf deliveryGuySelf)
+	public int saveForShopAdmin(DeliveryGuySelf deliveryGuySelf)
 	{
 
 		Connection connection = null;
@@ -47,18 +47,30 @@ public class DeliveryGuySelfDAO {
 				+ "("
 
 				+ DeliveryGuySelf.DELIVERY_GUY_SELF_ID + ","
+				+ DeliveryGuySelf.NAME + ","
+				+ DeliveryGuySelf.SHOP_ID + ","
 //				+ DeliveryGuySelf.USERNAME + ","
+
 				+ DeliveryGuySelf.PASSWORD + ","
 				+ DeliveryGuySelf.ABOUT + ","
 				+ DeliveryGuySelf.PROFILE_IMAGE_URL + ","
+
 				+ DeliveryGuySelf.PHONE_NUMBER + ","
+				+ DeliveryGuySelf.DESIGNATION + ","
+
+//				+ DeliveryGuySelf.CURRENT_LATITUDE + ","
+//				+ DeliveryGuySelf.CURRENT_LONGITUDE + ","
 
 				+ DeliveryGuySelf.IS_ENABLED + ","
 				+ DeliveryGuySelf.IS_WAITLISTED + ","
-				+ DeliveryGuySelf.NAME + ","
-				+ DeliveryGuySelf.SHOP_ID + ""
 
-				+ " ) VALUES (?,?,?,?,? ,?,?,?,?)";
+				+ DeliveryGuySelf.ACCOUNT_PRIVATE + ","
+
+				+ DeliveryGuySelf.GOVERNMENT_ID_NAME + ","
+				+ DeliveryGuySelf.GOVERNMENT_ID_NUMBER + ""
+
+
+				+ " ) VALUES (?,?,?, ?,?,? ,?,? ,?,? ,?,?,?)";
 		
 		try {
 
@@ -83,16 +95,24 @@ public class DeliveryGuySelfDAO {
 
 			int i = 0;
 			statement.setInt(++i,rowIdUserID);
+			statement.setString(++i,deliveryGuySelf.getName());
+			statement.setObject(++i,deliveryGuySelf.getShopID());
+
 //			statement.setString(++i,deliveryGuySelf.getUsername());
 			statement.setString(++i,deliveryGuySelf.getPassword());
 			statement.setString(++i,deliveryGuySelf.getAbout());
 			statement.setString(++i,deliveryGuySelf.getProfileImageURL());
+
 			statement.setString(++i,deliveryGuySelf.getPhoneNumber());
+			statement.setString(++i,deliveryGuySelf.getDesignation());
 
 			statement.setObject(++i,deliveryGuySelf.getEnabled());
 			statement.setObject(++i,deliveryGuySelf.getWaitlisted());
-			statement.setString(++i,deliveryGuySelf.getName());
-			statement.setObject(++i,deliveryGuySelf.getShopID());
+
+			statement.setBoolean(++i,deliveryGuySelf.isAccountPrivate());
+			statement.setString(++i,deliveryGuySelf.getGovtIDName());
+			statement.setString(++i,deliveryGuySelf.getGovtIDNumber());
+
 
 			statement.executeUpdate();
 //			ResultSet rs = statement.getGeneratedKeys();
@@ -159,7 +179,7 @@ public class DeliveryGuySelfDAO {
 	
 
 
-	public int updateDeliveryGuySelf(DeliveryGuySelf deliveryGuySelf)
+	public int updateForShopAdmin(DeliveryGuySelf deliveryGuySelf)
 	{
 
 		String updateUsername = "UPDATE " + Usernames.TABLE_NAME
@@ -170,16 +190,23 @@ public class DeliveryGuySelfDAO {
 
 		String updateStatement = "UPDATE " + DeliveryGuySelf.TABLE_NAME
 				+ " SET "
+				+ DeliveryGuySelf.NAME + " = ?,"
+				+ DeliveryGuySelf.SHOP_ID + " = ?,"
 //				+ DeliveryGuySelf.USERNAME + " = ?,"
 				+ DeliveryGuySelf.PASSWORD + " = ?,"
+
 				+ DeliveryGuySelf.ABOUT + " = ?,"
 				+ DeliveryGuySelf.PROFILE_IMAGE_URL + " = ?,"
 				+ DeliveryGuySelf.PHONE_NUMBER + " = ?,"
+				+ DeliveryGuySelf.DESIGNATION + " = ?,"
 
 				+ DeliveryGuySelf.IS_ENABLED + " = ?,"
 				+ DeliveryGuySelf.IS_WAITLISTED + " = ?,"
-				+ DeliveryGuySelf.NAME + " = ?,"
-				+ DeliveryGuySelf.SHOP_ID + " = ?"
+
+				+ DeliveryGuySelf.ACCOUNT_PRIVATE + " = ?,"
+
+				+ DeliveryGuySelf.GOVERNMENT_ID_NAME + " = ?,"
+				+ DeliveryGuySelf.GOVERNMENT_ID_NUMBER + " = ?"
 
 				+ " WHERE " + DeliveryGuySelf.DELIVERY_GUY_SELF_ID + " = ?";
 		
@@ -202,16 +229,24 @@ public class DeliveryGuySelfDAO {
 			statement = connection.prepareStatement(updateStatement);
 
 			int i = 0;
+
+			statement.setString(++i,deliveryGuySelf.getName());
+			statement.setObject(++i,deliveryGuySelf.getShopID());
 //			statement.setString(1,deliveryGuySelf.getUsername());
 			statement.setString(++i,deliveryGuySelf.getPassword());
+
 			statement.setString(++i,deliveryGuySelf.getAbout());
 			statement.setString(++i,deliveryGuySelf.getProfileImageURL());
 			statement.setString(++i,deliveryGuySelf.getPhoneNumber());
+			statement.setString(++i,deliveryGuySelf.getDesignation());
 
 			statement.setObject(++i,deliveryGuySelf.getEnabled());
 			statement.setObject(++i,deliveryGuySelf.getWaitlisted());
-			statement.setString(++i,deliveryGuySelf.getName());
-			statement.setObject(++i,deliveryGuySelf.getShopID());
+
+			statement.setBoolean(++i,deliveryGuySelf.isAccountPrivate());
+			statement.setString(++i,deliveryGuySelf.getGovtIDName());
+			statement.setString(++i,deliveryGuySelf.getGovtIDNumber());
+
 
 			statement.setObject(++i,deliveryGuySelf.getDeliveryGuyID());
 			
@@ -283,16 +318,21 @@ public class DeliveryGuySelfDAO {
 
 		String updateStatement = "UPDATE " + DeliveryGuySelf.TABLE_NAME
 				+ " SET "
+				+ DeliveryGuySelf.NAME + " = ?,"
+				+ DeliveryGuySelf.SHOP_ID + " = ?"
 //				+ DeliveryGuySelf.USERNAME + " = ?,"
 				+ DeliveryGuySelf.PASSWORD + " = ?,"
+
 				+ DeliveryGuySelf.ABOUT + " = ?,"
 				+ DeliveryGuySelf.PROFILE_IMAGE_URL + " = ?,"
 				+ DeliveryGuySelf.PHONE_NUMBER + " = ?,"
 
+				+ DeliveryGuySelf.CURRENT_LATITUDE + " = ?,"
+				+ DeliveryGuySelf.CURRENT_LATITUDE + " = ?,"
+
 //				+ DeliveryGuySelf.IS_ENABLED + " = ?,"
 //				+ DeliveryGuySelf.IS_WAITLISTED + " = ?,"
-				+ DeliveryGuySelf.NAME + " = ?,"
-				+ DeliveryGuySelf.SHOP_ID + " = ?"
+
 
 				+ " WHERE " + DeliveryGuySelf.DELIVERY_GUY_SELF_ID + " = ?";
 
@@ -315,16 +355,21 @@ public class DeliveryGuySelfDAO {
 			statement = connection.prepareStatement(updateStatement);
 
 			int i = 0;
+			statement.setString(++i,deliveryGuySelf.getName());
+			statement.setObject(++i,deliveryGuySelf.getShopID());
 //			statement.setString(1,deliveryGuySelf.getUsername());
 			statement.setString(++i,deliveryGuySelf.getPassword());
+
 			statement.setString(++i,deliveryGuySelf.getAbout());
 			statement.setString(++i,deliveryGuySelf.getProfileImageURL());
 			statement.setString(++i,deliveryGuySelf.getPhoneNumber());
 
+			statement.setObject(++i,deliveryGuySelf.getCurrentLatitude());
+			statement.setObject(++i,deliveryGuySelf.getCurrentLongitude());
+
 //			statement.setObject(++i,deliveryGuySelf.getEnabled());
 //			statement.setObject(++i,deliveryGuySelf.getWaitlisted());
-			statement.setString(++i,deliveryGuySelf.getName());
-			statement.setObject(++i,deliveryGuySelf.getShopID());
+
 
 			statement.setObject(++i,deliveryGuySelf.getDeliveryGuyID());
 
@@ -554,7 +599,7 @@ public class DeliveryGuySelfDAO {
 
 	
 	
-	public ArrayList<DeliveryGuySelf> readDeliveryVehicleSelf(Integer shopID, Boolean isEnabled)
+	public ArrayList<DeliveryGuySelf> readForShopAdmin(Integer shopID, Boolean isEnabled)
 	{
 		String query = "SELECT "
 				+ DeliveryGuySelf.DELIVERY_GUY_SELF_ID + ","
@@ -572,7 +617,13 @@ public class DeliveryGuySelfDAO {
 				+ DeliveryGuySelf.CURRENT_LONGITUDE + ","
 
 				+ DeliveryGuySelf.IS_ENABLED + ","
-				+ DeliveryGuySelf.IS_WAITLISTED + ""
+				+ DeliveryGuySelf.IS_WAITLISTED + ","
+
+				+ DeliveryGuySelf.ACCOUNT_PRIVATE + ","
+
+				+ DeliveryGuySelf.GOVERNMENT_ID_NAME + ","
+				+ DeliveryGuySelf.GOVERNMENT_ID_NUMBER + ","
+				+ DeliveryGuySelf.TIMESTAMP_CREATED + ""
 
 				+ " FROM " + DeliveryGuySelf.TABLE_NAME
 				+ " INNER JOIN " + Usernames.TABLE_NAME + " ON (" + DeliveryGuySelf.DELIVERY_GUY_SELF_ID + " = " + Usernames.USER_ID + ")";
@@ -630,6 +681,7 @@ public class DeliveryGuySelfDAO {
 				deliveryGuySelf.setAbout(rs.getString(DeliveryGuySelf.ABOUT));
 				deliveryGuySelf.setProfileImageURL(rs.getString(DeliveryGuySelf.PROFILE_IMAGE_URL));
 				deliveryGuySelf.setPhoneNumber(rs.getString(DeliveryGuySelf.PHONE_NUMBER));
+
 				deliveryGuySelf.setDesignation(rs.getString(DeliveryGuySelf.DESIGNATION));
 
 				deliveryGuySelf.setCurrentLatitude((Double) rs.getObject(DeliveryGuySelf.CURRENT_LATITUDE));
@@ -637,6 +689,11 @@ public class DeliveryGuySelfDAO {
 
 				deliveryGuySelf.setEnabled(rs.getBoolean(DeliveryGuySelf.IS_ENABLED));
 				deliveryGuySelf.setWaitlisted(rs.getBoolean(DeliveryGuySelf.IS_WAITLISTED));
+
+				deliveryGuySelf.setAccountPrivate(rs.getBoolean(DeliveryGuySelf.ACCOUNT_PRIVATE));
+				deliveryGuySelf.setGovtIDName(rs.getString(DeliveryGuySelf.GOVERNMENT_ID_NAME));
+				deliveryGuySelf.setGovtIDNumber(rs.getString(DeliveryGuySelf.GOVERNMENT_ID_NUMBER));
+				deliveryGuySelf.setTimestampCreated(rs.getTimestamp(DeliveryGuySelf.TIMESTAMP_CREATED));
 
 				vehiclesList.add(deliveryGuySelf);
 				
@@ -688,7 +745,7 @@ public class DeliveryGuySelfDAO {
 
 
 	
-	public DeliveryGuySelf readDeliveryGuySelf(int deliveryGuyID)
+	public DeliveryGuySelf readForLogin(int deliveryGuyID)
 	{
 		
 		String query = "SELECT "
@@ -707,7 +764,12 @@ public class DeliveryGuySelfDAO {
 				+ DeliveryGuySelf.CURRENT_LONGITUDE + ","
 
 				+ DeliveryGuySelf.IS_ENABLED + ","
-				+ DeliveryGuySelf.IS_WAITLISTED + ""
+				+ DeliveryGuySelf.IS_WAITLISTED + ","
+
+//				+ DeliveryGuySelf.ACCOUNT_PRIVATE + ","
+				+ DeliveryGuySelf.GOVERNMENT_ID_NAME + ","
+				+ DeliveryGuySelf.GOVERNMENT_ID_NUMBER + ","
+				+ DeliveryGuySelf.TIMESTAMP_CREATED + ""
 
 				+ " FROM " + DeliveryGuySelf.TABLE_NAME
 				+ " INNER JOIN " + Usernames.TABLE_NAME + " ON (" + DeliveryGuySelf.DELIVERY_GUY_SELF_ID + " = " + Usernames.USER_ID + ")"
@@ -744,6 +806,10 @@ public class DeliveryGuySelfDAO {
 
 				deliveryGuySelf.setEnabled((Boolean) rs.getObject(DeliveryGuySelf.IS_ENABLED));
 				deliveryGuySelf.setWaitlisted((Boolean) rs.getObject(DeliveryGuySelf.IS_WAITLISTED));
+
+				deliveryGuySelf.setGovtIDName(rs.getString(DeliveryGuySelf.GOVERNMENT_ID_NAME));
+				deliveryGuySelf.setGovtIDNumber(rs.getString(DeliveryGuySelf.GOVERNMENT_ID_NUMBER));
+				deliveryGuySelf.setTimestampCreated(rs.getTimestamp(DeliveryGuySelf.TIMESTAMP_CREATED));
 
 			}
 			

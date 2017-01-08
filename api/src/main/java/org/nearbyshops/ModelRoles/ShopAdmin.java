@@ -2,6 +2,8 @@ package org.nearbyshops.ModelRoles;
 
 import org.nearbyshops.Model.Shop;
 
+import java.sql.Timestamp;
+
 /**
  * Created by sumeet on 14/6/16.
  */
@@ -45,22 +47,23 @@ public class ShopAdmin {
     public static final String createtableShopAdminPostgres
             = "CREATE TABLE IF NOT EXISTS " + ShopAdmin.TABLE_NAME + "("
             + " " + ShopAdmin.SHOP_ADMIN_ID + " INT UNIQUE NOT NULL,"
-
             + " " + ShopAdmin.NAME + " text,"
+
             + " " + ShopAdmin.PASSWORD + " text NOT NULL,"
 
             + " " + ShopAdmin.ABOUT + " text,"
             + " " + ShopAdmin.PROFILE_IMAGE_URL + " text,"
             + " " + ShopAdmin.PHONE_NUMBER + " text,"
-
             + " " + ShopAdmin.DESIGNATION + " text,"
+
+            + " " + ShopAdmin.IS_ENABLED + " boolean NOT NULL,"
+            + " " + ShopAdmin.IS_WAITLISTED + " boolean NOT NULL,"
+
+            + " " + ShopAdmin.ACCOUNT_PRIVATE + " boolean,"
 
             + " " + ShopAdmin.GOVERNMENT_ID_NAME + " text,"
             + " " + ShopAdmin.GOVERNMENT_ID_NUMBER + " text,"
             + " " + ShopAdmin.TIMESTAMP_CREATED + " timestamp with time zone NOT NULL DEFAULT now(),"
-
-            + " " + ShopAdmin.IS_ENABLED + " boolean NOT NULL,"
-            + " " + ShopAdmin.IS_WAITLISTED + " boolean NOT NULL,"
             + " FOREIGN KEY(" + ShopAdmin.SHOP_ADMIN_ID +") REFERENCES " + Usernames.TABLE_NAME + "(" + Usernames.USER_ID + ")"
             + ")";
 
@@ -79,15 +82,52 @@ public class ShopAdmin {
     private String profileImageURL;
     private String phoneNumber;
 
+    private String designation;
 
     private Boolean isEnabled;
     private Boolean isWaitlisted;
 
-    private String designation;
+    private boolean accountPrivate;
+
+    private String govtIDName;
+    private String govtIDNumber;
+    private Timestamp timestampCreated;
 
 
     // getter and setters
 
+
+    public boolean isAccountPrivate() {
+        return accountPrivate;
+    }
+
+    public void setAccountPrivate(boolean accountPrivate) {
+        this.accountPrivate = accountPrivate;
+    }
+
+    public String getGovtIDName() {
+        return govtIDName;
+    }
+
+    public void setGovtIDName(String govtIDName) {
+        this.govtIDName = govtIDName;
+    }
+
+    public String getGovtIDNumber() {
+        return govtIDNumber;
+    }
+
+    public void setGovtIDNumber(String govtIDNumber) {
+        this.govtIDNumber = govtIDNumber;
+    }
+
+    public Timestamp getTimestampCreated() {
+        return timestampCreated;
+    }
+
+    public void setTimestampCreated(Timestamp timestampCreated) {
+        this.timestampCreated = timestampCreated;
+    }
 
     public int getShopAdminID() {
         return shopAdminID;

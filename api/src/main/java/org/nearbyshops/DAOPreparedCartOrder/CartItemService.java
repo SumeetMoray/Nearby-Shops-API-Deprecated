@@ -500,10 +500,8 @@ public class CartItemService {
 				+ " LEFT OUTER JOIN " + Cart.TABLE_NAME + " ON(" + CartItem.TABLE_NAME + "." + CartItem.CART_ID + " = " + Cart.TABLE_NAME + "." + Cart.CART_ID + ")"
 				+ " LEFT OUTER JOIN " + Item.TABLE_NAME + " ON(" + Item.TABLE_NAME + "." + Item.ITEM_ID + " = " + CartItem.TABLE_NAME + "." + CartItem.ITEM_ID + "),"
 				+ ShopItem.TABLE_NAME
-				+ " Where "
-				+ ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID + " = " + Cart.TABLE_NAME + "." + Cart.SHOP_ID
-				+ " and "
-				+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + " = " + CartItem.TABLE_NAME + "." + CartItem.ITEM_ID;
+				+ " Where " + ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID + " = " + Cart.TABLE_NAME + "." + Cart.SHOP_ID
+				+ " and " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + " = " + CartItem.TABLE_NAME + "." + CartItem.ITEM_ID;
 
 
 		//" shop_item.item_id = cart_item.item_id " +

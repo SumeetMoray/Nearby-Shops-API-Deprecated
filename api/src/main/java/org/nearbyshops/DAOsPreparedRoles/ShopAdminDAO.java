@@ -4,6 +4,7 @@ package org.nearbyshops.DAOsPreparedRoles;
 import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.JDBCContract;
+import org.nearbyshops.Model.Shop;
 import org.nearbyshops.ModelRoles.Endpoints.ShopAdminEndPoint;
 import org.nearbyshops.ModelRoles.ShopAdmin;
 import org.nearbyshops.ModelRoles.Usernames;
@@ -55,9 +56,13 @@ public class ShopAdminDAO {
 				+ ShopAdmin.DESIGNATION + ","
 
 				+ ShopAdmin.IS_ENABLED + ","
-				+ ShopAdmin.IS_WAITLISTED + ""
+				+ ShopAdmin.IS_WAITLISTED + ","
 
-				+ " ) VALUES (?,?,?, ?,?,?, ?, ?,?)";
+				+ ShopAdmin.ACCOUNT_PRIVATE + ","
+				+ ShopAdmin.GOVERNMENT_ID_NAME + ","
+				+ ShopAdmin.GOVERNMENT_ID_NUMBER + ""
+
+				+ " ) VALUES (?,?,?, ?,?,?, ?, ?,?, ?,?,?)";
 		
 		try {
 			
@@ -95,6 +100,10 @@ public class ShopAdminDAO {
 
 			statement.setObject(++i,shopAdmin.getEnabled());
 			statement.setObject(++i,shopAdmin.getWaitlisted());
+
+			statement.setObject(++i,shopAdmin.isAccountPrivate());
+			statement.setString(++i,shopAdmin.getGovtIDName());
+			statement.setString(++i,shopAdmin.getGovtIDNumber());
 
 			statement.executeUpdate();
 
@@ -170,7 +179,7 @@ public class ShopAdminDAO {
 
 
 
-	public int updateShopAdmin(ShopAdmin shopAdmin)
+	public int updateForAccountApproval(ShopAdmin shopAdmin)
 	{
 
 
@@ -294,7 +303,11 @@ public class ShopAdminDAO {
 				+ ShopAdmin.PROFILE_IMAGE_URL + " =?,"
 				+ ShopAdmin.PHONE_NUMBER + " =?,"
 
-				+ ShopAdmin.DESIGNATION + " =?"
+				+ ShopAdmin.DESIGNATION + " =?,"
+
+				+ ShopAdmin.ACCOUNT_PRIVATE + " =?,"
+				+ ShopAdmin.GOVERNMENT_ID_NAME + " =?,"
+				+ ShopAdmin.GOVERNMENT_ID_NUMBER + " =?"
 
 				+ " WHERE " + ShopAdmin.SHOP_ADMIN_ID + " = ?";
 
@@ -330,6 +343,11 @@ public class ShopAdminDAO {
 			statement.setString(++i,shopAdmin.getProfileImageURL());
 			statement.setString(++i,shopAdmin.getPhoneNumber());
 			statement.setString(++i,shopAdmin.getDesignation());
+
+			statement.setObject(++i,shopAdmin.isAccountPrivate());
+			statement.setString(++i,shopAdmin.getGovtIDName());
+			statement.setString(++i,shopAdmin.getGovtIDNumber());
+
 			statement.setObject(++i,shopAdmin.getShopAdminID());
 
 			updatedRows = statement.executeUpdate();
@@ -466,10 +484,220 @@ public class ShopAdminDAO {
 
 
 
+	public ShopAdminEndPoint getShopAdminPublic(Integer shopID,
+											 String searchString,
+											 String sortBy,
+											 Integer limit, Integer offset)
+	{
+		//+ "count(*) OVER() AS full_count " + ","
+
+		String query = "SELECT "
+				+ "count(*) over() AS full_count " + ","
+				+ ShopAdmin.TABLE_NAME + "." + ShopAdmin.SHOP_ADMIN_ID + ","
+				+ ShopAdmin.NAME + ","
+
+//						+ Usernames.USERNAME
+//						+ ShopAdmin.PASSWORD + ","
+
+				+ ShopAdmin.ABOUT + ","
+				+ ShopAdmin.PROFILE_IMAGE_URL + ","
+				+ ShopAdmin.PHONE_NUMBER + ","
+
+				+ ShopAdmin.DESIGNATION + ","
+
+				+ ShopAdmin.IS_ENABLED + ","
+				+ ShopAdmin.IS_WAITLISTED + ","
+
+				+ ShopAdmin.ACCOUNT_PRIVATE + ","
+
+				+ ShopAdmin.TABLE_NAME + "." + ShopAdmin.GOVERNMENT_ID_NAME + ","
+				+ ShopAdmin.TABLE_NAME + "." + ShopAdmin.GOVERNMENT_ID_NUMBER + ","
+
+				+ ShopAdmin.TABLE_NAME + "." + ShopAdmin.TIMESTAMP_CREATED + ""
+
+				+ " FROM " + ShopAdmin.TABLE_NAME
+				+ " INNER JOIN " + Usernames.TABLE_NAME + " ON ( " + Usernames.USER_ID + " = " + ShopAdmin.SHOP_ADMIN_ID + ") "
+				+ " INNER JOIN " + Shop.TABLE_NAME + " ON ( " + Shop.TABLE_NAME + "." + Shop.SHOP_ADMIN_ID + " = " + ShopAdmin.TABLE_NAME  + "." + ShopAdmin.SHOP_ADMIN_ID + ") "
+				+ " WHERE " + ShopAdmin.IS_ENABLED + " = true "
+				+ " AND " + ShopAdmin.ACCOUNT_PRIVATE + " = false ";
+
+
+//						+ Shop.SHOP_ID + ","
+//						+ ShopAdmin.NAME_ADMIN + ","
+//						+ ShopAdmin.USERNAME + ","
+//						+ ShopAdmin.PASSWORD + ","
+//
+//						+ ShopAdmin.PROFILE_IMAGE_URL + ","
+//						+ ShopAdmin.PHONE_NUMBER + ","
+//
+//						+ ShopAdmin.ADMIN_ENABLED + ","
+//						+ ShopAdmin.ADMIN_WAITLISTED + ""
+
+
+
+//		boolean isFirst = true;
+//
+
+		if(shopID!=null)
+		{
+			query = query + " AND " + Shop.SHOP_ID + " = " + shopID;
+		}
+
+
+
+		if(searchString !=null)
+		{
+			String queryPartSearch = ShopAdmin.TABLE_NAME + "." + ShopAdmin.NAME +" ilike '%" + searchString + "%'";
+
+
+			//				queryJoin = queryJoin + " WHERE " + queryPartSearch;
+
+			query = query + " AND " + queryPartSearch;
+
+//			isFirst = false;
+		}
+
+
+
+		// Applying Filters
+
+
+//		query = query + " Group by " +
+//				ShopAdmin.SHOP_ADMIN_ID;
+
+
+
+
+
+		if(sortBy!=null)
+		{
+			if(!sortBy.equals(""))
+			{
+				String queryPartSortBy = " ORDER BY " + sortBy;
+
+				query = query + queryPartSortBy;
+			}
+		}
+
+
+
+		if(limit !=null)
+		{
+
+			String queryPartLimitOffset = "";
+
+			if(offset!=null)
+			{
+				queryPartLimitOffset = " LIMIT " + limit + " " + " OFFSET " + offset;
+
+			}else
+			{
+				queryPartLimitOffset = " LIMIT " + limit + " " + " OFFSET " + 0;
+			}
+
+			query = query + queryPartLimitOffset;
+		}
+
+
+
+
+
+		ShopAdminEndPoint endPoint = new ShopAdminEndPoint();
+
+		ArrayList<ShopAdmin> vehiclesList = new ArrayList<ShopAdmin>();
+
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet rs = null;
+
+		try {
+
+			connection = dataSource.getConnection();
+			statement = connection.createStatement();
+
+			rs = statement.executeQuery(query);
+
+			while(rs.next())
+			{
+
+				ShopAdmin shopAdmin = new ShopAdmin();
+
+				shopAdmin.setShopAdminID((Integer) rs.getObject(ShopAdmin.SHOP_ADMIN_ID));
+
+				shopAdmin.setName(rs.getString(ShopAdmin.NAME));
+
+//				shopAdmin.setUsername(rs.getString(ShopAdmin.USERNAME));
+//				shopAdmin.setPassword(rs.getString(ShopAdmin.PASSWORD));
+
+				shopAdmin.setAbout(rs.getString(ShopAdmin.ABOUT));
+				shopAdmin.setProfileImageURL(rs.getString(ShopAdmin.PROFILE_IMAGE_URL));
+				shopAdmin.setPhoneNumber(rs.getString(ShopAdmin.PHONE_NUMBER));
+				shopAdmin.setDesignation(rs.getString(ShopAdmin.DESIGNATION));
+
+				shopAdmin.setEnabled(rs.getBoolean(ShopAdmin.IS_ENABLED));
+				shopAdmin.setWaitlisted(rs.getBoolean(ShopAdmin.IS_WAITLISTED));
+
+				shopAdmin.setAccountPrivate(rs.getBoolean(ShopAdmin.ACCOUNT_PRIVATE));
+
+				shopAdmin.setGovtIDName(rs.getString(ShopAdmin.GOVERNMENT_ID_NAME));
+				shopAdmin.setGovtIDNumber(rs.getString(ShopAdmin.GOVERNMENT_ID_NUMBER));
+				shopAdmin.setTimestampCreated(rs.getTimestamp(ShopAdmin.TIMESTAMP_CREATED));
+
+				endPoint.setItemCount(rs.getInt("full_count"));
+				vehiclesList.add(shopAdmin);
+
+			}
+
+
+			endPoint.setResults(vehiclesList);
+
+
+//rs.getInt("full_count")
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+		finally
+		{
+
+			try {
+				if(rs!=null)
+				{rs.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(statement!=null)
+				{statement.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(connection!=null)
+				{connection.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return endPoint;
+	}
+
+
 
 	
 	
-	public ArrayList<ShopAdmin> getShopAdmin(Boolean enabled, Boolean waitlisted,
+	public ArrayList<ShopAdmin> getShopAdminForApproval(Boolean enabled, Boolean waitlisted,
 											 String searchString,
 											 String sortBy,
 											 Integer limit, Integer offset)
@@ -491,7 +719,14 @@ public class ShopAdminDAO {
 						+ ShopAdmin.DESIGNATION + ","
 
 						+ ShopAdmin.IS_ENABLED + ","
-						+ ShopAdmin.IS_WAITLISTED + ""
+						+ ShopAdmin.IS_WAITLISTED + ","
+
+						+ ShopAdmin.ACCOUNT_PRIVATE + ","
+
+						+ ShopAdmin.GOVERNMENT_ID_NAME + ","
+						+ ShopAdmin.GOVERNMENT_ID_NUMBER + ","
+
+						+ ShopAdmin.TIMESTAMP_CREATED + ""
 
 						+ " FROM " + ShopAdmin.TABLE_NAME
 						+ " INNER JOIN " + Usernames.TABLE_NAME + " ON ( " + Usernames.USER_ID + " = " + ShopAdmin.SHOP_ADMIN_ID + ")";
@@ -621,6 +856,7 @@ public class ShopAdminDAO {
 
 				ShopAdmin shopAdmin = new ShopAdmin();
 
+				shopAdmin.setShopAdminID((Integer) rs.getObject(ShopAdmin.SHOP_ADMIN_ID));
 				shopAdmin.setName(rs.getString(ShopAdmin.NAME));
 //				shopAdmin.setShopID((Integer) rs.getObject(ShopAdmin.SHOP_ID));
 
@@ -636,7 +872,14 @@ public class ShopAdminDAO {
 				shopAdmin.setEnabled(rs.getBoolean(ShopAdmin.IS_ENABLED));
 				shopAdmin.setWaitlisted(rs.getBoolean(ShopAdmin.IS_WAITLISTED));
 
-				shopAdmin.setShopAdminID((Integer) rs.getObject(ShopAdmin.SHOP_ADMIN_ID));
+				shopAdmin.setAccountPrivate(rs.getBoolean(ShopAdmin.ACCOUNT_PRIVATE));
+
+				shopAdmin.setGovtIDName(rs.getString(ShopAdmin.GOVERNMENT_ID_NAME));
+				shopAdmin.setGovtIDNumber(rs.getString(ShopAdmin.GOVERNMENT_ID_NUMBER));
+				shopAdmin.setTimestampCreated(rs.getTimestamp(ShopAdmin.TIMESTAMP_CREATED));
+
+
+
 
 
 				vehiclesList.add(shopAdmin);
@@ -683,6 +926,8 @@ public class ShopAdminDAO {
 
 		return vehiclesList;
 	}
+
+
 
 
 	public ShopAdminEndPoint getEndpointMetadata(Boolean enabled, Boolean waitlisted,
@@ -828,7 +1073,7 @@ public class ShopAdminDAO {
 
 
 
-	public ShopAdmin getShopAdmin(int shopAdminID)
+	public ShopAdmin getShopAdminForLogin(int shopAdminID)
 	{
 
 		String query = "SELECT "
@@ -847,7 +1092,14 @@ public class ShopAdminDAO {
 				+ ShopAdmin.DESIGNATION + ","
 
 				+ ShopAdmin.IS_ENABLED + ","
-				+ ShopAdmin.IS_WAITLISTED + ""
+				+ ShopAdmin.IS_WAITLISTED + ","
+
+				+ ShopAdmin.ACCOUNT_PRIVATE + ","
+
+				+ ShopAdmin.GOVERNMENT_ID_NAME + ","
+				+ ShopAdmin.GOVERNMENT_ID_NUMBER + ","
+
+				+ ShopAdmin.TIMESTAMP_CREATED + ""
 
 				+ " FROM " + ShopAdmin.TABLE_NAME
 				+ " INNER JOIN " + Usernames.TABLE_NAME + " ON ( " + Usernames.USER_ID + " = " + ShopAdmin.SHOP_ADMIN_ID + ")"
@@ -875,6 +1127,7 @@ public class ShopAdminDAO {
 			{
 				shopAdmin = new ShopAdmin();
 
+				shopAdmin.setShopAdminID(rs.getInt(ShopAdmin.SHOP_ADMIN_ID));
 				shopAdmin.setName(rs.getString(ShopAdmin.NAME));
 
 				shopAdmin.setUsername(rs.getString(Usernames.USERNAME));
@@ -889,8 +1142,12 @@ public class ShopAdminDAO {
 				shopAdmin.setEnabled(rs.getBoolean(ShopAdmin.IS_ENABLED));
 				shopAdmin.setWaitlisted(rs.getBoolean(ShopAdmin.IS_WAITLISTED));
 
-				shopAdmin.setShopAdminID(rs.getInt(ShopAdmin.SHOP_ADMIN_ID));
 
+				shopAdmin.setAccountPrivate(rs.getBoolean(ShopAdmin.ACCOUNT_PRIVATE));
+
+				shopAdmin.setGovtIDName(rs.getString(ShopAdmin.GOVERNMENT_ID_NAME));
+				shopAdmin.setGovtIDNumber(rs.getString(ShopAdmin.GOVERNMENT_ID_NUMBER));
+				shopAdmin.setTimestampCreated(rs.getTimestamp(ShopAdmin.TIMESTAMP_CREATED));
 			}
 			
 			
