@@ -886,6 +886,7 @@ public class OrderEndpointShopStaff {
 							  @QueryParam("DeliveryReceived") Boolean deliveryReceived,
 							  @QueryParam("latCenter")Double latCenter, @QueryParam("lonCenter")Double lonCenter,
 							  @QueryParam("PendingOrders") Boolean pendingOrders,
+							  @QueryParam("SearchString") String searchString,
 							  @QueryParam("SortBy") String sortBy,
 							  @QueryParam("Limit")Integer limit, @QueryParam("Offset")Integer offset,
 							  @QueryParam("metadata_only")Boolean metaonly)
@@ -955,6 +956,7 @@ public class OrderEndpointShopStaff {
 							paymentsReceived,deliveryReceived,
 							latCenter,lonCenter,
 							pendingOrders,
+							searchString,
 							sortBy,limit,offset);
 
 
@@ -962,13 +964,11 @@ public class OrderEndpointShopStaff {
 		}
 
 
-/*
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-*/
+//		try {
+//			Thread.sleep(1000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 
 		//Marker
 

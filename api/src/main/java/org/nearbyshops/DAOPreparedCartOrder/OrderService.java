@@ -2,10 +2,12 @@ package org.nearbyshops.DAOPreparedCartOrder;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.Globals.Globals;
+import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.Order;
 import org.nearbyshops.Model.OrderItem;
 import org.nearbyshops.ModelDelivery.DeliveryAddress;
 import org.nearbyshops.ModelEndPoints.OrderEndPoint;
+import org.nearbyshops.ModelRoles.DeliveryGuySelf;
 import org.nearbyshops.ModelStats.OrderStats;
 import org.nearbyshops.ModelOrderStatus.OrderStatusHomeDelivery;
 
@@ -712,6 +714,7 @@ public class OrderService {
                                        Boolean deliveryReceived,
                                        Double latCenter, Double lonCenter,
                                        Boolean pendingOrders,
+                                       String searchString,
                                        String sortBy,
                                        Integer limit, Integer offset)
     {
@@ -785,6 +788,30 @@ public class OrderService {
             }else
             {
                 query = query + " AND " + Order.SHOP_ID + " = " + shopID;
+            }
+
+        }
+
+
+        if(searchString != null)
+        {
+
+//            String queryPart = ;
+
+            String queryPartSearch = " ( " + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.NAME +" ilike '%" + searchString + "%'"
+                    + " or CAST ( " + Order.TABLE_NAME + "." + Order.ORDER_ID + " AS text )" + " ilike '%" + searchString + "%'" + ") ";
+
+            //+ " or " + Item.TABLE_NAME + "." + Item.ITEM_NAME + " ilike '%" + searchString + "%'"
+
+            if(isFirst)
+            {
+                query = query + " WHERE " + queryPartSearch;
+
+                isFirst = false;
+
+            }else
+            {
+                query = query + " AND " + queryPartSearch;
             }
 
         }

@@ -2,31 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="56c19d1b-2b75-44ae-a36e-97cd27b83bd8" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/nearbyshops/BackupDeliveryGuyEndpoint/DeliveryGuySelfResource.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/OrderEndpointEndUser.java" afterPath="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/Deprecated/OrderEndpointEndUser.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/OrderResource_Closed.java" afterPath="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/OrderResource.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOPreparedCartOrder/CartItemService.java" afterPath="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOPreparedCartOrder/CartItemService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOPreparedCartOrder/CartStatsDAO.java" afterPath="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOPreparedCartOrder/CartStatsDAO.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/nearbyshops/AuthenticationFilter.java" afterPath="$PROJECT_DIR$/src/main/java/org/nearbyshops/AuthenticationFilter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOPreparedCartOrder/OrderService.java" afterPath="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOPreparedCartOrder/OrderService.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPreparedRoles/DeliveryGuySelfDAO.java" afterPath="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPreparedRoles/DeliveryGuySelfDAO.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPreparedRoles/EndUserDAOPrepared.java" afterPath="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPreparedRoles/EndUserDAOPrepared.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPreparedRoles/ShopAdminDAO.java" afterPath="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPreparedRoles/ShopAdminDAO.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPreparedRoles/ShopStaffDAOPrepared.java" afterPath="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPreparedRoles/ShopStaffDAOPrepared.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/nearbyshops/Main.java" afterPath="$PROJECT_DIR$/src/main/java/org/nearbyshops/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/nearbyshops/ModelRoles/DeliveryGuySelf.java" afterPath="$PROJECT_DIR$/src/main/java/org/nearbyshops/ModelRoles/DeliveryGuySelf.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/nearbyshops/ModelRoles/Endpoints/ShopAdminEndPoint.java" afterPath="$PROJECT_DIR$/src/main/java/org/nearbyshops/ModelRoles/Endpoints/ShopAdminEndPoint.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/nearbyshops/ModelRoles/ShopAdmin.java" afterPath="$PROJECT_DIR$/src/main/java/org/nearbyshops/ModelRoles/ShopAdmin.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/nearbyshops/ModelRoles/ShopStaff.java" afterPath="$PROJECT_DIR$/src/main/java/org/nearbyshops/ModelRoles/ShopStaff.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointRoles/DeliveryGuySelfResource.java" afterPath="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointRoles/DeliveryGuySelfResource.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointRoles/ShopAdminResource.java" afterPath="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointRoles/ShopAdminResource.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointRoles/ShopStaffResource.java" afterPath="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointRoles/ShopStaffResource.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/CartItemResource.java" afterPath="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/CartItemResource.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/CartResource.java" afterPath="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/CartResource.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/Deprecated/OrderEndpointEndUser.java" afterPath="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/Deprecated/OrderEndpointEndUser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/OrderEndpointDeliveryGuySelf.java" afterPath="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/OrderEndpointDeliveryGuySelf.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/OrderEndpointShopStaff.java" afterPath="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/OrderEndpointShopStaff.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/OrderItemResource.java" afterPath="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/OrderItemResource.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/org/sumeet/restsamples/Sample/MyResourceTest.java" afterPath="$PROJECT_DIR$/src/test/java/org/sumeet/restsamples/Sample/MyResourceTest.java" />
     </list>
     <ignored path="api.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -46,7 +29,80 @@
     <favorites_list name="api" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="DeliveryGuySelfResource.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointRoles/DeliveryGuySelfResource.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-4210">
+              <caret line="168" column="55" selection-start-line="168" selection-start-column="55" selection-end-line="168" selection-end-column="55" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DeliveryGuySelfDAO.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPreparedRoles/DeliveryGuySelfDAO.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-772">
+              <caret line="1040" column="27" selection-start-line="1040" selection-start-column="27" selection-end-line="1040" selection-end-column="27" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="OrderEndpointDeliveryGuySelf.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/OrderEndpointDeliveryGuySelf.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-109">
+              <caret line="251" column="5" selection-start-line="251" selection-start-column="5" selection-end-line="251" selection-end-column="5" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="OrderEndpointShopStaff.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/OrderEndpointShopStaff.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="973" column="0" selection-start-line="973" selection-start-column="0" selection-end-line="973" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="OrderService.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOPreparedCartOrder/OrderService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="249">
+              <caret line="785" column="32" selection-start-line="785" selection-start-column="32" selection-end-line="785" selection-end-column="32" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ItemDAOJoinOuter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPrepared/ItemDAOJoinOuter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="359">
+              <caret line="33" column="26" selection-start-line="33" selection-start-column="26" selection-end-line="33" selection-end-column="26" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DeliveryAddress.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/ModelDelivery/DeliveryAddress.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-396">
+              <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -71,7 +127,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPreparedRoles/BackupConventional/StaffDAOPrepared.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointRoles/StaffResource.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/Globals/Globals.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpoints/ShopResource.java" />
@@ -91,12 +146,10 @@
         <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/ModelRoles/Admin.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPrepared/ItemCategoryDAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpoints/ShopItemResource.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/AuthenticationFilter.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPrepared/ItemDAOJoinOuter.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/Model/Item.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpoints/ItemResource.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPrepared/ItemDAO.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOPreparedCartOrder/OrderService.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPrepared/ShopDAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/CartStatsResource.java" />
         <option value="$PROJECT_DIR$/src/test/java/org/sumeet/restsamples/Sample/MyResourceTest.java" />
@@ -112,16 +165,19 @@
         <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/ModelRoles/ShopStaff.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/ModelRoles/ShopAdmin.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/ModelRoles/DeliveryGuySelf.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/OrderEndpointShopStaff.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointRoles/DeliveryGuySelfResource.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPreparedRoles/DeliveryGuySelfDAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/ModelRoles/Endpoints/ShopAdminEndPoint.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointRoles/ShopAdminResource.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPreparedRoles/ShopAdminDAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPreparedRoles/ShopStaffDAOPrepared.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/OrderEndpointEndUser.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/OrderResource.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPreparedRoles/DeliveryGuySelfDAO.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPreparedRoles/ShopAdminDAO.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/AuthenticationFilter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/OrderEndpointDeliveryGuySelf.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/Deprecated/OrderEndpointEndUser.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOPreparedCartOrder/OrderService.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/OrderEndpointShopStaff.java" />
       </list>
     </option>
   </component>
@@ -278,6 +334,36 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="api" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="api" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nearbyshops" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RESTEndpointsOrder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="PackagesPane" />
@@ -291,7 +377,7 @@
     <property name="project.structure.last.edited" value="Problems" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="SearchEverywhereHistoryKey" value="ShopAdmi&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpointRoles/ShopAdminResource.java&#10;ShopStaff&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/ModelRoles/ShopStaff.java&#10;Shop&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/Model/Shop.java&#10;main&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/Main.java&#10;ItemRes&#9;PSI&#9;JAVA://org.nearbyshops.RESTEndpoints.ItemResource&#10;forbi&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/ModelSecurity/ForbiddenOperations.java&#10;Staff&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/ModelRoles/Staff.java&#10;ShopStaffDAO&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/DAOsPreparedRoles/ShopStaffDAOPrepared.java&#10;ShopAdmin&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/DAOsPreparedRoles/ShopAdminDAO.java&#10;OrderStat&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/ModelOrderStatus/OrderStatusHomeDelivery.java&#10;orderStat&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/ModelOrderStatus/OrderStatusHomeDelivery.java&#10;ShopItemRE&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpoints/ShopItemResource.java&#10;StaffDAO&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/DAOsPreparedRoles/StaffDAOPrepared.java&#10;DeliveryguySelfDA&#9;PSI&#9;JAVA://org.nearbyshops.BackupDAOsRemaining.DeliveryGuySelfDAO&#10;DeliveryGuySelf&#9;PSI&#9;JAVA://org.nearbyshops.ModelRoles.DeliveryGuySelf&#10;ShopAdm&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/ModelRoles/ShopAdmin.java&#10;staffDAO&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/DAOsPreparedRoles/StaffDAOPrepared.java&#10;AdminDAO&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/DAOsPreparedRoles/AdminDAOPrepared.java&#10;AdminDA&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/DAOsPreparedRoles/ShopAdminDAO.java&#10;ShopItemRes&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpoints/ShopItemResource.java&#10;ShopResource&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpoints/ShopResource.java&#10;StaffRe&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpointRoles/StaffResource.java&#10;Auth&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/AuthenticationFilter.java&#10;ItemCate&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpoints/ItemCategoryResource.java&#10;Admin&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpointRoles/AdminResource.java&#10;Staf&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpointRoles/StaffResource.java&#10;GlobalCon&#9;PSI&#9;JAVA://org.nearbyshops.Globals.GlobalConstants&#10;Globals&#9;PSI&#9;JAVA://org.nearbyshops.Globals.Globals&#10;ItemRe&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpoints/ItemResource.java&#10;ShopDA&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/DAOsPrepared/ShopDAO.java&#10;ItemCategory&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpoints/ItemCategoryResource.java&#10;Filter&#9;PSI&#9;JAVA://org.nearbyshops.AuthenticationFilter&#10;ShopD&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/DAOsPrepared/ShopItemDAO.java&#10;ShopItemByItem&#9;PSI&#9;JAVA://org.nearbyshops.DAOsPrepared.ShopItemByItemDAO&#10;ItemDAO&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/DAOsPrepared/ItemDAO.java&#10;ShopItem&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpoints/ShopItemResource.java&#10;Ite&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpoints/ItemResource.java&#10;ItemDA&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/DAOsPrepared/ItemDAO.java&#10;ShopRes&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpoints/ShopResource.java&#10;ShopItemRe&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpoints/ShopItemResource.java&#10;Shopite&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpoints/ShopItemResource.java&#10;ItemCat&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpoints/ItemCategoryResource.java&#10;Item&#9;PSI&#9;JAVA://org.nearbyshops.Model.Item&#10;ShopSer&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/DeprecatedDAOs/ShopService.java&#10;itemStat&#9;PSI&#9;JAVA://org.nearbyshops.ModelStats.ItemStats&#10;DeliveryG&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpointRoles/DeliveryGuySelfResource.java&#10;ShopAdminRe&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpointRoles/ShopAdminResource.java&#10;ShopAdminD&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/DAOsPreparedRoles/ShopAdminDAO.java&#10;Deli&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/ModelRoles/DeliveryGuySelf.java&#10;DeliveryGuy&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpointRoles/DeliveryGuySelfResource.java" />
+    <property name="SearchEverywhereHistoryKey" value="ItemDao&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/DAOsPrepared/ItemDAOJoinOuter.java&#10;ShopAdmi&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpointRoles/ShopAdminResource.java&#10;ShopStaff&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/ModelRoles/ShopStaff.java&#10;Shop&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/Model/Shop.java&#10;main&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/Main.java&#10;ItemRes&#9;PSI&#9;JAVA://org.nearbyshops.RESTEndpoints.ItemResource&#10;forbi&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/ModelSecurity/ForbiddenOperations.java&#10;Staff&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/ModelRoles/Staff.java&#10;ShopStaffDAO&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/DAOsPreparedRoles/ShopStaffDAOPrepared.java&#10;ShopAdmin&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/DAOsPreparedRoles/ShopAdminDAO.java&#10;OrderStat&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/ModelOrderStatus/OrderStatusHomeDelivery.java&#10;orderStat&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/ModelOrderStatus/OrderStatusHomeDelivery.java&#10;ShopItemRE&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpoints/ShopItemResource.java&#10;StaffDAO&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/DAOsPreparedRoles/StaffDAOPrepared.java&#10;DeliveryguySelfDA&#9;PSI&#9;JAVA://org.nearbyshops.BackupDAOsRemaining.DeliveryGuySelfDAO&#10;DeliveryGuySelf&#9;PSI&#9;JAVA://org.nearbyshops.ModelRoles.DeliveryGuySelf&#10;ShopAdm&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/ModelRoles/ShopAdmin.java&#10;staffDAO&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/DAOsPreparedRoles/StaffDAOPrepared.java&#10;AdminDAO&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/DAOsPreparedRoles/AdminDAOPrepared.java&#10;AdminDA&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/DAOsPreparedRoles/ShopAdminDAO.java&#10;ShopItemRes&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpoints/ShopItemResource.java&#10;ShopResource&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpoints/ShopResource.java&#10;StaffRe&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpointRoles/StaffResource.java&#10;Auth&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/AuthenticationFilter.java&#10;ItemCate&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpoints/ItemCategoryResource.java&#10;Admin&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpointRoles/AdminResource.java&#10;Staf&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpointRoles/StaffResource.java&#10;GlobalCon&#9;PSI&#9;JAVA://org.nearbyshops.Globals.GlobalConstants&#10;Globals&#9;PSI&#9;JAVA://org.nearbyshops.Globals.Globals&#10;ItemRe&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpoints/ItemResource.java&#10;ShopDA&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/DAOsPrepared/ShopDAO.java&#10;ItemCategory&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpoints/ItemCategoryResource.java&#10;Filter&#9;PSI&#9;JAVA://org.nearbyshops.AuthenticationFilter&#10;ShopD&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/DAOsPrepared/ShopItemDAO.java&#10;ShopItemByItem&#9;PSI&#9;JAVA://org.nearbyshops.DAOsPrepared.ShopItemByItemDAO&#10;ItemDAO&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/DAOsPrepared/ItemDAO.java&#10;ShopItem&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpoints/ShopItemResource.java&#10;Ite&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpoints/ItemResource.java&#10;ItemDA&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/DAOsPrepared/ItemDAO.java&#10;ShopRes&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpoints/ShopResource.java&#10;ShopItemRe&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpoints/ShopItemResource.java&#10;Shopite&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpoints/ShopItemResource.java&#10;ItemCat&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpoints/ItemCategoryResource.java&#10;Item&#9;PSI&#9;JAVA://org.nearbyshops.Model.Item&#10;ShopSer&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/DeprecatedDAOs/ShopService.java&#10;itemStat&#9;PSI&#9;JAVA://org.nearbyshops.ModelStats.ItemStats&#10;DeliveryG&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpointRoles/DeliveryGuySelfResource.java&#10;ShopAdminRe&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/RESTEndpointRoles/ShopAdminResource.java&#10;ShopAdminD&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/DAOsPreparedRoles/ShopAdminDAO.java&#10;Deli&#9;FILE&#9;file:///media/sumeet/data/localAreaDelivery/localAreaAPIJDBCIDEA/api/src/main/java/org/nearbyshops/ModelRoles/DeliveryGuySelf.java" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -821,7 +907,14 @@
       <option name="project" value="LOCAL" />
       <updated>1483689940215</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="Refinements Related to Roles and Profiles   &#10;&#10;8 Jan 2017">
+      <created>1483869100192</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1483869100192</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TodoView">
@@ -835,7 +928,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="24" width="1366" height="693" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32941177" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -849,7 +942,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32941177" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25151515" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25151515" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32941177" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -919,7 +1012,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Implemented Shop Review Thanks&#10;&#10;21 October 2016" />
     <MESSAGE value="Implemented Shop Item by Item and Shop Item by Shop to optimize the shop Item DAO fetches&#10;&#10;22 October 2016" />
     <MESSAGE value="Implemented Item Reviews Endpoints, Favourite Item Endpoint and ItemReview Thanks Endpoint&#10;&#10;24 October 2016" />
     <MESSAGE value="Refactored Orders Endpoint&#10;&#10;24 October 2016" />
@@ -944,7 +1036,8 @@
     <MESSAGE value="Added Secured Get endpoint for Order Shop Staff. Also added Feature Pending Orders for Order History Feature in the Android App.   &#10;&#10;23 December 2016" />
     <MESSAGE value="Refactored Roles to make username unique by adding an extra table usernames .   &#10;&#10;30 December 2016" />
     <MESSAGE value="Cleaned up code in cart stats Endpoint   &#10;&#10;6 Jan 2017" />
-    <option name="LAST_COMMIT_MESSAGE" value="Cleaned up code in cart stats Endpoint   &#10;&#10;6 Jan 2017" />
+    <MESSAGE value="Refinements Related to Roles and Profiles   &#10;&#10;8 Jan 2017" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refinements Related to Roles and Profiles   &#10;&#10;8 Jan 2017" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -969,20 +1062,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpoints/ShopResource.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2070">
-          <caret line="139" column="33" selection-start-line="139" selection-start-column="33" selection-end-line="139" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointSettings/ServiceConfigurationResource.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="357" column="9" selection-start-line="357" selection-start-column="9" selection-end-line="357" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/BackupRoles/ModelRoles/Admin.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="144">
@@ -1039,13 +1118,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/AuthenticationFilter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3618">
-          <caret line="271" column="21" selection-start-line="271" selection-start-column="21" selection-end-line="271" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpoints/ShopItemResource.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
@@ -1057,13 +1129,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
           <caret line="52" column="12" selection-start-line="52" selection-start-column="12" selection-end-line="52" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPrepared/ItemDAOJoinOuter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="341">
-          <caret line="74" column="0" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -1091,21 +1156,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="53">
           <caret line="127" column="38" selection-start-line="127" selection-start-column="38" selection-end-line="127" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpoints/ItemResource.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="164">
-          <caret line="552" column="21" selection-start-line="552" selection-start-column="21" selection-end-line="552" selection-end-column="21" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOPreparedCartOrder/OrderService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4428">
-          <caret line="121" column="0" selection-start-line="121" selection-start-column="0" selection-end-line="121" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -1121,6 +1172,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="232">
           <caret line="40" column="5" selection-start-line="40" selection-start-column="5" selection-end-line="40" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1128,14 +1182,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1098">
           <caret line="61" column="0" selection-start-line="61" selection-start-column="0" selection-end-line="66" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1238,36 +1284,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointRoles/DeliveryGuySelfResource.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="414" column="0" selection-start-line="414" selection-start-column="0" selection-end-line="414" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/BackupDeliveryGuyEndpoint/DeliveryGuySelfResource.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="123">
           <caret line="60" column="64" selection-start-line="60" selection-start-column="64" selection-end-line="60" selection-end-column="64" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/ModelRoles/DeliveryGuySelf.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-972">
-          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPreparedRoles/DeliveryGuySelfDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-286">
-          <caret line="811" column="101" selection-start-line="811" selection-start-column="101" selection-end-line="811" selection-end-column="101" />
           <folding />
         </state>
       </provider>
@@ -1319,46 +1339,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPreparedRoles/ShopAdminDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="588" column="27" selection-start-line="588" selection-start-column="27" selection-end-line="588" selection-end-column="27" />
-          <folding>
-            <element signature="e#13976#13987#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPreparedRoles/ShopStaffDAOPrepared.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="222">
           <caret line="1003" column="43" selection-start-line="1003" selection-start-column="43" selection-end-line="1003" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/OrderEndpointShopStaff.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="25" column="14" selection-start-line="25" selection-start-column="14" selection-end-line="25" selection-end-column="14" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/Deprecated/OrderEndpointEndUser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/OrderEndpointDeliveryGuySelf.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1371,27 +1355,149 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/ModelRoles/Usernames.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOPreparedReviewItem/ItemReviewDAOPrepared.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="74" column="29" selection-start-line="74" selection-start-column="29" selection-end-line="74" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="704">
+          <caret line="259" column="38" selection-start-line="259" selection-start-column="38" selection-end-line="259" selection-end-column="38" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/ModelRoles/DeliveryGuySelf.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="90" column="33" selection-start-line="90" selection-start-column="33" selection-end-line="90" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#6018#6019#0" expanded="true" />
+            <element signature="e#6050#6051#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointRoles/DeliveryGuySelfResource.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4210">
+          <caret line="168" column="55" selection-start-line="168" selection-start-column="55" selection-end-line="168" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/OrderResource.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="71" column="28" selection-start-line="71" selection-start-column="28" selection-end-line="71" selection-end-column="28" />
+        <state relative-caret-position="126">
+          <caret line="24" column="13" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPreparedRoles/AdminDAOPrepared.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-11968">
-          <caret line="20" column="42" selection-start-line="20" selection-start-column="42" selection-end-line="20" selection-end-column="42" />
+        <state relative-caret-position="-502">
+          <caret line="615" column="17" selection-start-line="615" selection-start-column="17" selection-end-line="615" selection-end-column="17" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/ModelRoles/Usernames.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPreparedRoles/ShopAdminDAO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+        <state relative-caret-position="20">
+          <caret line="1344" column="53" selection-start-line="1344" selection-start-column="53" selection-end-line="1344" selection-end-column="53" />
+          <folding>
+            <element signature="e#13976#13987#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPreparedRoles/DeliveryGuySelfDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-772">
+          <caret line="1040" column="27" selection-start-line="1040" selection-start-column="27" selection-end-line="1040" selection-end-column="27" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/AuthenticationFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="287">
+          <caret line="259" column="17" selection-start-line="259" selection-start-column="17" selection-end-line="259" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/ModelDelivery/DeliveryAddress.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-396">
+          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpoints/ItemResource.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="296">
+          <caret line="472" column="60" selection-start-line="472" selection-start-column="12" selection-end-line="472" selection-end-column="60" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOsPrepared/ItemDAOJoinOuter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="359">
+          <caret line="33" column="26" selection-start-line="33" selection-start-column="26" selection-end-line="33" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/Deprecated/OrderEndpointEndUser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="279" column="38" selection-start-line="279" selection-start-column="38" selection-end-line="279" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/OrderEndpointDeliveryGuySelf.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-109">
+          <caret line="251" column="5" selection-start-line="251" selection-start-column="5" selection-end-line="251" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/DAOPreparedCartOrder/OrderService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="785" column="32" selection-start-line="785" selection-start-column="32" selection-end-line="785" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/nearbyshops/RESTEndpointsOrder/OrderEndpointShopStaff.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="973" column="0" selection-start-line="973" selection-start-column="0" selection-end-line="973" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

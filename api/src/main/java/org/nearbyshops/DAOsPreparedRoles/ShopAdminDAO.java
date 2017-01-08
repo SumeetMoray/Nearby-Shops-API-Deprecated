@@ -1341,12 +1341,8 @@ public class ShopAdminDAO {
 
 		try {
 
-			connection = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL
-						,JDBCContract.CURRENT_USERNAME
-						,JDBCContract.CURRENT_PASSWORD);
-
+			connection = dataSource.getConnection();
 			statement = connection.createStatement();
-
 			rs = statement.executeQuery(query);
 
 			while(rs.next())

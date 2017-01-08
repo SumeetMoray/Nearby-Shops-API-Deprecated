@@ -244,6 +244,7 @@ public class OrderEndpointDeliveryGuySelf {
 							  @QueryParam("DeliveryReceived") Boolean deliveryReceived,
 							  @QueryParam("latCenter")Double latCenter, @QueryParam("lonCenter")Double lonCenter,
 							  @QueryParam("PendingOrders") Boolean pendingOrders,
+							  @QueryParam("SearchString") String searchString,
 							  @QueryParam("SortBy") String sortBy,
 							  @QueryParam("Limit")Integer limit, @QueryParam("Offset")Integer offset,
 							  @QueryParam("metadata_only")Boolean metaonly)
@@ -341,6 +342,7 @@ public class OrderEndpointDeliveryGuySelf {
 							paymentsReceived,deliveryReceived,
 							latCenter,lonCenter,
 							pendingOrders,
+							searchString,
 							sortBy,limit,offset);
 
 

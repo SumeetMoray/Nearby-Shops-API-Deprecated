@@ -244,9 +244,9 @@ public class DeliveryGuySelfDAO {
 			statement.setObject(++i,deliveryGuySelf.getWaitlisted());
 
 			statement.setBoolean(++i,deliveryGuySelf.isAccountPrivate());
+
 			statement.setString(++i,deliveryGuySelf.getGovtIDName());
 			statement.setString(++i,deliveryGuySelf.getGovtIDNumber());
-
 
 			statement.setObject(++i,deliveryGuySelf.getDeliveryGuyID());
 			
@@ -256,6 +256,8 @@ public class DeliveryGuySelfDAO {
 			System.out.println("Total rows updated: " + updatedRows);	
 			
 			//conn.close();
+
+			connection.commit();
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -379,6 +381,8 @@ public class DeliveryGuySelfDAO {
 			System.out.println("Total rows updated: " + updatedRows);
 
 			//conn.close();
+
+			connection.commit();
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

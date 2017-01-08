@@ -256,8 +256,6 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                 ShopAdmin shopAdmin = shopAdminDAO.checkShopAdmin(username,password);
                 // Distributor account exist and is enabled
 
-                System.out.println("Shop Admin : " + shopAdmin.getEnabled());
-
                 if(shopAdmin!=null )
                 {
                     if(!shopAdmin.getEnabled())
