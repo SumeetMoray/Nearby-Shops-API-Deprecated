@@ -796,6 +796,85 @@ public class OrderEndpointShopStaff {
 
 
 	@PUT
+	@Path("/AcceptReturnCancelledByUser/{OrderID}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN,GlobalConstants.ROLE_SHOP_STAFF})
+	public Response acceptReturnCancelledByUser(@PathParam("OrderID")int orderID)
+	{
+		Order order = Globals.orderService.readStatusHomeDelivery(orderID);
+
+		if(Globals.accountApproved instanceof ShopAdmin)
+		{
+			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
+
+			if(order.getShopID()!=shop.getShopID())
+			{
+				// An attempt to update an order for shop you do not own
+				throw new ForbiddenException("An attempt to update order for shop you do not own !");
+			}
+		}
+		else if(Globals.accountApproved instanceof ShopStaff)
+		{
+			ShopStaff shopStaff = (ShopStaff) Globals.accountApproved;
+
+			// check permission
+			if(!shopStaff.isAcceptReturns())
+			{
+				throw new ForbiddenException("Not Permitted !");
+			}
+
+			// check shopID
+			if(order.getShopID()!=shopStaff.getShopID())
+			{
+				// An attempt to update an order for shop you do not own
+				throw new ForbiddenException("An attempt to update order for shop you do not own !");
+			}
+		}
+		else
+		{
+			throw new ForbiddenException("Not Permitted !");
+		}
+
+
+
+		if(order.getStatusHomeDelivery()== OrderStatusHomeDelivery.CANCELLED_BY_USER_RETURN_PENDING)
+		{
+			order.setStatusHomeDelivery(OrderStatusHomeDelivery.CANCELLED_BY_USER);
+
+			int rowCount = Globals.orderService.updateStatusHomeDelivery(order);
+
+
+			if(rowCount >= 1)
+			{
+
+				return Response.status(Status.OK)
+						.entity(null)
+						.build();
+			}
+			if(rowCount <= 0)
+			{
+
+				return Response.status(Status.NOT_MODIFIED)
+						.build();
+			}
+
+		}
+		else
+		{
+			throw new ForbiddenException("Invalid operation !");
+		}
+
+//		order.setOrderID(orderID);
+//		int rowCount = Globals.orderService.updateOrder(order);
+
+
+		return null;
+	}
+
+
+
+	@PUT
 	@Path("/AcceptReturn/{OrderID}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN,GlobalConstants.ROLE_SHOP_STAFF})
@@ -936,7 +1015,7 @@ public class OrderEndpointShopStaff {
 				endUserID,shopID, pickFromShop,
 				homeDeliveryStatus,pickFromShopStatus,
 				deliveryGuyID,
-				paymentsReceived,deliveryReceived,pendingOrders
+				paymentsReceived,deliveryReceived,pendingOrders,searchString
 		);
 
 		endPoint.setLimit(limit);

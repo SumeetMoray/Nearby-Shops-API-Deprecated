@@ -254,7 +254,6 @@ public class OrderEndpointDeliveryGuySelf {
 		// *********************** second Implementation
 
 
-
 		if(Globals.accountApproved instanceof ShopAdmin)
 		{
 			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
@@ -322,7 +321,7 @@ public class OrderEndpointDeliveryGuySelf {
 				endUserID,shopID, pickFromShop,
 				homeDeliveryStatus,pickFromShopStatus,
 				deliveryGuyID,
-				paymentsReceived,deliveryReceived,pendingOrders
+				paymentsReceived,deliveryReceived,pendingOrders,searchString
 		);
 
 		endPoint.setLimit(limit);

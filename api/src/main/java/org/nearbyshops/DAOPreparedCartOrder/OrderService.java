@@ -772,7 +772,7 @@ public class OrderService {
 
         if(endUserID !=null)
         {
-            query = query + " WHERE " + Order.END_USER_ID + " = " + endUserID;
+            query = query + " WHERE " + Order.TABLE_NAME + "." + Order.END_USER_ID + " = " + endUserID;
 
             isFirst = false;
         }
@@ -1144,12 +1144,15 @@ public class OrderService {
                                        Integer deliveryGuyID,
                                        Boolean paymentsReceived,
                                        Boolean deliveryReceived,
-                                        Boolean pendingOrders)
+                                        Boolean pendingOrders,
+                                        String searchString)
     {
 
         String query = "SELECT " +
-                        "count( DISTINCT " + Order.ORDER_ID + ") as item_count" +
-                        " FROM " + Order.TABLE_NAME ;
+                        "count( DISTINCT " + Order.TABLE_NAME + "." +Order.ORDER_ID + ") as item_count" +
+                        " FROM " + Order.TABLE_NAME
+                        + " LEFT OUTER JOIN " + OrderItem.TABLE_NAME + " ON (" + Order.TABLE_NAME + "." + Order.ORDER_ID + " = " + OrderItem.TABLE_NAME + "." + OrderItem.ORDER_ID + " ) "
+                        + " LEFT OUTER JOIN " + DeliveryAddress.TABLE_NAME + " ON (" + Order.TABLE_NAME + "." + Order.DELIVERY_ADDRESS_ID + " = " + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.ID + ")";
 
 
 
@@ -1169,7 +1172,7 @@ public class OrderService {
 
         if(endUserID !=null)
         {
-            query = query + " WHERE " + Order.END_USER_ID + " = " + endUserID;
+            query = query + " WHERE " + Order.TABLE_NAME + "." + Order.END_USER_ID + " = " + endUserID;
 
             isFirst = false;
         }
@@ -1189,6 +1192,32 @@ public class OrderService {
             }
 
         }
+
+
+
+        if(searchString != null)
+        {
+
+//            String queryPart = ;
+
+            String queryPartSearch = " ( " + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.NAME +" ilike '%" + searchString + "%'"
+                    + " or CAST ( " + Order.TABLE_NAME + "." + Order.ORDER_ID + " AS text )" + " ilike '%" + searchString + "%'" + ") ";
+
+            //+ " or " + Item.TABLE_NAME + "." + Item.ITEM_NAME + " ilike '%" + searchString + "%'"
+
+            if(isFirst)
+            {
+                query = query + " WHERE " + queryPartSearch;
+
+                isFirst = false;
+
+            }else
+            {
+                query = query + " AND " + queryPartSearch;
+            }
+
+        }
+
 
 
         if(pendingOrders!=null)
@@ -1351,6 +1380,7 @@ public class OrderService {
 
         OrderEndPoint endPoint = new OrderEndPoint();
 
+
         Connection connection = null;
         Statement statement = null;
         ResultSet rs = null;
@@ -1510,6 +1540,7 @@ public class OrderService {
 //                + Order.PICK_FROM_SHOP + ","
 
                 + Order.SHOP_ID + ","
+                + Order.END_USER_ID + ","
                 + Order.STATUS_HOME_DELIVERY + ""
 //                + Order.STATUS_PICK_FROM_SHOP + ""
 
@@ -1540,6 +1571,7 @@ public class OrderService {
                 order.setDeliveryReceived(rs.getBoolean(Order.DELIVERY_RECEIVED));
                 order.setShopID(rs.getInt(Order.SHOP_ID));
                 order.setStatusHomeDelivery(rs.getInt(Order.STATUS_HOME_DELIVERY));
+                order.setEndUserID(rs.getInt(Order.END_USER_ID));
 //                order.setPickFromShop(rs.getBoolean(Order.PICK_FROM_SHOP));
 //                order.setDateTimePlaced(rs.getTimestamp(Order.DATE_TIME_PLACED));
 
@@ -1905,6 +1937,38 @@ public class OrderService {
             else if(status == 5)
             {
                 order.setStatusHomeDelivery(OrderStatusHomeDelivery.CANCELLED_BY_SHOP_RETURN_PENDING);
+            }
+            else
+            {
+                return 0;
+            }
+
+            return updateStatusHomeDelivery(order);
+        }
+
+        return 0;
+    }
+
+
+
+
+
+
+    public int orderCancelledByEndUser(Integer orderID)
+    {
+        Order order = readStatusHomeDelivery(orderID);
+
+        if(order!=null) {
+
+            int status = order.getStatusHomeDelivery();
+
+            if (status == 1 || status == 2 || status == 3 || status == 4)
+            {
+                order.setStatusHomeDelivery(OrderStatusHomeDelivery.CANCELLED_BY_USER);
+            }
+            else if(status == 5)
+            {
+                order.setStatusHomeDelivery(OrderStatusHomeDelivery.CANCELLED_BY_USER_RETURN_PENDING);
             }
             else
             {

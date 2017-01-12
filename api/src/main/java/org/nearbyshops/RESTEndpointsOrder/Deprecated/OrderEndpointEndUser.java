@@ -258,7 +258,7 @@ public class OrderEndpointEndUser {
 				endUserID,shopID, pickFromShop,
 				homeDeliveryStatus,pickFromShopStatus,
 				deliveryGuyID,
-				paymentsReceived,deliveryReceived,null
+				paymentsReceived,deliveryReceived,null,null
 				);
 
 		endPoint.setLimit(set_limit);

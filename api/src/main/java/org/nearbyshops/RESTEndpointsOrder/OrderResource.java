@@ -3,17 +3,18 @@ package org.nearbyshops.RESTEndpointsOrder;
 import org.glassfish.jersey.media.sse.EventOutput;
 import org.glassfish.jersey.media.sse.SseBroadcaster;
 import org.glassfish.jersey.media.sse.SseFeature;
+import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.Order;
-import org.nearbyshops.ModelEndPoints.ItemEndPoint;
+import org.nearbyshops.Model.Shop;
 import org.nearbyshops.ModelEndPoints.OrderEndPoint;
-import org.nearbyshops.ModelStats.OrderStats;
-import org.nearbyshops.zExperimental.SSEEndpoint;
+import org.nearbyshops.ModelRoles.EndUser;
+import org.nearbyshops.ModelRoles.ShopAdmin;
+import org.nearbyshops.ModelRoles.ShopStaff;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Singleton;
 import javax.ws.rs.*;
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -87,6 +88,158 @@ public class OrderResource {
 		}
 		
 	}
+
+
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_END_USER})
+	public Response getOrders(@QueryParam("OrderID")Integer orderID,
+							  @QueryParam("ShopID")Integer shopID,
+							  @QueryParam("PickFromShop") Boolean pickFromShop,
+							  @QueryParam("StatusHomeDelivery")Integer homeDeliveryStatus,
+							  @QueryParam("StatusPickFromShopStatus")Integer pickFromShopStatus,
+							  @QueryParam("DeliveryGuyID")Integer deliveryGuyID,
+							  @QueryParam("PaymentsReceived") Boolean paymentsReceived,
+							  @QueryParam("DeliveryReceived") Boolean deliveryReceived,
+							  @QueryParam("latCenter")Double latCenter, @QueryParam("lonCenter")Double lonCenter,
+							  @QueryParam("PendingOrders") Boolean pendingOrders,
+							  @QueryParam("SearchString") String searchString,
+							  @QueryParam("SortBy") String sortBy,
+							  @QueryParam("Limit")Integer limit, @QueryParam("Offset")Integer offset,
+							  @QueryParam("metadata_only")Boolean metaonly)
+	{
+		//							  @QueryParam("EndUserID")Integer endUserID,
+
+		Integer endUserID;
+
+		// *********************** second Implementation
+
+		if(Globals.accountApproved instanceof EndUser)
+		{
+			EndUser endUser = (EndUser) Globals.accountApproved;
+//			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
+//			shopID = shop.getShopID();
+			endUserID = endUser.getEndUserID();
+		}
+		else
+		{
+			throw new ForbiddenException("Not Permitted !");
+		}
+
+
+		final int max_limit = 100;
+
+		if(limit!=null)
+		{
+			if(limit>=max_limit)
+			{
+				limit = max_limit;
+			}
+		}
+		else
+		{
+			limit = 30;
+		}
+
+
+		if(offset==null)
+		{
+			offset = 0;
+		}
+
+
+		OrderEndPoint endPoint = Globals.orderService.endPointMetaDataOrders(orderID,
+				endUserID,shopID, pickFromShop,
+				homeDeliveryStatus,pickFromShopStatus,
+				deliveryGuyID,
+				paymentsReceived,deliveryReceived,pendingOrders,searchString
+		);
+
+		endPoint.setLimit(limit);
+		endPoint.setMax_limit(max_limit);
+		endPoint.setOffset(offset);
+
+		List<Order> list = null;
+
+
+		if(metaonly==null || (!metaonly)) {
+
+			list =
+					Globals.orderService.readOrders(orderID,
+							endUserID,shopID, pickFromShop,
+							homeDeliveryStatus,pickFromShopStatus,
+							deliveryGuyID,
+							paymentsReceived,deliveryReceived,
+							latCenter,lonCenter,
+							pendingOrders,
+							searchString,
+							sortBy,limit,offset);
+
+
+			endPoint.setResults(list);
+		}
+
+
+//		try {
+//			Thread.sleep(1000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+
+		//Marker
+
+		return Response.status(Status.OK)
+				.entity(endPoint)
+				.build();
+	}
+
+
+
+	// requires authentication by the Distributor
+	@PUT
+	@Path("/CancelByUser/{OrderID}")
+	@RolesAllowed({GlobalConstants.ROLE_END_USER})
+	public Response cancelledByShop(@PathParam("OrderID")int orderID)
+	{
+		Order order = Globals.orderService.readStatusHomeDelivery(orderID);
+
+		if(Globals.accountApproved instanceof EndUser)
+		{
+			EndUser endUser = (EndUser) Globals.accountApproved;
+
+			if(order.getEndUserID()!=endUser.getEndUserID())
+			{
+				throw new ForbiddenException("Not Permitted !");
+			}
+		}
+		else
+		{
+			throw new ForbiddenException("Not Permitted !");
+		}
+
+
+
+		int rowCount = Globals.orderService.orderCancelledByEndUser(orderID);
+
+		if(rowCount >= 1)
+		{
+
+			return Response.status(Status.OK)
+					.entity(null)
+					.build();
+		}
+		if(rowCount <= 0)
+		{
+
+			return Response.status(Status.NOT_MODIFIED)
+					.entity(null)
+					.build();
+		}
+
+		return null;
+	}
+
 
 
 
