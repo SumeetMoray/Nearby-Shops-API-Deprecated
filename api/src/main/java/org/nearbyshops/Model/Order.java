@@ -95,6 +95,7 @@ public class Order {
     private Integer orderID;
     private Integer endUserID;
     private Integer shopID;
+    private Shop shop;
     //int orderStatus;
 
     private Integer statusHomeDelivery;
@@ -113,6 +114,13 @@ public class Order {
     private OrderStats orderStats;
 
 
+    public Shop getShop() {
+        return shop;
+    }
+
+    public void setShop(Shop shop) {
+        this.shop = shop;
+    }
 
     public Integer getOrderID() {
         return orderID;

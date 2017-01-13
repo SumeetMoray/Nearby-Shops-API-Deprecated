@@ -64,16 +64,20 @@ public class OrderResource {
 	public Response createOrder(Order order, @QueryParam("CartID") int cartID)
 	{
 
-		Order orderResult = Globals.orderService.placeOrder(order,cartID);
+//		Order orderResult = Globals.orderService.placeOrder(order,cartID);
+
+		int orderId = Globals.placeOrderHD_dao.placeOrderNew(order,cartID);
 
 
-		if(orderResult!=null)
+
+		if(orderId!=-1)
 		{
+			Order orderResult = Globals.orderService.readOrder(orderId);
 
-			Globals.broadcastMessage("Order Number : " + String.valueOf(orderResult.getOrderID()) + " Has been received !",order.getShopID());
+			Globals.broadcastMessage("Order Number : " + String.valueOf(orderId) + " Has been received !",orderResult.getShopID());
 
 			return Response.status(Status.CREATED)
-					.entity(orderResult)
+//					.entity(orderResult)
 					.build();
 			
 		}
@@ -83,7 +87,6 @@ public class OrderResource {
 			//Response.status(Status.CREATED).location(arg0)
 			
 			return Response.status(Status.NOT_MODIFIED)
-					.entity(null)
 					.build();
 		}
 		

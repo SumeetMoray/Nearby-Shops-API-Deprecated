@@ -57,9 +57,10 @@ public class ItemCategoryDAO {
 					+ ItemCategory.IMAGE_PATH + ","
 					+ ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT + ","
 					+ ItemCategory.IS_ABSTRACT + ","
+					+ ItemCategory.CATEGORY_ORDER + ","
 
 					+ ItemCategory.IS_LEAF_NODE
-					+ ") VALUES(?,?,? ,?,?,? ,?)";
+					+ ") VALUES(?,?,? ,?,?,? ,?,?)";
 
 		int idOfInsertedRow = 0;
 		
@@ -71,12 +72,13 @@ public class ItemCategoryDAO {
 			int i = 0;
 			statement.setString(++i,itemCategory.getCategoryName());
 			statement.setString(++i,itemCategory.getCategoryDescription());
-			statement.setInt(++i,itemCategory.getParentCategoryID());
+			statement.setObject(++i,itemCategory.getParentCategoryID());
 
 			statement.setString(++i,itemCategory.getImagePath());
 			statement.setString(++i,itemCategory.getDescriptionShort());
 			statement.setBoolean(++i,itemCategory.getisAbstractNode());
 
+			statement.setObject(++i,itemCategory.getCategoryOrder());
 			statement.setBoolean(++i,itemCategory.getIsLeafNode());
 
 
@@ -391,6 +393,7 @@ public class ItemCategoryDAO {
 				+ " " + ItemCategory.PARENT_CATEGORY_ID + " = ?,"
 				+ " " + ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT + " = ?,"
 				+ " " + ItemCategory.IS_ABSTRACT + " = ?,"
+				+ " " + ItemCategory.CATEGORY_ORDER + " = ?,"
 
 				+ " " + ItemCategory.IS_LEAF_NODE + " = ?"
 
@@ -416,6 +419,8 @@ public class ItemCategoryDAO {
 			statement.setObject(++i,itemCategory.getParentCategoryID());
 			statement.setString(++i,itemCategory.getDescriptionShort());
 			statement.setBoolean(++i,itemCategory.getisAbstractNode());
+
+			statement.setObject(++i,itemCategory.getCategoryOrder());
 
 			statement.setBoolean(++i,itemCategory.getIsLeafNode());
 			statement.setInt(++i,itemCategory.getItemCategoryID());
@@ -529,8 +534,9 @@ public class ItemCategoryDAO {
 				+ ItemCategory.ITEM_CATEGORY_ID + ","
 				+ ItemCategory.PARENT_CATEGORY_ID + ","
 				+ ItemCategory.IMAGE_PATH + ","
-				+ ItemCategory.ITEM_CATEGORY_DESCRIPTION + ","
+				+ ItemCategory.CATEGORY_ORDER + ","
 
+				+ ItemCategory.ITEM_CATEGORY_DESCRIPTION + ","
 				+ ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT + ","
 				+ ItemCategory.IS_ABSTRACT + ","
 
@@ -707,6 +713,8 @@ public class ItemCategoryDAO {
 				itemCategory.setParentCategoryID(rs.getInt(ItemCategory.PARENT_CATEGORY_ID));
 				itemCategory.setIsLeafNode(rs.getBoolean(ItemCategory.IS_LEAF_NODE));
 				itemCategory.setImagePath(rs.getString(ItemCategory.IMAGE_PATH));
+				itemCategory.setCategoryOrder(rs.getInt(ItemCategory.CATEGORY_ORDER));
+
 				itemCategory.setCategoryName(rs.getString(ItemCategory.ITEM_CATEGORY_NAME));
 
 				itemCategory.setisAbstractNode(rs.getBoolean(ItemCategory.IS_ABSTRACT));
@@ -1047,8 +1055,9 @@ public class ItemCategoryDAO {
 					+ ItemCategory.ITEM_CATEGORY_ID + ","
 					+ ItemCategory.PARENT_CATEGORY_ID + "," 
 					+ ItemCategory.IMAGE_PATH + ","
-					+ ItemCategory.ITEM_CATEGORY_DESCRIPTION + ","
+					+ ItemCategory.CATEGORY_ORDER + ","
 
+					+ ItemCategory.ITEM_CATEGORY_DESCRIPTION + ","
 					+ ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT + ","
 					+ ItemCategory.IS_ABSTRACT + ","
 
@@ -1062,6 +1071,8 @@ public class ItemCategoryDAO {
 				+ ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID + ","
 				+ ItemCategory.TABLE_NAME + "." + ItemCategory.PARENT_CATEGORY_ID + ","
 				+ ItemCategory.TABLE_NAME + "." + ItemCategory.IMAGE_PATH + ","
+				+ ItemCategory.TABLE_NAME + "." + ItemCategory.CATEGORY_ORDER + ","
+
 				+ ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_DESCRIPTION + ","
 
 				+ ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT + ","
@@ -1240,8 +1251,9 @@ public class ItemCategoryDAO {
 				+ "cat." + ItemCategory.ITEM_CATEGORY_ID + ","
 				+ "cat." + ItemCategory.PARENT_CATEGORY_ID + ","
 				+ "cat." + ItemCategory.IMAGE_PATH + ","
-				+ "cat." + ItemCategory.ITEM_CATEGORY_DESCRIPTION + ","
+				+ "cat." + ItemCategory.CATEGORY_ORDER + ","
 
+				+ "cat." + ItemCategory.ITEM_CATEGORY_DESCRIPTION + ","
 				+ "cat." + ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT + ","
 				+ "cat." + ItemCategory.IS_ABSTRACT + ","
 
@@ -1258,8 +1270,9 @@ public class ItemCategoryDAO {
 				+ ItemCategory.ITEM_CATEGORY_ID + ","
 				+ ItemCategory.PARENT_CATEGORY_ID + ","
 				+ ItemCategory.IMAGE_PATH + ","
-				+ ItemCategory.ITEM_CATEGORY_DESCRIPTION + ","
+				+ ItemCategory.CATEGORY_ORDER + ","
 
+				+ ItemCategory.ITEM_CATEGORY_DESCRIPTION + ","
 				+ ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT + ","
 				+ ItemCategory.IS_ABSTRACT + ","
 
@@ -1352,6 +1365,7 @@ public class ItemCategoryDAO {
 				itemCategory.setParentCategoryID(rs.getInt(ItemCategory.PARENT_CATEGORY_ID));
 				itemCategory.setIsLeafNode(rs.getBoolean(ItemCategory.IS_LEAF_NODE));
 				itemCategory.setImagePath(rs.getString(ItemCategory.IMAGE_PATH));
+				itemCategory.setCategoryOrder(rs.getInt(ItemCategory.CATEGORY_ORDER));
 				itemCategory.setCategoryName(rs.getString(ItemCategory.ITEM_CATEGORY_NAME));
 
 				itemCategory.setisAbstractNode(rs.getBoolean(ItemCategory.IS_ABSTRACT));

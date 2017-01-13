@@ -71,6 +71,8 @@ public class Globals {
 	// security
 	public static ForbiddenOperationsDAO forbiddenOperationsDAO = new ForbiddenOperationsDAO();
 
+	public static PlaceOrderHD_DAO placeOrderHD_dao = new PlaceOrderHD_DAO();
+
 
 
 	// static reference for holding security accountApproved
