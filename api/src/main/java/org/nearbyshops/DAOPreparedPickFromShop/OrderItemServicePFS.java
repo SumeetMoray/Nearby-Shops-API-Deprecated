@@ -1,18 +1,18 @@
-package org.nearbyshops.DAOPreparedCartOrder;
+package org.nearbyshops.DAOPreparedPickFromShop;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.JDBCContract;
 import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.OrderItem;
 import org.nearbyshops.ModelEndPoints.OrderItemEndPoint;
-import org.nearbyshops.ModelStats.OrderStats;
+import org.nearbyshops.ModelPickFromShop.OrderItemEndPointPFS;
+import org.nearbyshops.ModelPickFromShop.OrderItemPFS;
 
 import java.sql.*;
 import java.util.ArrayList;
 
 
-public class OrderItemService {
+public class OrderItemServicePFS {
 
 	
 	@Override
@@ -26,7 +26,7 @@ public class OrderItemService {
 	
 	
 	
-	public int saveOrderItem(OrderItem orderItem)
+	public int saveOrderItem(OrderItemPFS orderItemPFS)
 	{	
 		
 		Connection connection = null;
@@ -35,32 +35,24 @@ public class OrderItemService {
 
 
 
-		String insertOrderItem = "INSERT INTO "
-				+ OrderItem.TABLE_NAME
+		String insertOrderItemPFS = "INSERT INTO "
+				+ OrderItemPFS.TABLE_NAME
 				+ "("
-				+ OrderItem.ORDER_ID + ","
-				+ OrderItem.ITEM_ID + ","
-				+ OrderItem.ITEM_QUANTITY + ","
-				+ OrderItem.ITEM_PRICE_AT_ORDER + ""
+				+ OrderItemPFS.ORDER_ID + ","
+				+ OrderItemPFS.ITEM_ID + ","
+				+ OrderItemPFS.ITEM_QUANTITY + ","
+				+ OrderItemPFS.ITEM_PRICE_AT_ORDER + ""
 				+ ") VALUES(?,?,?,?)";
-
-
-		/*+ "" + orderItem.getOrderID() + ","
-				+ "" + orderItem.getItemID() + ","
-				+ "" + orderItem.getItemQuantity() + ","
-				+ "" + orderItem.getItemPriceAtOrder() +
-		*/
-
 
 		try {
 			
 			connection = dataSource.getConnection();
-			statement = connection.prepareStatement(insertOrderItem,Statement.RETURN_GENERATED_KEYS);
+			statement = connection.prepareStatement(insertOrderItemPFS,Statement.RETURN_GENERATED_KEYS);
 
-			statement.setObject(1,orderItem.getOrderID());
-			statement.setObject(2,orderItem.getItemID());
-			statement.setObject(3,orderItem.getItemQuantity());
-			statement.setObject(4,orderItem.getItemPriceAtOrder());
+			statement.setObject(1,orderItemPFS.getOrderID());
+			statement.setObject(2,orderItemPFS.getItemID());
+			statement.setObject(3,orderItemPFS.getItemQuantity());
+			statement.setObject(4,orderItemPFS.getItemPriceAtOrder());
 
 			rowCount = statement.executeUpdate();
 			ResultSet rs = statement.getGeneratedKeys();
@@ -102,23 +94,24 @@ public class OrderItemService {
 		
 		return rowCount;
 	}
-	
 
-	public int updateOrderItem(OrderItem orderItem)
+
+
+	public int updateOrderItem(OrderItemPFS orderItemPFS)
 	{
 
 		String updateStatement = "UPDATE "
-				+ OrderItem.TABLE_NAME
+				+ OrderItemPFS.TABLE_NAME
 				+ " SET "
-				+ OrderItem.ITEM_ID + " = " + orderItem.getItemID() + ","
-				+ OrderItem.ORDER_ID + " = " + orderItem.getOrderID() + ","
-				+ OrderItem.ITEM_QUANTITY + " = " + orderItem.getItemQuantity() + ","
-				+ OrderItem.ITEM_PRICE_AT_ORDER + " = " + orderItem.getItemPriceAtOrder()
+				+ OrderItemPFS.ITEM_ID + " = " + orderItemPFS.getItemID() + ","
+				+ OrderItemPFS.ORDER_ID + " = " + orderItemPFS.getOrderID() + ","
+				+ OrderItemPFS.ITEM_QUANTITY + " = " + orderItemPFS.getItemQuantity() + ","
+				+ OrderItemPFS.ITEM_PRICE_AT_ORDER + " = " + orderItemPFS.getItemPriceAtOrder()
 
 				+ " WHERE "
-				+ OrderItem.ORDER_ID + " = " + orderItem.getOrderID()
+				+ OrderItemPFS.ORDER_ID + " = " + orderItemPFS.getOrderID()
 				+ " AND "
-				+ OrderItem.ITEM_ID + " = " + orderItem.getItemID();
+				+ OrderItemPFS.ITEM_ID + " = " + orderItemPFS.getItemID();
 
 
 
@@ -170,17 +163,17 @@ public class OrderItemService {
 	}
 	
 
-	public int deleteOrderItem(int itemID,int orderID)
+	public int deleteOrderItemPFS(int itemID,int orderID)
 	{
 
-		String deleteStatement = "DELETE FROM " + OrderItem.TABLE_NAME;
+		String deleteStatement = "DELETE FROM " + OrderItemPFS.TABLE_NAME;
 
 
 		boolean isFirst = true;
 
 		if(itemID > 0)
 		{
-			deleteStatement = deleteStatement + " WHERE " + OrderItem.ITEM_ID + " = " + itemID;
+			deleteStatement = deleteStatement + " WHERE " + OrderItemPFS.ITEM_ID + " = " + itemID;
 			isFirst = false;
 		}
 
@@ -188,10 +181,10 @@ public class OrderItemService {
 		{
 			if(isFirst)
 			{
-				deleteStatement = deleteStatement + " WHERE " + OrderItem.ORDER_ID + " = " + orderID;
+				deleteStatement = deleteStatement + " WHERE " + OrderItemPFS.ORDER_ID + " = " + orderID;
 			}else
 			{
-				deleteStatement = deleteStatement + " AND " + OrderItem.ORDER_ID + " = " + orderID;
+				deleteStatement = deleteStatement + " AND " + OrderItemPFS.ORDER_ID + " = " + orderID;
 			}
 
 		}
@@ -249,7 +242,7 @@ public class OrderItemService {
 	
 	
 	
-	public ArrayList<OrderItem> getOrderItem(Integer orderID,
+	public ArrayList<OrderItemPFS> getOrderItemPFS(Integer orderID,
 											 Integer itemID,
 											 String searchString,
 											 String sortBy,
@@ -258,20 +251,36 @@ public class OrderItemService {
 
 
 
-		String query = "SELECT * FROM " + OrderItem.TABLE_NAME;
+		String query = "SELECT " +
+						OrderItemPFS.ORDER_ID + "," +
+						OrderItemPFS.ITEM_ID + "," +
+						OrderItemPFS.ITEM_QUANTITY + "," +
+						OrderItemPFS.ITEM_PRICE_AT_ORDER + ","
+						+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + ","
+						+ Item.TABLE_NAME + "." + Item.ITEM_ID + ","
+						+ Item.TABLE_NAME + "." + Item.ITEM_IMAGE_URL + ","
+						+ Item.TABLE_NAME + "." + Item.ITEM_NAME + ","
+						+ Item.TABLE_NAME + "." + Item.ITEM_DESC + ","
 
-		if(itemID==null)
-		{
-			String itemInnerJoin = " LEFT OUTER JOIN " + Item.TABLE_NAME + " ON ( " + OrderItem.TABLE_NAME + "." + OrderItem.ITEM_ID + " = " + Item.TABLE_NAME + "." + Item.ITEM_ID + " ) ";
-			query = query + itemInnerJoin;
-		}
+						+ Item.TABLE_NAME + "." + Item.QUANTITY_UNIT + ","
+						+ Item.TABLE_NAME + "." + Item.DATE_TIME_CREATED + ","
+						+ Item.TABLE_NAME + "." + Item.ITEM_DESCRIPTION_LONG + "" +
+						" FROM " + OrderItemPFS.TABLE_NAME +
+						" LEFT OUTER JOIN " + Item.TABLE_NAME + " ON ( " + OrderItemPFS.TABLE_NAME + "." + OrderItemPFS.ITEM_ID + " = " + Item.TABLE_NAME + "." + Item.ITEM_ID + " ) ";
+
+
+//		if(itemID==null)
+//		{
+//			String itemInnerJoin = " LEFT OUTER JOIN " + Item.TABLE_NAME + " ON ( " + OrderItemPFS.TABLE_NAME + "." + OrderItemPFS.ITEM_ID + " = " + Item.TABLE_NAME + "." + Item.ITEM_ID + " ) ";
+//			query = query + itemInnerJoin;
+//		}
 
 
 		boolean isFirst = true;
 
 		if(orderID != null)
 		{
-			query = query + " WHERE " + OrderItem.ORDER_ID + " = " + orderID;
+			query = query + " WHERE " + OrderItemPFS.ORDER_ID + " = " + orderID;
 
 			isFirst = false;
 		}
@@ -280,11 +289,11 @@ public class OrderItemService {
 		{
 			if(isFirst)
 			{
-				query = query + " WHERE " + OrderItem.ITEM_ID + " = " + itemID;
+				query = query + " WHERE " + OrderItemPFS.ITEM_ID + " = " + itemID;
 			}
 			else
 			{
-				query = query + " AND " + OrderItem.ITEM_ID + " = " + itemID;
+				query = query + " AND " + OrderItemPFS.ITEM_ID + " = " + itemID;
 			}
 
 		}
@@ -327,7 +336,7 @@ public class OrderItemService {
 
 
 
-		ArrayList<OrderItem> orderItemList = new ArrayList<OrderItem>();
+		ArrayList<OrderItemPFS> orderItemList = new ArrayList<OrderItemPFS>();
 
 
 		
@@ -345,12 +354,12 @@ public class OrderItemService {
 			while(rs.next())
 			{
 
-				OrderItem orderItem = new OrderItem();
+				OrderItemPFS orderItem = new OrderItemPFS();
 
-				orderItem.setOrderID(rs.getInt(OrderItem.ORDER_ID));
-				orderItem.setItemID(rs.getInt(OrderItem.ITEM_ID));
-				orderItem.setItemPriceAtOrder(rs.getInt(OrderItem.ITEM_PRICE_AT_ORDER));
-				orderItem.setItemQuantity(rs.getInt(OrderItem.ITEM_QUANTITY));
+				orderItem.setOrderID(rs.getInt(OrderItemPFS.ORDER_ID));
+				orderItem.setItemID(rs.getInt(OrderItemPFS.ITEM_ID));
+				orderItem.setItemPriceAtOrder(rs.getInt(OrderItemPFS.ITEM_PRICE_AT_ORDER));
+				orderItem.setItemQuantity(rs.getInt(OrderItemPFS.ITEM_QUANTITY));
 
 
 				if(itemID==null)
@@ -421,18 +430,18 @@ public class OrderItemService {
 
 
 
-	public OrderItemEndPoint getEndPointMetadata(Integer orderID, Integer itemID)
+	public OrderItemEndPointPFS getEndPointMetadata(Integer orderID, Integer itemID)
 	{
 
 
 		String query = "SELECT "
 				+ " count(*) as item_count" + ""
-				+ " FROM " + OrderItem.TABLE_NAME;
+				+ " FROM " + OrderItemPFS.TABLE_NAME;
 
 
 		/*if(itemID==null)
 		{
-			String itemInnerJoin = " INNER JOIN " + Item.TABLE_NAME + " ON ( " + OrderItem.TABLE_NAME + "." + OrderItem.ITEM_ID + " = " + Item.TABLE_NAME + "." + Item.ITEM_ID + " ) ";
+			String itemInnerJoin = " INNER JOIN " + Item.TABLE_NAME + " ON ( " + OrderItemPFS.TABLE_NAME + "." + OrderItemPFS.ITEM_ID + " = " + Item.TABLE_NAME + "." + Item.ITEM_ID + " ) ";
 
 			query = query + itemInnerJoin;
 		}*/
@@ -442,7 +451,7 @@ public class OrderItemService {
 
 		if(orderID != null)
 		{
-			query = query + " WHERE " + OrderItem.ORDER_ID + " = " + orderID;
+			query = query + " WHERE " + OrderItemPFS.ORDER_ID + " = " + orderID;
 
 			isFirst = false;
 		}
@@ -451,11 +460,11 @@ public class OrderItemService {
 		{
 			if(isFirst)
 			{
-				query = query + " WHERE " + OrderItem.ITEM_ID + " = " + itemID;
+				query = query + " WHERE " + OrderItemPFS.ITEM_ID + " = " + itemID;
 			}
 			else
 			{
-				query = query + " AND " + OrderItem.ITEM_ID + " = " + itemID;
+				query = query + " AND " + OrderItemPFS.ITEM_ID + " = " + itemID;
 			}
 
 		}
@@ -463,10 +472,10 @@ public class OrderItemService {
 
 
 
-//		ArrayList<OrderItem> orderItemList = new ArrayList<OrderItem>();
+//		ArrayList<OrderItemPFS> orderItemList = new ArrayList<OrderItemPFS>();
 
 
-		OrderItemEndPoint endPoint = new OrderItemEndPoint();
+		OrderItemEndPointPFS endPoint = new OrderItemEndPointPFS();
 
 		Connection connection = null;
 		Statement statement = null;

@@ -1,4 +1,4 @@
-package org.nearbyshops.RESTEndpointsOrder;
+package org.nearbyshops.RESTEndpointsCart;
 
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Cart;

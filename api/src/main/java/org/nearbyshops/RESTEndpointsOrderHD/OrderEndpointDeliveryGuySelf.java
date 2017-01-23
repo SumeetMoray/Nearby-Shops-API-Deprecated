@@ -1,8 +1,5 @@
-package org.nearbyshops.RESTEndpointsOrder;
+package org.nearbyshops.RESTEndpointsOrderHD;
 
-import org.glassfish.jersey.media.sse.EventOutput;
-import org.glassfish.jersey.media.sse.SseBroadcaster;
-import org.glassfish.jersey.media.sse.SseFeature;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Order;
@@ -64,7 +61,7 @@ public class OrderEndpointDeliveryGuySelf {
 	{
 		Order order = Globals.orderService.readStatusHomeDelivery(orderID);
 
-		System.out.println("Accept Order : ShopID : Order : " + order.getShopID());
+		System.out.println("Accept OrderPFS : ShopID : OrderPFS : " + order.getShopID());
 
 		if(Globals.accountApproved instanceof DeliveryGuySelf)
 		{
@@ -127,7 +124,7 @@ public class OrderEndpointDeliveryGuySelf {
 	{
 		Order order = Globals.orderService.readStatusHomeDelivery(orderID);
 
-		System.out.println("Return Order : ShopID : Order : " + order.getShopID());
+		System.out.println("Return OrderPFS : ShopID : OrderPFS : " + order.getShopID());
 
 		if(Globals.accountApproved instanceof DeliveryGuySelf)
 		{
@@ -179,7 +176,7 @@ public class OrderEndpointDeliveryGuySelf {
 	{
 		Order order = Globals.orderService.readStatusHomeDelivery(orderID);
 
-		System.out.println("Handover Order : ShopID : Order : " + order.getShopID());
+		System.out.println("Handover OrderPFS : ShopID : OrderPFS : " + order.getShopID());
 
 		if(Globals.accountApproved instanceof DeliveryGuySelf)
 		{

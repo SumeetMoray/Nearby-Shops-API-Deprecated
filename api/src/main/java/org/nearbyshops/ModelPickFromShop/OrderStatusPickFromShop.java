@@ -1,4 +1,4 @@
-package org.nearbyshops.ModelOrderStatus;
+package org.nearbyshops.ModelPickFromShop;
 
 /**
  * Created by sumeet on 13/6/16.

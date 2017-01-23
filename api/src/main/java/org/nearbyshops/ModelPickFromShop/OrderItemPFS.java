@@ -1,14 +1,16 @@
-package org.nearbyshops.Model;
+package org.nearbyshops.ModelPickFromShop;
+
+import org.nearbyshops.Model.Item;
 
 /**
  * Created by sumeet on 29/5/16.
  */
-public class OrderItem {
+public class OrderItemPFS {
 
 
 
     // Table Name for Distributor
-    public static final String TABLE_NAME = "ORDER_ITEM";
+    public static final String TABLE_NAME = "ORDER_ITEM_PICK_FROM_SHOP";
 
     // Column names for Distributor
 
@@ -19,15 +21,15 @@ public class OrderItem {
 
 
     // Create table OrderItemPFS in Postgres
-    public static final String createtableOrderItemPostgres = "CREATE TABLE IF NOT EXISTS " + OrderItem.TABLE_NAME + "("
-            + " " + OrderItem.ITEM_ID + " INT,"
-            + " " + OrderItem.ORDER_ID + " INT,"
-            + " " + OrderItem.ITEM_PRICE_AT_ORDER + " FLOAT,"
-            + " " + OrderItem.ITEM_QUANTITY + " INT,"
-            + " FOREIGN KEY(" + OrderItem.ITEM_ID +") REFERENCES " + Item.TABLE_NAME + "(" + Item.ITEM_ID + "),"
-            + " FOREIGN KEY(" + OrderItem.ORDER_ID +") REFERENCES " + Order.TABLE_NAME + "(" + Order.ORDER_ID + "),"
-            + " PRIMARY KEY (" + OrderItem.ITEM_ID + ", " + OrderItem.ORDER_ID + "),"
-            + " UNIQUE (" + OrderItem.ITEM_ID + "," + OrderItem.ORDER_ID  + ")"
+    public static final String createtableOrderItemPostgres = "CREATE TABLE IF NOT EXISTS " + OrderItemPFS.TABLE_NAME + "("
+            + " " + OrderItemPFS.ITEM_ID + " INT,"
+            + " " + OrderItemPFS.ORDER_ID + " INT,"
+            + " " + OrderItemPFS.ITEM_PRICE_AT_ORDER + " FLOAT,"
+            + " " + OrderItemPFS.ITEM_QUANTITY + " INT,"
+            + " FOREIGN KEY(" + OrderItemPFS.ITEM_ID +") REFERENCES " + Item.TABLE_NAME + "(" + Item.ITEM_ID + "),"
+            + " FOREIGN KEY(" + OrderItemPFS.ORDER_ID +") REFERENCES " + OrderPFS.TABLE_NAME + "(" + OrderPFS.ORDER_ID_PFS + "),"
+            + " PRIMARY KEY (" + OrderItemPFS.ITEM_ID + ", " + OrderItemPFS.ORDER_ID + "),"
+            + " UNIQUE (" + OrderItemPFS.ITEM_ID + "," + OrderItemPFS.ORDER_ID  + ")"
             + ")";
 
 

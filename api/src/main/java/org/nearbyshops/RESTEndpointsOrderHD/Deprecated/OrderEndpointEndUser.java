@@ -1,4 +1,4 @@
-package org.nearbyshops.RESTEndpointsOrder.Deprecated;
+package org.nearbyshops.RESTEndpointsOrderHD.Deprecated;
 
 import org.glassfish.jersey.media.sse.EventOutput;
 import org.glassfish.jersey.media.sse.SseBroadcaster;
@@ -7,7 +7,6 @@ import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Order;
 import org.nearbyshops.ModelEndPoints.OrderEndPoint;
 
-import javax.inject.Singleton;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;

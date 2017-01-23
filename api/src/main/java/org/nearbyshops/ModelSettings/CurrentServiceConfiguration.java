@@ -1,13 +1,11 @@
 package org.nearbyshops.ModelSettings;
 
-import org.nearbyshops.ModelSettings.ServiceConfiguration;
-
 /**
  * Created by sumeet on 21/6/16.
  */
 public class CurrentServiceConfiguration {
 
-    private ServiceConfiguration serviceConfiguration;
+    private ServiceConfigurationLocal serviceConfigurationLocal;
     private int configurationID;
     private String name;
     private Integer serviceID; // foreign key
@@ -37,11 +35,11 @@ public class CurrentServiceConfiguration {
         this.serviceID = serviceID;
     }
 
-    public ServiceConfiguration getServiceConfiguration() {
-        return serviceConfiguration;
+    public ServiceConfigurationLocal getServiceConfigurationLocal() {
+        return serviceConfigurationLocal;
     }
 
-    public void setServiceConfiguration(ServiceConfiguration serviceConfiguration) {
-        this.serviceConfiguration = serviceConfiguration;
+    public void setServiceConfigurationLocal(ServiceConfigurationLocal serviceConfigurationLocal) {
+        this.serviceConfigurationLocal = serviceConfigurationLocal;
     }
 }

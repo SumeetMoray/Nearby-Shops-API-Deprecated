@@ -1,20 +1,17 @@
-package org.nearbyshops.RESTEndpointsOrder;
+package org.nearbyshops.RESTEndpointsOrderHD;
 
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.OrderItem;
-import org.nearbyshops.ModelEndPoints.ItemEndPoint;
 import org.nearbyshops.ModelEndPoints.OrderItemEndPoint;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import java.util.List;
 
 
-@Path("/OrderItem")
+@Path("/OrderItemPFS")
 public class OrderItemResource {
 
 
@@ -123,9 +120,9 @@ public class OrderItemResource {
 
 
 /*
-		List<OrderItem> orderList = Globals.orderItemService.getOrderItem(orderID,itemID);
+		List<OrderItemPFS> orderList = Globals.orderItemService.getOrderItem(orderID,itemID);
 
-		GenericEntity<List<OrderItem>> listEntity = new GenericEntity<List<OrderItem>>(orderList){
+		GenericEntity<List<OrderItemPFS>> listEntity = new GenericEntity<List<OrderItemPFS>>(orderList){
 		};
 
 		if(orderList.size()<=0)

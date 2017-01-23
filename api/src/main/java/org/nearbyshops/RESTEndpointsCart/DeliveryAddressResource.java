@@ -1,4 +1,4 @@
-package org.nearbyshops.RESTEndpointsOrder;
+package org.nearbyshops.RESTEndpointsCart;
 
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.ModelDelivery.DeliveryAddress;
@@ -35,24 +35,21 @@ public class DeliveryAddressResource {
 
 		if(idOfInsertedRow >=1)
 		{
-			
-			
-			Response response = Response.status(Status.CREATED)
+
+
+			return Response.status(Status.CREATED)
 					.location(URI.create("/api/DeliveryAddress/" + idOfInsertedRow))
 					.entity(address)
 					.build();
 			
-			return response;
-			
 		}else if(idOfInsertedRow <=0)
 		{
-			Response response = Response.status(Status.NOT_MODIFIED)
-					.entity(null)
-					.build();
-			
+
 			//Response.status(Status.CREATED).location(arg0)
 			
-			return response;
+			return Response.status(Status.NOT_MODIFIED)
+					.entity(null)
+					.build();
 		}
 		
 		return null;

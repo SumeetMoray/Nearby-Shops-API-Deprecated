@@ -1470,10 +1470,14 @@ public ArrayList<ShopItem> getShopItems(
 				+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + ","
 				+ ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID + ""
 
-				+ " FROM " + ShopItem.TABLE_NAME + "," + Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
-				+ " WHERE " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "=" + Item.TABLE_NAME + "." + Item.ITEM_ID
-				+ " AND " + Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "=" + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
+				+ " FROM " + ShopItem.TABLE_NAME
+				+ " INNER JOIN " + Item.TABLE_NAME + " ON (" + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + " = " + Item.TABLE_NAME + "." + Item.ITEM_ID + ")"
+				+ " LEFT OUTER JOIN " + ItemCategory.TABLE_NAME + " ON ( " + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID + " = " + Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + ")";
 
+
+				//+ " WHERE " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "=" + Item.TABLE_NAME + "." + Item.ITEM_ID;
+		//+ " AND " + Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "=" + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
+		//+ "," + ItemCategory.TABLE_NAME
 
 
 		if(shopID !=null)

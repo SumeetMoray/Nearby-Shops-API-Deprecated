@@ -5,7 +5,7 @@ import org.nearbyshops.DAOPreparedSettings.ServiceConfigurationDAOPrepared;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Image;
-import org.nearbyshops.ModelSettings.ServiceConfiguration;
+import org.nearbyshops.ModelSettings.ServiceConfigurationLocal;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
@@ -39,12 +39,12 @@ public class ServiceConfigurationResource {
 //	@POST
 //	@Consumes(MediaType.APPLICATION_JSON)
 //	@Produces(MediaType.APPLICATION_JSON)
-	public Response createService(ServiceConfiguration serviceConfiguration)
+	public Response createService(ServiceConfigurationLocal serviceConfigurationLocal)
 	{
 
-		int idOfInsertedRow = daoPrepared.saveService(serviceConfiguration);
+		int idOfInsertedRow = daoPrepared.saveService(serviceConfigurationLocal);
 
-		serviceConfiguration.setServiceID(idOfInsertedRow);
+		serviceConfigurationLocal.setServiceID(idOfInsertedRow);
 
 		if(idOfInsertedRow >=1)
 		{
@@ -52,7 +52,7 @@ public class ServiceConfigurationResource {
 			
 			Response response = Response.status(Status.CREATED)
 					.location(URI.create("/api/CurrentServiceConfiguration/" + idOfInsertedRow))
-					.entity(serviceConfiguration)
+					.entity(serviceConfigurationLocal)
 					.build();
 			
 			return response;
@@ -79,11 +79,11 @@ public class ServiceConfigurationResource {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@RolesAllowed({GlobalConstants.ROLE_ADMIN})
-	public Response updateService(ServiceConfiguration serviceConfiguration)
+	public Response updateService(ServiceConfigurationLocal serviceConfigurationLocal)
 	{
 
-		serviceConfiguration.setServiceID(1);
-		int rowCount =	daoPrepared.updateService(serviceConfiguration);
+		serviceConfigurationLocal.setServiceID(1);
+		int rowCount =	daoPrepared.updateService(serviceConfigurationLocal);
 
 		if(rowCount >= 1)
 		{
@@ -148,10 +148,10 @@ public class ServiceConfigurationResource {
 	{
 
 
-		List<ServiceConfiguration> servicesList = daoPrepared.readServices(serviceLevel,serviceType,latCenterQuery,lonCenterQuery,
+		List<ServiceConfigurationLocal> servicesList = daoPrepared.readServices(serviceLevel,serviceType,latCenterQuery,lonCenterQuery,
                                     								sortBy,limit,offset);
 
-		GenericEntity<List<ServiceConfiguration>> listEntity = new GenericEntity<List<ServiceConfiguration>>(servicesList){
+		GenericEntity<List<ServiceConfigurationLocal>> listEntity = new GenericEntity<List<ServiceConfigurationLocal>>(servicesList){
 			
 		};
 	
@@ -181,13 +181,13 @@ public class ServiceConfigurationResource {
 	{
 //		@PathParam("ServiceID")int service
 
-		ServiceConfiguration serviceConfiguration = daoPrepared.getServiceConfiguration();
+		ServiceConfigurationLocal serviceConfigurationLocal = daoPrepared.getServiceConfiguration();
 		
-		if(serviceConfiguration != null)
+		if(serviceConfigurationLocal != null)
 		{
 
 			return Response.status(Status.OK)
-			.entity(serviceConfiguration)
+			.entity(serviceConfigurationLocal)
 			.build();
 			
 		} else 

@@ -1,4 +1,4 @@
-package org.nearbyshops.RESTEndpointsOrder;
+package org.nearbyshops.RESTEndpointsOrderHD;
 
 import org.glassfish.jersey.media.sse.EventOutput;
 import org.glassfish.jersey.media.sse.SseBroadcaster;
@@ -6,11 +6,8 @@ import org.glassfish.jersey.media.sse.SseFeature;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Order;
-import org.nearbyshops.Model.Shop;
 import org.nearbyshops.ModelEndPoints.OrderEndPoint;
 import org.nearbyshops.ModelRoles.EndUser;
-import org.nearbyshops.ModelRoles.ShopAdmin;
-import org.nearbyshops.ModelRoles.ShopStaff;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Singleton;
@@ -394,7 +391,7 @@ public class OrderResource {
 //			set_offset = offset;
 //		}
 //
-//		OrderEndPoint endPoint = Globals.orderService.endPointMetaDataOrders(orderID,
+//		OrderEndPointPFS endPoint = Globals.orderService.endPointMetaDataOrders(orderID,
 //				endUserID,shopID, pickFromShop,
 //				homeDeliveryStatus,pickFromShopStatus,
 //				deliveryGuyID,

@@ -1,4 +1,4 @@
-package org.nearbyshops.RESTEndpointsOrder;
+package org.nearbyshops.RESTEndpointsCart;
 
 import org.nearbyshops.DAOsPrepared.ItemDAO;
 import org.nearbyshops.Globals.Globals;

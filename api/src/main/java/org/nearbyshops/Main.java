@@ -23,23 +23,15 @@ import org.nearbyshops.ModelReviewShop.ShopReview;
 import org.nearbyshops.ModelReviewShop.ShopReviewThanks;
 import org.nearbyshops.ModelRoles.*;
 import org.nearbyshops.ModelSecurity.ForbiddenOperations;
-import org.nearbyshops.ModelSettings.ServiceConfiguration;
+import org.nearbyshops.ModelSettings.ServiceConfigurationLocal;
 import org.nearbyshops.ModelSettings.Settings;
 
-import java.awt.BorderLayout;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URI;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.ws.rs.core.UriBuilder;
 
 /**
  * Main class.
@@ -249,7 +241,7 @@ public class Main {
 			statement.executeUpdate(Cart.createTableCartPostgres);
 			statement.executeUpdate(CartItem.createtableCartItemPostgres);
 
-			statement.executeUpdate(ServiceConfiguration.createTableServiceConfigurationPostgres);
+			statement.executeUpdate(ServiceConfigurationLocal.createTableServiceConfigurationPostgres);
 			statement.executeUpdate(Settings.createTableSettingsPostgres);
 
 			// tables for shop reviews
@@ -338,7 +330,7 @@ public class Main {
 			if(Globals.serviceConfigurationDAO.getServiceConfiguration()==null)
 			{
 
-				ServiceConfiguration defaultConfiguration = new ServiceConfiguration();
+				ServiceConfigurationLocal defaultConfiguration = new ServiceConfigurationLocal();
 
 				defaultConfiguration.setServiceLevel(GlobalConstants.SERVICE_LEVEL_CITY);
 				defaultConfiguration.setServiceType(GlobalConstants.SERVICE_TYPE_NONPROFIT);
@@ -349,10 +341,10 @@ public class Main {
 
 /*
 				insertServiceConfig = "INSERT INTO "
-						+ ServiceConfiguration.TABLE_NAME
+						+ ServiceConfigurationLocal.TABLE_NAME
 						+ "("
-						+ ServiceConfiguration.SERVICE_CONFIGURATION_ID + ","
-						+ ServiceConfiguration.SERVICE_NAME + ") VALUES ("
+						+ ServiceConfigurationLocal.SERVICE_CONFIGURATION_ID + ","
+						+ ServiceConfigurationLocal.SERVICE_NAME + ") VALUES ("
 						+ "" + "1" + ","
 						+ "'" + "ROOT_CONFIGURATION" + "')";
 

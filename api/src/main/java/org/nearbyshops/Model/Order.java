@@ -52,7 +52,7 @@ public class Order {
 
 
 
-    // Create Table Order In postgres
+    // Create Table OrderPFS In postgres
 
     public static final String createTableOrderPostgres = "CREATE TABLE IF NOT EXISTS " + Order.TABLE_NAME + "("
             + " " + Order.ORDER_ID + " SERIAL PRIMARY KEY,"

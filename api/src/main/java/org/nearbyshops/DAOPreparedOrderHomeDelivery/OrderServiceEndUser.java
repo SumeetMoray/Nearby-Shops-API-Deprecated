@@ -1,4 +1,4 @@
-package org.nearbyshops.DAOPreparedCartOrder;
+package org.nearbyshops.DAOPreparedOrderHomeDelivery;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.Globals.Globals;
@@ -558,7 +558,7 @@ public class OrderServiceEndUser {
 
             String addressJoin = " INNER JOIN "
                     + DeliveryAddress.TABLE_NAME
-                    + " ON (" + Order.TABLE_NAME + "." + Order.DELIVERY_ADDRESS_ID
+                    + " ON (" + OrderPFS.TABLE_NAME + "." + OrderPFS.DELIVERY_ADDRESS_ID
                     + " = " + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.DELIVERY_GUY_SELF_ID + ")";
 
             query = query + addressJoin;

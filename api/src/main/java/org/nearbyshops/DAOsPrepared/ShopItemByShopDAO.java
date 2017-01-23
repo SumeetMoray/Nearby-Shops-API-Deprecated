@@ -51,7 +51,8 @@ public class ShopItemByShopDAO {
 		*/
 
 
-			String queryJoin = "SELECT DISTINCT "
+			String queryJoin = "SELECT "
+
 					+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + ","
 					+ ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID + ","
 					+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_PRICE + ","
@@ -60,7 +61,7 @@ public class ShopItemByShopDAO {
 					+ ShopItem.TABLE_NAME + "." + ShopItem.DATE_TIME_ADDED + ","
 					+ ShopItem.TABLE_NAME + "." + ShopItem.LAST_UPDATE_DATE_TIME + ","
 
-					+ Item.TABLE_NAME + "." + Item.ITEM_ID + ","
+//					+ Item.TABLE_NAME + "." + Item.ITEM_ID + ","
 					+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + ","
 					+ Item.TABLE_NAME + "." + Item.ITEM_IMAGE_URL + ","
 					+ Item.TABLE_NAME + "." + Item.ITEM_NAME + ","
@@ -74,12 +75,12 @@ public class ShopItemByShopDAO {
 					+  "count( DISTINCT " + ItemReview.TABLE_NAME + "." + ItemReview.END_USER_ID + ") as rating_count" + ","
 					+  "(avg(" + ItemReview.TABLE_NAME + "." + ItemReview.RATING + ")* count( DISTINCT " + ItemReview.TABLE_NAME + "." + ItemReview.END_USER_ID + ") ) as popularity" + ""
 
-					+ " FROM " + Shop.TABLE_NAME  + "," + ShopItem.TABLE_NAME + "," + ItemReview.TABLE_NAME
-					+ " RIGHT OUTER JOIN " + Item.TABLE_NAME + " ON (" + ItemReview.TABLE_NAME + "." + ItemReview.ITEM_ID + " = " + Item.TABLE_NAME + "." + Item.ITEM_ID + ")" + "," + ItemCategory.TABLE_NAME
-					+ " WHERE " + Shop.TABLE_NAME + "." + Shop.SHOP_ID + "=" + ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
-					+ " AND " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "=" + Item.TABLE_NAME + "." + Item.ITEM_ID
-					+ " AND " + Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "=" + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
-
+					+ " FROM " + Shop.TABLE_NAME
+					+ " INNER JOIN " + ShopItem.TABLE_NAME + " ON ( " + Shop.TABLE_NAME + "." + Shop.SHOP_ID + "=" + ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID + ") "
+					+ " INNER JOIN " + Item.TABLE_NAME + " ON ( " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "=" + Item.TABLE_NAME + "." + Item.ITEM_ID + ") "
+					+ " LEFT OUTER JOIN " + ItemCategory.TABLE_NAME + " ON ( " + Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "=" + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID + ") "
+					+ " LEFT OUTER JOIN " + ItemReview.TABLE_NAME + " ON (" + ItemReview.TABLE_NAME + "." + ItemReview.ITEM_ID + " = " + Item.TABLE_NAME + "." + Item.ITEM_ID + ")"
+					+ " WHERE " + Item.TABLE_NAME + "." + Item.ITEM_ID + " >= 0 ";
 
 
 
@@ -373,7 +374,6 @@ public class ShopItemByShopDAO {
 		queryJoin = queryJoin
 
 				+ " group by "
-
 				+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + ","
 				+ ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID + ","
 				+ Item.TABLE_NAME + "." + Item.ITEM_ID ;

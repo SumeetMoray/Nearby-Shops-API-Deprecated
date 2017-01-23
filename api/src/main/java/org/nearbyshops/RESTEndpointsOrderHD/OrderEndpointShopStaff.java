@@ -1,4 +1,4 @@
-package org.nearbyshops.RESTEndpointsOrder;
+package org.nearbyshops.RESTEndpointsOrderHD;
 
 import org.glassfish.jersey.media.sse.EventOutput;
 import org.glassfish.jersey.media.sse.SseBroadcaster;
@@ -23,7 +23,7 @@ import java.util.List;
 
 
 @Singleton
-@Path("/Order/ShopStaff")
+@Path("/OrderPFS/ShopStaff")
 public class OrderEndpointShopStaff {
 
 
@@ -66,14 +66,14 @@ public class OrderEndpointShopStaff {
 	{
 		Order order = Globals.orderService.readStatusHomeDelivery(orderID);
 
-		System.out.println("Set Confirmed : ShopID : Order : " + order.getShopID());
+		System.out.println("Set Confirmed : ShopID : OrderPFS : " + order.getShopID());
 
 		if(Globals.accountApproved instanceof ShopAdmin)
 		{
 			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
 			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
 
-			System.out.println("ShopID : Order : " + order.getShopID() + "ShopID : Shop : " + shop.getShopID());
+			System.out.println("ShopID : OrderPFS : " + order.getShopID() + "ShopID : Shop : " + shop.getShopID());
 
 			if(order.getShopID()!=shop.getShopID())
 			{
@@ -271,7 +271,7 @@ public class OrderEndpointShopStaff {
 //					ForbiddenOperations activity = new ForbiddenOperations();
 //					activity.setShopAdminID(shopAdmin.getShopAdminID());
 //					activity.setActivityInfo("An attempt to update order for shop you do not own !");
-//					activity.setEndpointInfo("PUT : /Order/ShopStaff/HandoverToDelivery/{OrderID}");
+//					activity.setEndpointInfo("PUT : /OrderPFS/ShopStaff/HandoverToDelivery/{OrderID}");
 //					Globals.forbiddenOperationsDAO.saveForbiddenActivity(activity);
 
 				throw new ForbiddenException("An attempt to update order for shop you do not own !");
@@ -574,9 +574,9 @@ public class OrderEndpointShopStaff {
 			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
 			shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
 
-//			for(Order orderItem : ordersList)
+//			for(OrderPFS orderItem : ordersList)
 //			{
-//				Order order = Globals.orderService.readStatusHomeDelivery(orderItem.getOrderID());
+//				OrderPFS order = Globals.orderService.readStatusHomeDelivery(orderItem.getOrderID());
 //
 //				if(order.getShopID()!=shop.getShopID())
 //				{
@@ -1065,11 +1065,11 @@ public class OrderEndpointShopStaff {
 	// Update Stock
 
 	// Permissions : Home Delivery Inventory
-	// 0. Cancel Order's
-	// 1. Confirm Order's
-	// 2. Set Order's Packed
+	// 0. Cancel OrderPFS's
+	// 1. Confirm OrderPFS's
+	// 2. Set OrderPFS's Packed
 	// 3. Handover to Delivery
-	// 4. Mark Order Delivered
+	// 4. Mark OrderPFS Delivered
 	// 5. Payment Received | Collect Payments from Delivery Guy
 	// 6. Accept Return's | Cancelled By Shop
 

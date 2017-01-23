@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 /**
  * Created by sumeet on 19/6/16.
  */
-public class ServiceConfiguration {
+public class ServiceConfigurationLocal {
 
 
     // Table Name
@@ -20,6 +20,10 @@ public class ServiceConfiguration {
 
     public static final String SERVICE_NAME = "SERVICE_NAME";
     public static final String HELPLINE_NUMBER = "HELPLINE_NUMBER";
+
+
+    public static final String DESCRIPTION_SHORT = "DESCRIPTION_SHORT";
+    public static final String DESCRIPTION_LONG = "DESCRIPTION_LONG";
 
     public static final String ADDRESS = "ADDRESS";
     public static final String CITY = "CITY";
@@ -44,52 +48,41 @@ public class ServiceConfiguration {
     public static final String UPDATED = "UPDATED";
 
 
-    // Consider Revising : Are these fields Required ?
-//    public static final String LAT_MAX = "LAT_MAX";
-//    public static final String LON_MAX = "LON_MAX";
-//    public static final String LAT_MIN = "LAT_MIN";
-//    public static final String LON_MIN = "LON_MIN";
-
-
-
-
     // Create Table Statement
     public static final String createTableServiceConfigurationPostgres
-            = "CREATE TABLE IF NOT EXISTS " + ServiceConfiguration.TABLE_NAME + "("
-            + " " + ServiceConfiguration.SERVICE_CONFIGURATION_ID + " SERIAL PRIMARY KEY,"
+            = "CREATE TABLE IF NOT EXISTS " + ServiceConfigurationLocal.TABLE_NAME + "("
+            + " " + ServiceConfigurationLocal.SERVICE_CONFIGURATION_ID + " SERIAL PRIMARY KEY,"
 
-//            + " " + ServiceConfiguration.IMAGE_PATH + " text,"
-            + " " + ServiceConfiguration.LOGO_IMAGE_PATH + " text,"
-            + " " + ServiceConfiguration.BACKDROP_IMAGE_PATH + " text,"
+//            + " " + ServiceConfigurationLocal.IMAGE_PATH + " text,"
+            + " " + ServiceConfigurationLocal.LOGO_IMAGE_PATH + " text,"
+            + " " + ServiceConfigurationLocal.BACKDROP_IMAGE_PATH + " text,"
 
-            + " " + ServiceConfiguration.SERVICE_NAME + " text,"
-            + " " + ServiceConfiguration.HELPLINE_NUMBER + " text,"
+            + " " + ServiceConfigurationLocal.SERVICE_NAME + " text,"
+            + " " + ServiceConfigurationLocal.HELPLINE_NUMBER + " text,"
 
-            + " " + ServiceConfiguration.ADDRESS + " text,"
-            + " " + ServiceConfiguration.CITY + " text,"
-            + " " + ServiceConfiguration.PINCODE + " BIGINT,"
-            + " " + ServiceConfiguration.LANDMARK + " text,"
-            + " " + ServiceConfiguration.STATE + " text,"
-            + " " + ServiceConfiguration.COUNTRY + " text,"
+            + " " + ServiceConfigurationGlobal.DESCRIPTION_SHORT + " text,"
+            + " " + ServiceConfigurationGlobal.DESCRIPTION_LONG + " text,"
 
-            + " " + ServiceConfiguration.ISO_COUNTRY_CODE + " text,"
-            + " " + ServiceConfiguration.ISO_LANGUAGE_CODE + " text,"
-            + " " + ServiceConfiguration.ISO_CURRENCY_CODE + " text,"
+            + " " + ServiceConfigurationLocal.ADDRESS + " text,"
+            + " " + ServiceConfigurationLocal.CITY + " text,"
+            + " " + ServiceConfigurationLocal.PINCODE + " BIGINT,"
+            + " " + ServiceConfigurationLocal.LANDMARK + " text,"
+            + " " + ServiceConfigurationLocal.STATE + " text,"
+            + " " + ServiceConfigurationLocal.COUNTRY + " text,"
 
-            + " " + ServiceConfiguration.SERVICE_TYPE + " INT,"
-            + " " + ServiceConfiguration.SERVICE_LEVEL + " INT,"
+            + " " + ServiceConfigurationLocal.ISO_COUNTRY_CODE + " text,"
+            + " " + ServiceConfigurationLocal.ISO_LANGUAGE_CODE + " text,"
+            + " " + ServiceConfigurationLocal.ISO_CURRENCY_CODE + " text,"
 
-            + " " + ServiceConfiguration.LAT_CENTER + " FLOAT,"
-            + " " + ServiceConfiguration.LON_CENTER + " FLOAT,"
-            + " " + ServiceConfiguration.SERVICE_RANGE + " FLOAT,"
+            + " " + ServiceConfigurationLocal.SERVICE_TYPE + " INT,"
+            + " " + ServiceConfigurationLocal.SERVICE_LEVEL + " INT,"
 
-//            + " " + ServiceConfiguration.LAT_MAX + " FLOAT,"
-//            + " " + ServiceConfiguration.LON_MAX + " FLOAT,"
-//            + " " + ServiceConfiguration.LAT_MIN + " FLOAT,"
-//            + " " + ServiceConfiguration.LON_MIN + " FLOAT,"
+            + " " + ServiceConfigurationLocal.LAT_CENTER + " FLOAT,"
+            + " " + ServiceConfigurationLocal.LON_CENTER + " FLOAT,"
+            + " " + ServiceConfigurationLocal.SERVICE_RANGE + " FLOAT,"
 
-            + " " + ServiceConfiguration.UPDATED + " timestamp with time zone,"
-            + " " + ServiceConfiguration.CREATED + " timestamp with time zone NOT NULL DEFAULT now()"
+            + " " + ServiceConfigurationLocal.UPDATED + " timestamp with time zone,"
+            + " " + ServiceConfigurationLocal.CREATED + " timestamp with time zone NOT NULL DEFAULT now()"
             + ")";
 
 
@@ -106,6 +99,9 @@ public class ServiceConfiguration {
 
     private String serviceName;
     private String helplineNumber;
+
+    private String descriptionShort;
+    private String descriptionLong;
 
     private String address;
     private String city;
@@ -131,19 +127,25 @@ public class ServiceConfiguration {
     private Timestamp created;
     private Timestamp updated;
 
-
-    // Consider Revising : Are these variables needed or not ?
-//    private Double latMax;
-//    private Double lonMax;
-//    private Double latMin;
-//    private Double lonMin;
-
-
     // real time variables : the values of these variables are generated in real time.
     private Double rt_distance;
 
 
+    public String getDescriptionShort() {
+        return descriptionShort;
+    }
 
+    public void setDescriptionShort(String descriptionShort) {
+        this.descriptionShort = descriptionShort;
+    }
+
+    public String getDescriptionLong() {
+        return descriptionLong;
+    }
+
+    public void setDescriptionLong(String descriptionLong) {
+        this.descriptionLong = descriptionLong;
+    }
 
     public String getISOCurrencyCode() {
         return ISOCurrencyCode;

@@ -61,13 +61,25 @@ public class ItemCategory {
 	private Integer parentCategoryID;
 	private boolean isLeafNode;
 	private String imagePath;
+	private Integer categoryOrder;
 	// recently added
 	private boolean isAbstractNode;
 	private String descriptionShort;
 	private boolean isEnabled;
 	private boolean isWaitlisted;
-	private Integer categoryOrder;
 
+
+	private String rt_gidb_service_url;
+	ItemCategory parentCategory = null;
+
+
+	public String getRt_gidb_service_url() {
+		return rt_gidb_service_url;
+	}
+
+	public void setRt_gidb_service_url(String rt_gidb_service_url) {
+		this.rt_gidb_service_url = rt_gidb_service_url;
+	}
 
 	//no-args Constructor
 	public ItemCategory() {
