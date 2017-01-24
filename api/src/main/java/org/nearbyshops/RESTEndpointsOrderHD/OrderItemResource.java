@@ -11,7 +11,7 @@ import javax.ws.rs.core.Response.Status;
 import java.util.List;
 
 
-@Path("/OrderItemPFS")
+@Path("/OrderItem")
 public class OrderItemResource {
 
 

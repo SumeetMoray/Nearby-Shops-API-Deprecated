@@ -23,7 +23,7 @@ import java.util.List;
 
 
 @Singleton
-@Path("/OrderPFS/ShopStaff")
+@Path("/Order/ShopStaff")
 public class OrderEndpointShopStaff {
 
 
@@ -66,14 +66,14 @@ public class OrderEndpointShopStaff {
 	{
 		Order order = Globals.orderService.readStatusHomeDelivery(orderID);
 
-		System.out.println("Set Confirmed : ShopID : OrderPFS : " + order.getShopID());
+		System.out.println("Set Confirmed : ShopID : Order : " + order.getShopID());
 
 		if(Globals.accountApproved instanceof ShopAdmin)
 		{
 			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
 			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
 
-			System.out.println("ShopID : OrderPFS : " + order.getShopID() + "ShopID : Shop : " + shop.getShopID());
+			System.out.println("ShopID : Order : " + order.getShopID() + "ShopID : Shop : " + shop.getShopID());
 
 			if(order.getShopID()!=shop.getShopID())
 			{
