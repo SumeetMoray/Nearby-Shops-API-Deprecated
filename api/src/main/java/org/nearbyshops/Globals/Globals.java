@@ -113,7 +113,7 @@ public class Globals {
 	public static String broadcastMessage(String message, int shopID) {
 
 		OutboundEvent.Builder eventBuilder = new OutboundEvent.Builder();
-		OutboundEvent event = eventBuilder.name("OrderPFS Received !")
+		OutboundEvent event = eventBuilder.name("Order Received !")
 				.mediaType(MediaType.TEXT_PLAIN_TYPE)
 				.data(String.class, message)
 				.build();

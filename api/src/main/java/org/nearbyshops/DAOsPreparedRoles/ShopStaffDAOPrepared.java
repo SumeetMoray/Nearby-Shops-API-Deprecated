@@ -75,9 +75,16 @@ public class ShopStaffDAOPrepared {
 				+ ShopStaff.HANDOVER_TO_DELIVERY + ","
 				+ ShopStaff.MARK_ORDERS_DELIVERED + ","
 				+ ShopStaff.ACCEPT_PAYMENTS_FROM_DELIVERY + ","
-				+ ShopStaff.ACCEPT_RETURNS + ""
+				+ ShopStaff.ACCEPT_RETURNS + ","
 
-				+ ") VALUES(?,?,?, ?, ?,? ,?,?,?,? ,?,? ,?,? ,?,?,?,?,?,?,?)";
+				+ ShopStaff.CANCEL_ORDERS_PFS + ","
+				+ ShopStaff.CONFIRM_ORDERS_PFS + ","
+				+ ShopStaff.SET_ORDERS_PACKED_PFS + ","
+				+ ShopStaff.SET_READY_FOR_PICKUP_PFS + ","
+				+ ShopStaff.SET_PAYMENT_RECEIVED_PFS + ","
+				+ ShopStaff.MARK_DELIVERED_PFS + ""
+
+				+ ") VALUES(?,?,?, ?, ?,? ,?,?,?,? ,?,? ,?,? ,?,?,?,?,?,?,? ,?,?,?,?,?,?)";
 
 		try {
 
@@ -127,6 +134,13 @@ public class ShopStaffDAOPrepared {
 			statement.setObject(++i,shopStaff.isMarkOrdersDelivered());
 			statement.setObject(++i,shopStaff.isAcceptPaymentsFromDelivery());
 			statement.setObject(++i,shopStaff.isAcceptReturns());
+
+			statement.setObject(++i,shopStaff.isPermitCancelOrdersPFS());
+			statement.setObject(++i,shopStaff.isPermitConfirmOrdersPFS());
+			statement.setObject(++i,shopStaff.isPermitSetOrdersPackedPFS());
+			statement.setObject(++i,shopStaff.isPermitSetReadyForPickupPFS());
+			statement.setObject(++i,shopStaff.isPermitSetPaymentReceivedPFS());
+			statement.setObject(++i,shopStaff.isPermitMarkDeliveredPFS());
 
 
 			statement.executeUpdate();
@@ -227,7 +241,14 @@ public class ShopStaffDAOPrepared {
 				+ ShopStaff.HANDOVER_TO_DELIVERY + "=?,"
 				+ ShopStaff.MARK_ORDERS_DELIVERED + "=?,"
 				+ ShopStaff.ACCEPT_PAYMENTS_FROM_DELIVERY + "=?,"
-				+ ShopStaff.ACCEPT_RETURNS + "=?"
+				+ ShopStaff.ACCEPT_RETURNS + "=?,"
+
+				+ ShopStaff.CANCEL_ORDERS_PFS + "=?,"
+				+ ShopStaff.CONFIRM_ORDERS_PFS + "=?,"
+				+ ShopStaff.SET_ORDERS_PACKED_PFS + "=?,"
+				+ ShopStaff.SET_READY_FOR_PICKUP_PFS + "=?,"
+				+ ShopStaff.SET_PAYMENT_RECEIVED_PFS + "=?,"
+				+ ShopStaff.MARK_DELIVERED_PFS + "=?"
 
 				+ " WHERE " + ShopStaff.STAFF_ID + " = ?";
 
@@ -277,6 +298,14 @@ public class ShopStaffDAOPrepared {
 			statement.setObject(++i,shopStaff.isMarkOrdersDelivered());
 			statement.setObject(++i,shopStaff.isAcceptPaymentsFromDelivery());
 			statement.setObject(++i,shopStaff.isAcceptReturns());
+
+
+			statement.setObject(++i,shopStaff.isPermitCancelOrdersPFS());
+			statement.setObject(++i,shopStaff.isPermitConfirmOrdersPFS());
+			statement.setObject(++i,shopStaff.isPermitSetOrdersPackedPFS());
+			statement.setObject(++i,shopStaff.isPermitSetReadyForPickupPFS());
+			statement.setObject(++i,shopStaff.isPermitSetPaymentReceivedPFS());
+			statement.setObject(++i,shopStaff.isPermitMarkDeliveredPFS());
 
 
 			statement.setObject(++i,shopStaff.getStaffID());
@@ -670,7 +699,14 @@ public class ShopStaffDAOPrepared {
 				+ ShopStaff.HANDOVER_TO_DELIVERY + ","
 				+ ShopStaff.MARK_ORDERS_DELIVERED + ","
 				+ ShopStaff.ACCEPT_PAYMENTS_FROM_DELIVERY + ","
-				+ ShopStaff.ACCEPT_RETURNS + ""
+				+ ShopStaff.ACCEPT_RETURNS + ","
+
+				+ ShopStaff.CANCEL_ORDERS_PFS + ","
+				+ ShopStaff.CONFIRM_ORDERS_PFS + ","
+				+ ShopStaff.SET_ORDERS_PACKED_PFS + ","
+				+ ShopStaff.SET_READY_FOR_PICKUP_PFS + ","
+				+ ShopStaff.SET_PAYMENT_RECEIVED_PFS + ","
+				+ ShopStaff.MARK_DELIVERED_PFS + ""
 
 				+ " FROM " + ShopStaff.TABLE_NAME
 				+ " INNER JOIN " + Usernames.TABLE_NAME + " ON (" + ShopStaff.STAFF_ID + " = " + Usernames.USER_ID + ")";
@@ -768,6 +804,13 @@ public class ShopStaffDAOPrepared {
 				shopStaff.setMarkOrdersDelivered(rs.getBoolean(ShopStaff.MARK_ORDERS_DELIVERED));
 				shopStaff.setAcceptPaymentsFromDelivery(rs.getBoolean(ShopStaff.ACCEPT_PAYMENTS_FROM_DELIVERY));
 				shopStaff.setAcceptReturns(rs.getBoolean(ShopStaff.ACCEPT_RETURNS));
+
+				shopStaff.setPermitCancelOrdersPFS(rs.getBoolean(ShopStaff.CANCEL_ORDERS_PFS));
+				shopStaff.setPermitConfirmOrdersPFS(rs.getBoolean(ShopStaff.CONFIRM_ORDERS_PFS));
+				shopStaff.setPermitSetOrdersPackedPFS(rs.getBoolean(ShopStaff.SET_ORDERS_PACKED_PFS));
+				shopStaff.setPermitSetReadyForPickupPFS(rs.getBoolean(ShopStaff.SET_READY_FOR_PICKUP_PFS));
+				shopStaff.setPermitSetPaymentReceivedPFS(rs.getBoolean(ShopStaff.SET_PAYMENT_RECEIVED_PFS));
+				shopStaff.setPermitMarkDeliveredPFS(rs.getBoolean(ShopStaff.MARK_DELIVERED_PFS));
 
 				shopStaffList.add(shopStaff);
 			}
@@ -1103,7 +1146,14 @@ public class ShopStaffDAOPrepared {
 				+ ShopStaff.HANDOVER_TO_DELIVERY + ","
 				+ ShopStaff.MARK_ORDERS_DELIVERED + ","
 				+ ShopStaff.ACCEPT_PAYMENTS_FROM_DELIVERY + ","
-				+ ShopStaff.ACCEPT_RETURNS + ""
+				+ ShopStaff.ACCEPT_RETURNS + ","
+
+				+ ShopStaff.CANCEL_ORDERS_PFS + ","
+				+ ShopStaff.CONFIRM_ORDERS_PFS + ","
+				+ ShopStaff.SET_ORDERS_PACKED_PFS + ","
+				+ ShopStaff.SET_READY_FOR_PICKUP_PFS + ","
+				+ ShopStaff.SET_PAYMENT_RECEIVED_PFS + ","
+				+ ShopStaff.MARK_DELIVERED_PFS + ""
 
 				+ " FROM " + ShopStaff.TABLE_NAME
 				+ " INNER JOIN " + Usernames.TABLE_NAME + " ON (" + ShopStaff.STAFF_ID + " = " + Usernames.USER_ID + ")"
@@ -1163,6 +1213,14 @@ public class ShopStaffDAOPrepared {
 				shopStaff.setMarkOrdersDelivered(rs.getBoolean(ShopStaff.MARK_ORDERS_DELIVERED));
 				shopStaff.setAcceptPaymentsFromDelivery(rs.getBoolean(ShopStaff.ACCEPT_PAYMENTS_FROM_DELIVERY));
 				shopStaff.setAcceptReturns(rs.getBoolean(ShopStaff.ACCEPT_RETURNS));
+
+
+				shopStaff.setPermitCancelOrdersPFS(rs.getBoolean(ShopStaff.CANCEL_ORDERS_PFS));
+				shopStaff.setPermitConfirmOrdersPFS(rs.getBoolean(ShopStaff.CONFIRM_ORDERS_PFS));
+				shopStaff.setPermitSetOrdersPackedPFS(rs.getBoolean(ShopStaff.SET_ORDERS_PACKED_PFS));
+				shopStaff.setPermitSetReadyForPickupPFS(rs.getBoolean(ShopStaff.SET_READY_FOR_PICKUP_PFS));
+				shopStaff.setPermitSetPaymentReceivedPFS(rs.getBoolean(ShopStaff.SET_PAYMENT_RECEIVED_PFS));
+				shopStaff.setPermitMarkDeliveredPFS(rs.getBoolean(ShopStaff.MARK_DELIVERED_PFS));
 
 			}
 
@@ -1320,7 +1378,14 @@ public class ShopStaffDAOPrepared {
 						+ ShopStaff.HANDOVER_TO_DELIVERY + ","
 						+ ShopStaff.MARK_ORDERS_DELIVERED + ","
 						+ ShopStaff.ACCEPT_PAYMENTS_FROM_DELIVERY + ","
-						+ ShopStaff.ACCEPT_RETURNS + ""
+						+ ShopStaff.ACCEPT_RETURNS + ","
+
+						+ ShopStaff.CANCEL_ORDERS_PFS + ","
+						+ ShopStaff.CONFIRM_ORDERS_PFS + ","
+						+ ShopStaff.SET_ORDERS_PACKED_PFS + ","
+						+ ShopStaff.SET_READY_FOR_PICKUP_PFS + ","
+						+ ShopStaff.SET_PAYMENT_RECEIVED_PFS + ","
+						+ ShopStaff.MARK_DELIVERED_PFS + ""
 
 						+ " FROM " + ShopStaff.TABLE_NAME
 						+ " INNER JOIN " + Usernames.TABLE_NAME + " ON (" + ShopStaff.STAFF_ID + " = " + Usernames.USER_ID + ")";
@@ -1409,6 +1474,14 @@ public class ShopStaffDAOPrepared {
 				shopStaff.setMarkOrdersDelivered(rs.getBoolean(ShopStaff.MARK_ORDERS_DELIVERED));
 				shopStaff.setAcceptPaymentsFromDelivery(rs.getBoolean(ShopStaff.ACCEPT_PAYMENTS_FROM_DELIVERY));
 				shopStaff.setAcceptReturns(rs.getBoolean(ShopStaff.ACCEPT_RETURNS));
+
+
+				shopStaff.setPermitCancelOrdersPFS(rs.getBoolean(ShopStaff.CANCEL_ORDERS_PFS));
+				shopStaff.setPermitConfirmOrdersPFS(rs.getBoolean(ShopStaff.CONFIRM_ORDERS_PFS));
+				shopStaff.setPermitSetOrdersPackedPFS(rs.getBoolean(ShopStaff.SET_ORDERS_PACKED_PFS));
+				shopStaff.setPermitSetReadyForPickupPFS(rs.getBoolean(ShopStaff.SET_READY_FOR_PICKUP_PFS));
+				shopStaff.setPermitSetPaymentReceivedPFS(rs.getBoolean(ShopStaff.SET_PAYMENT_RECEIVED_PFS));
+				shopStaff.setPermitMarkDeliveredPFS(rs.getBoolean(ShopStaff.MARK_DELIVERED_PFS));
 
 			}
 

@@ -2,10 +2,9 @@ package org.nearbyshops.DAOPreparedPickFromShop;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.Model.Cart;
-import org.nearbyshops.Model.CartItem;
-import org.nearbyshops.Model.Order;
-import org.nearbyshops.Model.Shop;
+import org.nearbyshops.Model.*;
+import org.nearbyshops.ModelPickFromShop.OrderItemPFS;
+import org.nearbyshops.ModelPickFromShop.OrderPFS;
 
 import java.sql.*;
 
@@ -22,7 +21,7 @@ public class PlaceOrderPFS_DAO {
 //    private ShopItemDAO shopItemDAO = Globals.shopItemDAO;
 
 
-    public int placeOrderNew(Order order, int cartID) {
+    public int placeOrderNew(OrderPFS order, int cartID) {
 
         Connection connection = null;
 
@@ -39,35 +38,28 @@ public class PlaceOrderPFS_DAO {
         int updatedItemsCount = -1;
 
 
-        String copyCartToOrder = " insert into " + Order.TABLE_NAME
+        String copyCartToOrder = " insert into " + OrderPFS.TABLE_NAME
                 + " ( "
-                + Order.END_USER_ID + ","
-                + Order.SHOP_ID + ","
+                + OrderPFS.END_USER_ID + ","
+                + OrderPFS.SHOP_ID + ","
 
-                + " " + Order.STATUS_HOME_DELIVERY + ","
-                + " " + Order.STATUS_PICK_FROM_SHOP + ","
+                + " " + OrderPFS.STATUS_PICK_FROM_SHOP + ","
 
-                + " " + Order.PAYMENT_RECEIVED + ","
-                + " " + Order.DELIVERY_RECEIVED + ","
+                + " " + OrderPFS.PAYMENT_RECEIVED + ","
+                + " " + OrderPFS.DELIVERY_RECEIVED + ","
 
-                + " " + Order.DELIVERY_CHARGES + ","
-                + " " + Order.DELIVERY_ADDRESS_ID + ","
+                + " " + OrderPFS.DELIVERY_ADDRESS_ID + ","
 //                + OrderPFS.DELIVERY_GUY_SELF_ID + ","
-                + Order.PICK_FROM_SHOP + ""
                 + " ) " +
                 " select "
                 + Cart.END_USER_ID + ","
                 + Cart.SHOP_ID + ","
                 + " 1 " + ","
-                + " 1 " + ","
 
                 + " false " + ","
                 + " false " + ","
 
-                + " ? " + ","
-                + " ? " + ","
-
-                + " false " + ""
+                + " ? " + ""
                 + " from " + Cart.TABLE_NAME
                 + " where " + Cart.CART_ID + " = ?";
 
@@ -78,21 +70,31 @@ public class PlaceOrderPFS_DAO {
 
         String copyCartItemToOrderItem =
 
-                "insert into " +
-                        " order_item" +
-                        " (order_id" + "," + "item_id" + "," + " item_price_at_order" + ","
-                        + "item_quantity) " +
+                "insert into " + OrderItemPFS.TABLE_NAME +
+                        " ("
+                        + OrderItemPFS.ORDER_ID  + ","
+                        + OrderItemPFS.ITEM_ID + ","
+                        + OrderItemPFS.ITEM_PRICE_AT_ORDER + ","
+                        + OrderItemPFS.ITEM_QUANTITY + ") " +
 
-                        " select " + " ? " +
-                        ", shop_item.item_id,item_price, cart_item.item_quantity from cart_item, cart,shop_item " +
-                        " where " +
-                        " cart.cart_id = cart_item.cart_id " +
-                        " and " +
-                        "shop_item.shop_id = cart.shop_id" +
-                        " and " +
-                        " shop_item.item_id = cart_item.item_id " +
-                        " and " +
-                        " cart.cart_id = ? ";
+                        " select " + " ? " + ","
+                        + ShopItem.TABLE_NAME+ "." + ShopItem.ITEM_ID + ","
+                        + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_PRICE + ","
+                        + CartItem.TABLE_NAME + "." + CartItem.ITEM_QUANTITY
+                        + " from "
+                        + CartItem.TABLE_NAME + ","
+                        + Cart.TABLE_NAME + ","
+                        + ShopItem.TABLE_NAME  +
+                        " where "
+                        + Cart.TABLE_NAME + "." + Cart.CART_ID + " = " + CartItem.TABLE_NAME + "." + CartItem.CART_ID +
+                        " and "
+                        + ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID + " = " + Cart.TABLE_NAME + "." + Cart.SHOP_ID +
+                        " and "
+                        + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + " = " + CartItem.TABLE_NAME + "." + CartItem.ITEM_ID +
+                        " and "
+                        + Cart.TABLE_NAME + "." + Cart.CART_ID + " = ? ";
+
+
 
 
         String copyCartItemToOrderItemBackup =
@@ -116,6 +118,16 @@ public class PlaceOrderPFS_DAO {
 
 
         String updateQuantity =
+                " Update " + ShopItem.TABLE_NAME +
+                        " SET " +  ShopItem.AVAILABLE_ITEM_QUANTITY + " = " +  ShopItem.AVAILABLE_ITEM_QUANTITY + " - " +  OrderItemPFS.ITEM_QUANTITY +
+                        " from " +  OrderItemPFS.TABLE_NAME + "," + OrderPFS.TABLE_NAME +
+                        " where " + OrderItemPFS.TABLE_NAME + "." + OrderItemPFS.ITEM_ID + " = " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID +
+                        " and " + OrderPFS.TABLE_NAME+ "." + OrderPFS.ORDER_ID_PFS + " = " + OrderItemPFS.TABLE_NAME+ "."  + OrderItemPFS.ORDER_ID +
+                        " and " + ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID + " = " + OrderPFS.TABLE_NAME + "." + OrderPFS.SHOP_ID +
+                        " and " + OrderPFS.TABLE_NAME + "." + OrderPFS.ORDER_ID_PFS + " = ?";
+
+
+        String updateQuantityBackup =
 
                 " Update shop_item SET available_item_quantity = available_item_quantity - item_quantity from order_item,customer_order " +
                         " where order_item.item_id = shop_item.item_id " +
@@ -126,27 +138,27 @@ public class PlaceOrderPFS_DAO {
 
 
         String deleteCart = " DELETE FROM " + CartItem.TABLE_NAME +
-                            " WHERE " + Cart.CART_ID + " = ?";
+                " WHERE " + Cart.CART_ID + " = ?";
 
 
         String deleteCartItems = " DELETE FROM " + Cart.TABLE_NAME +
-                                 " WHERE " + Cart.CART_ID + " = ?";
+                " WHERE " + Cart.CART_ID + " = ?";
 
 
-        String updateOrder = "UPDATE " + Order.TABLE_NAME
-
-                + " SET "
-                + Order.END_USER_ID + " = ?,"
-                + " " + Order.SHOP_ID + " = ?,"
-                + " " + Order.STATUS_HOME_DELIVERY + " = ?,"
-                + " " + Order.STATUS_PICK_FROM_SHOP + " = ?,"
-                + " " + Order.PAYMENT_RECEIVED + " = ?,"
-                + " " + Order.DELIVERY_RECEIVED + " = ?,"
-                + " " + Order.DELIVERY_CHARGES + " = ?,"
-                + " " + Order.DELIVERY_ADDRESS_ID + " = ?,"
-                + Order.DELIVERY_GUY_SELF_ID + " = ?,"
-                + Order.PICK_FROM_SHOP + " = ?"
-                + " WHERE " + Order.ORDER_ID + " = ?";
+//        String updateOrder = "UPDATE " + Order.TABLE_NAME
+//
+//                + " SET "
+//                + Order.END_USER_ID + " = ?,"
+//                + " " + Order.SHOP_ID + " = ?,"
+//                + " " + Order.STATUS_HOME_DELIVERY + " = ?,"
+//                + " " + Order.STATUS_PICK_FROM_SHOP + " = ?,"
+//                + " " + Order.PAYMENT_RECEIVED + " = ?,"
+//                + " " + Order.DELIVERY_RECEIVED + " = ?,"
+//                + " " + Order.DELIVERY_CHARGES + " = ?,"
+//                + " " + Order.DELIVERY_ADDRESS_ID + " = ?,"
+//                + Order.DELIVERY_GUY_SELF_ID + " = ?,"
+//                + Order.PICK_FROM_SHOP + " = ?"
+//                + " WHERE " + Order.ORDER_ID + " = ?";
 
 
 
@@ -157,9 +169,8 @@ public class PlaceOrderPFS_DAO {
 
 
             statementCopyCartToOrder = connection.prepareStatement(copyCartToOrder,PreparedStatement.RETURN_GENERATED_KEYS);
-            statementCopyCartToOrder.setInt(1,0);
-            statementCopyCartToOrder.setInt(2,order.getDeliveryAddressID());
-            statementCopyCartToOrder.setInt(3,cartID);
+            statementCopyCartToOrder.setInt(1,order.getDeliveryAddressID());
+            statementCopyCartToOrder.setInt(2,cartID);
             statementCopyCartToOrder.executeUpdate();
 
             ResultSet rsCopyCartToOrder = statementCopyCartToOrder.getGeneratedKeys();
