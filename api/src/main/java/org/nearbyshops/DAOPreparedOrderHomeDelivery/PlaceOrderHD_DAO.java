@@ -75,21 +75,31 @@ public class PlaceOrderHD_DAO {
 
         String copyCartItemToOrderItem =
 
-                "insert into " +
-                        " order_item" +
-                        " (order_id" + "," + "item_id" + "," + " item_price_at_order" + ","
-                        + "item_quantity) " +
+                "insert into " + OrderItem.TABLE_NAME +
+                        " ("
+                        + OrderItem.ORDER_ID  + ","
+                        + OrderItem.ITEM_ID + ","
+                        + OrderItem.ITEM_PRICE_AT_ORDER + ","
+                        + OrderItem.ITEM_QUANTITY + ") " +
 
-                        " select " + " ? " +
-                        ", shop_item.item_id,item_price, cart_item.item_quantity from cart_item, cart,shop_item " +
-                        " where " +
-                        " cart.cart_id = cart_item.cart_id " +
-                        " and " +
-                        "shop_item.shop_id = cart.shop_id" +
-                        " and " +
-                        " shop_item.item_id = cart_item.item_id " +
-                        " and " +
-                        " cart.cart_id = ? ";
+                        " select " + " ? " + ","
+                        + ShopItem.TABLE_NAME+ "." + ShopItem.ITEM_ID + ","
+                        + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_PRICE + ","
+                        + CartItem.TABLE_NAME + "." + CartItem.ITEM_QUANTITY
+                        + " from "
+                        + CartItem.TABLE_NAME + ","
+                        + Cart.TABLE_NAME + ","
+                        + ShopItem.TABLE_NAME  +
+                        " where "
+                        + Cart.TABLE_NAME + "." + Cart.CART_ID + " = " + CartItem.TABLE_NAME + "." + CartItem.CART_ID +
+                        " and "
+                        + ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID + " = " + Cart.TABLE_NAME + "." + Cart.SHOP_ID +
+                        " and "
+                        + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + " = " + CartItem.TABLE_NAME + "." + CartItem.ITEM_ID +
+                        " and "
+                        + Cart.TABLE_NAME + "." + Cart.CART_ID + " = ? ";
+
+
 
 
         String copyCartItemToOrderItemBackup =
@@ -113,6 +123,16 @@ public class PlaceOrderHD_DAO {
 
 
         String updateQuantity =
+                        " Update " + ShopItem.TABLE_NAME +
+                        " SET " +  ShopItem.AVAILABLE_ITEM_QUANTITY + " = " +  ShopItem.AVAILABLE_ITEM_QUANTITY + " - " +  OrderItem.ITEM_QUANTITY +
+                        " from " +  OrderItem.TABLE_NAME + "," + Order.TABLE_NAME +
+                        " where " + OrderItem.TABLE_NAME + "." + OrderItem.ITEM_ID + " = " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID +
+                        " and " + Order.TABLE_NAME+ "." + Order.ORDER_ID + " = " + OrderItem.TABLE_NAME+ "."  + OrderItem.ORDER_ID +
+                        " and " + ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID + " = " + Order.TABLE_NAME + "." + Order.SHOP_ID +
+                        " and " + Order.TABLE_NAME + "." + Order.ORDER_ID + " = ?";
+
+
+        String updateQuantityBackup =
 
                 " Update shop_item SET available_item_quantity = available_item_quantity - item_quantity from order_item,customer_order " +
                         " where order_item.item_id = shop_item.item_id " +

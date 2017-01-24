@@ -15,10 +15,7 @@ public class JDBCContract {
 	private static String POSTGRES_PASSWORD = "password";
 	
 	
-	public static String CURRENT_CONNECTION_URL = POSTGRES_CONNECTION_URL_PREPARED
-
-
-			;
+	public static String CURRENT_CONNECTION_URL = POSTGRES_CONNECTION_URL_PREPARED;
 	
 	public static String CURRENT_USERNAME = POSTGRES_USERNAME;
 	public static String CURRENT_PASSWORD = POSTGRES_PASSWORD;

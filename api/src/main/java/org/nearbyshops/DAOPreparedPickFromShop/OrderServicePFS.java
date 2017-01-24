@@ -1204,7 +1204,7 @@ public class OrderServicePFS {
 
             int status = order.getStatusPickFromShop();
 
-            if (status == 1 || status == 2 || status == 3 || status == 4)
+            if (status == 1 || status == 2 || status == 3)
             {
                 order.setStatusPickFromShop(OrderStatusPickFromShop.CANCELLED_BY_SHOP);
             }
