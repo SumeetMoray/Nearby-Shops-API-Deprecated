@@ -8,6 +8,9 @@ import org.nearbyshops.DAOPreparedCartOrder.*;
 import org.nearbyshops.DAOPreparedOrderHomeDelivery.OrderItemService;
 import org.nearbyshops.DAOPreparedOrderHomeDelivery.OrderService;
 import org.nearbyshops.DAOPreparedOrderHomeDelivery.PlaceOrderHD_DAO;
+import org.nearbyshops.DAOPreparedPickFromShop.OrderItemServicePFS;
+import org.nearbyshops.DAOPreparedPickFromShop.OrderServicePFS;
+import org.nearbyshops.DAOPreparedPickFromShop.PlaceOrderPFS_DAO;
 import org.nearbyshops.DAOPreparedReviewItem.FavoriteItemDAOPrepared;
 import org.nearbyshops.DAOPreparedReviewItem.ItemReviewDAOPrepared;
 import org.nearbyshops.DAOPreparedReviewItem.ItemReviewThanksDAOPrepared;
@@ -75,6 +78,12 @@ public class Globals {
 	public static ForbiddenOperationsDAO forbiddenOperationsDAO = new ForbiddenOperationsDAO();
 
 	public static PlaceOrderHD_DAO placeOrderHD_dao = new PlaceOrderHD_DAO();
+
+
+	// DAO Pick for shop
+	public static OrderItemServicePFS orderItemServicePFS = new OrderItemServicePFS();
+	public static OrderServicePFS orderServicePFS = new OrderServicePFS();
+	public static PlaceOrderPFS_DAO placeOrderPFS_dao = new PlaceOrderPFS_DAO();
 
 
 

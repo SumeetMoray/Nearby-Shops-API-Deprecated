@@ -85,7 +85,7 @@ public class OrderEndpointShopStaff {
 		{
 			ShopStaff shopStaff = (ShopStaff) Globals.accountApproved;
 
-			if(!shopStaff.isSetOrdersPacked())
+			if(!shopStaff.isConfirmOrders())
 			{
 				throw new ForbiddenException("Not Permitted !");
 			}

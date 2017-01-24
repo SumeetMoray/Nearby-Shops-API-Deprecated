@@ -1,8 +1,10 @@
-package org.nearbyshops.RESTEndpointsOrderHD;
+package org.nearbyshops.RESTEndpointsOrderPFS;
 
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.OrderItem;
 import org.nearbyshops.ModelEndPoints.OrderItemEndPoint;
+import org.nearbyshops.ModelPickFromShop.OrderItemEndPointPFS;
+import org.nearbyshops.ModelPickFromShop.OrderItemPFS;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -11,11 +13,11 @@ import javax.ws.rs.core.Response.Status;
 import java.util.List;
 
 
-@Path("/OrderItem")
-public class OrderItemResource {
+@Path("/OrderItemPFS")
+public class OrderItemResourcePFS {
 
 
-	public OrderItemResource() {
+	public OrderItemResourcePFS() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -24,11 +26,10 @@ public class OrderItemResource {
 //	@POST
 //	@Consumes(MediaType.APPLICATION_JSON)
 //	@Produces(MediaType.APPLICATION_JSON)
-//	public Response createOrderItem(OrderItem orderItem)
+//	public Response createOrderItem(OrderItemPFS orderItem)
 //	{
 //
-//		int rowCount = Globals.orderItemService.saveOrderItem(orderItem);
-//
+//		int rowCount = Globals.orderItemServicePFS.saveOrderItem(orderItem);
 //
 //
 //		if(rowCount == 1)
@@ -110,7 +111,7 @@ public class OrderItemResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getOrderItem(@QueryParam("OrderID")Integer orderID,
+	public Response getOrderItemPFS(@QueryParam("OrderID")Integer orderID,
 								 @QueryParam("ItemID")Integer itemID,
 								 @QueryParam("SearchString")String searchString,
 								 @QueryParam("SortBy") String sortBy,
@@ -168,19 +169,19 @@ public class OrderItemResource {
 			set_offset = offset;
 		}
 
-		OrderItemEndPoint endPoint = Globals.orderItemService.getEndPointMetadata(orderID,itemID);
+		OrderItemEndPointPFS endPoint = Globals.orderItemServicePFS.getEndPointMetadata(orderID,itemID);
 
 		endPoint.setLimit(set_limit);
 		endPoint.setMax_limit(max_limit);
 		endPoint.setOffset(set_offset);
 
-		List<OrderItem> list = null;
+		List<OrderItemPFS> list = null;
 
 
 		if(metaonly==null || (!metaonly)) {
 
 			list =
-					Globals.orderItemService.getOrderItem(
+					Globals.orderItemServicePFS.getOrderItemPFS(
 							orderID,itemID,
 							searchString,sortBy,limit,offset
 					);
