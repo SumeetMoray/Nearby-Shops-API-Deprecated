@@ -253,7 +253,7 @@ public class OrderItemServicePFS {
 
 		String query = "SELECT " +
 						OrderItemPFS.ORDER_ID + "," +
-						OrderItemPFS.ITEM_ID + "," +
+						OrderItemPFS.TABLE_NAME + "." + OrderItemPFS.ITEM_ID + "," +
 						OrderItemPFS.ITEM_QUANTITY + "," +
 						OrderItemPFS.ITEM_PRICE_AT_ORDER + ","
 						+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + ","

@@ -54,8 +54,8 @@ public class OrderServicePFS {
                 + OrderPFS.TIMESTAMP_PFS_READY_FOR_PICKUP + ","
                 + OrderPFS.TIMESTAMP_PFS_DELIVERED + ""
 
-                + " FROM " + Order.TABLE_NAME
-                + " WHERE " + Order.ORDER_ID + " = " + orderID;
+                + " FROM " + OrderPFS.TABLE_NAME
+                + " WHERE " + OrderPFS.ORDER_ID_PFS + " = " + orderID;
 
         Connection connection = null;
         Statement statement = null;
@@ -171,7 +171,7 @@ public class OrderServicePFS {
                 + OrderPFS.TABLE_NAME + "." + OrderPFS.SHOP_ID + ","
 
                 + OrderPFS.TABLE_NAME + "." + OrderPFS.ORDER_TOTAL + ","
-                + OrderPFS.TABLE_NAME + "." + OrderPFS.ITEM_COUNT + ","
+//                + OrderPFS.TABLE_NAME + "." + OrderPFS.ITEM_COUNT + ","
                 + OrderPFS.TABLE_NAME + "." + OrderPFS.APP_SERVICE_CHARGE + ","
 
                 + OrderPFS.TABLE_NAME + "." + OrderPFS.DELIVERY_ADDRESS_ID + ","
@@ -207,7 +207,7 @@ public class OrderServicePFS {
 //                + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.LATITUDE + ","
 //                + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.LONGITUDE + ","
 
-                + " count( " + OrderItemPFS.ITEM_ID + " ) as item_count, "
+                + " count( " + OrderItemPFS.TABLE_NAME + "." + OrderItemPFS.ITEM_ID + " ) as item_count, "
                 + " sum( " + OrderItemPFS.ITEM_PRICE_AT_ORDER + " * " + OrderItemPFS.ITEM_QUANTITY + ") as item_total "
                 + " FROM " + OrderPFS.TABLE_NAME
                 + " LEFT OUTER JOIN " + OrderItemPFS.TABLE_NAME + " ON (" + OrderPFS.TABLE_NAME + "." + OrderPFS.ORDER_ID_PFS + " = " + OrderItemPFS.TABLE_NAME + "." + OrderItemPFS.ORDER_ID + " ) "
@@ -443,7 +443,7 @@ public class OrderServicePFS {
                 order.setShopID(rs.getInt(OrderPFS.SHOP_ID));
 
                 order.setOrderTotal(rs.getInt(OrderPFS.ORDER_TOTAL));
-                order.setItemCount(rs.getInt(OrderPFS.ITEM_COUNT));
+//                order.setItemCount(rs.getInt(OrderPFS.ITEM_COUNT));
                 order.setAppServiceCharge(rs.getInt(OrderPFS.APP_SERVICE_CHARGE));
 
                 order.setDeliveryAddressID(rs.getInt(OrderPFS.DELIVERY_ADDRESS_ID));
@@ -485,10 +485,13 @@ public class OrderServicePFS {
 
 
                 OrderStatsPFS orderStats = new OrderStatsPFS();
-                orderStats.setOrderID(rs.getInt("order_id"));
+                orderStats.setOrderID(rs.getInt(OrderPFS.ORDER_ID_PFS));
                 orderStats.setItemCount(rs.getInt("item_count"));
                 orderStats.setItemTotal(rs.getInt("item_total"));
                 order.setOrderStats(orderStats);
+
+
+                System.out.println("Item Count : " + orderStats.getItemCount());
 
 
                 ordersList.add(order);

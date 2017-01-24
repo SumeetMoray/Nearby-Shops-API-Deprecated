@@ -1,11 +1,19 @@
 package org.nearbyshops.RESTEndpointsOrderPFS;
 
+import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
+import org.nearbyshops.Model.Order;
 import org.nearbyshops.Model.OrderItem;
+import org.nearbyshops.Model.Shop;
 import org.nearbyshops.ModelEndPoints.OrderItemEndPoint;
 import org.nearbyshops.ModelPickFromShop.OrderItemEndPointPFS;
 import org.nearbyshops.ModelPickFromShop.OrderItemPFS;
+import org.nearbyshops.ModelPickFromShop.OrderPFS;
+import org.nearbyshops.ModelRoles.EndUser;
+import org.nearbyshops.ModelRoles.ShopAdmin;
+import org.nearbyshops.ModelRoles.ShopStaff;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -111,6 +119,7 @@ public class OrderItemResourcePFS {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN,GlobalConstants.ROLE_SHOP_STAFF,GlobalConstants.ROLE_END_USER})
 	public Response getOrderItemPFS(@QueryParam("OrderID")Integer orderID,
 								 @QueryParam("ItemID")Integer itemID,
 								 @QueryParam("SearchString")String searchString,
@@ -120,27 +129,44 @@ public class OrderItemResourcePFS {
 	{
 
 
-/*
-		List<OrderItemPFS> orderList = Globals.orderItemService.getOrderItem(orderID,itemID);
+		OrderPFS order = Globals.orderServicePFS.readStatusPickFromShop(orderID);
 
-		GenericEntity<List<OrderItemPFS>> listEntity = new GenericEntity<List<OrderItemPFS>>(orderList){
-		};
-
-		if(orderList.size()<=0)
+		if(Globals.accountApproved instanceof ShopAdmin)
 		{
+			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
 
-			return Response.status(Status.NO_CONTENT)
-					.entity(listEntity)
-					.build();
-			
-		}else
-		{
+			if(order.getShopID()!=shop.getShopID())
+			{
+				throw new ForbiddenException("Not Permitted !");
+			}
 
-			return Response.status(Status.OK)
-					.entity(listEntity)
-					.build();
 		}
-*/
+		else if(Globals.accountApproved instanceof ShopStaff)
+		{
+			ShopStaff staff = ((ShopStaff) Globals.accountApproved);
+
+			if(order.getShopID()!=staff.getShopID())
+			{
+				throw new ForbiddenException("Not Permitted !");
+			}
+		}
+		else if(Globals.accountApproved instanceof EndUser)
+		{
+			EndUser endUser = (EndUser) Globals.accountApproved;
+
+			if(order.getEndUserID()!= endUser.getEndUserID())
+			{
+				throw new ForbiddenException("Not Permitted !");
+			}
+
+		}
+		else
+		{
+			throw new ForbiddenException("Not Permitted !");
+		}
+
+
 
 
 		////////////////////////////

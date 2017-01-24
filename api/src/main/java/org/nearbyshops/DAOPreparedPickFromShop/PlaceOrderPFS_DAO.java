@@ -48,8 +48,7 @@ public class PlaceOrderPFS_DAO {
                 + " " + OrderPFS.PAYMENT_RECEIVED + ","
                 + " " + OrderPFS.DELIVERY_RECEIVED + ","
 
-                + " " + OrderPFS.DELIVERY_ADDRESS_ID + ","
-//                + OrderPFS.DELIVERY_GUY_SELF_ID + ","
+                + " " + OrderPFS.DELIVERY_ADDRESS_ID + ""
                 + " ) " +
                 " select "
                 + Cart.END_USER_ID + ","

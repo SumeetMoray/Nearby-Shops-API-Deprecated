@@ -14,6 +14,8 @@ import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.*;
 import org.nearbyshops.ModelDelivery.DeliveryAddress;
+import org.nearbyshops.ModelPickFromShop.OrderItemPFS;
+import org.nearbyshops.ModelPickFromShop.OrderPFS;
 import org.nearbyshops.ModelRoles.DeliveryGuySelf;
 import org.nearbyshops.ModelReviewItem.FavouriteItem;
 import org.nearbyshops.ModelReviewItem.ItemReview;
@@ -240,6 +242,10 @@ public class Main {
 
 			statement.executeUpdate(Cart.createTableCartPostgres);
 			statement.executeUpdate(CartItem.createtableCartItemPostgres);
+
+			// order tables pick from shop
+			statement.executeUpdate(OrderPFS.createTableOrderPFSPostgres);
+			statement.executeUpdate(OrderItemPFS.createtableOrderItemPostgres);
 
 			statement.executeUpdate(ServiceConfigurationLocal.createTableServiceConfigurationPostgres);
 			statement.executeUpdate(Settings.createTableSettingsPostgres);

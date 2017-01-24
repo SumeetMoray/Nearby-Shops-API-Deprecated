@@ -1,9 +1,17 @@
 package org.nearbyshops.RESTEndpointsOrderHD;
 
+import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
+import org.nearbyshops.Model.Order;
 import org.nearbyshops.Model.OrderItem;
+import org.nearbyshops.Model.Shop;
 import org.nearbyshops.ModelEndPoints.OrderItemEndPoint;
+import org.nearbyshops.ModelPickFromShop.OrderPFS;
+import org.nearbyshops.ModelRoles.EndUser;
+import org.nearbyshops.ModelRoles.ShopAdmin;
+import org.nearbyshops.ModelRoles.ShopStaff;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -110,6 +118,7 @@ public class OrderItemResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN,GlobalConstants.ROLE_SHOP_STAFF,GlobalConstants.ROLE_END_USER})
 	public Response getOrderItem(@QueryParam("OrderID")Integer orderID,
 								 @QueryParam("ItemID")Integer itemID,
 								 @QueryParam("SearchString")String searchString,
@@ -118,6 +127,45 @@ public class OrderItemResource {
 								 @QueryParam("metadata_only")Boolean metaonly)
 	{
 
+		Order order = Globals.orderService.readStatusHomeDelivery(orderID);
+
+
+		if(Globals.accountApproved instanceof ShopAdmin)
+		{
+			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
+			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
+
+			if(order.getShopID()!=shop.getShopID())
+			{
+				throw new ForbiddenException("Not Permitted !");
+			}
+
+		}
+		else if(Globals.accountApproved instanceof ShopStaff)
+		{
+			ShopStaff staff = ((ShopStaff) Globals.accountApproved);
+
+			if(order.getShopID()!=staff.getShopID())
+			{
+				throw new ForbiddenException("Not Permitted !");
+			}
+		}
+		else if(Globals.accountApproved instanceof EndUser)
+		{
+			EndUser endUser = (EndUser) Globals.accountApproved;
+
+			if(order.getEndUserID()!=endUser.getEndUserID())
+			{
+				throw new ForbiddenException("Not Permitted !");
+			}
+
+		}
+		else
+		{
+			throw new ForbiddenException("Not Permitted !");
+		}
+
+//		System.out.println("Entered ...");
 
 /*
 		List<OrderItemPFS> orderList = Globals.orderItemService.getOrderItem(orderID,itemID);

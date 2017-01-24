@@ -65,8 +65,6 @@ public class OrderResource {
 
 		int orderId = Globals.placeOrderHD_dao.placeOrderNew(order,cartID);
 
-
-
 		if(orderId!=-1)
 		{
 			Order orderResult = Globals.orderService.readOrder(orderId);
