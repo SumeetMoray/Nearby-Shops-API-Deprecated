@@ -202,7 +202,7 @@ public class AuthenticationFilterBackup implements ContainerRequestFilter {
             {
                 EndUser endUser = endUserDAOPrepared.checkEndUser(null,username,password);
                 // Distributor account exist and is enabled
-                if(endUser!=null && endUser.getEnabled())
+                if(endUser!=null)
                 {
                     isAllowed = true;
                     return isAllowed;

@@ -321,8 +321,7 @@ public class DeliveryGuySelfDAO {
 		String updateStatement = "UPDATE " + DeliveryGuySelf.TABLE_NAME
 				+ " SET "
 				+ DeliveryGuySelf.NAME + " = ?,"
-				+ DeliveryGuySelf.SHOP_ID + " = ?"
-//				+ DeliveryGuySelf.USERNAME + " = ?,"
+//				+ DeliveryGuySelf.SHOP_ID + " = ?,"
 				+ DeliveryGuySelf.PASSWORD + " = ?,"
 
 				+ DeliveryGuySelf.ABOUT + " = ?,"
@@ -330,11 +329,7 @@ public class DeliveryGuySelfDAO {
 				+ DeliveryGuySelf.PHONE_NUMBER + " = ?,"
 
 				+ DeliveryGuySelf.CURRENT_LATITUDE + " = ?,"
-				+ DeliveryGuySelf.CURRENT_LATITUDE + " = ?,"
-
-//				+ DeliveryGuySelf.IS_ENABLED + " = ?,"
-//				+ DeliveryGuySelf.IS_WAITLISTED + " = ?,"
-
+				+ DeliveryGuySelf.CURRENT_LONGITUDE + " = ?"
 
 				+ " WHERE " + DeliveryGuySelf.DELIVERY_GUY_SELF_ID + " = ?";
 
@@ -358,7 +353,7 @@ public class DeliveryGuySelfDAO {
 
 			int i = 0;
 			statement.setString(++i,deliveryGuySelf.getName());
-			statement.setObject(++i,deliveryGuySelf.getShopID());
+//			statement.setObject(++i,deliveryGuySelf.getShopID());
 //			statement.setString(1,deliveryGuySelf.getUsername());
 			statement.setString(++i,deliveryGuySelf.getPassword());
 

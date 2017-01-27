@@ -28,7 +28,7 @@ public class PlaceOrderHD_DAO {
         PreparedStatement statementUpdateQuantity = null;
         PreparedStatement statementDeleteCart = null;
         PreparedStatement statementDeleteCartItem = null;
-        PreparedStatement statementUpdateOrder = null;
+//        PreparedStatement statementUpdateOrder = null;
 
 
         int orderID = -1;
@@ -301,14 +301,14 @@ public class PlaceOrderHD_DAO {
 
 
 
-            if (statementUpdateOrder != null) {
-                try {
-
-                    statementUpdateOrder.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+//            if (statementUpdateOrder != null) {
+//                try {
+//
+//                    statementUpdateOrder.close();
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                }
+//            }
 
 
 

@@ -28,7 +28,7 @@ public class EndUserService {
 		String insertEndUser = "INSERT INTO "
 				+ EndUser.TABLE_NAME
 				+ "("
-				+ EndUser.USERNAME + ","
+//				+ EndUser.USERNAME + ","
 				+ EndUser.PASSWORD
 				+ ") VALUES("
 				+ "'" + endUser.getUsername() + "'" + ","
@@ -90,7 +90,7 @@ public class EndUserService {
 	{	
 		String updateStatement = "UPDATE " + EndUser.TABLE_NAME
 				+ " SET "
-				+ EndUser.USERNAME + " = " + "'" + endUser.getUsername() + "'" + ","
+//				+ EndUser.USERNAME + " = " + "'" + endUser.getUsername() + "'" + ","
 				+ EndUser.PASSWORD + " = " + "'" + endUser.getPassword() + "'"
 				+ " WHERE "
 				+ EndUser.END_USER_ID  + " = " + endUser.getEndUserID();
@@ -230,7 +230,7 @@ public class EndUserService {
 				EndUser endUser = new EndUser();
 
 				endUser.setEndUserID(rs.getInt(EndUser.END_USER_ID));
-				endUser.setUsername(rs.getString(EndUser.USERNAME));
+//				endUser.setUsername(rs.getString(EndUser.USERNAME));
 
 				endUsersList.add(endUser);
 			}
@@ -306,7 +306,7 @@ public class EndUserService {
 			{
 				endUser = new EndUser();
 				endUser.setEndUserID(rs.getInt(EndUser.END_USER_ID));
-				endUser.setUsername(rs.getString(EndUser.USERNAME));
+//				endUser.setUsername(rs.getString(EndUser.USERNAME));
 			}
 			
 			
@@ -370,8 +370,8 @@ public class EndUserService {
 
 		else if(username!=null)
 		{
-			query = "SELECT * FROM " + EndUser.TABLE_NAME
-					+ " WHERE " +  EndUser.USERNAME + " = " + "'" + username + "'";
+//			query = "SELECT * FROM " + EndUser.TABLE_NAME
+//					+ " WHERE " +  EndUser.USERNAME + " = " + "'" + username + "'";
 
 		}
 
@@ -406,7 +406,7 @@ public class EndUserService {
 				endUser = new EndUser();
 
 				endUser.setEndUserID(rs.getInt(EndUser.END_USER_ID));
-				endUser.setUsername(rs.getString(EndUser.USERNAME));
+//				endUser.setUsername(rs.getString(EndUser.USERNAME));
 				endUser.setPassword(rs.getString(EndUser.PASSWORD));
 			}
 

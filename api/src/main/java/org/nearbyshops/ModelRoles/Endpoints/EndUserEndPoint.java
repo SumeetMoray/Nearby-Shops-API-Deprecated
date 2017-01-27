@@ -1,4 +1,4 @@
-package org.nearbyshops.ModelEndPoints;
+package org.nearbyshops.ModelRoles.Endpoints;
 
 import org.nearbyshops.ModelRoles.EndUser;
 
@@ -9,42 +9,42 @@ import java.util.List;
  */
 public class EndUserEndPoint {
 
-    private Integer itemCount;
-    private Integer offset;
-    private Integer limit;
-    private Integer max_limit;
+    private int itemCount;
+    private int offset;
+    private int limit;
+    private int max_limit;
     private List<EndUser> results;
 
 
-    public Integer getItemCount() {
+    public int getItemCount() {
         return itemCount;
     }
 
-    public void setItemCount(Integer itemCount) {
+    public void setItemCount(int itemCount) {
         this.itemCount = itemCount;
     }
 
-    public Integer getOffset() {
+    public int getOffset() {
         return offset;
     }
 
-    public void setOffset(Integer offset) {
+    public void setOffset(int offset) {
         this.offset = offset;
     }
 
-    public Integer getLimit() {
+    public int getLimit() {
         return limit;
     }
 
-    public void setLimit(Integer limit) {
+    public void setLimit(int limit) {
         this.limit = limit;
     }
 
-    public Integer getMax_limit() {
+    public int getMax_limit() {
         return max_limit;
     }
 
-    public void setMax_limit(Integer max_limit) {
+    public void setMax_limit(int max_limit) {
         this.max_limit = max_limit;
     }
 

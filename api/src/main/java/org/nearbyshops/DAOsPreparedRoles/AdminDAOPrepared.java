@@ -5,7 +5,10 @@ import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.ModelRoles.Admin;
 import org.nearbyshops.ModelRoles.Usernames;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -336,139 +339,6 @@ public class AdminDAOPrepared {
 	}
 
 
-//	public int deleteAdmin(int adminID) {
-//
-//		String deleteStatement = "DELETE FROM " + Admin.TABLE_NAME
-//				+ " WHERE "
-//				+ Admin.ADMIN_ID + " = ?";
-//
-//
-//		Connection connection = null;
-//		PreparedStatement statement = null;
-//		int rowsCountDeleted = 0;
-//		try {
-//
-//			connection = dataSource.getConnection();
-//			statement = connection.prepareStatement(deleteStatement);
-//
-//			statement.setInt(1, adminID);
-//
-//			rowsCountDeleted = statement.executeUpdate();
-//
-//			System.out.println(" Deleted Count: " + rowsCountDeleted);
-//
-//			connection.close();
-//
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} finally
-//
-//		{
-//
-//			try {
-//
-//				if (statement != null) {
-//					statement.close();
-//				}
-//			} catch (SQLException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//
-//			try {
-//
-//				if (connection != null) {
-//					connection.close();
-//				}
-//			} catch (SQLException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-//
-//
-//		return rowsCountDeleted;
-//	}
-
-
-
-//
-//	public ArrayList<Admin> getAdmin() {
-//		String query = "SELECT * FROM " + Admin.TABLE_NAME;
-//		ArrayList<Admin> serviceProvidersList = new ArrayList<Admin>();
-//
-//
-//		Connection connection = null;
-//		Statement statement = null;
-//		ResultSet rs = null;
-//
-//		try {
-//
-//			connection = dataSource.getConnection();
-//			statement = connection.createStatement();
-//
-//			rs = statement.executeQuery(query);
-//
-//			while (rs.next()) {
-//
-//				Admin admin = new Admin();
-//
-//				admin.setAdminID(rs.getInt(Admin.ADMIN_ID));
-//				admin.setAdministratorName(rs.getString(Admin.ADMIN_NAME));
-//				admin.setUsername(rs.getString(Admin.USER_NAME));
-//				admin.setPassword(rs.getString(Admin.PASSWORD));
-//
-//				admin.setAbout(rs.getString(Admin.ABOUT));
-//				admin.setProfileImageURL(rs.getString(Admin.PROFILE_IMAGE_URL));
-//
-//				serviceProvidersList.add(admin);
-//
-//			}
-//
-//
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} finally
-//
-//		{
-//
-//			try {
-//				if (rs != null) {
-//					rs.close();
-//				}
-//			} catch (SQLException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//
-//			try {
-//
-//				if (statement != null) {
-//					statement.close();
-//				}
-//			} catch (SQLException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//
-//			try {
-//
-//				if (connection != null) {
-//					connection.close();
-//				}
-//			} catch (SQLException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-//
-//
-//		return serviceProvidersList;
-//	}
-
-
 	public List<Admin> getAdmin(String username, Integer admin_id)
 	{
 		boolean isFirst = true;
@@ -494,6 +364,7 @@ public class AdminDAOPrepared {
 			query = query + " WHERE " + Usernames.USERNAME + " = ?";
 			isFirst = false;
 		}
+
 
 		if(admin_id!=null)
 		{

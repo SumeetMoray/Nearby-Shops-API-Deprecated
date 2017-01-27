@@ -1,11 +1,11 @@
-package org.nearbyshops.ModelRoles;
+package org.nearbyshops.ModelRoles.Backups;
 
 import java.sql.Timestamp;
 
 /**
  * Created by sumeet on 29/5/16.
  */
-public class EndUser {
+public class EndUserBackups {
 
 
     // Table Name for EndUser
@@ -15,7 +15,7 @@ public class EndUser {
 
     public static final String END_USER_ID = "ID";
     public static final String END_USER_NAME = "END_USER_NAME";
-//    public static final String USERNAME = "USERNAME";
+    public static final String USERNAME = "USERNAME";
     public static final String PASSWORD = "PASSWORD";
 
     public static final String ABOUT = "ABOUT";
@@ -23,8 +23,8 @@ public class EndUser {
 
 
     // to be Implemented
-//    public static final String IS_ENABLED = "IS_ENABLED";
-//    public static final String IS_WAITLISTED = "IS_WAITLISTED";
+    public static final String IS_ENABLED = "IS_ENABLED";
+    public static final String IS_WAITLISTED = "IS_WAITLISTED";
 
 
     // to be implemented
@@ -43,21 +43,20 @@ public class EndUser {
     // Create Table EndUser
 
     public static final String createTableEndUserPostgres
-            = "CREATE TABLE IF NOT EXISTS " + EndUser.TABLE_NAME + "("
-            + " " + EndUser.END_USER_ID + " INT UNIQUE NOT NULL,"
-            + " " + EndUser.END_USER_NAME + " text,"
-//            + " " + EndUser.USERNAME + " text UNIQUE,"
-            + " " + EndUser.PASSWORD + " text,"
+            = "CREATE TABLE IF NOT EXISTS " + EndUserBackups.TABLE_NAME + "("
+            + " " + EndUserBackups.END_USER_ID + " SERIAL PRIMARY KEY,"
+            + " " + EndUserBackups.END_USER_NAME + " text,"
+            + " " + EndUserBackups.USERNAME + " text UNIQUE,"
+            + " " + EndUserBackups.PASSWORD + " text,"
 
-            + " " + EndUser.ABOUT + " text,"
-            + " " + EndUser.PROFILE_IMAGE_URL + " text,"
+            + " " + EndUserBackups.ABOUT + " text,"
+            + " " + EndUserBackups.PROFILE_IMAGE_URL + " text,"
 
-//            + " " + EndUser.IS_ENABLED + " boolean,"
-//            + " " + EndUser.IS_WAITLISTED + " boolean,"
+            + " " + EndUserBackups.IS_ENABLED + " boolean,"
+            + " " + EndUserBackups.IS_WAITLISTED + " boolean,"
 
-            + " " + EndUser.CREATED + " timestamp with time zone NOT NULL DEFAULT now(),"
-            + " " + EndUser.UPDATED + " timestamp with time zone,"
-            + " FOREIGN KEY(" + EndUser.END_USER_ID +") REFERENCES " + Usernames.TABLE_NAME + "(" + Usernames.USER_ID + ")"
+            + " " + EndUserBackups.CREATED + " timestamp with time zone NOT NULL DEFAULT now(),"
+            + " " + EndUserBackups.UPDATED + " timestamp with time zone "
             + ")";
 
 
@@ -72,14 +71,31 @@ public class EndUser {
     private String about;
     private String profileImageURL;
 
-//    private Boolean isEnabled;
-//    private Boolean isWaitlisted;
+    private Boolean isEnabled;
+    private Boolean isWaitlisted;
     private Timestamp created;
     private Timestamp updated;
 
 
 
     // Getter and Setters
+
+
+    public Boolean getEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        isEnabled = enabled;
+    }
+
+    public Boolean getWaitlisted() {
+        return isWaitlisted;
+    }
+
+    public void setWaitlisted(Boolean waitlisted) {
+        isWaitlisted = waitlisted;
+    }
 
     public String getPassword() {
         return password;

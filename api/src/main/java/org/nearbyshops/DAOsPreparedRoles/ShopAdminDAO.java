@@ -362,6 +362,8 @@ public class ShopAdminDAO {
 
 			if (connection != null) {
 				try {
+					
+					updatedRows=-1;
 					connection.rollback();
 				} catch (SQLException e1) {
 					e1.printStackTrace();
@@ -439,6 +441,7 @@ public class ShopAdminDAO {
 
 			if (connection != null) {
 				try {
+					rowsCountDeleted=0;
 					connection.rollback();
 				} catch (SQLException e1) {
 					e1.printStackTrace();

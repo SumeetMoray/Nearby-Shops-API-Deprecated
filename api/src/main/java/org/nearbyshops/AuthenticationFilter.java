@@ -32,7 +32,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 //    private DistributorDAOPrepared distributorDAOPrepared = Globals.distributorDAOPrepared;
 //    private DistributorStaffDAOPrepared distributorStaffDAO = Globals.distributorStaffDAOPrepared;
     private DeliveryGuySelfDAO deliveryGuySelfDAO = Globals.deliveryGuySelfDAO;
-    private EndUserDAOPrepared endUserDAOPrepared = Globals.endUserDAOPrepared;
+    private EndUserDAONew endUserDAOPrepared = Globals.endUserDAONew;
     private ShopAdminDAO shopAdminDAO = Globals.shopAdminDAO;
     private ShopStaffDAOPrepared shopStaffDAO = Globals.shopStaffDAOPrepared;
 
@@ -200,23 +200,11 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             }
             else if(role.equals(GlobalConstants.ROLE_END_USER))
             {
-                EndUser endUser = endUserDAOPrepared.checkEndUser(null,username,password);
+                EndUser endUser = endUserDAOPrepared.checkEndUser(username,password);
                 // Distributor account exist and is enabled
                 if(endUser!=null )
                 {
-                    if(!endUser.getEnabled())
-                    {
-                        Response response = Response.status(403)
-                                .entity(new ErrorNBSAPI(403, "Your account is disabled. Contact administrator to know more !"))
-                                .build();
-
-                        throw new ForbiddenException("Permission denied !",response);
-                    }
-                    else
-                    {
-                        return endUser;
-                    }
-
+                    return endUser;
                 }
 
             }

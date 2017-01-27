@@ -545,11 +545,10 @@ public class OrderServiceEndUser {
                                                 String searchString)
     {
 
-        String query = "SELECT " +
-                "count( DISTINCT " + Order.TABLE_NAME + "." +Order.ORDER_ID + ") as item_count" +
-                " FROM " + Order.TABLE_NAME
-                + " LEFT OUTER JOIN " + OrderItem.TABLE_NAME + " ON (" + Order.TABLE_NAME + "." + Order.ORDER_ID + " = " + OrderItem.TABLE_NAME + "." + OrderItem.ORDER_ID + " ) "
-                + " LEFT OUTER JOIN " + DeliveryAddress.TABLE_NAME + " ON (" + Order.TABLE_NAME + "." + Order.DELIVERY_ADDRESS_ID + " = " + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.ID + ")";
+        String query = "SELECT " + " count( DISTINCT " + Order.TABLE_NAME + "." +Order.ORDER_ID + ") as item_count"
+                    + " FROM " + Order.TABLE_NAME
+                    + " LEFT OUTER JOIN " + OrderItem.TABLE_NAME + " ON (" + Order.TABLE_NAME + "." + Order.ORDER_ID + " = " + OrderItem.TABLE_NAME + "." + OrderItem.ORDER_ID + " ) "
+                    + " LEFT OUTER JOIN " + DeliveryAddress.TABLE_NAME + " ON (" + Order.TABLE_NAME + "." + Order.DELIVERY_ADDRESS_ID + " = " + DeliveryAddress.TABLE_NAME + "." + DeliveryAddress.ID + ")";
 
 
 

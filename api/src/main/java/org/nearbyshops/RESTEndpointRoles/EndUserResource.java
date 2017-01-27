@@ -5,7 +5,7 @@ import org.nearbyshops.DAOsPreparedRoles.EndUserDAOPrepared;
 import org.nearbyshops.Globals.APIErrors;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.ModelEndPoints.EndUserEndPoint;
+import org.nearbyshops.ModelRoles.Endpoints.EndUserEndPoint;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
 import org.nearbyshops.ModelRoles.EndUser;
 
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 
-@Path("/v1/EndUser")
+//@Path("/v1/EndUser")
 public class EndUserResource {
 
 
@@ -37,8 +37,8 @@ public class EndUserResource {
 	public Response createEndUser(EndUser endUser)
 	{
 
-		endUser.setEnabled(false);
-		endUser.setWaitlisted(false);
+//		endUser.setEnabled(false);
+//		endUser.setWaitlisted(false);
 //		System.out.println(distributor.getName() + " | " + distributor.getDistributorID());
 		
 		int idOfInsertedRow = endUserDAOPrepared.saveEndUser(endUser);
@@ -541,7 +541,7 @@ public class EndUserResource {
 
 		EndUser endUser = endUserDAOPrepared.checkEndUser(null,username,password);
 		// Distributor account exist and is enabled
-		if(endUser!=null && endUser.getEnabled())
+//		if(endUser!=null && endUser.getEnabled())
 		{
 			// If code enters here implies that distributor account is used for update. So we need to check if
 			// the distributor is same as the one authorized.

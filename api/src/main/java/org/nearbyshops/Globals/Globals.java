@@ -86,6 +86,8 @@ public class Globals {
 	public static PlaceOrderPFS_DAO placeOrderPFS_dao = new PlaceOrderPFS_DAO();
 
 
+	public static EndUserDAONew endUserDAONew  = new EndUserDAONew();
+
 
 	// static reference for holding security accountApproved
 
