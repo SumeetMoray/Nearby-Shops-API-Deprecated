@@ -85,8 +85,6 @@ public class EndUserDAONew {
 
 			int i = 0;
 			statement.setInt(++i,rowIdUserID);
-
-			statement.setObject(++i,endUser.getEndUserID());
 			statement.setString(++i,endUser.getName());
 			statement.setString(++i,endUser.getPassword());
 
@@ -921,7 +919,7 @@ public class EndUserDAONew {
 				//				+ EndUser.IS_ENABLED + ","
 				//				+ EndUser.IS_WAITLISTED + ","
 
-				+ EndUser.UPDATED + ","
+				+ EndUser.CREATED + ","
 				+ EndUser.UPDATED + ""
 
 				+ " FROM " + EndUser.TABLE_NAME

@@ -1137,7 +1137,7 @@ public class ItemCategoryDAO {
 			Integer shopID, Integer parentID, Boolean parentIsNull,
 			Double latCenter, Double lonCenter,
 			Double deliveryRangeMin, Double deliveryRangeMax,
-			Double proximity,
+			Double proximity, Boolean shopEnabled,
 			String sortBy,
 			Integer limit, Integer offset)
 	{
@@ -1180,6 +1180,15 @@ public class ItemCategoryDAO {
 				+ " WHERE " + Shop.TABLE_NAME + "." + Shop.SHOP_ID + "=" + ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
 				+ " AND " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "=" + Item.TABLE_NAME + "." + Item.ITEM_ID
 				+ " AND " + Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "=" + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
+
+
+		if(shopEnabled!=null && shopEnabled)
+		{
+			queryJoin = queryJoin + " AND " + Shop.TABLE_NAME + "." + Shop.IS_OPEN + " = TRUE "
+					+ " AND " + Shop.TABLE_NAME + "." + Shop.SHOP_ENABLED + " = TRUE "
+					+ " AND " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_PRICE + " > 0 ";
+		}
+
 		
 		
 

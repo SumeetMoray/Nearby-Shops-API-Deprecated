@@ -23,6 +23,7 @@ public class ShopItemByShopDAO {
 												Double proximity,
 												Integer endUserID, Boolean isFilledCart,
 												Boolean isOutOfStock, Boolean priceEqualsZero,
+												Boolean shopEnabled,
 												String searchString,
 												String sortBy,
 												Integer limit, Integer offset
@@ -81,6 +82,15 @@ public class ShopItemByShopDAO {
 					+ " LEFT OUTER JOIN " + ItemCategory.TABLE_NAME + " ON ( " + Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "=" + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID + ") "
 					+ " LEFT OUTER JOIN " + ItemReview.TABLE_NAME + " ON (" + ItemReview.TABLE_NAME + "." + ItemReview.ITEM_ID + " = " + Item.TABLE_NAME + "." + Item.ITEM_ID + ")"
 					+ " WHERE " + Item.TABLE_NAME + "." + Item.ITEM_ID + " >= 0 ";
+
+
+
+		if(shopEnabled!=null && shopEnabled)
+		{
+			queryJoin = queryJoin + " AND " + Shop.TABLE_NAME + "." + Shop.IS_OPEN + " = TRUE "
+						+ " AND " + Shop.TABLE_NAME + "." + Shop.SHOP_ENABLED + " = TRUE "
+						+ " AND " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_PRICE + " > 0 ";
+		}
 
 
 
@@ -565,7 +575,8 @@ public class ShopItemByShopDAO {
 			Double proximity,
 			Integer endUserID, Boolean isFilledCart,
 			Boolean isOutOfStock, Boolean priceEqualsZero,
-			String searchString
+			String searchString,
+			Boolean shopEnabled
 
 	)
 	{
@@ -593,19 +604,17 @@ public class ShopItemByShopDAO {
 				+ Shop.TABLE_NAME  + "," + ShopItem.TABLE_NAME + ","
 				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
 
-				+ " WHERE "
-				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID
-				+ "="
-				+ ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
-				+ " AND "
-				+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID
-				+ "="
-				+ Item.TABLE_NAME + "." + Item.ITEM_ID
-				+ " AND "
-				+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID
-				+ "="
-				+ ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
+				+ " WHERE " + Shop.TABLE_NAME + "." + Shop.SHOP_ID + "=" + ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
+				+ " AND " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "=" + Item.TABLE_NAME + "." + Item.ITEM_ID
+				+ " AND " + Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "=" + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
 
+
+		if(shopEnabled!=null && shopEnabled)
+		{
+			queryJoin = queryJoin + " AND " + Shop.TABLE_NAME + "." + Shop.IS_OPEN + " = TRUE "
+					+ " AND " + Shop.TABLE_NAME + "." + Shop.SHOP_ENABLED + " = TRUE "
+					+ " AND " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_PRICE + " > 0 ";
+		}
 
 
 		if(endUserID!=null)

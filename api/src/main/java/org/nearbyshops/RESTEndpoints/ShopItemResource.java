@@ -512,6 +512,7 @@ public class ShopItemResource {
 			@QueryParam("IsOutOfStock") Boolean isOutOfStock,@QueryParam("PriceEqualsZero")Boolean priceEqualsZero,
 			@QueryParam("MinPrice")Integer minPrice,@QueryParam("MaxPrice")Integer maxPrice,
 			@QueryParam("SearchString") String searchString,
+			@QueryParam("ShopEnabled")Boolean shopEnabled,
 			@QueryParam("SortBy") String sortBy,
 			@QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset,
 			@QueryParam("metadata_only")Boolean metaonly,
@@ -549,7 +550,8 @@ public class ShopItemResource {
 						deliveryRangeMin,deliveryRangeMax,
 						proximity,endUserID,
 						isFilledCart,isOutOfStock,
-						priceEqualsZero, searchString
+						priceEqualsZero, searchString,
+						shopEnabled
 				);
 			}
 			else if(itemID !=null && ShopID==null)
@@ -617,8 +619,9 @@ public class ShopItemResource {
 							isFilledCart,
 							isOutOfStock,
 							priceEqualsZero,
-							searchString,sortBy,
-							limit,offset
+							shopEnabled,
+							searchString,
+							sortBy,limit,offset
 					);
 				}
 				else if(itemID !=null && ShopID==null)

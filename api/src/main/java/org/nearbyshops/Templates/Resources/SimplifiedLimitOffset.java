@@ -55,6 +55,7 @@ public class SimplifiedLimitOffset {
 
         ShopEndPoint endPoint = shopDAO.getShopsListQuerySimple(
                 enabled,waitlisted,
+                null,
                 latCenter,lonCenter,
                 deliveryRangeMin,deliveryRangeMax,
                 proximity,searchString,

@@ -7,6 +7,7 @@ import org.nearbyshops.Model.ItemCategory;
 import org.nearbyshops.Model.Shop;
 import org.nearbyshops.Model.ShopItem;
 import org.nearbyshops.ModelEndPoints.ShopEndPoint;
+import org.nearbyshops.ModelPickFromShop.OrderPFS;
 import org.nearbyshops.ModelReviewShop.ShopReview;
 
 import java.sql.*;
@@ -764,6 +765,7 @@ public class ShopDAO {
 
 	public ShopEndPoint getShopsListQuerySimple(
 			Boolean enabled, Boolean waitlisted,
+			Boolean filterByVisibility,
 			Double latCenter, Double lonCenter,
 			Double deliveryRangeMin,Double deliveryRangeMax,
 			Double proximity,
@@ -831,7 +833,7 @@ public class ShopDAO {
 
 
 		// Visibility Filter : Apply
-		if(latCenter != null && lonCenter != null)
+		if(filterByVisibility!=null && filterByVisibility && latCenter != null && lonCenter != null)
 		{
 
 			String queryPartlatLonCenter = "";
@@ -909,12 +911,13 @@ public class ShopDAO {
 		}
 
 
+
 		if(searchString !=null)
 		{
 			String queryPartSearch = Shop.TABLE_NAME + "." + Shop.SHOP_NAME +" ilike '%" + searchString + "%'"
 					+ " or " + Shop.TABLE_NAME + "." + Shop.LONG_DESCRIPTION + " ilike '%" + searchString + "%'"
-					+ " or " + Shop.TABLE_NAME + "." + Shop.SHOP_ADDRESS + " ilike '%" + searchString + "%'";
-
+					+ " or " + Shop.TABLE_NAME + "." + Shop.SHOP_ADDRESS + " ilike '%" + searchString + "%'"
+					+ " or CAST ( " + Shop.TABLE_NAME + "." + Shop.SHOP_ID + " AS text )" + " ilike '%" + searchString + "%'" + "";
 
 
 			if(isFirst)
@@ -1204,7 +1207,10 @@ public class ShopDAO {
 
 				+ " WHERE " + Shop.TABLE_NAME + "." + Shop.SHOP_ID + "=" + ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
 				+ " AND " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "=" + Item.TABLE_NAME + "." + Item.ITEM_ID
-				+ " AND " + Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "=" + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
+				+ " AND " + Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "=" + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID
+				+ " AND " + Shop.TABLE_NAME + "." + Shop.IS_OPEN + " = TRUE "
+				+ " AND " + Shop.TABLE_NAME + "." + Shop.SHOP_ENABLED + " = TRUE "
+				+ " AND " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_PRICE + " > 0 ";
 
 
 		// Visibility Filter : Apply
@@ -1569,17 +1575,12 @@ public class ShopDAO {
 				+ Shop.TABLE_NAME  + "," + ShopItem.TABLE_NAME + ","
 				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
 
-				+ " WHERE "
-				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID + "="
-				+ ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
-
-				+ " AND "
-				+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "="
-				+ Item.TABLE_NAME + "." + Item.ITEM_ID
-
-				+ " AND "
-				+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "="
-				+ ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
+				+ " WHERE " + Shop.TABLE_NAME + "." + Shop.SHOP_ID + "=" + ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
+				+ " AND " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "=" + Item.TABLE_NAME + "." + Item.ITEM_ID
+				+ " AND " + Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "=" + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID
+				+ " AND " + Shop.TABLE_NAME + "." + Shop.IS_OPEN + " = TRUE "
+				+ " AND " + Shop.TABLE_NAME + "." + Shop.SHOP_ENABLED + " = TRUE "
+				+ " AND " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_PRICE + " > 0 ";
 
 
 
@@ -1935,7 +1936,10 @@ public class ShopDAO {
 				+ " LEFT OUTER JOIN " + ShopReview.TABLE_NAME + " ON (" + ShopReview.TABLE_NAME + "." + ShopReview.SHOP_ID + " = " + Shop.TABLE_NAME + "." + Shop.SHOP_ID + ")"
 				+ " INNER JOIN " + ShopItem.TABLE_NAME + " ON (" + Shop.TABLE_NAME + "." + Shop.SHOP_ID + "=" + ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID + ")"
 				+ " INNER JOIN " + Item.TABLE_NAME + " ON (" + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "=" + Item.TABLE_NAME + "." + Item.ITEM_ID + ")"
-				+ " INNER JOIN " + ItemCategory.TABLE_NAME + " ON (" + Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "=" + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID + ")";
+				+ " INNER JOIN " + ItemCategory.TABLE_NAME + " ON (" + Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "=" + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID + ")"
+				+ " AND " + Shop.TABLE_NAME + "." + Shop.IS_OPEN + " = TRUE "
+				+ " AND " + Shop.TABLE_NAME + "." + Shop.SHOP_ENABLED + " = TRUE "
+				+ " AND " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_PRICE + " > 0 ";
 
 
 		queryJoin = queryJoin
@@ -2263,17 +2267,12 @@ public class ShopDAO {
 				+ Shop.TABLE_NAME  + "," + ShopItem.TABLE_NAME + ","
 				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
 
-				+ " WHERE "
-				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID + "="
-				+ ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
-
-				+ " AND "
-				+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "="
-				+ Item.TABLE_NAME + "." + Item.ITEM_ID
-
-				+ " AND "
-				+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "="
-				+ ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
+				+ " WHERE " + Shop.TABLE_NAME + "." + Shop.SHOP_ID + "=" + ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
+				+ " AND " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "=" + Item.TABLE_NAME + "." + Item.ITEM_ID
+				+ " AND " + Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "=" + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID
+				+ " AND " + Shop.TABLE_NAME + "." + Shop.IS_OPEN + " = TRUE "
+				+ " AND " + Shop.TABLE_NAME + "." + Shop.SHOP_ENABLED + " = TRUE "
+				+ " AND " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_PRICE + " > 0 ";
 
 
 

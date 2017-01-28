@@ -339,6 +339,7 @@ public class ShopResource {
 	public Response getShopListSimple(
 			@QueryParam("Enabled")Boolean enabled,
 			@QueryParam("Waitlisted") Boolean waitlisted,
+			@QueryParam("FilterByVisibility") Boolean filterByVisibility,
 			@QueryParam("latCenter")Double latCenter, @QueryParam("lonCenter")Double lonCenter,
 			@QueryParam("deliveryRangeMax")Double deliveryRangeMax,
 			@QueryParam("deliveryRangeMin")Double deliveryRangeMin,
@@ -367,6 +368,7 @@ public class ShopResource {
 
 		ShopEndPoint endPoint = shopDAO.getShopsListQuerySimple(
 									enabled,waitlisted,
+									filterByVisibility,
 									latCenter,lonCenter,
 									deliveryRangeMin,deliveryRangeMax,
 									proximity,searchString,

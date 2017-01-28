@@ -151,14 +151,12 @@ public class EndUserResourceNew {
 		{
 
 			return Response.status(Status.OK)
-					.entity(null)
 					.build();
 		}
 		if(rowCount == 0)
 		{
 
 			return Response.status(Status.NOT_MODIFIED)
-					.entity(null)
 					.build();
 		}
 
@@ -195,7 +193,6 @@ public class EndUserResourceNew {
 		{
 
 			return Response.status(Status.OK)
-					.entity(null)
 					.build();
 		}
 		
@@ -203,7 +200,6 @@ public class EndUserResourceNew {
 		{
 
 			return Response.status(Status.NOT_MODIFIED)
-					.entity(null)
 					.build();
 		}
 
@@ -417,7 +413,7 @@ public class EndUserResourceNew {
 	@POST
 	@Path("/Image")
 	@Consumes({MediaType.APPLICATION_OCTET_STREAM})
-	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN_DISABLED})
+	@RolesAllowed({GlobalConstants.ROLE_END_USER})
 	public Response uploadImage(InputStream in, @HeaderParam("Content-Length") long fileSize,
 							 @QueryParam("PreviousImageName") String previousImageName
 	) throws Exception
@@ -535,7 +531,7 @@ public class EndUserResourceNew {
 
 	@DELETE
 	@Path("/Image/{name}")
-	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN_DISABLED})
+	@RolesAllowed({GlobalConstants.ROLE_END_USER})
 	public Response deleteImageFile(@PathParam("name")String fileName)
 	{
 

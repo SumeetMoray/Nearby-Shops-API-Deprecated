@@ -620,7 +620,10 @@ public class ItemDAO {
 
 				+ " WHERE " + Shop.TABLE_NAME + "." + Shop.SHOP_ID + "=" + ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
 				+ " AND " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "=" + Item.TABLE_NAME + "." + Item.ITEM_ID
-				+ " AND " + Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "=" + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
+				+ " AND " + Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "=" + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID
+				+ " AND " + Shop.TABLE_NAME + "." + Shop.IS_OPEN + " = TRUE "
+				+ " AND " + Shop.TABLE_NAME + "." + Shop.SHOP_ENABLED + " = TRUE "
+				+ " AND " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_PRICE + " > 0 ";
 		
 		
 
@@ -1013,18 +1016,12 @@ public class ItemDAO {
 				+ " FROM "
 				+ Shop.TABLE_NAME  + "," + ShopItem.TABLE_NAME + ","
 				+ Item.TABLE_NAME + "," + ItemCategory.TABLE_NAME
-				+ " WHERE "
-				+ Shop.TABLE_NAME + "." + Shop.SHOP_ID
-				+ "="
-				+ ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
-				+ " AND "
-				+ ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID
-				+ "="
-				+ Item.TABLE_NAME + "." + Item.ITEM_ID
-				+ " AND "
-				+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID
-				+ "="
-				+ ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID;
+				+ " WHERE " + Shop.TABLE_NAME + "." + Shop.SHOP_ID + "=" + ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID
+				+ " AND " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "=" + Item.TABLE_NAME + "." + Item.ITEM_ID
+				+ " AND " + Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + "=" + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID
+				+ " AND " + Shop.TABLE_NAME + "." + Shop.IS_OPEN + " = TRUE "
+				+ " AND " + Shop.TABLE_NAME + "." + Shop.SHOP_ENABLED + " = TRUE "
+				+ " AND " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_PRICE + " > 0 ";
 
 
 
@@ -1110,6 +1107,7 @@ public class ItemDAO {
 
 
 		}
+
 
 
 

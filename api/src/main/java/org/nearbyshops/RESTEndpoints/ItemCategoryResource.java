@@ -478,6 +478,7 @@ public class ItemCategoryResource {
 			@QueryParam("deliveryRangeMax")Double deliveryRangeMax,
 			@QueryParam("deliveryRangeMin")Double deliveryRangeMin,
 			@QueryParam("proximity")Double proximity,
+			@QueryParam("ShopEnabled")Boolean shopEnabled,
 			@QueryParam("SortBy") String sortBy,
 			@QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset,
 			@QueryParam("metadata_only")Boolean metaonly)
@@ -524,7 +525,7 @@ public class ItemCategoryResource {
 					deliveryRangeMin,
 					deliveryRangeMax,
 					proximity,
-					sortBy,
+					shopEnabled, sortBy,
 					set_limit, set_offset);
 
 			endPoint.setResults(list);
