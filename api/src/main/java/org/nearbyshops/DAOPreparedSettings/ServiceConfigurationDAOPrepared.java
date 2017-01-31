@@ -4,6 +4,7 @@ package org.nearbyshops.DAOPreparedSettings;
 import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
+import org.nearbyshops.ModelSettings.ServiceConfigurationGlobal;
 import org.nearbyshops.ModelSettings.ServiceConfigurationLocal;
 
 import java.sql.*;
@@ -158,7 +159,7 @@ public class ServiceConfigurationDAOPrepared {
 	{
 
 		// Ensure the service configuration row exist before being updated
-		if(getServiceConfiguration()==null){
+		if(getServiceConfiguration(null,null)==null){
 			saveService(getDefaultConfiguration());
 		}
 
@@ -612,10 +613,14 @@ public class ServiceConfigurationDAOPrepared {
 
 
 
-	public ServiceConfigurationLocal getServiceConfiguration()
+	public ServiceConfigurationLocal getServiceConfiguration(Double latCenter, Double lonCenter)
 	{
 		
 		String query = " SELECT "
+						+ "6371 * acos(cos( radians("
+						+ latCenter + ")) * cos( radians( " + ServiceConfigurationGlobal.LAT_CENTER + " ) ) * cos(radians( " + ServiceConfigurationGlobal.LON_CENTER + " ) - radians("
+						+ lonCenter + "))"
+						+ " + sin( radians(" + latCenter + ")) * sin(radians( " + ServiceConfigurationGlobal.LAT_CENTER + " ))) as distance" + ","
 						+ ServiceConfigurationLocal.SERVICE_CONFIGURATION_ID + ","
 						+ ServiceConfigurationLocal.LOGO_IMAGE_PATH + ","
 						+ ServiceConfigurationLocal.BACKDROP_IMAGE_PATH + ","
@@ -666,6 +671,7 @@ public class ServiceConfigurationDAOPrepared {
 			{
 				serviceConfigurationLocal = new ServiceConfigurationLocal();
 
+				serviceConfigurationLocal.setRt_distance(rs.getDouble("distance"));
 				serviceConfigurationLocal.setServiceID(rs.getInt(ServiceConfigurationLocal.SERVICE_CONFIGURATION_ID));
 //				serviceConfigurationLocal.setImagePath(rs.getString(ServiceConfigurationLocal.IMAGE_PATH));
 				serviceConfigurationLocal.setLogoImagePath(rs.getString(ServiceConfigurationLocal.LOGO_IMAGE_PATH));

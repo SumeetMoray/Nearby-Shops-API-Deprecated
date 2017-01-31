@@ -1,6 +1,7 @@
 package org.nearbyshops;
 
 
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -15,6 +16,7 @@ import javax.ws.rs.ext.Provider;
 import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.text.DateFormat;
 
 /*
 *
@@ -35,17 +37,26 @@ public class GSONJersey implements MessageBodyWriter<Object>,
 
     //Customize the gson behavior here
     private Gson getGson() {
+
         if (gson == null) {
+
             final GsonBuilder gsonBuilder = new GsonBuilder();
-            gson = gsonBuilder.disableHtmlEscaping()
+            gson = gsonBuilder
+                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
                     .create();
+
+//            .setDateFormat("yyyy-MM-dd'T'HH:mm:ssX")
+
+//            .setDateFormat("yyyy-MM-dd hh:mm:ss.S")
+
+//            .disableHtmlEscaping()
 
 //            .setDateFormat("EEEEE, dd MMM yyyy HH:mm:ss ZZZZ zzz")
 
 //                    .setDateFormat(DateFormat.FULL,DateFormat.FULL)
 
 
-//            System.out.println("GSON COnverter");
+            System.out.println("GSON COnverter");
 
 /*
             .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
@@ -54,13 +65,14 @@ public class GSONJersey implements MessageBodyWriter<Object>,
 */
 
         }
+
         return gson;
     }
 
     @Override
     public boolean isReadable(Class<?> type, Type genericType,
                               Annotation[] annotations, MediaType mediaType) {
-//        System.out.println("GSON COnverter");
+        System.out.println("GSON COnverter");
         return true;
     }
 
@@ -69,7 +81,7 @@ public class GSONJersey implements MessageBodyWriter<Object>,
                            Annotation[] annotations, MediaType mediaType,
                            MultivaluedMap<String, String> httpHeaders, InputStream entityStream) {
 
-//        System.out.println("GSON COnverter");
+        System.out.println("GSON COnverter");
 
         InputStreamReader streamReader = null;
         try {
@@ -98,7 +110,7 @@ public class GSONJersey implements MessageBodyWriter<Object>,
     public boolean isWriteable(Class<?> type, Type genericType,
                                Annotation[] annotations, MediaType mediaType) {
 
-//        System.out.println("GSON COnverter");
+        System.out.println("GSON COnverter");
 
         return true;
     }
@@ -116,7 +128,7 @@ public class GSONJersey implements MessageBodyWriter<Object>,
                         OutputStream entityStream) throws IOException,
             WebApplicationException {
 
-//        System.out.println("GSON COnverter");
+        System.out.println("GSON COnverter");
 
         OutputStreamWriter writer = new OutputStreamWriter(entityStream, UTF_8);
         try {

@@ -1373,8 +1373,6 @@ public class ShopAdminDAO {
 
 				shopAdmin.setEnabled(rs.getBoolean(ShopAdmin.IS_ENABLED));
 
-
-
 			}
 
 

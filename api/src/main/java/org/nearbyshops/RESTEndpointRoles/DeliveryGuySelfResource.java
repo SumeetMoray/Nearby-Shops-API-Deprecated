@@ -325,7 +325,6 @@ public class DeliveryGuySelfResource {
 
 		List<DeliveryGuySelf> vehicleSelfList = Globals.deliveryGuySelfDAO.readForShopAdmin(shopID,isEnabled);
 		GenericEntity<List<DeliveryGuySelf>> listEntity = new GenericEntity<List<DeliveryGuySelf>>(vehicleSelfList){
-
 		};
 
 		

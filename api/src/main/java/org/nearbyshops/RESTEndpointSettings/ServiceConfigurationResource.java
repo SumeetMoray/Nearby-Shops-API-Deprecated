@@ -175,13 +175,13 @@ public class ServiceConfigurationResource {
 	
 	
 	@GET
-//	@Path("/{ServiceID}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getService()
+	public Response getService(@QueryParam("latCenter")Double latCenter,
+							   @QueryParam("lonCenter")Double lonCenter)
 	{
 //		@PathParam("ServiceID")int service
 
-		ServiceConfigurationLocal serviceConfigurationLocal = daoPrepared.getServiceConfiguration();
+		ServiceConfigurationLocal serviceConfigurationLocal = daoPrepared.getServiceConfiguration(latCenter,lonCenter);
 		
 		if(serviceConfigurationLocal != null)
 		{

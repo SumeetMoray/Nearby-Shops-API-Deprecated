@@ -200,12 +200,8 @@ public class DeliveryAddressService {
 
 	public int deleteAddress(int deliveryAddressID)
 	{
-		
-		String deleteStatement
-				= "DELETE FROM " + DeliveryAddress.TABLE_NAME
-				+ " WHERE " + DeliveryAddress.ID + " = ?";
-		
-		
+		String deleteStatement = "DELETE FROM " + DeliveryAddress.TABLE_NAME + " WHERE " + DeliveryAddress.ID + " = ?";
+
 		Connection connection= null;
 		PreparedStatement statement = null;
 		int rowsCountDeleted = 0;
@@ -213,13 +209,12 @@ public class DeliveryAddressService {
 			
 			connection = dataSource.getConnection();
 			statement = connection.prepareStatement(deleteStatement);
+			statement.setInt(1,deliveryAddressID);
 
-			statement.setObject(1,deliveryAddressID);
+			rowsCountDeleted = statement.executeUpdate();
+			System.out.println(" Deleted Count: " + rowsCountDeleted);
 
-			rowsCountDeleted = statement.executeUpdate(deleteStatement);
-			System.out.println(" Deleted Count: " + rowsCountDeleted);	
-			
-			connection.close();
+//			connection.close();
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

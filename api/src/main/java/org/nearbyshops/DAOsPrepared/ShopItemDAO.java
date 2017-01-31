@@ -270,17 +270,15 @@ public class ShopItemDAO {
 				+ " SET "
 
 				+ ShopItem.AVAILABLE_ITEM_QUANTITY + " = ?,"
-				+ ShopItem.ITEM_ID + " = ?,"
+//				+ ShopItem.ITEM_ID + " = ?,"
 				+ ShopItem.ITEM_PRICE + " = ?,"
 
-				+ ShopItem.SHOP_ID + " = ?,"
+//				+ ShopItem.SHOP_ID + " = ?,"
 				+ ShopItem.EXTRA_DELIVERY_CHARGE + " = ?,"
 				+ ShopItem.LAST_UPDATE_DATE_TIME + " = ?"
 
-				+ " WHERE "
-				+ ShopItem.SHOP_ID + " = ?"
-				+ " AND "
-				+ ShopItem.ITEM_ID + " = ?";
+				+ " WHERE " + ShopItem.SHOP_ID + " = ?"
+				+ " AND " + ShopItem.ITEM_ID + " = ?";
 		
 		System.out.println("Query:" + updateStatement);
 		
@@ -294,17 +292,18 @@ public class ShopItemDAO {
 			connection = dataSource.getConnection();
 			statement = connection.prepareStatement(updateStatement);
 
-			statement.setObject(1,shopItem.getAvailableItemQuantity());
-			statement.setObject(2,shopItem.getItemID());
-			statement.setObject(3,shopItem.getItemPrice());
+			int i = 0;
+			statement.setObject(++i,shopItem.getAvailableItemQuantity());
+//			statement.setObject(++i,shopItem.getItemID());
+			statement.setObject(++i,shopItem.getItemPrice());
 
-			statement.setObject(4,shopItem.getShopID());
-			statement.setObject(5,shopItem.getExtraDeliveryCharge());
-			statement.setTimestamp(6,new Timestamp(System.currentTimeMillis()));
+//			statement.setObject(++i,shopItem.getShopID());
+			statement.setObject(++i,shopItem.getExtraDeliveryCharge());
+			statement.setTimestamp(++i,new Timestamp(System.currentTimeMillis()));
 
 
-			statement.setObject(7,shopItem.getShopID());
-			statement.setObject(8,shopItem.getItemID());
+			statement.setObject(++i,shopItem.getShopID());
+			statement.setObject(++i,shopItem.getItemID());
 
 
 			updatedRows = statement.executeUpdate();
@@ -1472,7 +1471,8 @@ public ArrayList<ShopItem> getShopItems(
 
 				+ " FROM " + ShopItem.TABLE_NAME
 				+ " INNER JOIN " + Item.TABLE_NAME + " ON (" + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + " = " + Item.TABLE_NAME + "." + Item.ITEM_ID + ")"
-				+ " LEFT OUTER JOIN " + ItemCategory.TABLE_NAME + " ON ( " + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID + " = " + Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + ")";
+				+ " LEFT OUTER JOIN " + ItemCategory.TABLE_NAME + " ON ( " + ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID + " = " + Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + ")"
+				+ " WHERE " + ShopItem.TABLE_NAME + "." + ShopItem.SHOP_ID + " > -10 ";
 
 
 				//+ " WHERE " + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + "=" + Item.TABLE_NAME + "." + Item.ITEM_ID;

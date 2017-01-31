@@ -69,12 +69,13 @@
 
         <!-- Jersy Dependency for JSON Converter Support -->
 
-        <!--
+<!--
          <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-moxy</artifactId>
-        </dependency>-->
-        
+        </dependency>
+-->
+
          
         <dependency>
             <groupId>junit</groupId>

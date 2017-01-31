@@ -127,10 +127,12 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             {
 
                 Admin admin = adminDAOPrepared.checkAdmin(username,password);
+
                 if(admin != null)
                 {
                     return admin;
                 }
+
             }
             else if(role.equals(GlobalConstants.ROLE_STAFF_DISABLED))
             {
@@ -244,6 +246,8 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                 ShopAdmin shopAdmin = shopAdminDAO.checkShopAdmin(username,password);
                 // Distributor account exist and is enabled
 
+                System.out.println("Identifying shop Admin ...");
+
                 if(shopAdmin!=null )
                 {
                     if(!shopAdmin.getEnabled())
@@ -252,14 +256,19 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                                 .entity(new ErrorNBSAPI(403, "Your account is disabled. Contact administrator to know more !"))
                                 .build();
 
+                        System.out.println("Shop Admin disapproved permission denied ...");
+
                         throw new ForbiddenException("Permission denied !",response);
                     }
                     else
                     {
+                        System.out.println("Shop Admin successfully approved ...");
                         return shopAdmin;
                     }
 
                 }
+
+                System.out.println("Shop Admin null ...");
 
             }
         }

@@ -73,7 +73,7 @@ public class OrderResourcePFS {
 		{
 			OrderPFS orderResult = Globals.orderServicePFS.readOrder(orderId);
 
-			Globals.broadcastMessage("Order Number : Pick from Shop : " + String.valueOf(orderId) + " Has been received !",orderResult.getShopID());
+			Globals.broadcastMessage("Pick from Shop - Order Number : " + String.valueOf(orderId) + " Has been received !",orderResult.getShopID());
 
 			return Response.status(Status.CREATED)
 //					.entity(orderResult)

@@ -28,8 +28,10 @@ import org.nearbyshops.ModelSecurity.ForbiddenOperations;
 import org.nearbyshops.ModelSettings.ServiceConfigurationLocal;
 import org.nearbyshops.ModelSettings.Settings;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -70,7 +72,7 @@ public class Main {
 				// @ValidateOnExecution annotations on subclasses won't cause errors.
 //		rc.property(ServerProperties.BV_DISABLE_VALIDATE_ON_EXECUTABLE_OVERRIDE_CHECK, true);
 
-		rc.register(GSONJersey.class);
+//		rc.register(GSONJersey.class);
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
@@ -84,6 +86,8 @@ public class Main {
 //        return ;
     }
 
+
+
     /**
      * Main method.
      * @param args
@@ -91,12 +95,10 @@ public class Main {
      */
     public static void main(String[] args) throws IOException {
 
-
 		createDB();
 		createTables();
 
 		startServer();
-
 	}
 
     	//server = startServer();
@@ -333,7 +335,7 @@ public class Main {
 
 			String insertServiceConfig = "";
 
-			if(Globals.serviceConfigurationDAO.getServiceConfiguration()==null)
+			if(Globals.serviceConfigurationDAO.getServiceConfiguration(null,null)==null)
 			{
 
 				ServiceConfigurationLocal defaultConfiguration = new ServiceConfigurationLocal();
@@ -360,7 +362,35 @@ public class Main {
 
 
 
-			
+
+				// create directory images
+
+				final java.nio.file.Path BASE_DIR = Paths.get("./images");
+
+				File theDir = new File(BASE_DIR.toString());
+
+				// if the directory does not exist, create it
+				if (!theDir.exists()) {
+
+					System.out.println("Creating directory: " + BASE_DIR.toString());
+
+					boolean result = false;
+
+					try{
+						theDir.mkdir();
+						result = true;
+					}
+					catch(Exception se){
+						//handle it
+					}
+					if(result) {
+						System.out.println("DIR created");
+					}
+				}
+
+
+
+
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

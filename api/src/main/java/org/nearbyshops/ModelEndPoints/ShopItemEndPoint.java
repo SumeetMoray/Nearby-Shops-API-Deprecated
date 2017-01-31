@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class ShopItemEndPoint {
 
-    int itemCount;
+    Integer itemCount;
     Integer offset;
     Integer limit;
     Integer max_limit;

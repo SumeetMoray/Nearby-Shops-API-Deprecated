@@ -100,9 +100,23 @@ public class ShopItem{
 	private int extraDeliveryCharge;
 	private Timestamp dateTimeAdded;
 	private Timestamp lastUpdateDateTime;
-		
 
-	
+	public Timestamp getDateTimeAdded() {
+		return dateTimeAdded;
+	}
+
+	public void setDateTimeAdded(Timestamp dateTimeAdded) {
+		this.dateTimeAdded = dateTimeAdded;
+	}
+
+	public Timestamp getLastUpdateDateTime() {
+		return lastUpdateDateTime;
+	}
+
+	public void setLastUpdateDateTime(Timestamp lastUpdateDateTime) {
+		this.lastUpdateDateTime = lastUpdateDateTime;
+	}
+
 	public double getItemPrice() {
 		return itemPrice;
 	}
@@ -153,17 +167,4 @@ public class ShopItem{
 		this.extraDeliveryCharge = extraDeliveryCharge;
 	}
 
-	public Timestamp getDateTimeAdded() {
-		return dateTimeAdded;
-	}
-	public void setDateTimeAdded(Timestamp dateTimeAdded) {
-		this.dateTimeAdded = dateTimeAdded;
-	}
-
-	public Timestamp getLastUpdateDateTime() {
-		return lastUpdateDateTime;
-	}
-	public void setLastUpdateDateTime(Timestamp lastUpdateDateTime) {
-		this.lastUpdateDateTime = lastUpdateDateTime;
-	}
 }

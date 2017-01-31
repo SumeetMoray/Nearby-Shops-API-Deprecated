@@ -18,6 +18,7 @@ import org.nearbyshops.Model.ShopItem;
 import org.nearbyshops.ModelEndPoints.ShopItemEndPoint;
 import org.nearbyshops.ModelRoles.ShopAdmin;
 import org.nearbyshops.ModelRoles.ShopStaff;
+import org.nearbyshops.ModelRoles.Staff;
 
 
 @Path("/v1/ShopItem")
@@ -208,35 +209,47 @@ public class ShopItemResource {
 
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN,GlobalConstants.ROLE_SHOP_STAFF})
+//	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN,GlobalConstants.ROLE_SHOP_STAFF})
 	public Response updateShopItem(ShopItem shopItem)
 	{
+
 		System.out.println("Inside Resource Method !");
+
 
 		int rowCount = 0;
 
-		if(Globals.accountApproved instanceof ShopAdmin)
-		{
-			ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
-			Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
 
-			shopItem.setShopID(shop.getShopID());
-			rowCount = shopItemDAO.updateShopItem(shopItem);
-		}
+		try{
 
-		if(Globals.accountApproved instanceof ShopStaff)
-		{
-			ShopStaff shopStaff = (ShopStaff) Globals.accountApproved;
-
-			if(!shopStaff.isUpdateStock())
+			if(Globals.accountApproved instanceof ShopAdmin)
 			{
-				// staff member do not have permission
-				throw new ForbiddenException("Not Permitted !");
+				ShopAdmin shopAdmin = (ShopAdmin) Globals.accountApproved;
+				Shop shop = Globals.shopDAO.getShopIDForShopAdmin(shopAdmin.getShopAdminID());
+
+				shopItem.setShopID(shop.getShopID());
+				rowCount = shopItemDAO.updateShopItem(shopItem);
 			}
 
-			shopItem.setShopID(shopStaff.getShopID());
-			rowCount = shopItemDAO.updateShopItem(shopItem);
+			if(Globals.accountApproved instanceof ShopStaff)
+			{
+				ShopStaff shopStaff = (ShopStaff) Globals.accountApproved;
+
+				if(!shopStaff.isUpdateStock())
+				{
+					// staff member do not have permission
+					throw new ForbiddenException("Not Permitted !");
+				}
+
+				shopItem.setShopID(shopStaff.getShopID());
+				rowCount = shopItemDAO.updateShopItem(shopItem);
+			}
+
 		}
+		catch (Exception ex)
+		{
+			System.out.println(ex.toString());
+		}
+
 
 
 		
@@ -244,20 +257,72 @@ public class ShopItemResource {
 		{
 
 			return Response.status(Status.OK)
-								.entity(null)
 								.build();
 			
 		}else if(rowCount <= 0)
 		{
 
 			return Response.status(Status.NOT_MODIFIED)
+					.build();
+		}
+
+		return null;
+	}
+
+
+
+
+
+	@PUT
+	@Path("/UpdateByShop")
+	@Consumes(MediaType.APPLICATION_JSON)
+//	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN,GlobalConstants.ROLE_SHOP_STAFF})
+	public Response updateShop(ShopItem shopItem)
+	{
+
+		System.out.println("Inside Resource Method | Update by shop !");
+//
+//		if(Globals.accountApproved instanceof Staff) {
+//			// checking permission
+//			Staff staff = (Staff) Globals.accountApproved;
+//			if (!staff.isApproveShops())
+//			{
+//				// the staff member doesnt have persmission to post Item Category
+//				throw new ForbiddenException("Not Permitted");
+//			}
+//		}
+
+		shopItemDAO.updateShopItem(shopItem);
+		int rowCount = shopItemDAO.updateShopItem(shopItem);
+
+		if(rowCount >= 1)
+		{
+
+			return Response.status(Status.OK)
 					.entity(null)
 					.build();
 		}
-	
-		
+		if(rowCount <= 0)
+		{
+
+			return Response.status(Status.NOT_MODIFIED)
+					.entity(null)
+					.build();
+		}
+
 		return null;
 	}
+
+
+
+
+
+
+
+
+
+
+
 	
 	
 	@DELETE
@@ -451,7 +516,7 @@ public class ShopItemResource {
 			@QueryParam("ShopID")Integer ShopID, @QueryParam("ItemID") Integer itemID,
 			@QueryParam("SearchString") String searchString,
 			@QueryParam("SortBy") String sortBy,
-			@QueryParam("Limit") Integer limit, @QueryParam("Offset") int offset
+			@QueryParam("Limit") Integer limit, @QueryParam("Offset")Integer offset
 	)
 	{
 
@@ -532,6 +597,11 @@ public class ShopItemResource {
 		else
 		{
 			limit = 30;
+		}
+
+		if(offset==null)
+		{
+			offset=0;
 		}
 
 

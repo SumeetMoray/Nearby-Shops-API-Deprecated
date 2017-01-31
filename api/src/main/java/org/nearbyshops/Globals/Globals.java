@@ -141,19 +141,20 @@ public class Globals {
 
 
 
-	public static SseBroadcaster broadcaster = new SseBroadcaster();
-
-	public static String broadcastMessage(String message) {
-		OutboundEvent.Builder eventBuilder = new OutboundEvent.Builder();
-		OutboundEvent event = eventBuilder.name("message")
-				.mediaType(MediaType.TEXT_PLAIN_TYPE)
-				.data(String.class, message)
-				.build();
-
-		broadcaster.broadcast(event);
-
-		return "Message '" + message + "' has been broadcast.";
-	}
+//
+//	public static SseBroadcaster broadcaster = new SseBroadcaster();
+//
+//	public static String broadcastMessage(String message) {
+//		OutboundEvent.Builder eventBuilder = new OutboundEvent.Builder();
+//		OutboundEvent event = eventBuilder.name("message")
+//				.mediaType(MediaType.TEXT_PLAIN_TYPE)
+//				.data(String.class, message)
+//				.build();
+//
+//		broadcaster.broadcast(event);
+//
+//		return "Message '" + message + "' has been broadcast.";
+//	}
 
 
 
