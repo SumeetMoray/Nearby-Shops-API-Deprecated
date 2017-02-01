@@ -225,8 +225,8 @@ public class Main {
 			statement.executeUpdate(ItemCategory.createTableItemCategoryPostgres);
 			statement.executeUpdate(Item.createTableItemPostgres);
 
-			statement.executeUpdate(Shop.createTableShopPostgres);
 			statement.executeUpdate(ShopAdmin.createtableShopAdminPostgres);
+			statement.executeUpdate(Shop.createTableShopPostgres);
 			statement.executeUpdate(DeliveryGuySelf.createtableDeliveryGuySelfPostgres);
 			statement.executeUpdate(ShopStaff.createTableShopStaffPostgres);
 

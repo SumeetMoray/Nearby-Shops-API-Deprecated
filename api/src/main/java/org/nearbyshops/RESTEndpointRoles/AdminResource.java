@@ -78,6 +78,18 @@ public class AdminResource {
 	@RolesAllowed({GlobalConstants.ROLE_ADMIN})
 	public Response getDistributorLogin()
 	{
+
+
+
+
+
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+
 		//@Context HttpHeaders header
 		if(Globals.accountApproved instanceof Admin)
 		{
@@ -106,6 +118,9 @@ public class AdminResource {
 		{
 			throw new ForbiddenException("Not Permitted !");
 		}
+
+
+
 
 	}
 

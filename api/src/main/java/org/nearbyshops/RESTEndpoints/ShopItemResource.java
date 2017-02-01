@@ -276,21 +276,22 @@ public class ShopItemResource {
 	@PUT
 	@Path("/UpdateByShop")
 	@Consumes(MediaType.APPLICATION_JSON)
-//	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN,GlobalConstants.ROLE_SHOP_STAFF})
+	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN,GlobalConstants.ROLE_SHOP_STAFF})
 	public Response updateShop(ShopItem shopItem)
 	{
 
 		System.out.println("Inside Resource Method | Update by shop !");
-//
-//		if(Globals.accountApproved instanceof Staff) {
-//			// checking permission
-//			Staff staff = (Staff) Globals.accountApproved;
-//			if (!staff.isApproveShops())
-//			{
-//				// the staff member doesnt have persmission to post Item Category
-//				throw new ForbiddenException("Not Permitted");
-//			}
-//		}
+
+		if(Globals.accountApproved instanceof ShopStaff) {
+			// checking permission
+			ShopStaff staff = (ShopStaff) Globals.accountApproved;
+			if (!staff.isUpdateStock())
+			{
+				// the staff member doesnt have persmission to post Item Category
+				throw new ForbiddenException("Not Permitted");
+			}
+		}
+
 
 		shopItemDAO.updateShopItem(shopItem);
 		int rowCount = shopItemDAO.updateShopItem(shopItem);

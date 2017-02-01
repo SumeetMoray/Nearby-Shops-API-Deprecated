@@ -451,6 +451,16 @@ public class ShopAdminResource {
 	@RolesAllowed({GlobalConstants.ROLE_SHOP_ADMIN_DISABLED})
 	public Response getShopAdminLogin()
 	{
+
+
+
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+
 		ShopAdmin shopAdmin = null;
 
 		if(Globals.accountApproved instanceof ShopAdmin)
