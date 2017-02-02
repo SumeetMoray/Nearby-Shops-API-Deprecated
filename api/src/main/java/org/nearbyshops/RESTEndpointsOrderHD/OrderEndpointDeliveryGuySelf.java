@@ -93,6 +93,7 @@ public class OrderEndpointDeliveryGuySelf {
 			if(rowCount >= 1)
 			{
 
+				Globals.broadcastMessageToEndUser("Order Out For Delivery (Home Delivery)","Order Number " + String.valueOf(orderID) + " (HD) is Out for Delivery !",order.getEndUserID());
 				return Response.status(Status.OK)
 						.build();
 			}

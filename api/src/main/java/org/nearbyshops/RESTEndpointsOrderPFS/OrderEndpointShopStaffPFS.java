@@ -116,7 +116,10 @@ public class OrderEndpointShopStaffPFS {
 			if(rowCount >= 1)
 			{
 
-				return Response.status(Status.OK)
+				// generate a notification for the user - customer
+				Globals.broadcastMessageToEndUser("Order Confirmed (Pick From Shop)","Order Number " + String.valueOf(orderID) + " (PFS) has been confirmed !",order.getEndUserID());
+
+					return Response.status(Status.OK)
 						.build();
 			}
 			if(rowCount <= 0)
@@ -275,6 +278,7 @@ public class OrderEndpointShopStaffPFS {
 			if(rowCount >= 1)
 			{
 
+				Globals.broadcastMessageToEndUser("Order Ready For Pickup (Pick From Shop)","Order Number " + String.valueOf(orderID) + " (PFS) is Ready to Pickup !",order.getEndUserID());
 				return Response.status(Status.OK)
 						.build();
 			}
@@ -357,6 +361,7 @@ public class OrderEndpointShopStaffPFS {
 			if(rowCount >= 1)
 			{
 
+				Globals.broadcastMessageToEndUser("Order Delivered (Pick From Shop)","Order Number " + String.valueOf(orderID) + " (PFS) is Delivered !",order.getEndUserID());
 				return Response.status(Status.OK)
 						.build();
 			}
@@ -607,6 +612,7 @@ public class OrderEndpointShopStaffPFS {
 		if(rowCount >= 1)
 		{
 
+			Globals.broadcastMessageToEndUser("Order Cancelled (Pick From Shop)","Order Number " + String.valueOf(orderID) + " (PFS) is Cancelled By Shop !",order.getEndUserID());
 			return Response.status(Status.OK)
 					.build();
 		}

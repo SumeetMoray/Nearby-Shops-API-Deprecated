@@ -69,7 +69,7 @@ public class OrderResource {
 		{
 			Order orderResult = Globals.orderService.readOrder(orderId);
 
-			Globals.broadcastMessage("Order Number : " + String.valueOf(orderId) + " Has been received !",orderResult.getShopID());
+			Globals.broadcastMessageToShop("Order Number : " + String.valueOf(orderId) + " Has been received !",orderResult.getShopID());
 
 			return Response.status(Status.CREATED)
 //					.entity(orderResult)

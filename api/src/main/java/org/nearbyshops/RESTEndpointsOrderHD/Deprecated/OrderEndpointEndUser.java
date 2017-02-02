@@ -62,7 +62,7 @@ public class OrderEndpointEndUser {
 		if(orderResult!=null)
 		{
 
-			Globals.broadcastMessage(String.valueOf(orderResult.getOrderID()) + "Has been received !",order.getShopID());
+			Globals.broadcastMessageToShop(String.valueOf(orderResult.getOrderID()) + "Has been received !",order.getShopID());
 
 			return Response.status(Status.CREATED)
 					.entity(orderResult)

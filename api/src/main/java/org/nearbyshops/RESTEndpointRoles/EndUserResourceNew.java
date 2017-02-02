@@ -1,6 +1,9 @@
 package org.nearbyshops.RESTEndpointRoles;
 
 import net.coobird.thumbnailator.Thumbnails;
+import org.glassfish.jersey.media.sse.EventOutput;
+import org.glassfish.jersey.media.sse.SseBroadcaster;
+import org.glassfish.jersey.media.sse.SseFeature;
 import org.nearbyshops.DAOsPrepared.ShopDAO;
 import org.nearbyshops.DAOsPreparedRoles.EndUserDAONew;
 import org.nearbyshops.DAOsPreparedRoles.ShopAdminDAO;
@@ -40,8 +43,34 @@ public class EndUserResourceNew {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
-	
+
+
+	@GET
+	@Path("/Notifications/{EndUserID}")
+	@Produces(SseFeature.SERVER_SENT_EVENTS)
+	public EventOutput listenToBroadcast(@PathParam("EndUserID")int endUserID) {
+
+		final EventOutput eventOutput = new EventOutput();
+
+		if(Globals.broadcasterMapEndUser.get(endUserID)!=null)
+		{
+			SseBroadcaster broadcasterOne = Globals.broadcasterMapEndUser.get(endUserID);
+			broadcasterOne.add(eventOutput);
+		}
+		else
+		{
+			SseBroadcaster broadcasterTwo = new SseBroadcaster();
+			broadcasterTwo.add(eventOutput);
+			Globals.broadcasterMapEndUser.put(endUserID,broadcasterTwo);
+		}
+
+		return eventOutput;
+	}
+
+
+
+
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes({MediaType.APPLICATION_JSON})

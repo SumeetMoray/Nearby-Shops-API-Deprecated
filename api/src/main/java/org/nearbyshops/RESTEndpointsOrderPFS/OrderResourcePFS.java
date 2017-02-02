@@ -5,8 +5,6 @@ import org.glassfish.jersey.media.sse.SseBroadcaster;
 import org.glassfish.jersey.media.sse.SseFeature;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
-import org.nearbyshops.Model.Order;
-import org.nearbyshops.ModelEndPoints.OrderEndPoint;
 import org.nearbyshops.ModelPickFromShop.OrderEndPointPFS;
 import org.nearbyshops.ModelPickFromShop.OrderPFS;
 import org.nearbyshops.ModelRoles.EndUser;
@@ -73,7 +71,7 @@ public class OrderResourcePFS {
 		{
 			OrderPFS orderResult = Globals.orderServicePFS.readOrder(orderId);
 
-			Globals.broadcastMessage("Pick from Shop - Order Number : " + String.valueOf(orderId) + " Has been received !",orderResult.getShopID());
+			Globals.broadcastMessageToShop("Pick from Shop - Order Number : " + String.valueOf(orderId) + " Has been received !",orderResult.getShopID());
 
 			return Response.status(Status.CREATED)
 //					.entity(orderResult)

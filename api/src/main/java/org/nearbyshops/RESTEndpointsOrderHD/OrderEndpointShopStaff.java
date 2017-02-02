@@ -110,6 +110,7 @@ public class OrderEndpointShopStaff {
 			if(rowCount >= 1)
 			{
 
+				Globals.broadcastMessageToEndUser("Order Confirmed (Home Delivery)","Order Number " + String.valueOf(orderID) + " (HD) is Confirmed !",order.getEndUserID());
 				return Response.status(Status.OK)
 						.build();
 			}
@@ -451,6 +452,7 @@ public class OrderEndpointShopStaff {
 			if(rowCount >= 1)
 			{
 
+				Globals.broadcastMessageToEndUser("Order Delivered (Home Delivery)","Order Number " + String.valueOf(orderID) + " (HD) is Delivered !",order.getEndUserID());
 				return Response.status(Status.OK)
 						.entity(null)
 						.build();
@@ -698,6 +700,7 @@ public class OrderEndpointShopStaff {
 		if(rowCount >= 1)
 		{
 
+			Globals.broadcastMessageToEndUser("Order Cancelled (Home Delivery)","Order Number " + String.valueOf(orderID) + " (HD) is Cancelled By Shop !",order.getEndUserID());
 			return Response.status(Status.OK)
 					.entity(null)
 					.build();

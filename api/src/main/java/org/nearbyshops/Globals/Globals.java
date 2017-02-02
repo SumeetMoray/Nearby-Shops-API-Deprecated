@@ -121,7 +121,7 @@ public class Globals {
 
 	public static Map<Integer,SseBroadcaster> broadcasterMap = new HashMap<>();
 
-	public static String broadcastMessage(String message, int shopID) {
+	public static String broadcastMessageToShop(String message, int shopID) {
 
 		OutboundEvent.Builder eventBuilder = new OutboundEvent.Builder();
 		OutboundEvent event = eventBuilder.name("Order Received !")
@@ -139,12 +139,34 @@ public class Globals {
 	}
 
 
+	// broadcast messages to end user
+
+	public static Map<Integer,SseBroadcaster> broadcasterMapEndUser = new HashMap<>();
+
+	public static String broadcastMessageToEndUser(String title, String message, int endUserID) {
+
+		OutboundEvent.Builder eventBuilder = new OutboundEvent.Builder();
+		OutboundEvent event = eventBuilder.name(title)
+				.mediaType(MediaType.TEXT_PLAIN_TYPE)
+				.data(String.class, message)
+				.build();
+
+
+		if(broadcasterMapEndUser.get(endUserID)!=null)
+		{
+			broadcasterMapEndUser.get(endUserID).broadcast(event);
+		}
+
+		return "Message '" + message + "' has been broadcast.";
+	}
+
+
 
 
 //
 //	public static SseBroadcaster broadcaster = new SseBroadcaster();
 //
-//	public static String broadcastMessage(String message) {
+//	public static String broadcastMessageToShop(String message) {
 //		OutboundEvent.Builder eventBuilder = new OutboundEvent.Builder();
 //		OutboundEvent event = eventBuilder.name("message")
 //				.mediaType(MediaType.TEXT_PLAIN_TYPE)
