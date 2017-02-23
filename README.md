@@ -3,7 +3,9 @@
 Nearby Shops API
 ==================
 
-Rest API for Nearby Shops App. Please see the API installation guide at this link : http://nearbyshops.org/server-administration/
+Rest API for Nearby Shops App. 
+
+For installing the API on the Server please see the API installation guide at this link : http://nearbyshops.org/server-administration/
 
 
 For more information please see [the website][1].
