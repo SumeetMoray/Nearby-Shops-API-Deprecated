@@ -5,7 +5,7 @@ Nearby Shops API
 
 Rest API for Nearby Shops App. 
 
-For installing the API on the Server please see the API installation guide at this link : http://nearbyshops.org/server-administration/
+For installing the API on cloud Hosting Services like Digital Ocean or AWS please see the API installation guide available at this link : http://nearbyshops.org/server-administration/
 
 
 For more information please see [the website][1].
@@ -16,20 +16,7 @@ Download
 
 
 
-Download [the latest JAR][2] or grab via Maven:
-```xml
-<dependency>
-  <groupId>com.squareup.retrofit2</groupId>
-  <artifactId>retrofit</artifactId>
-  <version>2.2.0</version>
-</dependency>
-```
-or Gradle:
-```groovy
-compile 'com.squareup.retrofit2:retrofit:2.2.0'
-```
-
-
+Download [the latest JAR] from this Link : 
 
 
 License
