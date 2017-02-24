@@ -5,7 +5,7 @@ Nearby Shops API
 
 Rest API for Nearby Shops App. 
 
-For installing the API on cloud Hosting Services like Digital Ocean or AWS please see the API installation guide available at this link : http://nearbyshops.org/server-administration/
+For more information on Nearby Shops Software please visit http://nearbyshops.org
 
 
 Download
@@ -14,8 +14,10 @@ Download
 Download [the latest JAR] from this Link : 
 
 
-API Installation and Setup
---------------------------
+Installation Guide and Setup
+------------------------------
+
+For installing the API on cloud Hosting Services like Digital Ocean or AWS please see the API installation guide available at this link : http://nearbyshops.org/server-administration/
 
 
 Screenshots
@@ -38,6 +40,9 @@ Screenshots
 
 Guidelines for Code Contributors
 --------------------------------
+
+For guidelines please read the FAQ's (Frequently Asked Questions) available at 
+http://nearbyshops.org/frequently-asked-questions-faqs/
 
 
 Help and Contribution Required
