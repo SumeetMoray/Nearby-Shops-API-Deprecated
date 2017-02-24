@@ -22,6 +22,19 @@ Screenshots
 -----------
 
 
+<img src="https://i2.wp.com/nearbyshops.org/wp-content/uploads/2017/02/Screenshot_20170210-214201.png" width="208">
+<img src="https://github.com/SumeetMoray/Nearby-Shops-Global-items-Database-app/blob/master/screenshots/gidb-item-categories-browse.png" width="208">
+<img src="https://github.com/SumeetMoray/Nearby-Shops-Global-items-Database-app/blob/master/screenshots/gidb-items-browse.png" width="208">
+<img src="https://github.com/SumeetMoray/Nearby-Shops-Global-items-Database-app/blob/master/screenshots/gidb-items-by-category.png" width="208">
+
+
+<img src="https://i2.wp.com/nearbyshops.org/wp-content/uploads/2017/02/Screenshot_20170210-214209.png" width="208">
+<img src="https://i2.wp.com/nearbyshops.org/wp-content/uploads/2017/02/Screenshot_20170224-075254.png" width="208">
+
+
+
+
+
 
 Guidelines for Code Contributors
 --------------------------------
