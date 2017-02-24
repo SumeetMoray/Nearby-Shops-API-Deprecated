@@ -11,9 +11,32 @@ For installing the API on cloud Hosting Services like Digital Ocean or AWS pleas
 Download
 --------
 
-
-
 Download [the latest JAR] from this Link : 
+
+
+API Installation and Setup
+--------------------------
+
+
+Screenshots
+-----------
+
+
+
+Guidelines for Code Contributors
+--------------------------------
+
+
+Contribution Required
+---------------------
+
+Product promotion videos
+Graphics, Images Promotion
+Contribute Item Images for putting them in Items Database
+
+
+
+
 
 
 License
