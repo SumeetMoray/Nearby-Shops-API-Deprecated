@@ -5,7 +5,7 @@ Nearby Shops API
 
 Rest API for Nearby Shops App. 
 
-For more information on Nearby Shops Software please visit http://nearbyshops.org
+For more information please visit http://nearbyshops.org
 
 
 Download
