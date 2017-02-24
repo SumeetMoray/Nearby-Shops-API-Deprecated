@@ -40,12 +40,14 @@ Guidelines for Code Contributors
 --------------------------------
 
 
-Contribution Required
----------------------
+Help and Contribution Required
+------------------------------
 
-Product promotion videos
-Graphics, Images Promotion
-Contribute Item Images for putting them in Items Database
+Help and contribution is required in the following areas
+
+1. Create promotional videos for the Nearby Shops
+2. Graphics and Images for Promotion and to be used in Nearby Shops Website
+3. Contribute Item Image in the Global Items Database
 
 
 
