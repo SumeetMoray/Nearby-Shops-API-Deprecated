@@ -15,6 +15,7 @@ Download
 --------
 
 Download [the latest JAR] from this Link : 
+http://nearbyshops.org/downloads/
 
 
 Installation Guide and Setup
