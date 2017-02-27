@@ -63,7 +63,9 @@ Help and contribution is required in the following areas
 
 1. Create promotional videos for the Nearby Shops
 2. Graphics and Images for Promotion and to be used in Nearby Shops Website
-3. Contribute Item Image in the Global Items Database
+3. Contribution and help required for building an Open-Source Global Items Database
+
+For contributing plese write to us using the contact form available at http://nearbyshops.org
 
 
 
