@@ -65,7 +65,7 @@ Help and contribution is required in the following areas
 2. Graphics and Images for Promotion and to be used in Nearby Shops Website
 3. Contribution and help required for building an Open-Source Global Items Database
 
-For contributing plese write to us using the contact form available at http://nearbyshops.org
+For contributing plese write to us using the contact form available at http://nearbyshops.org/contact/
 
 
 
