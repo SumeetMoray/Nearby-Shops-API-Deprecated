@@ -39,6 +39,13 @@ Screenshots
 
 
 
+Built With (Technology Stack)
+-------------------------------
+
+1. Postgres DB as a Backend Database
+2. Jersey Framework for the REST API
+3. Jetty Server as an Embedded HTTP Server in the app. 
+
 
 
 Guidelines for Code Contributors
