@@ -97,6 +97,7 @@ public class Main {
 
 		createDB();
 		createTables();
+		upgradeTables();
 
 		startServer();
 	}
@@ -202,7 +203,61 @@ public class Main {
 		}
 
 	}
-	
+
+
+	private static void upgradeTables()
+	{
+
+		Connection connection = null;
+		Statement statement = null;
+
+		try {
+
+			connection = DriverManager.getConnection(JDBCContract.CURRENT_CONNECTION_URL
+					,JDBCContract.CURRENT_USERNAME
+					,JDBCContract.CURRENT_PASSWORD);
+
+			statement = connection.createStatement();
+
+			statement.executeUpdate(ItemCategory.upgradeTableSchema);
+			statement.executeUpdate(Item.upgradeTableSchema);
+
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		finally{
+
+
+			// close the connection and statement accountApproved
+
+			if(statement !=null)
+			{
+
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+
+
+			if(connection!=null)
+			{
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+
+	}
 	
 	
 	private static void createTables()

@@ -115,7 +115,7 @@ public class ItemDAO {
 
 
 
-	public int saveItemRowCount(Item item)
+	public int saveItemRowCountGIDB(Item item)
 	{
 
 		Connection connection = null;
@@ -131,9 +131,12 @@ public class ItemDAO {
 
 				+ Item.ITEM_CATEGORY_ID + ","
 				+ Item.QUANTITY_UNIT + ","
-				+ Item.ITEM_DESCRIPTION_LONG
+				+ Item.ITEM_DESCRIPTION_LONG + ","
 
-				+ ") VALUES(?,?,? ,?,?,?)";
+				+ Item.GIDB_SERVICE_URL + ","
+				+ Item.GIDB_ITEM_ID + ""
+
+				+ ") VALUES(?,?,? ,?,?,? ,?,?)";
 
 		try {
 
@@ -149,6 +152,8 @@ public class ItemDAO {
 			statement.setString(++i,item.getQuantityUnit());
 			statement.setString(++i,item.getItemDescriptionLong());
 
+			statement.setString(++i,item.getGidbServiceURL());
+			statement.setObject(++i,item.getGidbItemID());
 
 			idOfInsertedRow = statement.executeUpdate();
 
@@ -191,6 +196,87 @@ public class ItemDAO {
 
 		return idOfInsertedRow;
 	}
+
+
+
+
+	public int updateItemGIDB(Item item)
+	{
+
+		String updateStatement = "UPDATE " + Item.TABLE_NAME
+
+				+ " SET "
+
+				+ " " + Item.ITEM_NAME + " = ?,"
+				+ " " + Item.ITEM_DESC + " = ?,"
+				+ " " + Item.ITEM_IMAGE_URL + " = ?,"
+
+				+ " " + Item.ITEM_CATEGORY_ID + " = ?,"
+				+ " " + Item.QUANTITY_UNIT + " = ?,"
+				+ " " + Item.ITEM_DESCRIPTION_LONG + " = ?"
+
+				+ " WHERE " + Item.GIDB_SERVICE_URL + " = ?"
+				+ " AND " + Item.GIDB_ITEM_ID + " = ? ";
+
+
+		Connection connection = null;
+		PreparedStatement statement = null;
+
+		int rowCountUpdated = 0;
+
+		try {
+
+			connection = dataSource.getConnection();
+			statement = connection.prepareStatement(updateStatement);
+
+			int i = 0;
+			statement.setString(++i,item.getItemName());
+			statement.setString(++i,item.getItemDescription());
+			statement.setString(++i,item.getItemImageURL());
+
+			statement.setInt(++i,item.getItemCategoryID());
+			statement.setString(++i,item.getQuantityUnit());
+			statement.setString(++i,item.getItemDescriptionLong());
+
+//			statement.setInt(++i,item.getItemID());
+
+			statement.setString(++i,item.getGidbServiceURL());
+			statement.setObject(++i,item.getGidbItemID());
+
+			rowCountUpdated = statement.executeUpdate();
+			System.out.println("Total rows updated: " + rowCountUpdated);
+
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally
+
+		{
+
+			try {
+
+				if(statement!=null)
+				{statement.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(connection!=null)
+				{connection.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return rowCountUpdated;
+	}
+
 
 
 

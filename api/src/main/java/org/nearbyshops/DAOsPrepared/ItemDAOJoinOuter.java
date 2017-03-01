@@ -28,6 +28,88 @@ public class ItemDAOJoinOuter {
 	}
 
 
+	public Item checkItemByGidbURL(String gidbURL, int gidbID) {
+
+		String queryJoin = "SELECT DISTINCT "
+				+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + ","
+				+ Item.TABLE_NAME + "." + Item.ITEM_ID + ","
+				+ Item.TABLE_NAME + "." + Item.ITEM_IMAGE_URL + ","
+				+ Item.TABLE_NAME + "." + Item.GIDB_ITEM_ID + ","
+				+ Item.TABLE_NAME + "." + Item.GIDB_SERVICE_URL + ""
+				+ " FROM " + Item.TABLE_NAME
+				+ " WHERE " + Item.GIDB_SERVICE_URL + " = ?"
+				+ " AND " + Item.GIDB_ITEM_ID + " = ?";
+
+
+
+		Item item = null;
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+
+		try {
+
+			connection = dataSource.getConnection();
+			statement = connection.prepareStatement(queryJoin);
+
+			int i = 0;
+			statement.setString(++i,gidbURL);
+			statement.setObject(++i,gidbID);
+
+			rs = statement.executeQuery();
+
+			while (rs.next()) {
+
+				item = new Item();
+
+				item.setItemCategoryID(rs.getInt(Item.ITEM_CATEGORY_ID));
+				item.setItemID(rs.getInt(Item.ITEM_ID));
+				item.setItemImageURL(rs.getString(Item.ITEM_IMAGE_URL));
+				item.setGidbItemID(rs.getInt(Item.GIDB_ITEM_ID));
+				item.setGidbServiceURL(rs.getString(Item.GIDB_SERVICE_URL));
+
+			}
+
+		}
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally
+
+		{
+
+			try {
+				if(rs!=null)
+				{rs.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(statement!=null)
+				{statement.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(connection!=null)
+				{connection.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return item;
+	}
+
+
 
 	//Integer shopID,
 
@@ -62,6 +144,8 @@ public class ItemDAOJoinOuter {
 				+ Item.TABLE_NAME + "." + Item.QUANTITY_UNIT + ","
 				+ Item.TABLE_NAME + "." + Item.DATE_TIME_CREATED + ","
 				+ Item.TABLE_NAME + "." + Item.ITEM_DESCRIPTION_LONG + ","
+				+ Item.TABLE_NAME + "." + Item.GIDB_ITEM_ID + ","
+				+ Item.TABLE_NAME + "." + Item.GIDB_SERVICE_URL + ","
 
 				+  "avg(" + ItemReview.TABLE_NAME + "." + ItemReview.RATING + ") as avg_rating" + ","
 				+  "count( DISTINCT " + ItemReview.TABLE_NAME + "." + ItemReview.END_USER_ID + ") as rating_count" + ""
@@ -72,12 +156,10 @@ public class ItemDAOJoinOuter {
 
 
 
-
-
-
 		if(itemCategoryID != null)
 		{
-			queryJoin = queryJoin + " WHERE "
+			queryJoin = queryJoin
+					+ " WHERE "
 					+ Item.TABLE_NAME
 					+ "."
 					+ Item.ITEM_CATEGORY_ID + " = " + itemCategoryID;
@@ -250,6 +332,9 @@ public class ItemDAOJoinOuter {
 				item.setItemDescriptionLong(rs.getString(Item.ITEM_DESCRIPTION_LONG));
 				item.setDateTimeCreated(rs.getTimestamp(Item.DATE_TIME_CREATED));
 				item.setQuantityUnit(rs.getString(Item.QUANTITY_UNIT));
+				item.setGidbItemID(rs.getInt(Item.GIDB_ITEM_ID));
+				item.setGidbServiceURL(rs.getString(Item.GIDB_SERVICE_URL));
+
 
 
 				ItemStats itemStats = new ItemStats();
@@ -270,7 +355,8 @@ public class ItemDAOJoinOuter {
 			
 			System.out.println("Item By CategoryID " + itemList.size());	
 			
-		} catch (SQLException e) {
+		}
+		catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

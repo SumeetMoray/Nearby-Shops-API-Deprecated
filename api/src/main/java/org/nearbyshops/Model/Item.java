@@ -28,6 +28,11 @@ public class Item {
 	public static final String IS_ENABLED = "IS_ENABLED";
 	public static final String IS_WAITLISTED = "IS_WAITLISTED";
 
+	public static final String GIDB_ITEM_ID = "GIDB_ITEM_ID";
+	public static final String GIDB_SERVICE_URL = "GIDB_SERVICE_URL";
+
+	public static final String MAX_RETAIL_PRICE = "MAX_RETAIL_PRICE";
+
 
 	// Create Table Statement
 	public static final String createTableItemPostgres = "CREATE TABLE IF NOT EXISTS "
@@ -42,10 +47,23 @@ public class Item {
 			+ " " + Item.IS_ENABLED + " boolean,"
 			+ " " + Item.IS_WAITLISTED + " boolean,"
 			+ " " + Item.DATE_TIME_CREATED + "  timestamp with time zone NOT NULL DEFAULT now(),"
+			+ " " + Item.GIDB_SERVICE_URL + " text,"
+			+ " " + Item.GIDB_ITEM_ID + " INT,"
+			+ " " + Item.MAX_RETAIL_PRICE + " FLOAT,"
 			+ " FOREIGN KEY(" + Item.ITEM_CATEGORY_ID +") REFERENCES " + ItemCategory.TABLE_NAME + "(" + ItemCategory.ITEM_CATEGORY_ID + ")"
 			+ ")";
 
 //			+ " FOREIGN KEY(" + Item.ITEM_CATEGORY_ID +") REFERENCES ITEM_CATEGORY(ID))";
+
+
+
+	public static final String upgradeTableSchema =
+			"ALTER TABLE IF EXISTS " + Item.TABLE_NAME
+					+ " ADD COLUMN " + Item.GIDB_SERVICE_URL + " text,"
+					+ " ADD COLUMN " + Item.GIDB_ITEM_ID + " int,"
+					+ " ADD COLUMN " + Item.MAX_RETAIL_PRICE + " float";
+
+
 
 
 	// Instance Variables
@@ -74,7 +92,9 @@ public class Item {
 	private Boolean isEnabled;
 	private Boolean isWaitlisted;
 
-
+	// gidb stands for global items database
+	private int gidbItemID;
+	private String gidbServiceURL;
 
 
 	private Float rt_rating_avg;
@@ -131,7 +151,6 @@ public class Item {
 
 	public Item() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Integer getItemCategoryID() {
@@ -195,5 +214,23 @@ public class Item {
 	}
 	public void setItemName(String itemName) {
 		this.itemName = itemName;
+	}
+
+
+	public int getGidbItemID() {
+		return gidbItemID;
+	}
+
+	public void setGidbItemID(int gidbItemID) {
+		this.gidbItemID = gidbItemID;
+	}
+
+
+	public String getGidbServiceURL() {
+		return gidbServiceURL;
+	}
+
+	public void setGidbServiceURL(String gidbServiceURL) {
+		this.gidbServiceURL = gidbServiceURL;
 	}
 }

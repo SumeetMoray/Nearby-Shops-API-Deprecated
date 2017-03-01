@@ -712,8 +712,8 @@ public class ShopAdminDAO {
 						+ ShopAdmin.SHOP_ADMIN_ID + ","
 						+ ShopAdmin.NAME + ","
 
-//						+ Usernames.USERNAME
-//						+ ShopAdmin.PASSWORD + ","
+						+ Usernames.USERNAME + ","
+						+ ShopAdmin.PASSWORD + ","
 
 						+ ShopAdmin.ABOUT + ","
 						+ ShopAdmin.PROFILE_IMAGE_URL + ","
@@ -863,8 +863,8 @@ public class ShopAdminDAO {
 				shopAdmin.setName(rs.getString(ShopAdmin.NAME));
 //				shopAdmin.setShopID((Integer) rs.getObject(ShopAdmin.SHOP_ID));
 
-//				shopAdmin.setUsername(rs.getString(ShopAdmin.USERNAME));
-//				shopAdmin.setPassword(rs.getString(ShopAdmin.PASSWORD));
+				shopAdmin.setUsername(rs.getString(Usernames.USERNAME));
+				shopAdmin.setPassword(rs.getString(ShopAdmin.PASSWORD));
 
 				shopAdmin.setAbout(rs.getString(ShopAdmin.ABOUT));
 				shopAdmin.setProfileImageURL(rs.getString(ShopAdmin.PROFILE_IMAGE_URL));

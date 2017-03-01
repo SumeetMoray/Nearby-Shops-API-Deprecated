@@ -688,7 +688,7 @@ public class ItemResource {
 			item.setItemImageURL(saveNewImage(item.getRt_gidb_service_url(),item.getItemImageURL()));
 
 			int rowCountTemp = 0;
-			rowCountTemp = itemDAO.saveItemRowCount(item);
+			rowCountTemp = itemDAO.saveItemRowCountGIDB(item);
 			rowCountSum = rowCountSum + rowCountTemp;
 
 			if(rowCountTemp==0)
@@ -723,6 +723,92 @@ public class ItemResource {
 		return null;
 	}
 
+
+
+
+	@POST
+	@Path("/AddFromGlobalRevised")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
+	public Response addItemFromGlobalGIDB(List<Item> itemList)
+	{
+
+		int rowCountSum = 0;
+
+		if(Globals.accountApproved instanceof Staff) {
+
+			// checking permission
+			Staff staff = (Staff) Globals.accountApproved;
+
+			if (!staff.isCreateUpdateItems())
+			{
+				// the staff member doesnt have persmission to post Item Category
+
+				throw new ForbiddenException("Not Permitted");
+			}
+		}
+
+
+
+		for(Item item : itemList)
+		{
+			item.setItemImageURL(saveNewImage(item.getGidbServiceURL(),item.getItemImageURL()));
+
+			// if item already exist then do an update. If item does not exist then do an insert
+
+			Item itemGIDB = itemDAOJoinOuter.checkItemByGidbURL(item.getGidbServiceURL(),item.getGidbItemID());
+
+			int rowCountTemp = 0;
+
+			if(itemGIDB == null)
+			{
+				// do an insert
+
+				rowCountTemp = itemDAO.saveItemRowCountGIDB(item);
+				rowCountSum = rowCountSum + rowCountTemp;
+			}
+			else
+			{
+				// do an update
+
+				rowCountTemp = itemDAO.updateItemGIDB(item);
+				rowCountSum = rowCountSum + rowCountTemp;
+			}
+
+
+
+			if(rowCountTemp==0)
+			{
+				// update failed delete the new added Item Image
+				deleteImageFileInternal(item.getItemImageURL());
+			}
+
+		}
+
+
+		if(rowCountSum >= itemList.size())
+		{
+
+			return Response.status(Status.CREATED)
+					.build();
+
+		}
+		else if(rowCountSum < itemList.size() && rowCountSum > 0)
+		{
+			return Response.status(Status.PARTIAL_CONTENT)
+					.build();
+
+		}
+		else if(rowCountSum <= 0)
+		{
+			return Response.status(Status.NOT_MODIFIED)
+					.entity(null)
+					.build();
+		}
+
+		return null;
+	}
 
 
 	// Image Utility Methods
@@ -880,6 +966,8 @@ public class ItemResource {
 			Files.deleteIfExists(BASE_DIR.resolve(previousImageName));
 			Files.deleteIfExists(BASE_DIR.resolve("three_hundred_" + previousImageName + ".jpg"));
 			Files.deleteIfExists(BASE_DIR.resolve("five_hundred_" + previousImageName + ".jpg"));
+			Files.deleteIfExists(BASE_DIR.resolve("seven_hundred_" + previousImageName + ".jpg"));
+			Files.deleteIfExists(BASE_DIR.resolve("nine_hundred_" + previousImageName + ".jpg"));
 		}
 
 
@@ -954,6 +1042,20 @@ public class ItemResource {
 
 
 
+			Thumbnails.of(BASE_DIR.toString() + "/" + filename)
+					.size(700,700)
+					.outputFormat("jpg")
+					.toFile(new File(BASE_DIR.toString() + "/" + "seven_hundred_" + filename));
+
+
+
+			Thumbnails.of(BASE_DIR.toString() + "/" + filename)
+					.size(900,900)
+					.outputFormat("jpg")
+					.toFile(new File(BASE_DIR.toString() + "/" + "nine_hundred_" + filename));
+
+
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -1015,6 +1117,8 @@ public class ItemResource {
 			// delete thumbnails
 			Files.deleteIfExists(BASE_DIR.resolve("three_hundred_" + fileName + ".jpg"));
 			Files.deleteIfExists(BASE_DIR.resolve("five_hundred_" + fileName + ".jpg"));
+			Files.deleteIfExists(BASE_DIR.resolve("seven_hundred_" + fileName + ".jpg"));
+			Files.deleteIfExists(BASE_DIR.resolve("nine_hundred_" + fileName + ".jpg"));
 
 
 		} catch (IOException e) {

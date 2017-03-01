@@ -26,6 +26,10 @@ public class ItemCategory {
 	public static final String IS_WAITLISTED = "IS_WAITLISTED";
 
 
+	public static final String GIDB_ITEM_CAT_ID = "GIDB_ITEM_CAT_ID";
+	public static final String GIDB_SERVICE_URL = "GIDB_SERVICE_URL";
+
+
 
 
 	// Create Table Statement
@@ -46,9 +50,16 @@ public class ItemCategory {
 
 			+ " " + ItemCategory.IS_ENABLED + " boolean,"
 			+ " " + ItemCategory.IS_WAITLISTED + " boolean,"
+			+ " " + ItemCategory.GIDB_ITEM_CAT_ID + " INT,"
+			+ " " + ItemCategory.GIDB_SERVICE_URL + " text,"
 			+ " FOREIGN KEY(" + ItemCategory.PARENT_CATEGORY_ID +") REFERENCES "
 			+ ItemCategory.TABLE_NAME + "(" + ItemCategory.ITEM_CATEGORY_ID + ")"
 			+ ")";
+
+	public static final String upgradeTableSchema =
+			"ALTER TABLE IF EXISTS " + ItemCategory.TABLE_NAME
+					+ " ADD COLUMN " + ItemCategory.GIDB_SERVICE_URL + " text,"
+					+ " ADD COLUMN " + ItemCategory.GIDB_ITEM_CAT_ID + " int";
 
 
 
@@ -67,6 +78,10 @@ public class ItemCategory {
 	private String descriptionShort;
 	private boolean isEnabled;
 	private boolean isWaitlisted;
+
+	// gidb stands for global items database
+	private int gidbItemCatID;
+	private String gidbServiceURL;
 
 
 	private String rt_gidb_service_url;
@@ -89,6 +104,22 @@ public class ItemCategory {
 	
 	//Getters and Setters
 
+
+	public int getGidbItemCatID() {
+		return gidbItemCatID;
+	}
+
+	public void setGidbItemCatID(int gidbItemCatID) {
+		this.gidbItemCatID = gidbItemCatID;
+	}
+
+	public String getGidbServiceURL() {
+		return gidbServiceURL;
+	}
+
+	public void setGidbServiceURL(String gidbServiceURL) {
+		this.gidbServiceURL = gidbServiceURL;
+	}
 
 	public Integer getCategoryOrder() {
 		return categoryOrder;

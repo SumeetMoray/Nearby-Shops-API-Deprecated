@@ -4,7 +4,10 @@ import com.sun.org.apache.xpath.internal.operations.Or;
 import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.*;
+import org.nearbyshops.ModelStats.CartStats;
+
 import java.sql.*;
+import java.util.List;
 
 
 /**
@@ -29,6 +32,11 @@ public class PlaceOrderHD_DAO {
         PreparedStatement statementDeleteCart = null;
         PreparedStatement statementDeleteCartItem = null;
 //        PreparedStatement statementUpdateOrder = null;
+
+
+        Cart cart = Globals.cartService.readCart(cartID);
+        List<CartStats> cartStats = Globals.cartStatsDAO.getCartStats(cart.getEndUserID(),cartID,cart.getShopID());
+        Shop shop = Globals.shopDAO.getShop(cart.getShopID(),null,null);
 
 
         int orderID = -1;
@@ -172,9 +180,20 @@ public class PlaceOrderHD_DAO {
             connection = dataSource.getConnection();
             connection.setAutoCommit(false);
 
+            int deliveryCharges = 0;
+
+            if(cartStats.size()==1)
+            {
+                if(cartStats.get(0).getCart_Total() < shop.getBillAmountForFreeDelivery())
+                {
+                    deliveryCharges = (int) shop.getDeliveryCharges();
+                }
+            }
+
+
 
             statementCopyCartToOrder = connection.prepareStatement(copyCartToOrder,PreparedStatement.RETURN_GENERATED_KEYS);
-            statementCopyCartToOrder.setInt(1,0);
+            statementCopyCartToOrder.setInt(1,deliveryCharges);
             statementCopyCartToOrder.setInt(2,order.getDeliveryAddressID());
             statementCopyCartToOrder.setInt(3,cartID);
             statementCopyCartToOrder.executeUpdate();

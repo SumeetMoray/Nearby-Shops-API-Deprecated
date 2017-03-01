@@ -2462,6 +2462,8 @@ public class ShopDAO {
 					+ Shop.TABLE_NAME + "." + Shop.IS_OPEN + ","
 					+ Shop.TABLE_NAME + "." + Shop.LOGO_IMAGE_PATH + ","
 					+ Shop.TABLE_NAME + "." + Shop.TIMESTAMP_CREATED + ","
+					+ Shop.TABLE_NAME + "." + Shop.PICK_FROM_SHOP_AVAILABLE + ","
+					+ Shop.TABLE_NAME + "." + Shop.HOME_DELIVERY_AVAILABLE + ","
 
 					+  "avg(" + ShopReview.TABLE_NAME + "." + ShopReview.RATING + ") as avg_rating" + ","
 					+  "count( DISTINCT " + ShopReview.TABLE_NAME + "." + ShopReview.END_USER_ID + ") as rating_count" + ""
@@ -2564,8 +2566,9 @@ public class ShopDAO {
 				shop.setLongDescription(rs.getString(Shop.LONG_DESCRIPTION));
 				shop.setTimestampCreated(rs.getTimestamp(Shop.TIMESTAMP_CREATED));
 				shop.setOpen(rs.getBoolean(Shop.IS_OPEN));
+				shop.setPickFromShopAvailable(rs.getBoolean(Shop.PICK_FROM_SHOP_AVAILABLE));
+				shop.setHomeDeliveryAvailable(rs.getBoolean(Shop.HOME_DELIVERY_AVAILABLE));
 
-				
 			}
 	
 			

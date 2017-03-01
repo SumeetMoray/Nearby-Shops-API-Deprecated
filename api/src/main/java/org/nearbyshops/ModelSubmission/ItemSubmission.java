@@ -16,7 +16,6 @@ public class ItemSubmission {
     int SubmittedByShopStaffID;
     int itemID ; // null if its an add or a value if its an edit // foreign key nulls allowed
     boolean submissionApproved;
-
     boolean isReviewed;
 
 

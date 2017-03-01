@@ -31,8 +31,209 @@ public class ItemCategoryDAO {
 		// TODO Auto-generated method stub
 		super.finalize();	
 	}
-	
-	
+
+
+
+	public ItemCategory checkItemByGidbURL(String gidbURL, int gidbID) {
+
+		String queryJoin = "SELECT DISTINCT "
+				+ ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID + ","
+				+ ItemCategory.TABLE_NAME + "." + ItemCategory.ITEM_CATEGORY_ID + ","
+				+ ItemCategory.TABLE_NAME + "." + ItemCategory.IMAGE_PATH + ","
+				+ ItemCategory.TABLE_NAME + "." + ItemCategory.GIDB_ITEM_CAT_ID + ","
+				+ ItemCategory.TABLE_NAME + "." + ItemCategory.GIDB_SERVICE_URL + ""
+				+ " FROM " + ItemCategory.TABLE_NAME
+				+ " WHERE " + ItemCategory.GIDB_SERVICE_URL + " = ?"
+				+ " AND " + ItemCategory.GIDB_ITEM_CAT_ID + " = ?";
+
+
+
+		ItemCategory item = null;
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+
+		try {
+
+			connection = dataSource.getConnection();
+			statement = connection.prepareStatement(queryJoin);
+
+			int i = 0;
+			statement.setString(++i,gidbURL);
+			statement.setObject(++i,gidbID);
+
+			rs = statement.executeQuery();
+
+			while (rs.next()) {
+
+				item = new ItemCategory();
+
+				item.setItemCategoryID(rs.getInt(ItemCategory.ITEM_CATEGORY_ID));
+				item.setItemCategoryID(rs.getInt(ItemCategory.ITEM_CATEGORY_ID));
+				item.setImagePath(rs.getString(ItemCategory.IMAGE_PATH));
+				item.setGidbItemCatID(rs.getInt(ItemCategory.GIDB_ITEM_CAT_ID));
+				item.setGidbServiceURL(rs.getString(ItemCategory.GIDB_SERVICE_URL));
+
+			}
+
+		}
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally
+
+		{
+
+			try {
+				if(rs!=null)
+				{rs.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(statement!=null)
+				{statement.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(connection!=null)
+				{connection.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return item;
+	}
+
+
+	public int updateItemCatGIDB(ItemCategory itemCategory)
+	{
+		int rowCount = 0;
+
+
+		if(itemCategory.getParentCategoryID()!=null)
+		{
+			if(itemCategory.getParentCategoryID() == itemCategory.getItemCategoryID())
+			{
+				// an Item category cannot have itself as its own parent so abort this operation and return
+				return 0;
+			}
+
+
+			// a hack for android app. The android parcelable does not support Non primitives.
+			// So cant have null for the ID.
+			// The value of -1 represents the NULL when the request coming from an android app.
+			// So when you see a -1 for parent set it to null which really means a detached item category,
+			// an item category not having any parent
+
+			if(itemCategory.getParentCategoryID()==-1)
+			{
+				itemCategory.setParentCategoryID(null);
+			}
+		}
+
+
+//		if(itemCategory.getParentCategoryID()!=null)
+//		{
+//		}
+
+		String updateStatement = "";
+
+		updateStatement = "UPDATE "
+
+				+ ItemCategory.TABLE_NAME
+				+ " SET "
+				+ " " + ItemCategory.ITEM_CATEGORY_NAME + " = ?,"
+				+ " " + ItemCategory.ITEM_CATEGORY_DESCRIPTION + " = ?,"
+				+ " " + ItemCategory.IMAGE_PATH + " = ?,"
+				+ " " + ItemCategory.CATEGORY_ORDER + " = ?,"
+
+				+ " " + ItemCategory.PARENT_CATEGORY_ID + " = ?,"
+				+ " " + ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT + " = ?,"
+				+ " " + ItemCategory.IS_ABSTRACT + " = ?,"
+
+				+ " " + ItemCategory.IS_LEAF_NODE + " = ?"
+
+				+ " WHERE " + ItemCategory.GIDB_SERVICE_URL + " = ?"
+				+ " AND " + ItemCategory.GIDB_ITEM_CAT_ID + " = ? ";
+
+
+		Connection connection = null;
+//		Statement stmt = null;
+		PreparedStatement statement = null;
+
+
+		try {
+
+			connection = dataSource.getConnection();
+			statement = connection.prepareStatement(updateStatement);
+
+			int i = 0;
+			statement.setString(++i,itemCategory.getCategoryName());
+			statement.setString(++i,itemCategory.getCategoryDescription());
+			statement.setString(++i,itemCategory.getImagePath());
+			statement.setObject(++i,itemCategory.getCategoryOrder());
+
+			statement.setObject(++i,itemCategory.getParentCategoryID());
+			statement.setString(++i,itemCategory.getDescriptionShort());
+			statement.setBoolean(++i,itemCategory.getisAbstractNode());
+
+			statement.setBoolean(++i,itemCategory.getIsLeafNode());
+//			statement.setInt(++i,itemCategory.getItemCategoryID());
+
+			statement.setString(++i,itemCategory.getGidbServiceURL());
+			statement.setObject(++i,itemCategory.getGidbItemCatID());
+
+			rowCount = statement.executeUpdate();
+
+
+			System.out.println("Total rows updated: " + rowCount);
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally
+
+		{
+
+			try {
+
+				if(statement!=null)
+				{statement.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+
+				if(connection!=null)
+				{connection.close();}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return rowCount;
+	}
+
+
+
+
+
+
 	public int saveItemCategory(ItemCategory itemCategory)
 	{
 		
@@ -150,9 +351,11 @@ public class ItemCategoryDAO {
 
 				+ ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT + ","
 				+ ItemCategory.IS_ABSTRACT + ","
-				+ ItemCategory.IS_LEAF_NODE
+				+ ItemCategory.IS_LEAF_NODE + ","
+				+ ItemCategory.GIDB_SERVICE_URL + ","
+				+ ItemCategory.GIDB_ITEM_CAT_ID + ""
 
-				+ ") VALUES(?,?,? ,?,? ,?,?,?)";
+				+ ") VALUES(?,?,? ,?,? ,?,?,? ,?,?)";
 
 		int idOfInsertedRow = 0;
 
@@ -172,6 +375,9 @@ public class ItemCategoryDAO {
 			statement.setString(++i,itemCategory.getDescriptionShort());
 			statement.setBoolean(++i,itemCategory.getisAbstractNode());
 			statement.setBoolean(++i,itemCategory.getIsLeafNode());
+
+			statement.setString(++i,itemCategory.getGidbServiceURL());
+			statement.setObject(++i,itemCategory.getGidbItemCatID());
 
 
 			rowCount = statement.executeUpdate();
@@ -1138,11 +1344,13 @@ public class ItemCategoryDAO {
 			Double latCenter, Double lonCenter,
 			Double deliveryRangeMin, Double deliveryRangeMax,
 			Double proximity, Boolean shopEnabled,
+			String searchString,
 			String sortBy,
 			Integer limit, Integer offset)
 	{
 
 		String query = "";
+		boolean isFirst = true;
 
 
 		// a recursive CTE (Common table Expression) query. This query is used for retrieving hierarchical / tree set data.
@@ -1383,13 +1591,39 @@ public class ItemCategoryDAO {
 				+ ItemCategory.ITEM_CATEGORY_NAME
 				+ " FROM category_tree";
 
+
 		
 		if(parentID!=null)
 		{
 			queryLast = queryLast + " WHERE " 
 					+ ItemCategory.PARENT_CATEGORY_ID 
-					+ "=" + parentID ; 
+					+ "=" + parentID ;
+
+			isFirst = false;
 		}
+
+
+
+		if(searchString !=null)
+		{
+			String queryPartSearch = " ( " + ItemCategory.ITEM_CATEGORY_DESCRIPTION_SHORT +" ilike " + "'%" + searchString + "%'"
+					+ " or " + ItemCategory.ITEM_CATEGORY_DESCRIPTION + " ilike " + "'%"  + searchString + "%'"
+					+ " or " + ItemCategory.ITEM_CATEGORY_NAME + " ilike " + "'%"+  searchString  + "%'" + " ) ";
+
+
+			if(isFirst)
+			{
+				queryLast = queryLast + " WHERE " + queryPartSearch;
+
+					isFirst = false;
+			}
+			else
+			{
+				queryLast = queryLast + " AND " + queryPartSearch;
+			}
+		}
+
+
 		
 		String queryRecursive = withRecursiveStart + queryJoin + union + querySelect +  queryLast;
 

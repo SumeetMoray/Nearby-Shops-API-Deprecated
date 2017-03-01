@@ -23,6 +23,7 @@ import org.nearbyshops.DAOsPrepared.ItemCategoryDAO;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Image;
+import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ItemCategory;
 import org.nearbyshops.ModelEndPoints.ItemCategoryEndPoint;
 import org.nearbyshops.ModelRoles.Staff;
@@ -479,6 +480,7 @@ public class ItemCategoryResource {
 			@QueryParam("deliveryRangeMin")Double deliveryRangeMin,
 			@QueryParam("proximity")Double proximity,
 			@QueryParam("ShopEnabled")Boolean shopEnabled,
+			@QueryParam("SearchString") String searchString,
 			@QueryParam("SortBy") String sortBy,
 			@QueryParam("Limit") Integer limit, @QueryParam("Offset") Integer offset,
 			@QueryParam("metadata_only")Boolean metaonly)
@@ -525,7 +527,9 @@ public class ItemCategoryResource {
 					deliveryRangeMin,
 					deliveryRangeMax,
 					proximity,
-					shopEnabled, sortBy,
+					shopEnabled,
+					searchString,
+					sortBy,
 					set_limit, set_offset);
 
 			endPoint.setResults(list);
@@ -581,7 +585,7 @@ public class ItemCategoryResource {
 	// Add from Global
 
 	@POST
-	@Path("/AddFromGlobal")
+	@Path("/AddFromGlobalOld")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
@@ -643,6 +647,92 @@ public class ItemCategoryResource {
 
 		return null;
 	}
+
+
+	@POST
+	@Path("/AddFromGlobal")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
+	public Response addItemFromGlobalGIDB(List<ItemCategory> itemList)
+	{
+
+		int rowCountSum = 0;
+
+		if(Globals.accountApproved instanceof Staff) {
+
+			// checking permission
+			Staff staff = (Staff) Globals.accountApproved;
+
+			if (!staff.isCreateUpdateItemCategory())
+			{
+				// the staff member doesnt have persmission to post Item Category
+
+				throw new ForbiddenException("Not Permitted");
+			}
+		}
+
+
+
+		for(ItemCategory item : itemList)
+		{
+			item.setImagePath(saveNewImage(item.getGidbServiceURL(),item.getImagePath()));
+
+			// if item already exist then do an update. If item does not exist then do an insert
+
+			ItemCategory itemGIDB = itemCategoryDAO.checkItemByGidbURL(item.getGidbServiceURL(),item.getGidbItemCatID());
+
+			int rowCountTemp = 0;
+
+			if(itemGIDB == null)
+			{
+				// do an insert
+
+				rowCountTemp = itemCategoryDAO.saveItemCatRowCount(item);
+				rowCountSum = rowCountSum + rowCountTemp;
+			}
+			else
+			{
+				// do an update
+
+				rowCountTemp = itemCategoryDAO.updateItemCatGIDB(item);
+				rowCountSum = rowCountSum + rowCountTemp;
+			}
+
+
+
+			if(rowCountTemp==0)
+			{
+				// update failed delete the new added Item Image
+				deleteImageFileInternal(item.getImagePath());
+			}
+
+		}
+
+
+		if(rowCountSum >= itemList.size())
+		{
+
+			return Response.status(Status.CREATED)
+					.build();
+
+		}
+		else if(rowCountSum < itemList.size() && rowCountSum > 0)
+		{
+			return Response.status(Status.PARTIAL_CONTENT)
+					.build();
+
+		}
+		else if(rowCountSum <= 0)
+		{
+			return Response.status(Status.NOT_MODIFIED)
+					.entity(null)
+					.build();
+		}
+
+		return null;
+	}
+
 
 
 
