@@ -18,6 +18,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import net.coobird.thumbnailator.Thumbnails;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -25,8 +27,10 @@ import org.nearbyshops.DAOsPrepared.ItemDAO;
 import org.nearbyshops.DAOsPrepared.ItemDAOJoinOuter;
 import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
+import org.nearbyshops.Model.Endpoints.ItemImageEndPoint;
 import org.nearbyshops.Model.Image;
 import org.nearbyshops.Model.Item;
+import org.nearbyshops.Model.ItemImage;
 import org.nearbyshops.ModelEndPoints.ItemEndPoint;
 import org.nearbyshops.ModelRoles.Staff;
 
@@ -59,7 +63,7 @@ public class ItemResource {
 		}
 
 
-		int idOfInsertedRow = itemDAO.saveItem(item);
+		int idOfInsertedRow = itemDAO.saveItem(item,false);
 		
 		item.setItemID(idOfInsertedRow);
 		
@@ -234,55 +238,55 @@ public class ItemResource {
 
 
 
-	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
-	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
-	public Response updateItemBulk(List<Item> itemList)
-	{
-
-		if(Globals.accountApproved instanceof Staff) {
-
-			// checking permission
-			Staff staff = (Staff) Globals.accountApproved;
-			if (!staff.isCreateUpdateItems())
-			{
-				// the staff member doesnt have persmission to post Item Category
-				throw new ForbiddenException("Not Permitted");
-			}
-		}
-
-		int rowCountSum = 0;
-
-//		for(Item item : itemList)
-//		{
-//			rowCountSum = rowCountSum + itemDAO.updateItem(item);
+//	@PUT
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
+//	public Response updateItemBulk(List<Item> itemList)
+//	{
+//
+//		if(Globals.accountApproved instanceof Staff) {
+//
+//			// checking permission
+//			Staff staff = (Staff) Globals.accountApproved;
+//			if (!staff.isCreateUpdateItems())
+//			{
+//				// the staff member doesnt have persmission to post Item Category
+//				throw new ForbiddenException("Not Permitted");
+//			}
 //		}
-
-		rowCountSum = itemDAO.updateItemBulk(itemList);
-
-		if(rowCountSum ==  itemList.size())
-		{
-
-			return Response.status(Status.OK)
-					.entity(null)
-					.build();
-		}
-		else if( rowCountSum < itemList.size() && rowCountSum > 0)
-		{
-
-			return Response.status(Status.PARTIAL_CONTENT)
-					.entity(null)
-					.build();
-		}
-		else if(rowCountSum == 0 ) {
-
-			return Response.status(Status.NOT_MODIFIED)
-					.entity(null)
-					.build();
-		}
-
-		return null;
-	}
+//
+//		int rowCountSum = 0;
+//
+////		for(Item item : itemList)
+////		{
+////			rowCountSum = rowCountSum + itemDAO.updateItem(item);
+////		}
+//
+//		rowCountSum = itemDAO.updateItemBulk(itemList);
+//
+//		if(rowCountSum ==  itemList.size())
+//		{
+//
+//			return Response.status(Status.OK)
+//					.entity(null)
+//					.build();
+//		}
+//		else if( rowCountSum < itemList.size() && rowCountSum > 0)
+//		{
+//
+//			return Response.status(Status.PARTIAL_CONTENT)
+//					.entity(null)
+//					.build();
+//		}
+//		else if(rowCountSum == 0 ) {
+//
+//			return Response.status(Status.NOT_MODIFIED)
+//					.entity(null)
+//					.build();
+//		}
+//
+//		return null;
+//	}
 	
 	
 	@DELETE
@@ -386,6 +390,8 @@ public class ItemResource {
 						.build();
 			}	
 	}
+
+
 
 
 	@GET
@@ -546,6 +552,7 @@ public class ItemResource {
 
 
 
+
 //	@GET
 //	@Path("/Async")
 //	@Produces(MediaType.APPLICATION_JSON)
@@ -688,7 +695,7 @@ public class ItemResource {
 			item.setItemImageURL(saveNewImage(item.getRt_gidb_service_url(),item.getItemImageURL()));
 
 			int rowCountTemp = 0;
-			rowCountTemp = itemDAO.saveItemRowCountGIDB(item);
+			rowCountTemp = itemDAO.saveItem(item,true);
 			rowCountSum = rowCountSum + rowCountTemp;
 
 			if(rowCountTemp==0)
@@ -736,79 +743,205 @@ public class ItemResource {
 
 		int rowCountSum = 0;
 
-		if(Globals.accountApproved instanceof Staff) {
-
-			// checking permission
-			Staff staff = (Staff) Globals.accountApproved;
-
-			if (!staff.isCreateUpdateItems())
-			{
-				// the staff member doesnt have persmission to post Item Category
-
-				throw new ForbiddenException("Not Permitted");
-			}
-		}
-
-
-
-		for(Item item : itemList)
+		try
 		{
-			item.setItemImageURL(saveNewImage(item.getGidbServiceURL(),item.getItemImageURL()));
+			if(Globals.accountApproved instanceof Staff) {
 
-			// if item already exist then do an update. If item does not exist then do an insert
+				// checking permission
+				Staff staff = (Staff) Globals.accountApproved;
 
-			Item itemGIDB = itemDAOJoinOuter.checkItemByGidbURL(item.getGidbServiceURL(),item.getGidbItemID());
+				if (!staff.isCreateUpdateItems())
+				{
+					// the staff member doesnt have persmission to post Item Category
 
-			int rowCountTemp = 0;
-
-			if(itemGIDB == null)
-			{
-				// do an insert
-
-				rowCountTemp = itemDAO.saveItemRowCountGIDB(item);
-				rowCountSum = rowCountSum + rowCountTemp;
-			}
-			else
-			{
-				// do an update
-
-				rowCountTemp = itemDAO.updateItemGIDB(item);
-				rowCountSum = rowCountSum + rowCountTemp;
+					throw new ForbiddenException("Not Permitted");
+				}
 			}
 
 
 
-			if(rowCountTemp==0)
+			for(Item item : itemList)
 			{
-				// update failed delete the new added Item Image
-				deleteImageFileInternal(item.getItemImageURL());
+
+
+
+				// if item already exist then do an update. If item does not exist then do an insert
+
+				Item itemGIDB = itemDAOJoinOuter.checkItemByGidbURL(item.getGidbServiceURL(),item.getGidbItemID());
+
+				int rowCountTemp = 0;
+
+				int localItemID = 0;
+
+				if(itemGIDB == null)
+				{
+					item.setItemImageURL(saveNewImage(item.getGidbServiceURL(),item.getItemImageURL()));
+
+					// do an insert
+					rowCountTemp = itemDAO.saveItem(item,true);
+					rowCountSum = rowCountSum + rowCountTemp;
+
+
+					if(rowCountTemp==0)
+					{
+						// update failed delete the new added Item Image
+						deleteImageFileInternal(item.getItemImageURL());
+					}
+
+
+				}
+				else
+				{
+					// do an update
+
+					System.out.println(itemGIDB.getTimestampUpdated().toGMTString() + " | " + item.getTimestampUpdated().toGMTString());
+
+
+					if(itemGIDB.getTimestampUpdated().before(item.getTimestampUpdated()))
+					{
+						item.setItemImageURL(saveNewImage(item.getGidbServiceURL(),item.getItemImageURL()));
+						rowCountTemp = itemDAO.updateItemGIDB(item);
+						rowCountSum = rowCountSum + rowCountTemp;
+
+
+						if(rowCountTemp==0)
+						{
+							// update failed delete the new added Item Image
+							deleteImageFileInternal(item.getItemImageURL());
+						}
+					}
+					else
+					{
+						rowCountTemp = itemDAO.updateItemGIDBItemCat(item);
+						rowCountSum = rowCountSum + rowCountTemp;
+					}
+
+
+				}
+
+
+				// get local item ID to copy images
+				itemGIDB = itemDAOJoinOuter.checkItemByGidbURL(item.getGidbServiceURL(),item.getGidbItemID());
+
+				if(itemGIDB!=null)
+				{
+					copyItemImages(item.getGidbServiceURL(),item.getGidbItemID(),itemGIDB.getItemID());
+				}
+
+
+				copyItemSpecifications(item.getGidbServiceURL(),item.getGidbItemID());
+
+
+
+
 			}
 
+
+			if(rowCountSum >= itemList.size())
+			{
+
+				return Response.status(Status.CREATED)
+						.build();
+
+			}
+			else if(rowCountSum < itemList.size() && rowCountSum > 0)
+			{
+				return Response.status(Status.PARTIAL_CONTENT)
+						.build();
+
+			}
+			else if(rowCountSum <= 0)
+			{
+				return Response.status(Status.NOT_MODIFIED)
+						.entity(null)
+						.build();
+			}
+
+
 		}
-
-
-		if(rowCountSum >= itemList.size())
+		catch (Exception ex)
 		{
-
-			return Response.status(Status.CREATED)
-					.build();
-
+			ex.printStackTrace();
 		}
-		else if(rowCountSum < itemList.size() && rowCountSum > 0)
-		{
-			return Response.status(Status.PARTIAL_CONTENT)
-					.build();
 
-		}
-		else if(rowCountSum <= 0)
-		{
-			return Response.status(Status.NOT_MODIFIED)
-					.entity(null)
-					.build();
-		}
 
 		return null;
 	}
+
+
+
+	void copyItemImages(String gidbURL, int gidbItemID, int itemIDLocal)
+	{
+		String gidbServiceURL = gidbURL;
+
+		try
+		{
+			gidbURL = gidbURL + "/api/v1/ItemImage?ItemID=" + gidbItemID;
+
+			OkHttpClient client = new OkHttpClient();
+			Request request = new Request.Builder()
+					.url(gidbURL)
+					.build();
+
+			okhttp3.Response response = null;
+			response = client.newCall(request).execute();
+
+			GsonBuilder gsonBuilder = new GsonBuilder();
+			Gson gson = gsonBuilder.setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").create();
+
+			ItemImageEndPoint itemImageEndPoint = gson.fromJson(response.body().string(), ItemImageEndPoint.class);
+
+
+			for(ItemImage itemImage : itemImageEndPoint.getResults())
+			{
+
+				ItemImage itemImageChecked = Globals.itemImagesDAO
+						.checkItemImageByGidbURL(gidbServiceURL,itemImage.getImageID());
+
+
+				if(itemImageChecked==null)
+				{
+					// do an insert
+					itemImage.setImageFilename(ItemImageResource.saveNewImage(gidbServiceURL,itemImage.getImageFilename()));
+					itemImage.setItemID(itemIDLocal);
+					itemImage.setGidbServiceURL(gidbServiceURL);
+					itemImage.setGidbImageID(itemImage.getImageID());
+
+					Globals.itemImagesDAO.saveItemImage(itemImage,true);
+				}
+				else
+				{
+					// do an Update
+					if(itemImage.getTimestampUpdated().after(itemImageChecked.getTimestampUpdated()))
+					{
+						itemImage.setItemID(itemIDLocal);
+						itemImage.setImageFilename(ItemImageResource.saveNewImage(gidbServiceURL,itemImage.getImageFilename()));
+						Globals.itemImagesDAO.updateItemImage(itemImage);
+					}
+				}
+
+
+			}
+
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
+
+
+
+
+
+
+	void copyItemSpecifications(String gidbURL, int gidbItemID)
+	{
+
+	}
+
+
+
 
 
 	// Image Utility Methods
@@ -854,8 +987,8 @@ public class ItemResource {
 
 			okhttp3.Response response = null;
 			response = client.newCall(request).execute();
-			response.body().byteStream();
-			System.out.println();
+//			response.body().byteStream();
+//			System.out.println();
 
 			return uploadNewImage(response.body().byteStream());
 

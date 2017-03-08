@@ -58,8 +58,8 @@ public class ItemCategory {
 
 	public static final String upgradeTableSchema =
 			"ALTER TABLE IF EXISTS " + ItemCategory.TABLE_NAME
-					+ " ADD COLUMN " + ItemCategory.GIDB_SERVICE_URL + " text,"
-					+ " ADD COLUMN " + ItemCategory.GIDB_ITEM_CAT_ID + " int";
+					+ " ADD COLUMN  IF NOT EXISTS " + ItemCategory.GIDB_SERVICE_URL + " text,"
+					+ " ADD COLUMN  IF NOT EXISTS " + ItemCategory.GIDB_ITEM_CAT_ID + " int";
 
 
 

@@ -98,7 +98,7 @@ public class SettingsResource {
 	public Response getService()
 	{
 
-		Settings settings = daoPrepared.getServiceConfiguration();
+		Settings settings = daoPrepared.getSettings();
 		
 		if(settings != null)
 		{

@@ -20,6 +20,9 @@ public class HighPerformanceCount {
 
     private HikariDataSource dataSource = Globals.getDataSource();
 
+
+
+
     // an example of high performance count query
     public ShopEndPoint getEndPointMetadataFilterShops(
             Double latCenter, Double lonCenter,

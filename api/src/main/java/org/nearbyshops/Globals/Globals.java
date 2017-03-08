@@ -5,6 +5,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.glassfish.jersey.media.sse.OutboundEvent;
 import org.glassfish.jersey.media.sse.SseBroadcaster;
 import org.nearbyshops.DAOPreparedCartOrder.*;
+import org.nearbyshops.DAOPreparedItemSpecification.*;
 import org.nearbyshops.DAOPreparedOrderHomeDelivery.OrderItemService;
 import org.nearbyshops.DAOPreparedOrderHomeDelivery.OrderService;
 import org.nearbyshops.DAOPreparedOrderHomeDelivery.PlaceOrderHD_DAO;
@@ -87,6 +88,20 @@ public class Globals {
 
 
 	public static EndUserDAONew endUserDAONew  = new EndUserDAONew();
+
+
+	// Item Image and Item Specification DAO'
+
+	public static ItemImagesDAO itemImagesDAO = new ItemImagesDAO();
+
+	public static ItemSpecificationNameDAO itemSpecNameDAO = new ItemSpecificationNameDAO();
+	public static ItemSpecNameDAOOuterJoin itemSpecNameDAOOuterJoin = new ItemSpecNameDAOOuterJoin();
+
+	public static ItemSpecificationValueDAO itemSpecificationValueDAO = new ItemSpecificationValueDAO();
+	public static ItemSpecValueDAOJoinOuter itemSpecValueDAOJoinOuter = new ItemSpecValueDAOJoinOuter();
+
+	public static ItemSpecificationItemDAO itemSpecificationItemDAO = new ItemSpecificationItemDAO();
+
 
 
 	// static reference for holding security accountApproved

@@ -1,5 +1,7 @@
 package org.nearbyshops.ModelSettings;
 
+import org.nearbyshops.Model.Item;
+
 /**
  * Created by sumeet on 18/9/16.
  */
@@ -13,7 +15,9 @@ public class Settings {
     public static final String END_USER_ENABLED_DEFAULT = "END_USER_ENABLED_DEFAULT";
     public static final String DISTRIBUTOR_ENABLED_DEFAULT = "DISTRIBUTOR_ENABLED_DEFAULT";
 //    public static final String STAFF_ACCOUNT_ENABLED_DEFAULT = "STAFF_ACCOUNT_ENABLED_DEFAULT";
+    public static final String SHOP_ENABLED_BY_DEFAULT = "SHOP_ENABLED_BY_DEFAULT";
     public static final String GOOGLE_MAPS_API_KEY = "GOOGLE_MAPS_API_KEY";
+
 
 
     // Create Table Statement
@@ -22,8 +26,17 @@ public class Settings {
             + " " + Settings.SETTING_CONFIGURATION_ID + " SERIAL PRIMARY KEY,"
             + " " + Settings.END_USER_ENABLED_DEFAULT + " boolean,"
             + " " + Settings.DISTRIBUTOR_ENABLED_DEFAULT + " boolean,"
+            + " " + Settings.SHOP_ENABLED_BY_DEFAULT + " boolean,"
             + " " + Settings.GOOGLE_MAPS_API_KEY + " text"
             + ")";
+
+
+    public static final String upgradeTableSchema =
+            "ALTER TABLE IF EXISTS " + Settings.TABLE_NAME
+                    + " ADD COLUMN IF NOT EXISTS " + Settings.SHOP_ENABLED_BY_DEFAULT + " boolean";
+
+
+
 
 
 
@@ -31,9 +44,18 @@ public class Settings {
     private int settingsID;
     private Boolean endUserEnabledByDefault;
     private Boolean distributorEnabledByDefault;
+    private boolean shopEnabledByDefault;
 //    private String staffEnabledByDefault;
     private String googleMapsAPIKey;
 
+
+    public boolean isShopEnabledByDefault() {
+        return shopEnabledByDefault;
+    }
+
+    public void setShopEnabledByDefault(boolean shopEnabledByDefault) {
+        this.shopEnabledByDefault = shopEnabledByDefault;
+    }
 
     public int getSettingsID() {
         return settingsID;

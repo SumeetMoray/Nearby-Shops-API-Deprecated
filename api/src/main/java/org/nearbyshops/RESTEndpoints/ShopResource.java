@@ -25,6 +25,7 @@ import org.nearbyshops.ModelEndPoints.ShopEndPoint;
 import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
 import org.nearbyshops.ModelRoles.ShopAdmin;
 import org.nearbyshops.ModelRoles.Staff;
+import org.nearbyshops.ModelSettings.Settings;
 
 
 @Path("/v1/Shop")
@@ -65,7 +66,10 @@ public class ShopResource {
 		{
 			// We need to make sure that SHop Admin Creates shop only on his account not on the account of others
 			shop.setShopAdminID(((ShopAdmin) Globals.accountApproved).getShopAdminID());
-			shop.setShopEnabled(false);
+
+			Settings settings = Globals.settingsDAOPrepared.getSettings();
+
+			shop.setShopEnabled(settings.isShopEnabledByDefault());
 			shop.setShopWaitlisted(false);
 		}
 

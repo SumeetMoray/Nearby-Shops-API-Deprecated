@@ -14,6 +14,9 @@ import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.*;
 import org.nearbyshops.ModelDelivery.DeliveryAddress;
+import org.nearbyshops.ModelItemSpecification.ItemSpecificationItem;
+import org.nearbyshops.ModelItemSpecification.ItemSpecificationName;
+import org.nearbyshops.ModelItemSpecification.ItemSpecificationValue;
 import org.nearbyshops.ModelPickFromShop.OrderItemPFS;
 import org.nearbyshops.ModelPickFromShop.OrderPFS;
 import org.nearbyshops.ModelRoles.DeliveryGuySelf;
@@ -96,9 +99,9 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
 		createDB();
-		createTables();
 		upgradeTables();
 
+		createTables();
 		startServer();
 	}
 
@@ -219,8 +222,10 @@ public class Main {
 
 			statement = connection.createStatement();
 
+			statement.executeUpdate(Settings.upgradeTableSchema);
 			statement.executeUpdate(ItemCategory.upgradeTableSchema);
 			statement.executeUpdate(Item.upgradeTableSchema);
+
 
 
 		} catch (SQLException e) {
@@ -320,6 +325,16 @@ public class Main {
 			// tabled for keeping security records
 			statement.executeUpdate(ForbiddenOperations.createTableForbiddenOperationPostgres);
 
+
+
+			statement.executeUpdate(ItemImage.createTableItemImagesPostgres);
+
+			statement.executeUpdate(ItemSpecificationName.createTableItemSpecNamePostgres);
+			statement.executeUpdate(ItemSpecificationValue.createTableItemSpecificationValuePostgres);
+			statement.executeUpdate(ItemSpecificationItem.createTableItemSpecificationItemPostgres);
+
+
+
 			System.out.println("Tables Created ... !");
 
 
@@ -379,7 +394,7 @@ public class Main {
 			// Insert Default Settings
 			SettingsDAOPrepared settingsDAO = Globals.settingsDAOPrepared;
 
-			if(settingsDAO.getServiceConfiguration()==null){
+			if(settingsDAO.getSettings()==null){
 				settingsDAO.saveSettings(settingsDAO.getDefaultConfiguration());
 			}
 

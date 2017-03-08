@@ -31,23 +31,25 @@ public class SettingsDAOPrepared {
 		String insertItemCategory = "INSERT INTO "
 				+ Settings.TABLE_NAME
 				+ "("
-				+ Settings.DISTRIBUTOR_ENABLED_DEFAULT + ","
+				+ Settings.SETTING_CONFIGURATION_ID + ","
 				+ Settings.END_USER_ENABLED_DEFAULT + ","
-				+ Settings.GOOGLE_MAPS_API_KEY + ","
+				+ Settings.DISTRIBUTOR_ENABLED_DEFAULT + ","
+				+ Settings.SHOP_ENABLED_BY_DEFAULT + ","
+				+ Settings.GOOGLE_MAPS_API_KEY + ""
 
-				+ Settings.SETTING_CONFIGURATION_ID + ""
-				+ " ) VALUES (?,?,? ,?)";
+				+ " ) VALUES (?,?,?,?,?)";
 		
 		try {
 			
 			connection = dataSource.getConnection();
 			statement = connection.prepareStatement(insertItemCategory,Statement.RETURN_GENERATED_KEYS);
 
-			statement.setObject(1,settings.getDistributorEnabledByDefault());
-			statement.setObject(2,settings.getEndUserEnabledByDefault());
-			statement.setString(3,settings.getGoogleMapsAPIKey());
-
-			statement.setObject(4,1);
+			int i = 0;
+			statement.setObject(++i,1);
+			statement.setObject(++i,settings.getEndUserEnabledByDefault());
+			statement.setObject(++i,settings.getDistributorEnabledByDefault());
+			statement.setObject(++i,settings.isShopEnabledByDefault());
+			statement.setString(++i,settings.getGoogleMapsAPIKey());
 
 			rowIdOfInsertedRow = statement.executeUpdate();
 
@@ -99,7 +101,7 @@ public class SettingsDAOPrepared {
 	{
 
 		// Ensure the service configuration row exist before being updated
-		if(getServiceConfiguration()==null){
+		if(getSettings()==null){
 			saveSettings(getDefaultConfiguration());
 		}
 
@@ -107,13 +109,12 @@ public class SettingsDAOPrepared {
 		String updateStatement = "UPDATE " + Settings.TABLE_NAME
 
 				+ " SET "
-
-				+ Settings.DISTRIBUTOR_ENABLED_DEFAULT + " = ?,"
-				+ Settings.END_USER_ENABLED_DEFAULT + " = ?,"
-				+ Settings.GOOGLE_MAPS_API_KEY + " = ?"
-
+				+ Settings.END_USER_ENABLED_DEFAULT + "=?,"
+				+ Settings.DISTRIBUTOR_ENABLED_DEFAULT + "=?,"
+				+ Settings.SHOP_ENABLED_BY_DEFAULT + "=?,"
+				+ Settings.GOOGLE_MAPS_API_KEY + "=?"
 				+ " WHERE "
-				+ Settings.SETTING_CONFIGURATION_ID + " = ?";
+				+ Settings.SETTING_CONFIGURATION_ID + "=?";
 
 
 		Connection connection = null;
@@ -125,10 +126,12 @@ public class SettingsDAOPrepared {
 			connection = dataSource.getConnection();
 			statement = connection.prepareStatement(updateStatement);
 
-			statement.setObject(1,settings.getDistributorEnabledByDefault());
-			statement.setObject(2,settings.getEndUserEnabledByDefault());
-			statement.setString(3,settings.getGoogleMapsAPIKey());
-			statement.setObject(4,1);
+			int i = 0;
+			statement.setObject(++i,settings.getEndUserEnabledByDefault());
+			statement.setObject(++i,settings.getDistributorEnabledByDefault());
+			statement.setObject(++i,settings.isShopEnabledByDefault());
+			statement.setString(++i,settings.getGoogleMapsAPIKey());
+			statement.setObject(++i,1);
 
 			updatedRows = statement.executeUpdate();
 
@@ -226,12 +229,20 @@ public class SettingsDAOPrepared {
 
 
 
-	public Settings getServiceConfiguration()
+
+	public Settings getSettings()
 	{
 		
-		String query = "SELECT * FROM " + Settings.TABLE_NAME
+		String query = "SELECT "
+						+ Settings.SETTING_CONFIGURATION_ID + ","
+						+ Settings.END_USER_ENABLED_DEFAULT + ","
+						+ Settings.DISTRIBUTOR_ENABLED_DEFAULT + ","
+						+ Settings.SHOP_ENABLED_BY_DEFAULT + ","
+						+ Settings.GOOGLE_MAPS_API_KEY + ""
+						+ " FROM " + Settings.TABLE_NAME
 						+ " WHERE " + Settings.SETTING_CONFIGURATION_ID + " = " + 1;
-		
+
+
 		Connection connection = null;
 		Statement statement = null;
 		ResultSet rs = null;
@@ -249,10 +260,11 @@ public class SettingsDAOPrepared {
 
 				settings = new Settings();
 
-				settings.setGoogleMapsAPIKey(rs.getString(Settings.GOOGLE_MAPS_API_KEY));
-				settings.setDistributorEnabledByDefault(rs.getBoolean(Settings.DISTRIBUTOR_ENABLED_DEFAULT));
-				settings.setEndUserEnabledByDefault(rs.getBoolean(Settings.END_USER_ENABLED_DEFAULT));
 				settings.setSettingsID(rs.getInt(Settings.SETTING_CONFIGURATION_ID));
+				settings.setEndUserEnabledByDefault(rs.getBoolean(Settings.END_USER_ENABLED_DEFAULT));
+				settings.setDistributorEnabledByDefault(rs.getBoolean(Settings.DISTRIBUTOR_ENABLED_DEFAULT));
+				settings.setShopEnabledByDefault(rs.getBoolean(Settings.SHOP_ENABLED_BY_DEFAULT));
+				settings.setGoogleMapsAPIKey(rs.getString(Settings.GOOGLE_MAPS_API_KEY));
 
 			}
 

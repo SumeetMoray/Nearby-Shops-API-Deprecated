@@ -11,6 +11,7 @@ import org.nearbyshops.ModelErrorMessages.ErrorNBSAPI;
 import org.nearbyshops.ModelRoles.Endpoints.ShopAdminEndPoint;
 import org.nearbyshops.ModelRoles.ShopAdmin;
 import org.nearbyshops.ModelRoles.Staff;
+import org.nearbyshops.ModelSettings.Settings;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
@@ -47,7 +48,10 @@ public class ShopAdminResource {
 	{
 
 		// this is a public endpoint and all new registrations require approval before their accounts get activated.
-		shopAdmin.setEnabled(false);
+
+		Settings settings = Globals.settingsDAOPrepared.getSettings();
+
+		shopAdmin.setEnabled(settings.getDistributorEnabledByDefault());
 		shopAdmin.setWaitlisted(false);
 
 		int idOfInsertedRow = Globals.shopAdminDAO.saveShopAdmin(shopAdmin);

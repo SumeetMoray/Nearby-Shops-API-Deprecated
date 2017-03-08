@@ -31,11 +31,16 @@ public class ItemDAOJoinOuter {
 	public Item checkItemByGidbURL(String gidbURL, int gidbID) {
 
 		String queryJoin = "SELECT DISTINCT "
+
 				+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + ","
 				+ Item.TABLE_NAME + "." + Item.ITEM_ID + ","
 				+ Item.TABLE_NAME + "." + Item.ITEM_IMAGE_URL + ","
 				+ Item.TABLE_NAME + "." + Item.GIDB_ITEM_ID + ","
-				+ Item.TABLE_NAME + "." + Item.GIDB_SERVICE_URL + ""
+				+ Item.TABLE_NAME + "." + Item.GIDB_SERVICE_URL + ","
+				+ Item.TABLE_NAME + "." + Item.TIMESTAMP_UPDATED + ""
+
+
+
 				+ " FROM " + Item.TABLE_NAME
 				+ " WHERE " + Item.GIDB_SERVICE_URL + " = ?"
 				+ " AND " + Item.GIDB_ITEM_ID + " = ?";
@@ -67,6 +72,7 @@ public class ItemDAOJoinOuter {
 				item.setItemImageURL(rs.getString(Item.ITEM_IMAGE_URL));
 				item.setGidbItemID(rs.getInt(Item.GIDB_ITEM_ID));
 				item.setGidbServiceURL(rs.getString(Item.GIDB_SERVICE_URL));
+				item.setTimestampUpdated(rs.getTimestamp(Item.TIMESTAMP_UPDATED));
 
 			}
 
@@ -135,17 +141,37 @@ public class ItemDAOJoinOuter {
 				+ "avg(" + ShopItem.ITEM_PRICE + ") as avg_price" + ","
 				+ "count(" + ShopItem.TABLE_NAME + "." + ShopItem.ITEM_ID + ") as shop_count" + ","
 
-				+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + ","
+//				+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + ","
+//				+ Item.TABLE_NAME + "." + Item.ITEM_ID + ","
+//				+ Item.TABLE_NAME + "." + Item.ITEM_IMAGE_URL + ","
+//				+ Item.TABLE_NAME + "." + Item.ITEM_NAME + ","
+//				+ Item.TABLE_NAME + "." + Item.ITEM_DESC + ","
+//
+//				+ Item.TABLE_NAME + "." + Item.QUANTITY_UNIT + ","
+////				+ Item.TABLE_NAME + "." + Item.DATE_TIME_CREATED + ","
+//				+ Item.TABLE_NAME + "." + Item.ITEM_DESCRIPTION_LONG + ","
+//				+ Item.TABLE_NAME + "." + Item.GIDB_ITEM_ID + ","
+//				+ Item.TABLE_NAME + "." + Item.GIDB_SERVICE_URL + ","
+
+
 				+ Item.TABLE_NAME + "." + Item.ITEM_ID + ","
-				+ Item.TABLE_NAME + "." + Item.ITEM_IMAGE_URL + ","
+
 				+ Item.TABLE_NAME + "." + Item.ITEM_NAME + ","
 				+ Item.TABLE_NAME + "." + Item.ITEM_DESC + ","
 
+				+ Item.TABLE_NAME + "." + Item.ITEM_IMAGE_URL + ","
+				+ Item.TABLE_NAME + "." + Item.ITEM_CATEGORY_ID + ","
+
 				+ Item.TABLE_NAME + "." + Item.QUANTITY_UNIT + ","
-				+ Item.TABLE_NAME + "." + Item.DATE_TIME_CREATED + ","
+//				+ Item.TABLE_NAME + "." + Item.DATE_TIME_CREATED + ","
+//				+ Item.TABLE_NAME + "." + Item.TIMESTAMP_UPDATED + ","
 				+ Item.TABLE_NAME + "." + Item.ITEM_DESCRIPTION_LONG + ","
-				+ Item.TABLE_NAME + "." + Item.GIDB_ITEM_ID + ","
-				+ Item.TABLE_NAME + "." + Item.GIDB_SERVICE_URL + ","
+
+				+ Item.TABLE_NAME + "." + Item.LIST_PRICE + ","
+				+ Item.TABLE_NAME + "." + Item.BARCODE + ","
+				+ Item.TABLE_NAME + "." + Item.BARCODE_FORMAT + ","
+				+ Item.TABLE_NAME + "." + Item.IMAGE_COPYRIGHTS + ","
+
 
 				+  "avg(" + ItemReview.TABLE_NAME + "." + ItemReview.RATING + ") as avg_rating" + ","
 				+  "count( DISTINCT " + ItemReview.TABLE_NAME + "." + ItemReview.END_USER_ID + ") as rating_count" + ""
@@ -322,6 +348,20 @@ public class ItemDAOJoinOuter {
 			{
 				Item item = new Item();
 
+//				item.setItemID(rs.getInt(Item.ITEM_ID));
+//				item.setItemName(rs.getString(Item.ITEM_NAME));
+//				item.setItemDescription(rs.getString(Item.ITEM_DESC));
+//
+//				item.setItemImageURL(rs.getString(Item.ITEM_IMAGE_URL));
+//				item.setItemCategoryID(rs.getInt(Item.ITEM_CATEGORY_ID));
+//
+//				item.setItemDescriptionLong(rs.getString(Item.ITEM_DESCRIPTION_LONG));
+//				item.setDateTimeCreated(rs.getTimestamp(Item.DATE_TIME_CREATED));
+//				item.setQuantityUnit(rs.getString(Item.QUANTITY_UNIT));
+//				item.setGidbItemID(rs.getInt(Item.GIDB_ITEM_ID));
+//				item.setGidbServiceURL(rs.getString(Item.GIDB_SERVICE_URL));
+
+
 				item.setItemID(rs.getInt(Item.ITEM_ID));
 				item.setItemName(rs.getString(Item.ITEM_NAME));
 				item.setItemDescription(rs.getString(Item.ITEM_DESC));
@@ -330,10 +370,13 @@ public class ItemDAOJoinOuter {
 				item.setItemCategoryID(rs.getInt(Item.ITEM_CATEGORY_ID));
 
 				item.setItemDescriptionLong(rs.getString(Item.ITEM_DESCRIPTION_LONG));
-				item.setDateTimeCreated(rs.getTimestamp(Item.DATE_TIME_CREATED));
+//				item.setDateTimeCreated(rs.getTimestamp(Item.DATE_TIME_CREATED));
 				item.setQuantityUnit(rs.getString(Item.QUANTITY_UNIT));
-				item.setGidbItemID(rs.getInt(Item.GIDB_ITEM_ID));
-				item.setGidbServiceURL(rs.getString(Item.GIDB_SERVICE_URL));
+
+				item.setListPrice(rs.getFloat(Item.LIST_PRICE));
+				item.setBarcode(rs.getString(Item.BARCODE));
+				item.setBarcodeFormat(rs.getString(Item.BARCODE_FORMAT));
+				item.setImageCopyrights(rs.getString(Item.IMAGE_COPYRIGHTS));
 
 
 
