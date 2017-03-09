@@ -5,6 +5,7 @@ import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ItemCategory;
 import org.nearbyshops.ModelItemSpecification.ItemSpecificationItem;
+import org.nearbyshops.ModelItemSpecification.ItemSpecificationName;
 import org.nearbyshops.ModelItemSpecification.ItemSpecificationValue;
 
 import java.sql.*;
@@ -566,6 +567,93 @@ public class ItemSpecificationValueDAO {
 
         return itemCount;
     }
+
+
+
+    public ItemSpecificationValue checkItemSpecValueByGidbURL(String gidbURL, int gidbID) {
+
+        String queryJoin = "SELECT DISTINCT "
+
+                + ItemSpecificationValue.TABLE_NAME + "." + ItemSpecificationValue.ID + ","
+                + ItemSpecificationValue.TABLE_NAME + "." + ItemSpecificationValue.ITEM_SPECIFICATION_NAME_ID + ","
+                + ItemSpecificationValue.TABLE_NAME + "." + ItemSpecificationValue.GIDB_ID + ","
+                + ItemSpecificationValue.TABLE_NAME + "." + ItemSpecificationValue.GIDB_SERVICE_URL + ","
+                + ItemSpecificationValue.TABLE_NAME + "." + ItemSpecificationValue.TIMESTAMP_UPDATED + ""
+
+                + " FROM " + ItemSpecificationValue.TABLE_NAME
+                + " WHERE " + ItemSpecificationValue.GIDB_SERVICE_URL + " = ?"
+                + " AND " + ItemSpecificationValue.GIDB_ID + " = ?";
+
+
+        ItemSpecificationValue itemSpecValue = null;
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet rs = null;
+
+        try {
+
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement(queryJoin);
+
+            int i = 0;
+            statement.setString(++i,gidbURL);
+            statement.setObject(++i,gidbID);
+
+            rs = statement.executeQuery();
+
+            while (rs.next()) {
+
+                itemSpecValue = new ItemSpecificationValue();
+
+
+                itemSpecValue.setId(rs.getInt(ItemSpecificationValue.ID));
+                itemSpecValue.setItemSpecNameID(rs.getInt(ItemSpecificationValue.ITEM_SPECIFICATION_NAME_ID));
+                itemSpecValue.setTitle(rs.getString(ItemSpecificationValue.TITLE));
+                itemSpecValue.setDescription(rs.getString(ItemSpecificationValue.DESCRIPTION));
+                itemSpecValue.setImageFilename(rs.getString(ItemSpecificationValue.IMAGE_FILENAME));
+                itemSpecValue.setGidbID(rs.getInt(ItemSpecificationValue.GIDB_ID));
+                itemSpecValue.setGidbServiceURL(rs.getString(ItemSpecificationValue.GIDB_SERVICE_URL));
+            }
+
+        }
+        catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        finally
+
+        {
+
+            try {
+                if(rs!=null)
+                {rs.close();}
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            try {
+
+                if(statement!=null)
+                {statement.close();}
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            try {
+
+                if(connection!=null)
+                {connection.close();}
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+        return itemSpecValue;
+    }
+
 
 
 }

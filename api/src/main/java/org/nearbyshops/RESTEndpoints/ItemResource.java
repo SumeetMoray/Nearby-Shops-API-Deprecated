@@ -3,10 +3,12 @@ package org.nearbyshops.RESTEndpoints;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
@@ -20,6 +22,7 @@ import javax.ws.rs.core.Response.Status;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import net.coobird.thumbnailator.Thumbnails;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -32,7 +35,12 @@ import org.nearbyshops.Model.Image;
 import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ItemImage;
 import org.nearbyshops.ModelEndPoints.ItemEndPoint;
+import org.nearbyshops.ModelItemSpecification.ItemSpecificationItem;
+import org.nearbyshops.ModelItemSpecification.ItemSpecificationName;
+import org.nearbyshops.ModelItemSpecification.ItemSpecificationValue;
 import org.nearbyshops.ModelRoles.Staff;
+import org.nearbyshops.RESTEndpointsItemSpec.ItemSpecNameResource;
+import org.nearbyshops.RESTEndpointsItemSpec.ItemSpecValueResource;
 
 
 @Path("/v1/Item")
@@ -733,6 +741,9 @@ public class ItemResource {
 
 
 
+
+
+
 	@POST
 	@Path("/AddFromGlobalRevised")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -826,13 +837,8 @@ public class ItemResource {
 				if(itemGIDB!=null)
 				{
 					copyItemImages(item.getGidbServiceURL(),item.getGidbItemID(),itemGIDB.getItemID());
+					copyItemSpecifications(item.getGidbServiceURL(),item.getGidbItemID(),itemGIDB.getItemID());
 				}
-
-
-				copyItemSpecifications(item.getGidbServiceURL(),item.getGidbItemID());
-
-
-
 
 			}
 
@@ -864,9 +870,10 @@ public class ItemResource {
 			ex.printStackTrace();
 		}
 
-
 		return null;
 	}
+
+
 
 
 
@@ -916,6 +923,9 @@ public class ItemResource {
 					{
 						itemImage.setItemID(itemIDLocal);
 						itemImage.setImageFilename(ItemImageResource.saveNewImage(gidbServiceURL,itemImage.getImageFilename()));
+						itemImage.setGidbServiceURL(gidbServiceURL);
+						itemImage.setGidbImageID(itemImage.getImageID());
+						itemImage.setImageID(itemImageChecked.getImageID());
 						Globals.itemImagesDAO.updateItemImage(itemImage);
 					}
 				}
@@ -935,10 +945,114 @@ public class ItemResource {
 
 
 
-	void copyItemSpecifications(String gidbURL, int gidbItemID)
+	void copyItemSpecifications(String gidbURL, int gidbItemID, int itemIDLocal)
 	{
+//		/api/v1/ItemSpecificationName/CopyItemSpecs?ItemID=9
+
+		String gidbServiceURL = gidbURL;
+
+		try {
+			gidbURL = gidbURL + "/api/v1/ItemSpecificationName/CopyItemSpecs?ItemID=" + gidbItemID;
+
+			OkHttpClient client = new OkHttpClient();
+			Request request = new Request.Builder()
+					.url(gidbURL)
+					.build();
+
+			okhttp3.Response response = null;
+			response = client.newCall(request).execute();
+
+			GsonBuilder gsonBuilder = new GsonBuilder();
+			Gson gson = gsonBuilder.setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").create();
+
+			Type listType = new TypeToken<ArrayList<ItemSpecificationName>>(){}.getType();
+
+			List<ItemSpecificationName> listItemSpecName = gson.fromJson(response.body().string(), listType);
+
+
+
+			for(ItemSpecificationName itemSpecName : listItemSpecName)
+			{
+
+				ItemSpecificationName itemSpecNameChecked = Globals.itemSpecNameDAO.checkItemSpecNameByGidbURL(
+						gidbServiceURL,itemSpecName.getId()
+				);
+
+
+				if(itemSpecNameChecked==null)
+				{
+					// do an Insert
+					itemSpecName.setImageFilename(ItemSpecNameResource.saveNewImage(gidbServiceURL,itemSpecName.getImageFilename()));
+					itemSpecName.setGidbServiceURL(gidbServiceURL);
+					itemSpecName.setGidbID(itemSpecName.getId());
+					int id = Globals.itemSpecNameDAO.saveItemSpecName(itemSpecName);
+					itemSpecName.setId(id);
+				}
+				else
+				{
+					// do an update
+
+					if(itemSpecName.getTimestampUpdated().after(itemSpecNameChecked.getTimestampUpdated()))
+					{
+						itemSpecName.setImageFilename(ItemSpecNameResource.saveNewImage(gidbServiceURL,itemSpecName.getImageFilename()));
+						itemSpecName.setGidbServiceURL(gidbServiceURL);
+						itemSpecName.setGidbID(itemSpecName.getId());
+						itemSpecName.setId(itemSpecNameChecked.getId());
+						Globals.itemSpecNameDAO.updateItemSpecName(itemSpecName);
+					}
+				}
+
+
+
+				for(ItemSpecificationValue itemSpecValue: itemSpecName.getRt_itemSpecificationValue())
+				{
+					itemSpecNameChecked = Globals.itemSpecNameDAO.checkItemSpecNameByGidbURL(
+							gidbServiceURL,itemSpecName.getGidbID()
+					);
+
+					ItemSpecificationValue itemSpecValueChecked = Globals.itemSpecificationValueDAO.checkItemSpecValueByGidbURL(
+						gidbServiceURL,itemSpecValue.getId()
+					);
+
+
+					if(itemSpecValueChecked==null)
+					{
+						// do an insert
+						itemSpecValue.setImageFilename(ItemSpecValueResource.saveNewImage(gidbServiceURL,itemSpecValue.getImageFilename()));
+						itemSpecValue.setGidbServiceURL(gidbServiceURL);
+						itemSpecValue.setGidbID(itemSpecValue.getId());
+						itemSpecValue.setItemSpecNameID(itemSpecNameChecked.getId());
+						int id = Globals.itemSpecificationValueDAO.saveItemSpecValue(itemSpecValue);
+
+						ItemSpecificationItem itemSpecificationItem = new ItemSpecificationItem();
+						itemSpecificationItem.setItemSpecValueID(id);
+						itemSpecificationItem.setItemID(itemIDLocal);
+						Globals.itemSpecificationItemDAO.saveItemSpecItem(itemSpecificationItem);
+					}
+					else
+					{
+
+
+						// do an update
+					}
+
+				}
+			}
+
+
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+
+		}
+
 
 	}
+
+
+
+
 
 
 

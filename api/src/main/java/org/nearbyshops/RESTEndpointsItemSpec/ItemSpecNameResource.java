@@ -1,6 +1,8 @@
 package org.nearbyshops.RESTEndpointsItemSpec;
 
 import net.coobird.thumbnailator.Thumbnails;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import org.nearbyshops.DAOPreparedItemSpecification.ItemSpecNameDAOOuterJoin;
 import org.nearbyshops.DAOPreparedItemSpecification.ItemSpecificationNameDAO;
 import org.nearbyshops.Globals.GlobalConstants;
@@ -331,7 +333,7 @@ public class ItemSpecNameResource {
 
     // Image Utility Methods
 
-    boolean deleteImageFileInternal(String fileName)
+    public static boolean deleteImageFileInternal(String fileName)
     {
         boolean deleteStatus = false;
 
@@ -354,6 +356,102 @@ public class ItemSpecNameResource {
 
 
         return deleteStatus;
+    }
+
+
+    // Image Utility Methods
+
+
+
+
+    public static String saveNewImage(String serviceURL,String imageID)
+    {
+        try
+        {
+            serviceURL = serviceURL + "/api/v1/ItemSpecificationName/Image/" + imageID;
+
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(serviceURL)
+                    .build();
+
+            okhttp3.Response response = null;
+            response = client.newCall(request).execute();
+//			response.body().byteStream();
+//			System.out.println();
+
+            return uploadNewImage(response.body().byteStream());
+
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+
+
+    public static String uploadNewImage(InputStream in)
+    {
+
+        File theDir = new File(BASE_DIR.toString());
+
+        // if the directory does not exist, create it
+        if (!theDir.exists()) {
+
+            System.out.println("Creating directory: " + BASE_DIR.toString());
+
+            boolean result = false;
+
+            try{
+                theDir.mkdir();
+                result = true;
+            }
+            catch(Exception se){
+                //handle it
+            }
+            if(result) {
+                System.out.println("DIR created");
+            }
+        }
+
+
+
+        String fileName = "" + System.currentTimeMillis();
+
+
+        try {
+
+            // Copy the file to its location.
+            long filesize = 0;
+
+            filesize = Files.copy(in, BASE_DIR.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
+
+            if(filesize > MAX_IMAGE_SIZE_MB * 1048 * 1024)
+            {
+                // delete file if it exceeds the file size limit
+                Files.deleteIfExists(BASE_DIR.resolve(fileName));
+                return null;
+            }
+
+            createThumbnails(fileName);
+
+            Image image = new Image();
+            image.setPath(fileName);
+
+            // Return a 201 Created response with the appropriate Location header.
+
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+
+            return null;
+        }
+
+        return fileName;
     }
 
 
@@ -436,7 +534,7 @@ public class ItemSpecNameResource {
 
 
 
-    private void createThumbnails(String filename)
+    public static void createThumbnails(String filename)
     {
         try {
 

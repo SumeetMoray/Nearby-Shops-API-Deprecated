@@ -4,6 +4,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Item;
 import org.nearbyshops.Model.ItemCategory;
+import org.nearbyshops.Model.ItemImage;
 import org.nearbyshops.ModelItemSpecification.ItemSpecificationItem;
 import org.nearbyshops.ModelItemSpecification.ItemSpecificationName;
 import org.nearbyshops.ModelItemSpecification.ItemSpecificationValue;
@@ -615,6 +616,96 @@ public class ItemSpecificationNameDAO {
 
         return itemCount;
     }
+
+
+
+    public ItemSpecificationName checkItemSpecNameByGidbURL(String gidbURL, int gidbID) {
+
+        String queryJoin = "SELECT DISTINCT "
+
+                + ItemSpecificationName.TABLE_NAME + "." + ItemSpecificationName.ID + ","
+//                + ItemSpecificationName.TABLE_NAME + "." + ItemSpecificationName.TITLE + ","
+//                + ItemSpecificationName.TABLE_NAME + "." + ItemSpecificationName.DESCRIPTION + ","
+//                + ItemSpecificationName.TABLE_NAME + "." + ItemSpecificationName.IMAGE_FILENAME + ","
+                + ItemSpecificationName.TABLE_NAME + "." + ItemSpecificationName.GIDB_ID + ","
+                + ItemSpecificationName.TABLE_NAME + "." + ItemSpecificationName.GIDB_SERVICE_URL + ","
+                + ItemSpecificationName.TABLE_NAME + "." + ItemSpecificationName.TIMESTAMP_UPDATED + ""
+
+                + " FROM " + ItemSpecificationName.TABLE_NAME
+                + " WHERE " + ItemSpecificationName.GIDB_SERVICE_URL + " = ?"
+                + " AND " + ItemSpecificationName.GIDB_ID + " = ?";
+
+
+        ItemSpecificationName itemSpecName = null;
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet rs = null;
+
+        try {
+
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement(queryJoin);
+
+            int i = 0;
+            statement.setString(++i,gidbURL);
+            statement.setObject(++i,gidbID);
+
+            rs = statement.executeQuery();
+
+            while (rs.next()) {
+
+                itemSpecName = new ItemSpecificationName();
+
+
+                itemSpecName.setId(rs.getInt(ItemSpecificationName.ID));
+//                itemSpecName.setTitle(rs.getString(ItemSpecificationName.TITLE));
+//                itemSpecName.setDescription(rs.getString(ItemSpecificationName.DESCRIPTION));
+//                itemSpecName.setImageFilename(rs.getString(ItemSpecificationName.IMAGE_FILENAME));
+                itemSpecName.setGidbID(rs.getInt(ItemSpecificationName.GIDB_ID));
+                itemSpecName.setGidbServiceURL(rs.getString(ItemSpecificationName.GIDB_SERVICE_URL));
+                itemSpecName.setTimestampUpdated(rs.getTimestamp(ItemSpecificationName.TIMESTAMP_UPDATED));
+
+            }
+
+        }
+        catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        finally
+
+        {
+
+            try {
+                if(rs!=null)
+                {rs.close();}
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            try {
+
+                if(statement!=null)
+                {statement.close();}
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            try {
+
+                if(connection!=null)
+                {connection.close();}
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+        return itemSpecName;
+    }
+
 
 
 }
