@@ -11,13 +11,6 @@ Rest API for Nearby Shops App.
 For more information please visit http://nearbyshops.org
 
 
-Download
---------
-
-Download [the latest JAR] from this Link : 
-http://nearbyshops.org/downloads/
-
-
 Installation Guide and Setup
 ------------------------------
 
@@ -59,17 +52,20 @@ http://nearbyshops.org/frequently-asked-questions-faqs/
 Help and Contribution Required
 ------------------------------
 
-Help and contribution is required in the following areas
+Help us add following features
+
+1. Add Facebook and Google Sign-In 
+2. Add SSL / TLS Support 
+3. Help add Oauth-2 Support in the API
+4. Add Full-Tech-Search Support in the API
+
+Non Technical Contribution is also welcome 
 
 1. Create promotional videos for the Nearby Shops
 2. Graphics and Images for Promotion and to be used in Nearby Shops Website
 3. Contribution and help required for building an Open-Source Global Items Database
 
-For contributing plese write to us using the contact form available at http://nearbyshops.org/contact/
-
-
-
-
+For contributing you can write to us using the contact form available at http://nearbyshops.org/contact/
 
 
 License
