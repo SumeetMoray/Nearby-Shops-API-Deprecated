@@ -26,7 +26,7 @@ public class ItemSpecItemResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
+    @RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF,GlobalConstants.ROLE_SHOP_ADMIN})
     public Response saveItemSpecName(ItemSpecificationItem itemSpecItem)
     {
         int idOfInsertedRow = -1;
@@ -58,7 +58,7 @@ public class ItemSpecItemResource {
 
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
+    @RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF,GlobalConstants.ROLE_SHOP_ADMIN})
     public Response deleteItemSpecItem(@QueryParam("ItemSpecValueID")int itemSpecValueID,
                                        @QueryParam("ItemID")int itemID)
     {

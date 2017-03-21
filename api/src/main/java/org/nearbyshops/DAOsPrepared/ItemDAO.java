@@ -1098,8 +1098,6 @@ public class ItemDAO {
 
 
 			queryJoin = queryJoin + " AND " + queryPartlatLonCenter;
-
-
 		}
 
 

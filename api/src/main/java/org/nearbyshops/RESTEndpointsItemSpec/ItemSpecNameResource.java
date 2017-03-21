@@ -293,6 +293,40 @@ public class ItemSpecNameResource {
 
 
     @GET
+    @Path("/SpecsForFilters")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getItemSpecsForFilters(
+            @QueryParam("ItemCatID") Integer itemCatID,
+            @QueryParam("ShopID") Integer shopID,
+            @QueryParam("latCenter") Double latCenter, @QueryParam("lonCenter") Double lonCenter,
+            @QueryParam("SearchString") String searchString)
+    {
+
+
+
+        List<ItemSpecificationName> list = Globals.itemSpecNameDAOInnerJoin.getItemSpecNameForFilters(
+                itemCatID,shopID,latCenter,lonCenter,searchString,null,null,null
+        );
+
+
+//		try {
+//			Thread.sleep(1000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+
+
+        //Marker
+
+        return Response.status(Response.Status.OK)
+                .entity(list)
+                .build();
+    }
+
+
+
+
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getItemSpecName(
             @QueryParam("ItemID") Integer itemID,

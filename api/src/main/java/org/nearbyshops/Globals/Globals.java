@@ -4,6 +4,8 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.glassfish.jersey.media.sse.OutboundEvent;
 import org.glassfish.jersey.media.sse.SseBroadcaster;
+import org.nearbyshops.DAOItemSubmissions.DAOItemSubmissionNew;
+import org.nearbyshops.DAOItemSubmissions.DAOItemSubmissions;
 import org.nearbyshops.DAOPreparedCartOrder.*;
 import org.nearbyshops.DAOPreparedItemSpecification.*;
 import org.nearbyshops.DAOPreparedOrderHomeDelivery.OrderItemService;
@@ -96,11 +98,18 @@ public class Globals {
 
 	public static ItemSpecificationNameDAO itemSpecNameDAO = new ItemSpecificationNameDAO();
 	public static ItemSpecNameDAOOuterJoin itemSpecNameDAOOuterJoin = new ItemSpecNameDAOOuterJoin();
+	public static ItemSpecNameDAOInnerJoin itemSpecNameDAOInnerJoin = new ItemSpecNameDAOInnerJoin();
 
 	public static ItemSpecificationValueDAO itemSpecificationValueDAO = new ItemSpecificationValueDAO();
 	public static ItemSpecValueDAOJoinOuter itemSpecValueDAOJoinOuter = new ItemSpecValueDAOJoinOuter();
+	public static ItemSpecValueDAOInnerJoin itemSpecValueDAOInnerJoin = new ItemSpecValueDAOInnerJoin();
 
 	public static ItemSpecificationItemDAO itemSpecificationItemDAO = new ItemSpecificationItemDAO();
+
+
+
+	// Item Submission DAO
+	public static DAOItemSubmissionNew daoItemSubmissions = new DAOItemSubmissionNew();
 
 
 

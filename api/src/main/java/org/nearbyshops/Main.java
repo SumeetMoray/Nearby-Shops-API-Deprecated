@@ -17,6 +17,9 @@ import org.nearbyshops.ModelDelivery.DeliveryAddress;
 import org.nearbyshops.ModelItemSpecification.ItemSpecificationItem;
 import org.nearbyshops.ModelItemSpecification.ItemSpecificationName;
 import org.nearbyshops.ModelItemSpecification.ItemSpecificationValue;
+import org.nearbyshops.ModelItemSubmission.*;
+import org.nearbyshops.ModelItemSubmission.Deprecated.ItemSubmissionDetails;
+import org.nearbyshops.ModelItemSubmission.Deprecated.ShopAdminItemSubmission;
 import org.nearbyshops.ModelPickFromShop.OrderItemPFS;
 import org.nearbyshops.ModelPickFromShop.OrderPFS;
 import org.nearbyshops.ModelRoles.DeliveryGuySelf;
@@ -326,13 +329,19 @@ public class Main {
 			statement.executeUpdate(ForbiddenOperations.createTableForbiddenOperationPostgres);
 
 
-
 			statement.executeUpdate(ItemImage.createTableItemImagesPostgres);
 
 			statement.executeUpdate(ItemSpecificationName.createTableItemSpecNamePostgres);
 			statement.executeUpdate(ItemSpecificationValue.createTableItemSpecificationValuePostgres);
 			statement.executeUpdate(ItemSpecificationItem.createTableItemSpecificationItemPostgres);
 
+
+			// Tables for Item Submission
+			statement.executeUpdate(ItemSubmission.createTableItemSubmissionPostgres);
+//			statement.executeUpdate(ShopAdminItemSubmission.createTableItemPostgres);
+//			statement.executeUpdate(ItemSubmissionDetails.createTablePostgres);
+//			statement.executeUpdate(ItemSubmissionApproved.createTablePostgres);
+//			statement.executeUpdate(ItemSubmissionRejected.createTablePostgres);
 
 
 			System.out.println("Tables Created ... !");

@@ -9,6 +9,7 @@ import org.nearbyshops.Globals.GlobalConstants;
 import org.nearbyshops.Globals.Globals;
 import org.nearbyshops.Model.Image;
 import org.nearbyshops.ModelItemSpecification.EndPoints.ItemSpecValueEndPoint;
+import org.nearbyshops.ModelItemSpecification.ItemSpecificationName;
 import org.nearbyshops.ModelItemSpecification.ItemSpecificationValue;
 
 import javax.annotation.security.RolesAllowed;
@@ -22,6 +23,7 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 
 /**
  * Created by sumeet on 3/3/17.
@@ -294,6 +296,44 @@ public class ItemSpecValueResource {
                 .entity(endPoint)
                 .build();
     }
+
+
+
+
+    @GET
+    @Path("/SpecValuesForFilters")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getItemSpecsForFilters(
+            @QueryParam("ItemSpecID") Integer itemSpecID,
+            @QueryParam("ItemCatID") Integer itemCatID,
+            @QueryParam("ShopID") Integer shopID,
+            @QueryParam("latCenter") Double latCenter, @QueryParam("lonCenter") Double lonCenter,
+            @QueryParam("SearchString") String searchString)
+    {
+
+
+
+        List<ItemSpecificationValue> list = Globals.itemSpecValueDAOInnerJoin.getItemSpecNameForFilters(
+                itemSpecID,itemCatID,shopID,latCenter,lonCenter,searchString,null,null,null
+        );
+
+
+
+//		try {
+//			Thread.sleep(1000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+
+
+        //Marker
+
+        return Response.status(Response.Status.OK)
+                .entity(list)
+                .build();
+    }
+
+
 
 
 

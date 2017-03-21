@@ -13,7 +13,6 @@ public class Item {
 	}
 
 
-
 	// Table Name
 	public static final String TABLE_NAME = "ITEM";
 
@@ -38,6 +37,8 @@ public class Item {
 
 	public static final String GIDB_ITEM_ID = "GIDB_ITEM_ID";
 	public static final String GIDB_SERVICE_URL = "GIDB_SERVICE_URL";
+
+	public static final String VERSION = "VERSION";
 
 
 
@@ -85,8 +86,10 @@ public class Item {
 					+ " ADD COLUMN IF NOT EXISTS " + Item.BARCODE_FORMAT + " text,"
 					+ " ADD COLUMN IF NOT EXISTS " + Item.LIST_PRICE + " float,"
 					+ " ADD COLUMN IF NOT EXISTS " + Item.TIMESTAMP_UPDATED + " timestamp with time zone,"
+					+ " DROP COLUMN IF EXISTS " + Item.VERSION + ","
 					+ " DROP COLUMN IF EXISTS " + Item.IS_ENABLED + ","
 					+ " DROP COLUMN IF EXISTS " + Item.IS_WAITLISTED + "";
+
 
 
 
@@ -114,6 +117,7 @@ public class Item {
 	// gidb stands for global items database
 	private int gidbItemID;
 	private String gidbServiceURL;
+//	private int version;
 
 
 	private ItemStats itemStats;
@@ -122,8 +126,6 @@ public class Item {
 	private Float rt_rating_avg;
 	private Float rt_rating_count;
 	private String rt_gidb_service_url;
-
-
 
 
 
@@ -224,54 +226,71 @@ public class Item {
 	public String getQuantityUnit() {
 		return quantityUnit;
 	}
+
 	public void setQuantityUnit(String quantityUnit) {
 		this.quantityUnit = quantityUnit;
 	}
+
 	public Timestamp getDateTimeCreated() {
 		return dateTimeCreated;
 	}
+
 	public void setDateTimeCreated(Timestamp dateTimeCreated) {
 		this.dateTimeCreated = dateTimeCreated;
 	}
+
 	public String getItemDescriptionLong() {
 		return itemDescriptionLong;
 	}
+
 	public void setItemDescriptionLong(String itemDescriptionLong) {
 		this.itemDescriptionLong = itemDescriptionLong;
 	}
+
 	public ItemStats getItemStats() {
 		return itemStats;
 	}
+
 	public void setItemStats(ItemStats itemStats) {
 		this.itemStats = itemStats;
 	}
+
 	public ItemCategory getItemCategory() {
 		return itemCategory;
 	}
+
 	public void setItemCategory(ItemCategory itemCategory) {
 		this.itemCategory = itemCategory;
 	}
+
 	public int getItemID() {
 		return itemID;
 	}
+
 	public void setItemID(int itemID) {
 		this.itemID = itemID;
 	}
+
 	public String getItemDescription() {
 		return itemDescription;
 	}
+
 	public void setItemDescription(String itemDescription) {
 		this.itemDescription = itemDescription;
 	}
+
 	public String getItemImageURL() {
 		return itemImageURL;
 	}
+
 	public void setItemImageURL(String itemImageURL) {
 		this.itemImageURL = itemImageURL;
 	}
+
 	public String getItemName() {
 		return itemName;
 	}
+
 	public void setItemName(String itemName) {
 		this.itemName = itemName;
 	}

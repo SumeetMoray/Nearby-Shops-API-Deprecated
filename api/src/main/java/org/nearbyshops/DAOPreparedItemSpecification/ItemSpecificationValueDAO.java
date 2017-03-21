@@ -608,11 +608,13 @@ public class ItemSpecificationValueDAO {
 
                 itemSpecValue.setId(rs.getInt(ItemSpecificationValue.ID));
                 itemSpecValue.setItemSpecNameID(rs.getInt(ItemSpecificationValue.ITEM_SPECIFICATION_NAME_ID));
-                itemSpecValue.setTitle(rs.getString(ItemSpecificationValue.TITLE));
-                itemSpecValue.setDescription(rs.getString(ItemSpecificationValue.DESCRIPTION));
-                itemSpecValue.setImageFilename(rs.getString(ItemSpecificationValue.IMAGE_FILENAME));
+//                itemSpecValue.setTitle(rs.getString(ItemSpecificationValue.TITLE));
+//                itemSpecValue.setDescription(rs.getString(ItemSpecificationValue.DESCRIPTION));
+//                itemSpecValue.setImageFilename(rs.getString(ItemSpecificationValue.IMAGE_FILENAME));
                 itemSpecValue.setGidbID(rs.getInt(ItemSpecificationValue.GIDB_ID));
                 itemSpecValue.setGidbServiceURL(rs.getString(ItemSpecificationValue.GIDB_SERVICE_URL));
+                itemSpecValue.setTimestampUpdated(rs.getTimestamp(ItemSpecificationValue.TIMESTAMP_UPDATED));
+
             }
 
         }

@@ -1006,9 +1006,9 @@ public class ItemResource {
 
 				for(ItemSpecificationValue itemSpecValue: itemSpecName.getRt_itemSpecificationValue())
 				{
-					itemSpecNameChecked = Globals.itemSpecNameDAO.checkItemSpecNameByGidbURL(
-							gidbServiceURL,itemSpecName.getGidbID()
-					);
+//					itemSpecNameChecked = Globals.itemSpecNameDAO.checkItemSpecNameByGidbURL(
+//							gidbServiceURL,itemSpecName.getGidbID()
+//					);
 
 					ItemSpecificationValue itemSpecValueChecked = Globals.itemSpecificationValueDAO.checkItemSpecValueByGidbURL(
 						gidbServiceURL,itemSpecValue.getId()
@@ -1018,10 +1018,10 @@ public class ItemResource {
 					if(itemSpecValueChecked==null)
 					{
 						// do an insert
-						itemSpecValue.setImageFilename(ItemSpecValueResource.saveNewImage(gidbServiceURL,itemSpecValue.getImageFilename()));
+//						itemSpecValue.setImageFilename(ItemSpecValueResource.saveNewImage(gidbServiceURL,itemSpecValue.getImageFilename()));
 						itemSpecValue.setGidbServiceURL(gidbServiceURL);
 						itemSpecValue.setGidbID(itemSpecValue.getId());
-						itemSpecValue.setItemSpecNameID(itemSpecNameChecked.getId());
+						itemSpecValue.setItemSpecNameID(itemSpecName.getId());
 						int id = Globals.itemSpecificationValueDAO.saveItemSpecValue(itemSpecValue);
 
 						ItemSpecificationItem itemSpecificationItem = new ItemSpecificationItem();
@@ -1032,7 +1032,10 @@ public class ItemResource {
 					else
 					{
 
-
+						ItemSpecificationItem itemSpecificationItem = new ItemSpecificationItem();
+						itemSpecificationItem.setItemSpecValueID(itemSpecValueChecked.getId());
+						itemSpecificationItem.setItemID(itemIDLocal);
+						Globals.itemSpecificationItemDAO.saveItemSpecItem(itemSpecificationItem);
 						// do an update
 					}
 
@@ -1046,7 +1049,6 @@ public class ItemResource {
 			ex.printStackTrace();
 
 		}
-
 
 	}
 
@@ -1190,7 +1192,7 @@ public class ItemResource {
 	@POST
 	@Path("/Image")
 	@Consumes({MediaType.APPLICATION_OCTET_STREAM})
-	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF})
+	@RolesAllowed({GlobalConstants.ROLE_ADMIN,GlobalConstants.ROLE_STAFF,GlobalConstants.ROLE_SHOP_ADMIN})
 	public Response uploadImage(InputStream in, @HeaderParam("Content-Length") long fileSize,
 								@QueryParam("PreviousImageName") String previousImageName
 	) throws Exception

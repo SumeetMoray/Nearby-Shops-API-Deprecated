@@ -1,5 +1,7 @@
 package org.nearbyshops.ModelStats;
 
+import java.sql.Timestamp;
+
 /**
  * Created by sumeet on 26/5/16.
  */
@@ -14,6 +16,26 @@ public class ItemStats {
     private Double rating_avg;
     private Integer ratingCount;
 
+
+    private int submissionsCount;
+    private Timestamp latestUpdate;
+
+
+    public Timestamp getLatestUpdate() {
+        return latestUpdate;
+    }
+
+    public void setLatestUpdate(Timestamp latestUpdate) {
+        this.latestUpdate = latestUpdate;
+    }
+
+    public int getSubmissionsCount() {
+        return submissionsCount;
+    }
+
+    public void setSubmissionsCount(int submissionsCount) {
+        this.submissionsCount = submissionsCount;
+    }
 
     public Integer getItemID() {
         return itemID;

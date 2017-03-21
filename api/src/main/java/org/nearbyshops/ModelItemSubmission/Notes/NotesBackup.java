@@ -1,11 +1,12 @@
-package org.nearbyshops.ModelSubmission;
+package org.nearbyshops.ModelItemSubmission.Notes;
 
 import java.sql.Timestamp;
 
 /**
  * Created by sumeet on 25/11/16.
  */
-public class ItemSubmission {
+public class NotesBackup {
+
 
     // instance variables
     int SubmissionID;
