@@ -6,7 +6,18 @@ Nearby Shops API
 <img src="https://i1.wp.com/nearbyshops.org/wp-content/uploads/2017/02/backdrop_play_store.png" width="108">
 
 
-Rest API for Nearby Shops App. 
+The existing e-commerce solutions only allow you to build an e-commerce portal for single seller or a shop but they do not allow you to build your e-commerce marketplace where multiple sellers can sell. 
+
+Now you can Build your own e-commerce marketplace similar to Flipkart, Amazon, Ebay, Instacart , Grofers and bigbasket using this software. A revolutionary step forward in the e-commerce industry is bound to disrupt the entire e-commerce industry accross the world. 
+
+Also available in the software package the support of three beautiful Native android apps in the front end. 
+
+The open-source nature of Nearby Shops helps you get the rock solid support from the Strong community which help you with any technical problems you might face. World class high quality software development from the best developers of the world. 
+
+If you are planning to build your own marketplace. Dont waste your time and money on building your own Software. Take advantage of the industry experts in software and e-commerce. Nearby Shops platform can save your marketing and advertizing costs also. 
+
+Make the smart move and beat your compititors. 
+
 
 For more information please visit http://nearbyshops.org
 
