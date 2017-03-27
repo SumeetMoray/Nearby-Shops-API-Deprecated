@@ -3,6 +3,8 @@
 Nearby Shops API
 ==================
 
+Witness the e-commerce revolution happening in front of your eyes. The e-commerce industry will never be the same again. Revealing you the most disruptive e-commerce technology. That will change the world.  
+
 <img src="https://i1.wp.com/nearbyshops.org/wp-content/uploads/2017/02/backdrop_play_store.png" width="108">
 
 
