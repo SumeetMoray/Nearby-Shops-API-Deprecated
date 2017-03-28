@@ -8,7 +8,7 @@ Nearby Shops API
 
 The existing e-commerce solutions only allow you to build an e-commerce portal for single seller or a shop but they do not allow you to build your e-commerce marketplace where multiple sellers can sell.
 
-Now you can Build your own e-commerce marketplace similar to Flipkart, Amazon, Ebay, Instacart , Grofers and bigbasket using this software.
+Now you can Build your own e-commerce marketplace similar to Flipkart, Amazon, Ebay, Instacart , Grofers and bigbasket using this software. Support for mobile app is also available though three native android apps in the front end. 
 
 For more information please visit http://nearbyshops.org
 
@@ -16,7 +16,15 @@ For more information please visit http://nearbyshops.org
 Installation Guide and Setup
 ------------------------------
 
-For installing the API on cloud Hosting Services like Digital Ocean or AWS please see the API installation guide available at this link : http://nearbyshops.org/server-administration/
+For installing the API on cloud Hosting Services like Digital Ocean or AWS please see the API installation guide available at this link : https://nearbyshops.org/2017/02/14/nearby-shops-api-installation-guide-for-digital-ocean/
+
+
+Community Support and Forum
+-------------------------
+
+Finding difficulties ? Not being able to understand how to install and use the software. You can speak to a human being and ask for human support on this forum. 
+
+Forum Link : http://community.nearbyshops.org
 
 
 Screenshots
@@ -30,6 +38,8 @@ Screenshots
 
 Built With (Technology Stack)
 -------------------------------
+
+The app has a java REST API in the backend and three Native android apps in the front end. 
 
 1. Postgres DB as a Backend Database
 2. Jersey Framework for the REST API
