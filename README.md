@@ -8,10 +8,7 @@ Nearby Shops API
 
 The existing e-commerce solutions only allow you to build an e-commerce portal for single seller or a shop but they do not allow you to build your e-commerce marketplace where multiple sellers can sell.
 
-Now you can Build your own e-commerce marketplace similar to Flipkart, Amazon, Ebay, Instacart , Grofers and bigbasket using this software. A revolutionary step forward in the e-commerce industry.
-
-Also available in the software package the support of three native android apps in the front end.
-
+Now you can Build your own e-commerce marketplace similar to Flipkart, Amazon, Ebay, Instacart , Grofers and bigbasket using this software.
 
 For more information please visit http://nearbyshops.org
 
