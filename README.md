@@ -1,6 +1,7 @@
-The project is currently under development. Please come back later.
-===================================================================
-It is expected to take some more time to get the documentation and user guide ready and also make a formal public release.
+This Repository is Deprecated. Please Refer to the new Repository for latest Project updates
+====================================================================================
+
+The link for the new Repository is : https://github.com/SumeetMoray/Nearby-Shops-API
 
 
 
