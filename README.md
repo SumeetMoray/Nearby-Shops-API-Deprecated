@@ -1,5 +1,5 @@
 This Repository is Deprecated. Please Refer to the new Repository for latest Project updates
-====================================================================================
+----------------------------------------------------------------------------------------------
 
 The link for the new Repository is : https://github.com/SumeetMoray/Nearby-Shops-API
 
