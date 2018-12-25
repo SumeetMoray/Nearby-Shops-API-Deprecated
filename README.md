@@ -5,15 +5,12 @@ The link for the new Repository is : https://github.com/SumeetMoray/Nearby-Shops
 
 
 
-Nearby Shops API
+Nearby Shops API - Deprecated
 ==================
 
 
 <img src="https://i1.wp.com/nearbyshops.org/wp-content/uploads/2017/02/backdrop_play_store.png" width="108">
 
-The existing e-commerce solutions only allow you to build an e-commerce portal for single seller or a shop but they do not allow you to build your e-commerce marketplace where multiple sellers can sell.
-
-Build your own e-commerce marketplace. Support for mobile app is also available.
 
 For more information please visit http://nearbyshops.org
 
@@ -21,15 +18,7 @@ For more information please visit http://nearbyshops.org
 Installation Guide and Setup
 ------------------------------
 
-For installing the API on cloud Hosting Services like Digital Ocean or AWS please see the API installation guide available at this link : https://nearbyshops.org/2017/02/14/nearby-shops-api-installation-guide-for-digital-ocean/
-
-
-Community Support and Forum
--------------------------
-
-Finding difficulties ? You can speak to a human being and ask for human support on this forum. Or just in case share your thoughts and ideas. 
-
-Forum Link : http://community.nearbyshops.org
+Instructions for installation is available on https://nearbyshops.org
 
 
 Screenshots
@@ -52,28 +41,8 @@ The app has a java REST API in the backend and three Native android apps in the 
 
 
 
-Guidelines for Code Contributors
---------------------------------
-
-For guidelines please read the FAQ's (Frequently Asked Questions) available at 
-http://nearbyshops.org/frequently-asked-questions-faqs/
-
-
-Help and Contribution Required
+Contribute
 ------------------------------
-
-Help us add following features
-
-1. Add Facebook and Google Sign-In 
-2. Add SSL / TLS Support 
-3. Help add Oauth-2 Support in the API
-4. Add Full-Tech-Search Support in the API
-
-Non Technical Contribution is also welcome 
-
-1. Create promotional videos for the Nearby Shops
-2. Graphics and Images for Promotion and to be used in Nearby Shops Website
-3. Contribution and help required for building an Open-Source Global Items Database
 
 For contributing you can write to us using the contact form available at http://nearbyshops.org/contact/
 
@@ -81,7 +50,7 @@ For contributing you can write to us using the contact form available at http://
 License
 =======
 
-    Copyright 2017 Civic Life Solutions, Inc.
+    Copyright 2017-18 Bluetree Software LLP
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
